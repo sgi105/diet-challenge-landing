@@ -1,0 +1,18 @@
+{
+  "permissions": {
+    "allow": [
+      "WebFetch(domain:www.instagram.com)",
+      "WebFetch(domain:www.picuki.com)",
+      "WebFetch(domain:imginn.com)",
+      "WebFetch(domain:gramhir.com)",
+      "WebFetch(domain:docs.tosspayments.com)",
+      "WebSearch",
+      "WebFetch(domain:github.com)",
+      "WebFetch(domain:velog.io)",
+      "WebFetch(domain:www.tosspayments.com)",
+      "WebFetch(domain:blog.toktokhan.dev)",
+      "WebFetch(domain:raw.githubusercontent.com)",
+      "WebFetch(domain:developers.portone.io)"
+    ]
+  }
+}
