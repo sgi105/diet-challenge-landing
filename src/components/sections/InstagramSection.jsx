@@ -1,6 +1,8 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 const photos = [
+  { src: '/instagram/ig_04.jpg', caption: '무사의습관 7기 풀파티' },
+  { src: '/instagram/ig_05.jpg', caption: '챌린지 변화 기록' },
   { src: '/instagram/ig_02.jpg', caption: '단체 바디프로필 촬영' },
   { src: '/instagram/ig_01.jpg', caption: 'SIX WEEKS CHALLENGE' },
   { src: '/instagram/ig_03.jpg', caption: 'MUSA' },
