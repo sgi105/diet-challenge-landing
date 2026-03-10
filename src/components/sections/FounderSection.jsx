@@ -60,7 +60,7 @@ export default function FounderSection() {
                 { src: '/founder/hyrox_rank.webp', label: '버피 1등' },
               ].map((img, i) => (
                 <div key={i} className="shrink-0 w-28 rounded-xl overflow-hidden relative">
-                  <img src={img.src} alt={img.label} className="w-full aspect-[3/4] object-cover object-top" loading="lazy" />
+                  <img src={img.src} alt={img.label} className="w-full aspect-square object-cover object-top" loading="lazy" />
                   <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
                   <p className="absolute bottom-1.5 left-2 text-white text-[10px] font-semibold">{img.label}</p>
                 </div>
