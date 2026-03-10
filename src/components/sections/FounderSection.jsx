@@ -56,7 +56,8 @@ export default function FounderSection() {
               {[
                 { src: '/founder/bodyprofile0.webp', label: '바디프로필' },
                 { src: '/founder/marathon.png', label: '100K 마라톤' },
-                { src: '/founder/hyrox.webp', label: 'HYROX 1등' },
+                { src: '/founder/hyrox_photo.webp', label: 'HYROX' },
+                { src: '/founder/hyrox_rank.webp', label: '버피 1등' },
               ].map((img, i) => (
                 <div key={i} className="shrink-0 w-28 rounded-xl overflow-hidden relative">
                   <img src={img.src} alt={img.label} className="w-full aspect-[3/4] object-cover object-top" loading="lazy" />
