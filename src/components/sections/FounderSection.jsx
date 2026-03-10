@@ -51,6 +51,22 @@ export default function FounderSection() {
               <br />
               지금 이 순간에도 111일째 매일 뛰고 있습니다.
             </p>
+
+            <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-2" style={{ scrollbarWidth: 'none' }}>
+              {[
+                { src: '/founder/bodyprofile0.webp', label: '바디프로필' },
+                { src: '/founder/bodyprofile1.jpg', label: '변화 기록' },
+                { src: '/founder/bodyprofile2.png', label: '비포/애프터' },
+                { src: '/founder/marathon.png', label: '100K 마라톤' },
+                { src: '/founder/hyrox.webp', label: 'HYROX' },
+              ].map((img, i) => (
+                <div key={i} className="shrink-0 w-28 rounded-xl overflow-hidden relative">
+                  <img src={img.src} alt={img.label} className="w-full aspect-[3/4] object-cover object-top" loading="lazy" />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/60 via-transparent to-transparent" />
+                  <p className="absolute bottom-1.5 left-2 text-white text-[10px] font-semibold">{img.label}</p>
+                </div>
+              ))}
+            </div>
             <p className="text-text-primary font-semibold">
               이 경험을 9기수, 116명에게 전달했고
               <br />
