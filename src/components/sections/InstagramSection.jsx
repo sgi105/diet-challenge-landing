@@ -40,7 +40,7 @@ export default function InstagramSection() {
               <img
                 src={photo.src}
                 alt={photo.caption}
-                className="w-full aspect-square object-cover object-bottom"
+                className="w-full aspect-[3/4] object-cover"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
