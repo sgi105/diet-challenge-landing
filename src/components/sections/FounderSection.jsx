@@ -55,8 +55,6 @@ export default function FounderSection() {
             <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-2" style={{ scrollbarWidth: 'none' }}>
               {[
                 { src: '/founder/bodyprofile0.webp', label: '바디프로필' },
-                { src: '/founder/bodyprofile1.jpg', label: '변화 기록' },
-                { src: '/founder/bodyprofile2.png', label: '비포/애프터' },
                 { src: '/founder/marathon.png', label: '100K 마라톤' },
                 { src: '/founder/hyrox.webp', label: 'HYROX' },
               ].map((img, i) => (
