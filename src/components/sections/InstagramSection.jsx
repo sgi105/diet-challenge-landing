@@ -1,11 +1,14 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 const photos = [
-  { src: '/instagram/ig_04.jpg', caption: '무사의습관 7기 풀파티' },
-  { src: '/instagram/ig_05.jpg', caption: '챌린지 변화 기록' },
-  { src: '/instagram/ig_02.jpg', caption: '단체 바디프로필 촬영' },
-  { src: '/instagram/ig_01.jpg', caption: 'SIX WEEKS CHALLENGE' },
-  { src: '/instagram/ig_03.jpg', caption: 'MUSA' },
+  { src: '/instagram/1.jpg', caption: 'SIX WEEKS CHALLENGE' },
+  { src: '/instagram/2.jpg', caption: '바디프로필 단체샷' },
+  { src: '/instagram/3.jpg', caption: 'MUSA' },
+  { src: '/instagram/4.jpg', caption: '풀파티 단체' },
+  { src: '/instagram/5.jpg', caption: '풀파티 드론샷' },
+  { src: '/instagram/6.jpg', caption: '풀파티 현장' },
+  { src: '/instagram/8.jpg', caption: '풀파티' },
+  { src: '/instagram/11.jpg', caption: '단체 바디프로필' },
 ];
 
 export default function InstagramSection() {
@@ -40,7 +43,7 @@ export default function InstagramSection() {
               <img
                 src={photo.src}
                 alt={photo.caption}
-                className="w-full aspect-[3/4] object-cover"
+                className="w-full aspect-square object-cover"
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
