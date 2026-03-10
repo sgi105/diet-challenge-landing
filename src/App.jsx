@@ -17,6 +17,9 @@ import Footer from './components/layout/Footer';
 import UserInfoModal from './components/ui/UserInfoModal';
 import SuccessPage from './pages/SuccessPage';
 import FailPage from './pages/FailPage';
+import TermsPage from './pages/TermsPage';
+import PrivacyPage from './pages/PrivacyPage';
+import RefundPage from './pages/RefundPage';
 import { requestPayment } from './lib/tossPayments';
 
 function LandingPage() {
@@ -68,6 +71,9 @@ export default function App() {
       <Route path="/" element={<LandingPage />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/fail" element={<FailPage />} />
+      <Route path="/terms" element={<TermsPage />} />
+      <Route path="/privacy" element={<PrivacyPage />} />
+      <Route path="/refund" element={<RefundPage />} />
     </Routes>
   );
 }
