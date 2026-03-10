@@ -43,6 +43,9 @@ export default function PricingSection({ onCTA }) {
           <p className="text-text-muted text-xs mt-4">
             🔒 토스페이먼츠 안전결제
           </p>
+          <p className="text-text-muted text-xs mt-2">
+            결제 완료 후 즉시 챌린지 참여 가능 (서비스 제공 기간: 결제일로부터 30일)
+          </p>
         </div>
       </AnimateOnScroll>
     </section>
