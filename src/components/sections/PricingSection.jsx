@@ -1,3 +1,4 @@
+import { Link } from 'react-router-dom';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import Button from '../ui/Button';
 
@@ -41,11 +42,14 @@ export default function PricingSection({ onCTA }) {
           </Button>
 
           <p className="text-text-muted text-xs mt-4">
-            🔒 토스페이먼츠 안전결제
+            🔒 카드사 공식 결제창 · 개인정보 암호화 처리
           </p>
           <p className="text-text-muted text-xs mt-2">
             결제 완료 후 즉시 챌린지 참여 가능 (서비스 제공 기간: 결제일로부터 30일)
           </p>
+          <Link to="/refund" className="text-text-muted text-xs mt-2 underline inline-block hover:text-text-secondary transition-colors">
+            환불정책 확인하기
+          </Link>
         </div>
       </AnimateOnScroll>
     </section>
