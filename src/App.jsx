@@ -36,7 +36,7 @@ function LandingPage() {
     } catch (error) {
       if (error.code === 'USER_CANCEL') return;
       console.error('결제 오류:', error);
-      alert('결제 중 오류가 발생했습니다. 다시 시도해주세요.');
+      alert(`결제 오류: ${error.code || 'UNKNOWN'} - ${error.message}`);
     }
   };
 
