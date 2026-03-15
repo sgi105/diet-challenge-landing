@@ -18,6 +18,8 @@ export async function requestPayment(userInfo = {}) {
     payMethod: 'CARD',
     customer: {
       fullName: userInfo.name || '',
+      email: userInfo.email || 'customer@example.com',
+      ...(userInfo.phone ? { phoneNumber: userInfo.phone } : {}),
     },
     redirectUrl: `${window.location.origin}/success`,
   });
