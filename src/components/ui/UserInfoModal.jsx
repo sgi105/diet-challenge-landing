@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react';
 
 export default function UserInfoModal({ isOpen, onClose, onSubmit }) {
-  const [form, setForm] = useState({ name: '', age: '', gender: '' });
+  const [form, setForm] = useState({ name: '', phone: '', age: '', gender: '' });
   const [errors, setErrors] = useState({});
 
   useEffect(() => {
@@ -18,6 +18,7 @@ export default function UserInfoModal({ isOpen, onClose, onSubmit }) {
   const validate = () => {
     const newErrors = {};
     if (!form.name.trim()) newErrors.name = '이름을 입력해주세요.';
+    if (!form.phone.trim() || !/^01[0-9]{8,9}$/.test(form.phone.replace(/-/g, ''))) newErrors.phone = '휴대폰 번호를 올바르게 입력해주세요.';
     if (!form.age || form.age < 1 || form.age > 100) newErrors.age = '나이를 올바르게 입력해주세요.';
     if (!form.gender) newErrors.gender = '성별을 선택해주세요.';
     setErrors(newErrors);
@@ -70,6 +71,18 @@ export default function UserInfoModal({ isOpen, onClose, onSubmit }) {
               className="w-full bg-bg-primary border border-border rounded-xl px-4 py-3 text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-accent-green transition text-sm"
             />
             {errors.name && <p className="text-accent-orange text-xs mt-1">{errors.name}</p>}
+          </div>
+
+          <div>
+            <label className="block text-text-secondary text-sm font-medium mb-1.5">휴대폰 번호</label>
+            <input
+              type="tel"
+              value={form.phone}
+              onChange={(e) => handleChange('phone', e.target.value)}
+              placeholder="01012345678"
+              className="w-full bg-bg-primary border border-border rounded-xl px-4 py-3 text-text-primary placeholder:text-text-muted/50 focus:outline-none focus:border-accent-green transition text-sm"
+            />
+            {errors.phone && <p className="text-accent-orange text-xs mt-1">{errors.phone}</p>}
           </div>
 
           <div>

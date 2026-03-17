@@ -19,7 +19,7 @@ export async function requestPayment(userInfo = {}) {
     customer: {
       fullName: userInfo.name || '',
       email: userInfo.email || 'customer@example.com',
-      phoneNumber: userInfo.phone || '01000000000',
+      phoneNumber: userInfo.phone?.replace(/-/g, '') || '01000000000',
     },
     redirectUrl: `${window.location.origin}/success`,
   });
