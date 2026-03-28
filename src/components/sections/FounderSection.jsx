@@ -110,7 +110,7 @@ export default function FounderSection() {
 
       <AnimateOnScroll className="mt-8">
         <p className="text-center leading-relaxed">
-          <span className="text-text-secondary">체력 꼴찌도 49일이면 상위권.</span>
+          <span className="text-text-secondary">운동 처음이어도 괜찮습니다.</span>
           <br />
           <span className="text-text-primary font-bold">같은 구조를 30일짜리로 압축했습니다.</span>
         </p>
