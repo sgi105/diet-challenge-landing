@@ -3,10 +3,12 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 import Button from '../ui/Button';
 
 const included = [
-  '30일 매일 운동 미션 제공',
+  '30일 러닝 인증 + 식단 사진 + 체중 기록',
   'OT 식단 방법론 교육',
-  '카카오톡 인증 채팅방',
-  '성공 시 24만원 환급',
+  '3인 1팀 카카오톡 채팅방',
+  '나만 성공 시 20만원 환급',
+  '팀 전원 성공 시 25만원 환급',
+  '팀 1등 시 30만원 환급',
 ];
 
 export default function PricingSection({ onCTA }) {
@@ -25,7 +27,7 @@ export default function PricingSection({ onCTA }) {
         <div className="bg-bg-card border-2 border-accent-green rounded-2xl p-8 text-center shadow-[0_0_30px_rgba(0,255,136,0.1)]">
           <p className="text-5xl font-extrabold text-text-primary mb-2">200,000<span className="text-2xl">원</span></p>
           <p className="text-text-secondary text-sm mb-8">
-            성공 시 전액 환급 + <span className="text-accent-green font-semibold">40,000원 보너스</span>
+            성공 시 전액 환급 + <span className="text-accent-green font-semibold">팀 성과에 따라 최대 10만원 보너스</span>
           </p>
 
           <div className="text-left space-y-3 mb-8">
@@ -45,10 +47,10 @@ export default function PricingSection({ onCTA }) {
             🔒 카카오페이 · 토스페이 등 간편결제 가능
           </p>
           <p className="text-text-muted text-xs mt-2">
-            매주 월요일 새 기수 시작 (서비스 제공 기간: 시작일로부터 30일)
+            2026년 4월 1일 시작 · 3인 1팀 매칭 (서비스 제공 기간: 시작일로부터 30일)
           </p>
           <p className="text-text-muted text-xs mt-2">
-            🛡️ 시작 전 <Link to="/refund" className="underline hover:text-text-secondary transition-colors">전액 환불</Link> 가능 · 성공하면 24만원 돌려드립니다
+            🛡️ 시작 전 <Link to="/refund" className="underline hover:text-text-secondary transition-colors">전액 환불</Link> 가능 · 성공하면 최대 30만원 돌려드립니다
           </p>
         </div>
       </AnimateOnScroll>

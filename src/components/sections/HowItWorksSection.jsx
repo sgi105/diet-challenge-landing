@@ -2,9 +2,9 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 const steps = [
   { num: 1, title: '신청 & 예치', desc: '20만원 결제하면 자동 등록', circleClass: 'bg-accent-green' },
-  { num: 2, title: 'OT 세션 참여', desc: '식단 방법론 + 미션 안내 받기', circleClass: 'bg-accent-green' },
-  { num: 3, title: '30일 미션 수행', desc: '매일 주어지는 운동 미션 완료 & 인증', circleClass: 'bg-accent-green' },
-  { num: 4, title: '정산', desc: '성공: 24만원 환급 / 실패: 전액 몰수', circleClass: 'bg-accent-orange' },
+  { num: 2, title: '팀 매칭 & OT 세션', desc: '3인 1팀 배정 + 식단 방법론 안내', circleClass: 'bg-accent-green' },
+  { num: 3, title: '30일 미션 수행', desc: '매일 러닝 인증 + 식단 사진 + 체중 기록', circleClass: 'bg-accent-green' },
+  { num: 4, title: '정산', desc: '나만 성공: 20만원 / 팀 전원: 25만원 / 팀 1등: 30만원 / 실패: 전액 몰수', circleClass: 'bg-accent-orange' },
 ];
 
 export default function HowItWorksSection() {

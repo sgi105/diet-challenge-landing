@@ -22,7 +22,7 @@ export default function StickyCTA({ onCTA }) {
           onClick={onCTA}
           className="w-full bg-accent-green text-bg-primary font-bold py-4 rounded-xl text-base hover:brightness-110 transition-all duration-300 cursor-pointer"
         >
-          200,000원 예치 → 240,000원 돌려받기
+          200,000원 예치 → 최대 300,000원 돌려받기
         </button>
       </div>
     </div>

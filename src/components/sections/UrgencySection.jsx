@@ -21,11 +21,11 @@ export default function UrgencySection() {
         <div className="bg-bg-card rounded-xl p-5 space-y-3">
           <div className="flex justify-between text-sm">
             <span className="text-text-secondary">챌린지 시작일</span>
-            <span className="text-text-primary font-semibold">2026년 3월 23일 (월)</span>
+            <span className="text-text-primary font-semibold">2026년 4월 1일 (수)</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-text-secondary">모집 마감</span>
-            <span className="text-accent-orange font-semibold">2026년 3월 20일 (금) 자정</span>
+            <span className="text-accent-orange font-semibold">2026년 3월 31일 (화) 자정</span>
           </div>
           <div className="flex justify-between text-sm">
             <span className="text-text-secondary">정원</span>

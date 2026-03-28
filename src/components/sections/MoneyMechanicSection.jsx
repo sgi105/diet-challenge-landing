@@ -37,29 +37,9 @@ export default function MoneyMechanicSection() {
         </p>
       </AnimateOnScroll>
 
-      <div className="grid grid-cols-2 gap-4">
-        {/* Success card */}
-        <AnimateOnScroll animation="animate-scale-in">
-          <div className="bg-bg-card border-2 border-accent-green rounded-2xl p-5 text-center shadow-[0_0_20px_rgba(0,255,136,0.15)] h-full flex flex-col justify-between">
-            <div>
-              <p className="text-accent-green text-sm font-semibold mb-2">미션 성공</p>
-              <p className="text-2xl font-extrabold text-accent-green mb-2">
-                <CountUpNumber target={240000} isVisible={isVisible} suffix="원" />
-              </p>
-              <p className="text-text-secondary text-xs leading-relaxed">
-                20만원 예치
-                <br />→ 24만원 돌려받기
-              </p>
-            </div>
-            <div className="mt-3 space-y-1">
-              <p className="text-accent-green text-xs font-semibold">수익률 +20%</p>
-              <p className="text-accent-green text-xs font-semibold">+ 5kg 감량한 몸</p>
-            </div>
-          </div>
-        </AnimateOnScroll>
-
+      <div className="grid grid-cols-2 gap-4 max-w-sm mx-auto w-full">
         {/* Failure card */}
-        <AnimateOnScroll animation="animate-scale-in" delay={0.15}>
+        <AnimateOnScroll animation="animate-scale-in">
           <div className="bg-bg-card border-2 border-accent-orange rounded-2xl p-5 text-center h-full flex flex-col justify-between">
             <div>
               <p className="text-accent-orange text-sm font-semibold mb-2">미션 실패</p>
@@ -77,17 +57,77 @@ export default function MoneyMechanicSection() {
             </div>
           </div>
         </AnimateOnScroll>
+
+        {/* Solo success card */}
+        <AnimateOnScroll animation="animate-scale-in" delay={0.1}>
+          <div className="bg-bg-card border border-border rounded-2xl p-5 text-center h-full flex flex-col justify-between">
+            <div>
+              <p className="text-text-secondary text-sm font-semibold mb-2">나만 성공</p>
+              <p className="text-2xl font-extrabold text-text-primary mb-2">
+                <CountUpNumber target={200000} isVisible={isVisible} suffix="원" />
+              </p>
+              <p className="text-text-secondary text-xs leading-relaxed">
+                20만원 예치
+                <br />→ 20만원 환급
+              </p>
+            </div>
+            <div className="mt-3 space-y-1">
+              <p className="text-text-secondary text-xs font-semibold">본전</p>
+              <p className="text-text-secondary text-xs font-semibold">+ 3kg 감량한 몸</p>
+            </div>
+          </div>
+        </AnimateOnScroll>
+
+        {/* Team success card */}
+        <AnimateOnScroll animation="animate-scale-in" delay={0.2}>
+          <div className="bg-bg-card border-2 border-accent-green rounded-2xl p-5 text-center shadow-[0_0_20px_rgba(0,255,136,0.1)] h-full flex flex-col justify-between">
+            <div>
+              <p className="text-accent-green text-sm font-semibold mb-2">팀 전원 성공</p>
+              <p className="text-2xl font-extrabold text-accent-green mb-2">
+                <CountUpNumber target={250000} isVisible={isVisible} suffix="원" />
+              </p>
+              <p className="text-text-secondary text-xs leading-relaxed">
+                20만원 예치
+                <br />→ 25만원 환급
+              </p>
+            </div>
+            <div className="mt-3 space-y-1">
+              <p className="text-accent-green text-xs font-semibold">수익 +5만원</p>
+              <p className="text-accent-green text-xs font-semibold">+ 3kg 감량한 몸</p>
+            </div>
+          </div>
+        </AnimateOnScroll>
+
+        {/* Team 1st card */}
+        <AnimateOnScroll animation="animate-scale-in" delay={0.3}>
+          <div className="bg-bg-card border-2 border-yellow-400 rounded-2xl p-5 text-center shadow-[0_0_20px_rgba(250,204,21,0.15)] h-full flex flex-col justify-between">
+            <div>
+              <p className="text-yellow-400 text-sm font-semibold mb-2">팀 전원 + 팀 1등 🏆</p>
+              <p className="text-2xl font-extrabold text-yellow-400 mb-2">
+                <CountUpNumber target={300000} isVisible={isVisible} suffix="원" />
+              </p>
+              <p className="text-text-secondary text-xs leading-relaxed">
+                20만원 예치
+                <br />→ 30만원 환급
+              </p>
+            </div>
+            <div className="mt-3 space-y-1">
+              <p className="text-yellow-400 text-xs font-semibold">수익 +10만원</p>
+              <p className="text-yellow-400 text-xs font-semibold">+ 3kg 감량한 몸</p>
+            </div>
+          </div>
+        </AnimateOnScroll>
       </div>
 
       <AnimateOnScroll className="mt-10">
         <div className="bg-bg-card rounded-xl p-5 border border-border">
           <p className="text-text-secondary text-sm leading-relaxed text-center">
-            적금 이자보다 높고, 주식보다 확실합니다.
+            팀 사진 찍는데 나만 몸이 안 좋으면 민폐.
             <br />
-            유일한 변수는 <span className="text-text-primary font-bold">당신의 행동</span>뿐.
+            그 압박이 <span className="text-text-primary font-bold">포기를 불가능하게</span> 만듭니다.
             <br />
             <span className="text-text-muted text-xs mt-2 block">
-              성공 기준: 미션 수행률 90% 이상 + 5kg 감량
+              성공 기준: 미션 수행률 90% 이상 + 3kg 감량
             </span>
           </p>
         </div>

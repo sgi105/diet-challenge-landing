@@ -7,14 +7,14 @@ const features = [
     desc: '실패하면 전액 몰수. 이 압박감이 새벽 알람도 끄지 못하게 만듭니다.',
   },
   {
-    icon: '📈',
-    title: '매일 레벨업하는 미션',
-    desc: '같은 운동 반복이 아닙니다. 매일 새로운 미션이 앱으로 제공되고, 난이도가 올라갑니다.',
+    icon: '🏃',
+    title: '매일 3가지 미션',
+    desc: '러닝 인증 + 식단 사진 + 체중 기록. 심플하지만, 매일 해야 합니다.',
   },
   {
     icon: '⚔️',
-    title: '30명이 온라인에서 함께 싸운다',
-    desc: '혼자 하면 포기합니다. 같은 돈을 건 사람들과 매일 온라인으로 인증하고, 경쟁하고, 밀어줍니다.',
+    title: '3인 1팀 — 팀이 있으면 포기가 안 된다',
+    desc: '팀 사진 찍는데 나만 몸이 안 좋으면 민폐. 그 압박이 의지력보다 강합니다.',
   },
   {
     icon: '🎓',
@@ -29,10 +29,10 @@ export default function ProgramIntroSection() {
       <AnimateOnScroll>
         <span className="text-accent-green text-sm font-semibold">왜 이건 되는가</span>
         <h2 className="text-2xl md:text-4xl font-extrabold mt-2 mb-4">
-          돈이 걸리면, 몸이 달라집니다.
+          혼자 못 하는 다이어트를<br />팀으로 강제로 합니다.
         </h2>
         <p className="text-text-secondary mb-8">
-          의지력 대신 구조로 움직이게 만듭니다.
+          돈 + 팀. 의지력 대신 구조로 움직이게 만듭니다.
         </p>
       </AnimateOnScroll>
 
@@ -53,7 +53,7 @@ export default function ProgramIntroSection() {
       <AnimateOnScroll className="mt-8">
         <div className="border border-border rounded-xl p-4 text-center">
           <p className="text-text-muted text-sm">
-            🔥 <span className="text-text-secondary">1:1 프리미엄 식단 코칭</span> 옵션도 별도로 제공됩니다.
+            🔥 챌린지 성공 후 <span className="text-text-secondary">장기 코칭 (10주)</span>으로 이어갈 수 있습니다.
           </p>
         </div>
       </AnimateOnScroll>

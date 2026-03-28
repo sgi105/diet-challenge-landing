@@ -16,25 +16,25 @@ export default function HeroSection({ onCTA }) {
 
         {/* Main headline */}
         <h1 className="text-3xl md:text-5xl font-extrabold leading-tight mb-6 animate-fade-up" style={{ animationDelay: '0.1s' }}>
-          30일 안에 5kg 빼면
+          30일 안에 3kg 빼면
           <br />
-          <span className="text-accent-green">24만원</span> 돌려드립니다.
+          <span className="text-accent-green">최대 30만원</span> 돌려드립니다.
         </h1>
 
         {/* Badges */}
         <div className="flex flex-wrap justify-center gap-2 mb-6 animate-fade-up" style={{ animationDelay: '0.15s' }}>
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-accent-green/10 text-accent-green border border-accent-green/20">100% 온라인</span>
+          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-accent-green/10 text-accent-green border border-accent-green/20">3인 1팀</span>
           <span className="text-xs font-semibold px-3 py-1 rounded-full bg-accent-green/10 text-accent-green border border-accent-green/20">참가비 0원</span>
-          <span className="text-xs font-semibold px-3 py-1 rounded-full bg-accent-green/10 text-accent-green border border-accent-green/20">집에서 30분</span>
         </div>
 
         {/* Sub-headline */}
         <p className="text-text-secondary text-base md:text-lg leading-relaxed mb-8 animate-fade-up" style={{ animationDelay: '0.2s' }}>
-          20만원을 거세요. 성공하면 <span className="text-accent-green font-semibold">4만원 벌고</span>,
+          20만원을 거세요. 팀이 전원 성공하면 <span className="text-accent-green font-semibold">10만원 벌고</span>,
           <br />
           실패하면 <span className="text-accent-orange font-semibold">전액 몰수.</span>
           <br />
-          <span className="text-text-primary font-semibold mt-2 block">돈이 걸리면, 진짜 하게 됩니다.</span>
+          <span className="text-text-primary font-semibold mt-2 block">팀이 있으면, 포기가 안 됩니다.</span>
         </p>
 
         {/* CTA */}
