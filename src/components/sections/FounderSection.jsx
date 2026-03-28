@@ -1,5 +1,12 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 
+const RUN_START_DATE = new Date('2025-11-17');
+function getRunningDays() {
+  const today = new Date();
+  const diff = today - RUN_START_DATE;
+  return Math.floor(diff / (1000 * 60 * 60 * 24)) + 1;
+}
+
 const milestones = [
   { num: '-10kg', desc: '본인 감량' },
   { num: '116명', desc: '바디프로필 달성' },
@@ -49,7 +56,7 @@ export default function FounderSection() {
               <br />
               2025 인천 HYROX <span className="text-accent-green font-semibold">버피 구간 전체 1등.</span>
               <br />
-              지금 이 순간에도 111일째 매일 뛰고 있습니다.
+              지금 이 순간에도 <span className="text-accent-green font-semibold">{getRunningDays()}일째</span> 매일 뛰고 있습니다.
             </p>
 
             <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-2" style={{ scrollbarWidth: 'none' }}>
