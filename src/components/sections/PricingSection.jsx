@@ -44,7 +44,7 @@ export default function PricingSection({ onCTA }) {
           </Button>
 
           <p className="text-text-muted text-xs mt-4">
-            🔒 카카오페이 · 토스페이 등 간편결제 가능
+            🔒 이니시스 안전결제
           </p>
           <p className="text-text-muted text-xs mt-2">
             2026년 4월 1일 시작 · 3인 1팀 매칭 (서비스 제공 기간: 시작일로부터 30일)

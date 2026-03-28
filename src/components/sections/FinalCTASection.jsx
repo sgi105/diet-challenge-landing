@@ -14,7 +14,7 @@ export default function FinalCTASection({ onCTA }) {
       <AnimateOnScroll>
         <div className="space-y-3 mb-8">
           <p className="text-accent-green font-bold text-lg">
-            최대 30만원을 돌려받고, 거울 앞에서 웃는 사람
+            30만원 돌려받고 거울 앞에서 웃는 사람
           </p>
           <p className="text-text-muted">or</p>
           <p className="text-accent-orange font-bold text-lg">
