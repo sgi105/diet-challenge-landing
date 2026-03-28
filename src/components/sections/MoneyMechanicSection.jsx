@@ -122,9 +122,9 @@ export default function MoneyMechanicSection() {
       <AnimateOnScroll className="mt-10">
         <div className="bg-bg-card rounded-xl p-5 border border-border">
           <p className="text-text-secondary text-sm leading-relaxed text-center">
-            팀 사진 찍는데 나만 몸이 안 좋으면 민폐.
+            내가 실패하면 팀 전체 보너스가 날아갑니다.
             <br />
-            그 압박이 <span className="text-text-primary font-bold">포기를 불가능하게</span> 만듭니다.
+            그 책임감이 <span className="text-text-primary font-bold">포기를 불가능하게</span> 만듭니다.
             <br />
             <span className="text-text-muted text-xs mt-2 block">
               성공 기준: 미션 수행률 90% 이상 + 3kg 감량
