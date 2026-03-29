@@ -44,10 +44,6 @@ export default function HeroSection({ onCTA }) {
           </Button>
         </div>
 
-        {/* Spots remaining */}
-        <p className="text-text-muted text-sm mt-4 animate-fade-up" style={{ animationDelay: '0.4s' }}>
-          현재 {COHORT.filledSpots}명 신청 완료 · 잔여 {COHORT.totalSpots - COHORT.filledSpots}석
-        </p>
 
         {/* Countdown */}
         <div className="mt-8 animate-fade-up" style={{ animationDelay: '0.5s' }}>
