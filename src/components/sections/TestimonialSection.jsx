@@ -1,5 +1,5 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
-import { testimonials, stats } from '../../data/testimonials';
+import { testimonials } from '../../data/testimonials';
 
 function StarRating() {
   return (
@@ -43,30 +43,12 @@ export default function TestimonialSection() {
                     <p className="text-xs text-text-muted">{t.job}</p>
                   </div>
                 </div>
-                <span className="text-accent-green font-bold text-sm">-{t.lost}</span>
               </div>
             </div>
           ))}
         </div>
       </AnimateOnScroll>
 
-      {/* Stats */}
-      <AnimateOnScroll>
-        <div className="flex justify-center gap-8 mt-8 px-6">
-          <div className="text-center">
-            <p className="text-accent-green font-bold text-xl">-{stats.avgLoss}</p>
-            <p className="text-text-muted text-xs">평균 감량</p>
-          </div>
-          <div className="text-center">
-            <p className="text-accent-green font-bold text-xl">{stats.missionRate}</p>
-            <p className="text-text-muted text-xs">미션 완수율</p>
-          </div>
-          <div className="text-center">
-            <p className="text-accent-green font-bold text-xl">116명</p>
-            <p className="text-text-muted text-xs">바디프로필 달성</p>
-          </div>
-        </div>
-      </AnimateOnScroll>
     </section>
   );
 }
