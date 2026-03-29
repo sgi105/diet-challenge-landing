@@ -206,9 +206,9 @@ export default function ApplyPage() {
           {/* OT 참석 여부 */}
           <div>
             <label className="block text-text-secondary text-sm font-medium mb-1">
-              4월 1일 저녁 9시 OT 참석 가능 여부
+              4/1(수) 21:00-21:40 온라인 OT 참석 가능 여부
             </label>
-            <p className="text-text-muted text-xs mb-2">팀원들과 만나는 자리로 강력 권장합니다. 불참 시 영상으로 가이드 전달 예정.</p>
+            <p className="text-text-muted text-xs mb-2">식단 OT + 팀원들 만나는 시간. 강력 권장합니다. 불참 시 영상으로 가이드 전달 예정.</p>
             <div className="flex gap-2">
               {[{ label: '참석 가능', value: '참석' }, { label: '불참 (영상 수령)', value: '불참' }].map(opt => (
                 <button
