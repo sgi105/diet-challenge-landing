@@ -43,9 +43,6 @@ export default function PricingSection({ onCTA }) {
             인스타 DM으로 신청하기
           </Button>
 
-          <p className="text-text-muted text-xs mt-4">
-            🔒 이니시스 안전결제
-          </p>
           <p className="text-text-muted text-xs mt-2">
             2026년 4월 1일 시작 · 3인 1팀 매칭 (서비스 제공 기간: 시작일로부터 30일)
           </p>
