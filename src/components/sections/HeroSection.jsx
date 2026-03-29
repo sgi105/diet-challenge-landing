@@ -40,7 +40,7 @@ export default function HeroSection({ onCTA }) {
         {/* CTA */}
         <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
           <Button onClick={onCTA} className="animate-pulse-glow">
-            20만원 걸고 도전하기
+            인스타 DM으로 신청하기
           </Button>
         </div>
 

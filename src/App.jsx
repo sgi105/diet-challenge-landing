@@ -26,7 +26,7 @@ function LandingPage() {
   const [showModal, setShowModal] = useState(false);
 
   const handleCTA = () => {
-    setShowModal(true);
+    window.open('https://ig.me/m/samurai_habit', '_blank');
   };
 
   const handleFormSubmit = async (userInfo) => {
