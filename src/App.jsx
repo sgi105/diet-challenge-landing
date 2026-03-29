@@ -26,7 +26,7 @@ function LandingPage() {
   const [showModal, setShowModal] = useState(false);
 
   const handleCTA = () => {
-    window.open('https://ig.me/m/samurai_habit', '_blank');
+    window.open('https://ig.me/m/bali_tarzan', '_blank');
   };
 
   const handleFormSubmit = async (userInfo) => {
