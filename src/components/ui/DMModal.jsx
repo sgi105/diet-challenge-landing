@@ -60,7 +60,7 @@ export default function DMModal({ onClose }) {
             <span className="text-text-primary font-semibold text-sm">작성 후 DM으로 보내주세요</span>
           </div>
           <p className="text-text-secondary text-sm pl-8">
-            인스타그램에서 <span className="text-accent-green font-bold">@bali_tarzan</span> 검색 후 DM 보내주세요
+            인스타그램에서 <a href="https://www.instagram.com/bali_tarzan/" target="_blank" rel="noopener noreferrer" className="text-accent-green font-bold hover:underline">@bali_tarzan</a> 검색 후 DM 보내주세요
           </p>
         </div>
 
