@@ -11,7 +11,7 @@ export default function HeroSection({ onCTA }) {
       <div className="relative z-10 text-center max-w-lg mx-auto">
         {/* Pre-headline */}
         <span className="inline-block text-accent-orange text-sm font-semibold tracking-wide mb-6 animate-fade-up">
-          🔴 4월 기수 조기 마감 · 5월 대기 명단 모집 중
+          🔴 4월 기수 모집 시작 이틀 만에 마감 · 5월 대기 명단 모집 중
         </span>
 
         {/* Main headline */}
