@@ -40,14 +40,14 @@ export default function HeroSection({ onCTA }) {
         {/* CTA */}
         <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
           <Button onClick={onCTA} className="animate-pulse-glow">
-            5월 가장 빨리 소식 받기
+            5월 챌린지 모집 알림 신청
           </Button>
         </div>
 
 
         {/* Countdown */}
         <div className="mt-8 animate-fade-up" style={{ animationDelay: '0.5s' }}>
-          <p className="text-text-muted text-xs">5월 모집 오픈 시 가장 먼저 알려드립니다</p>
+          <p className="text-text-muted text-xs">5월 모집 오픈 시 <span className="text-accent-green">가장 먼저</span> 알림을 받을 수 있어요</p>
         </div>
       </div>
     </section>

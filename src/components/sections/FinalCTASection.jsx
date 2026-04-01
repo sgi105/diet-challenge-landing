@@ -32,7 +32,7 @@ export default function FinalCTASection({ onCTA }) {
         </p>
 
         <Button onClick={onCTA} className="animate-pulse-glow">
-          5월 가장 빨리 소식 받기
+          5월 챌린지 모집 알림 신청
         </Button>
 
         <p className="text-text-muted text-sm mt-4">
