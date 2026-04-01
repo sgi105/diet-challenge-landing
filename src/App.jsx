@@ -26,7 +26,12 @@ function LandingPage() {
 
   return (
     <div className="bg-bg-primary min-h-screen">
-      <HeroSection onCTA={handleCTA} />
+      {/* 상단 고정 배너 */}
+      <div className="fixed top-0 left-0 right-0 z-50 bg-accent-orange text-bg-primary text-center text-sm font-bold py-2.5 px-4">
+        🔴 4월 기수 이틀 만에 마감됐습니다
+      </div>
+      <div className="pt-10">
+        <HeroSection onCTA={handleCTA} />
       <PainPointSection />
       <FounderSection />
       <InstagramSection />
@@ -40,6 +45,7 @@ function LandingPage() {
       <FinalCTASection onCTA={handleCTA} />
       <Footer />
       <StickyCTA onCTA={handleCTA} />
+      </div>
     </div>
   );
 }
