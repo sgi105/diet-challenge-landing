@@ -19,10 +19,10 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import RefundPage from './pages/RefundPage';
 
-const WAITLIST_URL = 'https://ig.me/j/Aba4AF3R4T_5UOTl/';
+export const WAITLIST_URL = 'https://ig.me/j/Aba4AF3R4T_5UOTl/';
 
 function LandingPage() {
-  const handleCTA = () => window.open(WAITLIST_URL, '_blank');
+  const handleCTA = () => { window.location.href = WAITLIST_URL; };
 
   return (
     <div className="bg-bg-primary min-h-screen">

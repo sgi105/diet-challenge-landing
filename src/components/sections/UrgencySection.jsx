@@ -29,11 +29,6 @@ export default function UrgencySection() {
         </div>
       </AnimateOnScroll>
 
-      <AnimateOnScroll className="mt-6">
-        <p className="text-text-secondary text-center text-sm">
-          대기 명단에 먼저 등록할수록 우선 안내받습니다.
-        </p>
-      </AnimateOnScroll>
     </section>
   );
 }
