@@ -13,6 +13,7 @@ import FAQSection from './components/sections/FAQSection';
 import FinalCTASection from './components/sections/FinalCTASection';
 import StickyCTA from './components/layout/StickyCTA';
 import Footer from './components/layout/Footer';
+import IABGuide from './components/ui/IABGuide';
 import SuccessPage from './pages/SuccessPage';
 import FailPage from './pages/FailPage';
 import TermsPage from './pages/TermsPage';
@@ -45,6 +46,7 @@ function LandingPage() {
       <FinalCTASection onCTA={handleCTA} />
       <Footer />
       <StickyCTA onCTA={handleCTA} />
+      <IABGuide />
       </div>
     </div>
   );
