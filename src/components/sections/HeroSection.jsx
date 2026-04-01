@@ -11,7 +11,7 @@ export default function HeroSection({ onCTA }) {
       <div className="relative z-10 text-center max-w-lg mx-auto">
         {/* Pre-headline */}
         <span className="inline-block text-accent-orange text-sm font-semibold tracking-wide mb-6 animate-fade-up">
-          9기수 · 116명 바디프로필 달성 | 신규 모집 중
+          🔴 4월 기수 조기 마감 · 5월 대기 명단 모집 중
         </span>
 
         {/* Main headline */}
@@ -40,15 +40,14 @@ export default function HeroSection({ onCTA }) {
         {/* CTA */}
         <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
           <Button onClick={onCTA} className="animate-pulse-glow">
-            인스타 DM으로 신청하기
+            5월 가장 빨리 소식 받기
           </Button>
         </div>
 
 
         {/* Countdown */}
         <div className="mt-8 animate-fade-up" style={{ animationDelay: '0.5s' }}>
-          <p className="text-text-muted text-xs mb-3">모집 마감까지</p>
-          <CountdownTimer targetDate={COHORT.deadline} />
+          <p className="text-text-muted text-xs">5월 모집 오픈 시 가장 먼저 알려드립니다</p>
         </div>
       </div>
     </section>

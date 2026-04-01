@@ -1,4 +1,3 @@
-import { useState } from 'react';
 import { Routes, Route } from 'react-router-dom';
 import HeroSection from './components/sections/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
@@ -14,17 +13,16 @@ import FAQSection from './components/sections/FAQSection';
 import FinalCTASection from './components/sections/FinalCTASection';
 import StickyCTA from './components/layout/StickyCTA';
 import Footer from './components/layout/Footer';
-import DMModal from './components/ui/DMModal';
 import SuccessPage from './pages/SuccessPage';
 import FailPage from './pages/FailPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import RefundPage from './pages/RefundPage';
 
-function LandingPage() {
-  const [showDM, setShowDM] = useState(false);
+const WAITLIST_URL = 'https://ig.me/j/Aba4AF3R4T_5UOTl/';
 
-  const handleCTA = () => setShowDM(true);
+function LandingPage() {
+  const handleCTA = () => window.open(WAITLIST_URL, '_blank');
 
   return (
     <div className="bg-bg-primary min-h-screen">
@@ -42,7 +40,6 @@ function LandingPage() {
       <FinalCTASection onCTA={handleCTA} />
       <Footer />
       <StickyCTA onCTA={handleCTA} />
-      {showDM && <DMModal onClose={() => setShowDM(false)} />}
     </div>
   );
 }

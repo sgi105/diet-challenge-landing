@@ -40,7 +40,7 @@ export default function PricingSection({ onCTA }) {
           </div>
 
           <Button onClick={onCTA} className="w-full whitespace-nowrap" size="md">
-            @bali_tarzan DM으로 신청하기
+            5월 가장 빨리 소식 받기
           </Button>
 
           <p className="text-text-muted text-xs mt-2">

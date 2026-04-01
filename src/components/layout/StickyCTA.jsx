@@ -22,7 +22,7 @@ export default function StickyCTA({ onCTA }) {
           onClick={onCTA}
           className="w-full bg-accent-green text-bg-primary font-bold py-4 rounded-xl text-base hover:brightness-110 transition-all duration-300 cursor-pointer"
         >
-          📩 인스타 DM으로 신청하기 (@bali_tarzan)
+          🔔 5월 가장 빨리 소식 받기
         </button>
       </div>
     </div>
