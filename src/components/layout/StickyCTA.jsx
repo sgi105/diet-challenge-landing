@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { WAITLIST_URL } from '../../App';
+import { DM_URL } from '../../App';
 
 export default function StickyCTA({ onCTA }) {
   const [show, setShow] = useState(false);
@@ -20,7 +20,7 @@ export default function StickyCTA({ onCTA }) {
     <div className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ${show ? 'translate-y-0' : 'translate-y-full'}`}>
       <div className="bg-bg-primary/90 backdrop-blur-md border-t border-border px-4 py-3">
         <a
-          href={WAITLIST_URL}
+          href={DM_URL}
           className="block w-full bg-accent-green text-bg-primary font-bold py-4 rounded-xl text-base text-center hover:brightness-110 transition-all duration-300"
         >
           🔔 5월 챌린지 모집 알림 신청하기

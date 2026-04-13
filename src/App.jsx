@@ -20,10 +20,10 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import RefundPage from './pages/RefundPage';
 
-export const WAITLIST_URL = 'https://ig.me/j/Aba4AF3R4T_5UOTl/';
+export const DM_URL = 'https://ig.me/m/bali_tarzan';
 
 function LandingPage() {
-  const handleCTA = () => { window.location.href = WAITLIST_URL; };
+  const handleCTA = () => { window.location.href = DM_URL; };
 
   return (
     <div className="bg-bg-primary min-h-screen">
