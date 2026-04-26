@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react';
-import { DM_URL } from '../../App';
 
 export default function StickyCTA({ onCTA }) {
   const [show, setShow] = useState(false);
@@ -18,13 +17,14 @@ export default function StickyCTA({ onCTA }) {
 
   return (
     <div className={`fixed bottom-0 left-0 right-0 z-50 transition-all duration-300 ${show ? 'translate-y-0' : 'translate-y-full'}`}>
-      <div className="bg-bg-primary/90 backdrop-blur-md border-t border-border px-4 py-3">
-        <a
-          href={DM_URL}
-          className="block w-full bg-accent-green text-bg-primary font-bold py-4 rounded-xl text-base text-center hover:brightness-110 transition-all duration-300"
+      <div className="bg-bg-deep/95 backdrop-blur-md border-t border-white/10 px-4 py-3">
+        <button
+          onClick={onCTA}
+          className="block w-full bg-accent-green text-bg-primary font-extrabold py-3 rounded-2xl text-center hover:brightness-110 transition-all duration-300 cursor-pointer shadow-[0_8px_24px_rgba(200,255,77,0.35)] leading-tight"
         >
-          🔔 5월 챌린지 모집 알림 신청하기
-        </a>
+          <span className="block text-base">지원하기</span>
+          <span className="block text-[10px] font-bold opacity-80 mt-0.5 tracking-wide">4/27(일) 23:59 마감</span>
+        </button>
       </div>
     </div>
   );

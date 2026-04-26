@@ -1,0 +1,746 @@
+{
+  "generated_at": "2026-04-26T10:44:33.703Z",
+  "cohort": {
+    "challenge_type_id": "team_diet_30d",
+    "program_start_date": "2026-04-02"
+  },
+  "stats": {
+    "cohortSize": 11,
+    "avgLossKg": 2.3,
+    "totalLossKg": 25.1,
+    "avgCertDays": 24.6,
+    "totalCertDays": 271,
+    "leaderboard": [
+      {
+        "name": "한OO",
+        "loss": 5,
+        "start": 75.28,
+        "latest": 70.29
+      },
+      {
+        "name": "김OO",
+        "loss": 3.4,
+        "start": 57.6,
+        "latest": 54.19
+      },
+      {
+        "name": "고OO",
+        "loss": 3.4,
+        "start": 88.91,
+        "latest": 85.5
+      },
+      {
+        "name": "소OO",
+        "loss": 2.8,
+        "start": 58.75,
+        "latest": 56
+      },
+      {
+        "name": "신OO",
+        "loss": 2.8,
+        "start": 53.7,
+        "latest": 50.9
+      },
+      {
+        "name": "윤OO",
+        "loss": 2,
+        "start": 81.74,
+        "latest": 79.78
+      },
+      {
+        "name": "이OO",
+        "loss": 1.5,
+        "start": 81.5,
+        "latest": 80
+      },
+      {
+        "name": "손OO",
+        "loss": 1.5,
+        "start": 59.63,
+        "latest": 58.14
+      },
+      {
+        "name": "김OO",
+        "loss": 1.4,
+        "start": 65.05,
+        "latest": 63.65
+      },
+      {
+        "name": "서OO",
+        "loss": 1.1,
+        "start": 67.1,
+        "latest": 66
+      },
+      {
+        "name": "김OO",
+        "loss": 0.3,
+        "start": 51.27,
+        "latest": 51
+      }
+    ]
+  },
+  "top_posts": [
+    {
+      "day": 5,
+      "name": "김OO",
+      "caption": "내가 이걸 아침에 할수있을까? \n\n오늘은 아침에 나에게 졌다\n오전7시기상, 저녁제외 내내 클린식 유지,55키로대 진입은 뿌듯하다만\n오전에 운동을 나가지는 못했다\n오전내로 공복 유산소까지 마치는 루틴을 갖게될수 있겠지…? \n조바심갖지말고 매일 그냥하기나 하자!\n\n오늘의 유산소로는 러닝은 못했고 계단오르기 총 70층,실소요시간 14분20초(엄마랑해서 좀더걸림), 총소요시간 25분! 얼굴에서 땀이 뻘뻘, 숨이 매 슬랏(7번) 마다 헐떡여서 뿌듯",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-06/exercise/1775482025707-t0ml221zpw.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/weight/1775431626823-48z26h46xu6.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-06/exercise/1775482025707-t0ml221zpw.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-06/meal-lunch/1775468017497-vhksjigyloi.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-06/meal-dinner/1775482049790-ta1kt7sfx2.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 55.8,
+      "weight_start": 57.6,
+      "weight_goal": 54.6,
+      "likes": 10,
+      "created_at": "2026-04-06T13:31:27.148691+00:00"
+    },
+    {
+      "day": 5,
+      "name": "김OO",
+      "caption": "여전히 힘들다 러닝은. ㅋㅋㅋㅋㅋㅋ",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/exercise/1775433164945-6iobklku4zp.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-06/weight/1775484028912-ahsdgjhrlci.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/exercise/1775433164945-6iobklku4zp.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-06/meal-lunch/1775483983244-n4gnxs42ia.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-06/meal-dinner/1775483995162-m0hbowkt4ym.jpg",
+        "meal_lunch_tag": "normal",
+        "meal_dinner_tag": "healthy"
+      },
+      "weight": 64.15,
+      "weight_start": 65.05,
+      "weight_goal": 62,
+      "likes": 10,
+      "created_at": "2026-04-06T14:00:51.018841+00:00"
+    },
+    {
+      "day": 4,
+      "name": "김OO",
+      "caption": "제주 웰니스 환경이 어떠해야 하는가에 대해 심히 연구 중. 동쪽 제주사람들을 만나보고 게스트하우스도 경험해볼겸 현재 남원읍에 왔다. 급하게 제주도 동쪽 여행을 하게 돼서 게스트하우스에서 진행한 버피. 다행히 방안에 아무도 없어서 편안히 시작했으나 버피는 힘들다… ㅋㅋㅋㅋㅋ 아 숨차. ㅋㅋㅋ 그나저나 내일 아침 체중측정 어쩌나. 체중계는 없는 거 같던데… ㅠ",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/exercise/1775399752218-i27q50atzp.mp4",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/weight/1775353790730-3pv3nz9yxwh.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/exercise/1775399752218-i27q50atzp.mp4",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/meal-lunch/1775398782585-9ooiunzmd1l.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-05/meal-dinner/1775398798527-pjm8x302vnp.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 64.15,
+      "weight_start": 65.05,
+      "weight_goal": 62,
+      "likes": 9,
+      "created_at": "2026-04-05T14:39:44.506436+00:00"
+    },
+    {
+      "day": 5,
+      "name": "서OO",
+      "caption": "오 뛸만한데?!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/posts/1775476246742-516s5uhv1g9.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-06/weight/1775434947833-h5sylv3b0si.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-06/exercise/1775435935462-lm9x582bln.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-06/meal-lunch/1775475848686-bf553uouald.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-06/meal-dinner/1775475833146-ek7dhvfy9bi.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 66.5,
+      "weight_start": 67.1,
+      "weight_goal": 58,
+      "likes": 9,
+      "created_at": "2026-04-06T11:50:48.296062+00:00"
+    },
+    {
+      "day": 5,
+      "name": "신OO",
+      "caption": "9분동안 7속도로 쉬지않고 달린건 처음인데,\n인터벌 방식만 해오다가 이렇게 1분씩 늘려가면서 점점 심폐지구력도 늘어가고 체력도 늘어가겠구나.. 나 매일 대단한 도전을 하고있구나 느꼈어 \n결론은 너무 좋다구 🫶🏿 살도 쭉쭉 빠지는중 .ᐟ \n예쁜 우리집고양이 미미보고 힐링하세요",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/587cc169-0d99-4e5e-8e1e-0451c0883f89/posts/1775478492245-9mrhfnxkpzv.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/587cc169-0d99-4e5e-8e1e-0451c0883f89/2026-04-06/weight/1775443859288-2ny6yt0yjha.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/587cc169-0d99-4e5e-8e1e-0451c0883f89/2026-04-06/exercise/1775443845048-9jlqgv9k9hw.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/587cc169-0d99-4e5e-8e1e-0451c0883f89/2026-04-06/meal-lunch/1775459615059-gzi4jrdu31v.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/587cc169-0d99-4e5e-8e1e-0451c0883f89/2026-04-06/meal-dinner/1775478265921-nf0p6pr1ut.jpg",
+        "meal_lunch_tag": "normal",
+        "meal_dinner_tag": "healthy"
+      },
+      "weight": 52.5,
+      "weight_start": 53.7,
+      "weight_goal": 48,
+      "likes": 9,
+      "created_at": "2026-04-06T12:28:13.633503+00:00"
+    },
+    {
+      "day": 5,
+      "name": "이OO",
+      "caption": "오늘은 새로운 창업아이템과 팀원, 그리고 사람에 대해 고민했다. 좋은 주변인이 있는 것은 나에게 큰 힘이 되어준다!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ad94dd15-88e3-44bc-ba04-d2c76c06e9cc/2026-04-06/meal-lunch/1775480606207-3e1xuurr4yn.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ad94dd15-88e3-44bc-ba04-d2c76c06e9cc/2026-04-06/weight/1775480677682-c3vwdnuvmph.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ad94dd15-88e3-44bc-ba04-d2c76c06e9cc/2026-04-06/exercise/1775480596844-fz2sd0k6plc.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ad94dd15-88e3-44bc-ba04-d2c76c06e9cc/2026-04-06/meal-lunch/1775480606207-3e1xuurr4yn.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ad94dd15-88e3-44bc-ba04-d2c76c06e9cc/2026-04-06/meal-dinner/1775480659027-nxz6onqxi3.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 81.6,
+      "weight_start": 81.5,
+      "weight_goal": 78,
+      "likes": 9,
+      "created_at": "2026-04-06T13:06:25.788794+00:00"
+    },
+    {
+      "day": 20,
+      "name": "서OO",
+      "caption": "든든함니다!!! 🎂\n\n(생리 시작해서 러닝은 몬하고 강아지랑 걸엇서요.. 그래도 헬스장은 감.. 3xl 입어서 배불뚝이 댐..)",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/posts/1776766360093-a5dknnxwdlf.jpg",
+      "proof_photos": {
+        "pushup": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-21/pushup/1776760796533-8gee71kugq.mp4",
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-21/weight/1776739856228-vdue654kp8j.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-21/exercise/1776737489290-b0xuq8yav2r.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-21/meal-lunch/1776739881738-774vhdbmkew.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-21/meal-dinner/1776765494213-g3yvkrjjgn8.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 66.8,
+      "weight_start": 67.1,
+      "weight_goal": 64.1,
+      "likes": 9,
+      "created_at": "2026-04-21T10:12:41.04371+00:00"
+    },
+    {
+      "day": 4,
+      "name": "김OO",
+      "caption": "다이어트! \n\n오늘은 퇴원후 처음으로 케이크와 분식(맵고 튀긴거)을 일반식으로 먹었다 \n나름 다이어트 한다고 약간의 음식강박이 생겨나고 있는거같은데… 그건 끔찍하다\n식단은 그냥 습관처럼 꾸준히 하는거고.. 맛있는거 있으먄 적당히먹으면서 살수있어야한다 \n그렇게 쥐도새도 모르게 살은 자연스럽게 빠져있는 생활습관을 갖는게 목표다 (일단 빡쎄게 쫙한번 빼놓고 해야하는건가 싶기도 한데…) \n\n오늘처럼 뭔가 많이 먹은것 같은 날에 죄책감 갖지않도록 운동을 하늘을 우러러 한점 부끄럼 없을 정도로 운동시간만큼은 몰입해서 혼이 빠지도록 하고싶긴하다 \n이렇게 10분 20분 깨작하는걸로는 뭣도 안될거같다..\n어서 유산소 1시간을 부담없이 할수있는 루틴을 마련하고 싶다! \n\n오늘도 오전 러닝, 저녁에는 계단오르기를 했고 \n오늘은 10층을 더올라서 총 70층, 실소요시간 13분40초, 청소요시간 20분 기록했다 매일 마음의 장벽없이 100층 30분내로 돌파하는 그날까지 조금씩 늘려가야지!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/exercise/1775353627923-kx0ou2ikwr.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/weight/1775350185669-n6mbgukbbs9.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/exercise/1775353627923-kx0ou2ikwr.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/meal-lunch/1775359528798-k0cep9xqtz.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/meal-dinner/1775392848826-rb2vkiezf9.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 56.1,
+      "weight_start": 57.6,
+      "weight_goal": 54.6,
+      "likes": 8,
+      "created_at": "2026-04-05T12:46:12.264751+00:00"
+    },
+    {
+      "day": 5,
+      "name": "한OO",
+      "caption": "오늘은 뭔가 아침에는 잘 뛰어졌는데 저녁에 근력운동이 너어무 힘들었던 하루-! \n\n대학생은 쉬지 못하는 시기가 다가왔네요,,😭 과제의 연속입니다.!!!!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/211cb2d6-b900-4f40-83db-ef7512b92d5c/2026-04-06/exercise/1775443334842-i63nzb6r3ne.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/211cb2d6-b900-4f40-83db-ef7512b92d5c/2026-04-06/weight/1775440390212-yd1rn1mf7pi.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/211cb2d6-b900-4f40-83db-ef7512b92d5c/2026-04-06/exercise/1775443334842-i63nzb6r3ne.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/211cb2d6-b900-4f40-83db-ef7512b92d5c/2026-04-06/meal-lunch/1775484930987-p49dz61srvn.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/211cb2d6-b900-4f40-83db-ef7512b92d5c/2026-04-06/meal-dinner/1775484946632-ap9gh28urx.jpg",
+        "meal_lunch_tag": "normal",
+        "meal_dinner_tag": "healthy"
+      },
+      "weight": 72.71,
+      "weight_start": 75.28,
+      "weight_goal": 60,
+      "likes": 8,
+      "created_at": "2026-04-06T14:16:48.995081+00:00"
+    },
+    {
+      "day": 12,
+      "name": "김OO",
+      "caption": "좀 일찍 했네요. 근데 버피하니까 아랫배 진짜 관리 잘되네요. 월경 시작일이라 몸무게는 늘어있지만. 붓기 빠지는대로 꽤 결과가 괜찮을 거 같아요. \n\n오늘은 저 커피와 디저트 하나 먹고 이동하느라 먹은게 없네요. 간헐적 단식하는 날로 생각하려구요.",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/posts/1776085343439-eimkvj239uv.jpg",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-13/weight/1776083983646-0s125nfcfz8b.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-13/exercise/1776085128508-99c92xkmaw4.mp4",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-13/meal-lunch/1776083998212-uhyc3t3ly1h.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-13/meal-dinner/1776084027235-t3gdv97yd6t.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 64.8,
+      "weight_start": 65.05,
+      "weight_goal": 62,
+      "likes": 8,
+      "created_at": "2026-04-13T13:02:25.370287+00:00"
+    },
+    {
+      "day": 15,
+      "name": "손OO",
+      "caption": "버피도 이젠 덜 힘들다(?)\n내일부턴 러닝 다시 시작해야지!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/9fce3e44-dd8c-4f7d-874d-4c64711d3687/2026-04-16/exercise/1776349158159-1ufsrribaa2i.mp4",
+      "proof_photos": {
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/9fce3e44-dd8c-4f7d-874d-4c64711d3687/2026-04-16/weight/1776343979374-vby4mu979fq.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/9fce3e44-dd8c-4f7d-874d-4c64711d3687/2026-04-16/exercise/1776349158159-1ufsrribaa2i.mp4",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/9fce3e44-dd8c-4f7d-874d-4c64711d3687/2026-04-16/meal-lunch/1776343990953-km37993q86.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/9fce3e44-dd8c-4f7d-874d-4c64711d3687/2026-04-16/meal-dinner/1776349550398-adv0cig9bz.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "healthy"
+      },
+      "weight": 58.3,
+      "weight_start": 59.63,
+      "weight_goal": 56,
+      "likes": 8,
+      "created_at": "2026-04-16T14:26:16.441241+00:00"
+    },
+    {
+      "day": 19,
+      "name": "서OO",
+      "caption": "체력이 좋아진 느낌스",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-20/pushup/1776690972885-va3vomre6a.mp4",
+      "proof_photos": {
+        "pushup": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-20/pushup/1776690972885-va3vomre6a.mp4",
+        "weight": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-20/weight/1776647492179-a0enupax95.jpg",
+        "exercise": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-20/exercise/1776647482934-wycrlrdwdu.jpg",
+        "meal_lunch": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-20/meal-lunch/1776682740979-11cl1mwg00rl.jpg",
+        "meal_dinner": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/2026-04-20/meal-dinner/1776682751639-6ltbe2jo1ol.jpg",
+        "meal_lunch_tag": "healthy",
+        "meal_dinner_tag": "normal"
+      },
+      "weight": 66.8,
+      "weight_start": 67.1,
+      "weight_goal": 64.1,
+      "likes": 8,
+      "created_at": "2026-04-20T13:20:03.042355+00:00"
+    }
+  ],
+  "conversations": [
+    {
+      "author": "서OO",
+      "day": 8,
+      "caption": "오늘 생일이라 연어케이크 먹었슴다 ㅎㅎ",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/posts/1775733274800-sa7i0pnj98.jpg",
+      "created_at": "2026-04-09T11:14:35.272513+00:00",
+      "comment_count": 11,
+      "comments": [
+        {
+          "sender": "신OO",
+          "content": "연어 삐삐요트 ? 였나 생일축하해용 💕💕🧑‍🩰🩰",
+          "ts": "2026-04-09T11:23:44.092073+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@신OO 오 맞아요 이거 아는 사람 첨봐요 ㅋㅋ",
+          "ts": "2026-04-09T11:30:50.982464+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@신OO 축하 고마워요 😍",
+          "ts": "2026-04-09T11:32:39.745799+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "생일축하드려요 저였으면 생일때 치팅 야무지게 햤을 거 같은데 대단하시네요🔥🔥",
+          "ts": "2026-04-09T13:44:11.096593+00:00"
+        },
+        {
+          "sender": "고OO",
+          "content": "와 생일 축하해요 😁😁",
+          "ts": "2026-04-09T14:46:20.698324+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "생일축하드랴요~~",
+          "ts": "2026-04-09T14:50:41.377743+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@김OO 감사함니다🔥🔥",
+          "ts": "2026-04-09T15:22:00.27394+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@고OO 고마워요 😆😆",
+          "ts": "2026-04-09T15:22:37.206371+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@김OO 감사해요~~!!",
+          "ts": "2026-04-09T15:23:03.10329+00:00"
+        },
+        {
+          "sender": "윤OO",
+          "content": "생일 축하 드려요! 연어케이크 ㅋㅋㅋㅋ챌린지 충실",
+          "ts": "2026-04-10T09:43:41.130599+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@윤OO 감사해요! 과정은 충실한데 몸무게는 늘어나는 ㅋㅋㅋ",
+          "ts": "2026-04-10T12:38:17.388947+00:00"
+        }
+      ]
+    },
+    {
+      "author": "서OO",
+      "day": 20,
+      "caption": "든든함니다!!! 🎂\n\n(생리 시작해서 러닝은 몬하고 강아지랑 걸엇서요.. 그래도 헬스장은 감.. 3xl 입어서 배불뚝이 댐..)",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/posts/1776766360093-a5dknnxwdlf.jpg",
+      "created_at": "2026-04-21T10:12:41.04371+00:00",
+      "comment_count": 10,
+      "comments": [
+        {
+          "sender": "윤OO",
+          "content": "점심 뭐에요?!",
+          "ts": "2026-04-21T10:15:24.028394+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@윤OO 마녀스프임다!!",
+          "ts": "2026-04-21T10:41:31.584451+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "컨디션 난조 인데도  운동한  예인님  멋져여~~~❣️",
+          "ts": "2026-04-21T13:38:49.578275+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "고고씨잉~",
+          "ts": "2026-04-21T13:49:37.803656+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "저랑 똑같네요 ㅋㅋㅋ 그래도 운동한거 짝짝!!",
+          "ts": "2026-04-21T14:13:52.949749+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "저두 생리기간은 무조건 릴렉싱.... 🫂🧡",
+          "ts": "2026-04-21T14:36:12.521819+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@김OO 가을님도 운동 꾸준히 하시는거 넘 멋지세여!!",
+          "ts": "2026-04-21T15:23:28.939195+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@김OO 킵고이잉~~",
+          "ts": "2026-04-21T15:23:38.970117+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@김OO 지원님도 20일 연속!!! 👏👏",
+          "ts": "2026-04-21T15:24:16.915622+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@신OO 그래도 얼마나 안남앗으니 이틀차까지만 릴렉스하는걸루.. 🥹",
+          "ts": "2026-04-21T15:24:53.675472+00:00"
+        }
+      ]
+    },
+    {
+      "author": "김OO",
+      "day": 3,
+      "caption": "오늘도 해냈다,, 하는 뿌듯함 \n오늘은 벚꽃 보며 걷고(아침에 했는데 인증을 늦음 ㅜ)\n계단타기를 해보았다 10층씩 총 6번완료! 시간은 12분 정도 소요되었는데 러닝보다 훨씬 헐떡거렸다 \n요즘 러닝하는게 예전같지가 않아서, 지속가능한 운동을 다시 찾고있는데 어쩌면 좋은 옵션이 될수도!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-04/exercise/1775308658495-32y9t6z1u8r.jpg",
+      "created_at": "2026-04-04T13:55:10.680855+00:00",
+      "comment_count": 9,
+      "comments": [
+        {
+          "sender": "이OO",
+          "content": "러닝보다 더 힘든 계단타기..! 넘멋지십니다",
+          "ts": "2026-04-04T14:02:02.112856+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "10층 여섯번 = 60층…??????????",
+          "ts": "2026-04-04T14:47:25.557952+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "혼자 63빌딩 올라갓다오셧네요",
+          "ts": "2026-04-04T14:47:35.772504+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "잘 먹는다아..",
+          "ts": "2026-04-04T14:51:18.654986+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@신OO 언젠간 100층 도전..!!",
+          "ts": "2026-04-05T00:51:17.38062+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@이OO 상우님도 고고 짱추!",
+          "ts": "2026-04-05T00:51:32.802261+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "다들",
+          "ts": "2026-04-05T02:10:35.323302+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "엄청난운동을하고계시군요... 나자신",
+          "ts": "2026-04-05T02:10:42.756763+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@김OO 엄마밥🥹",
+          "ts": "2026-04-05T03:22:44.019542+00:00"
+        }
+      ]
+    },
+    {
+      "author": "서OO",
+      "day": 1,
+      "caption": "벌써 살빠진 기분인데 기분탓일까요?",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/1f5a9e6a-c469-4561-9c41-b2d543b9f2cf/posts/1775139128572-rzvauyufwak.jpg",
+      "created_at": "2026-04-02T14:10:39.128288+00:00",
+      "comment_count": 8,
+      "comments": [
+        {
+          "sender": "한OO",
+          "content": "우와 진짜 건강식이다아..",
+          "ts": "2026-04-02T14:13:33.022499+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@한OO 코끼리처럼 먹었어요",
+          "ts": "2026-04-02T14:22:23.11947+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "진짜 저도 ㅋㅋㅋ ㅠㅠ",
+          "ts": "2026-04-02T14:44:47.298783+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@한OO 🐘🐘🩷",
+          "ts": "2026-04-02T14:52:11.269095+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "저는 계란알러지가있어서 ... 계란을 못먹습니다 🥹",
+          "ts": "2026-04-02T16:25:51.418887+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "어떻게 점심 저것만 먹고 버텼어요...? 대단해...",
+          "ts": "2026-04-02T16:26:09.196326+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@신OO 헐 저도 있었는데 한동안 안먹으니까 또 없어지더라구요. 그래도 있을땐 못먹어서 힘듦ㅠㅠ",
+          "ts": "2026-04-02T23:59:28.180852+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@신OO 그래서 간식으로 계란이랑 방토 먹었더염 히히",
+          "ts": "2026-04-02T23:59:59.859345+00:00"
+        }
+      ]
+    },
+    {
+      "author": "한OO",
+      "day": 1,
+      "caption": "미쳐버린 눈바디 진짜 과거의 나 반성하고 또 반성해라 맨날 야식 처먹더니 진짜 와....도랐니.. 지금이라도 다이어트 시작하는게 다행인거 같아요ㅠㅠ 오늘 오분 뛰는 것도 정말 힘들었는데 막날에는 꼭 눈바디라도 좋아지길!!!!!",
+      "media_url": null,
+      "created_at": "2026-04-02T14:47:57.102794+00:00",
+      "comment_count": 8,
+      "comments": [
+        {
+          "sender": "한OO",
+          "content": "다시 봐도 충격적이네..",
+          "ts": "2026-04-02T14:48:17.107262+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "눈바디 올린거 진짜 리스펙!!! 너무 멋짐🔥🔥",
+          "ts": "2026-04-02T14:50:13.216042+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "@서OO 진짜 ㅋ̄̈ㅋ꙼̈ㅋ̆̎ㅋ̐̈ㅋ̊̈ㅋ̄̈ㅋ꙼̈ㅋ̆̎ㅋ̐̈ㅋ̊̈ㅋ̄̈ 저거 언제 다 빼요..??!??ㅠㅠ",
+          "ts": "2026-04-02T14:50:43.664744+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "@한OO 한 달 챌린지 끝나고도 같이 뺍시다 저희 ㅋㅋㅋ",
+          "ts": "2026-04-02T15:04:00.944624+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "@한OO 과거의나도 지금의나도 모두 사랑해줘요  ❤︎ 살이찌든안찌즘",
+          "ts": "2026-04-02T16:24:29.908162+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "@신OO 난 나의",
+          "ts": "2026-04-02T16:24:45.10937+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "@신OO 몸을 사랑해 인제 왜 자꾸 끊기니",
+          "ts": "2026-04-02T16:25:07.540284+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "@한OO 우리끼리 챌린지 이어가요 ㅋㅋㅋㅋ",
+          "ts": "2026-04-02T16:25:26.772718+00:00"
+        }
+      ]
+    },
+    {
+      "author": "김OO",
+      "day": 3,
+      "caption": "너무 피곤해서 초저녁부터 쓰러졌는데 무조건 일어나서 팀원들한테 피해주고 싶지않아 운동복 챙겨입고 완수했네요. 오늘 영상으로 만들어서 타잔님한테 보내놓고 입력하는데 기능이 새로 나와있는거 “비가 와서 운동대체하기” 봤네요. 내일부터 러닝이 힘든 날은 그 기능으로 대체해볼게요. 몸이 천근만근이었는데 완수해서 기분 좋아요.",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/ac6ef9a9-2259-4c2e-b10a-ad23245c2f44/2026-04-04/exercise/1775313707915-mh03rqd7ec.jpg",
+      "created_at": "2026-04-04T14:45:20.868504+00:00",
+      "comment_count": 8,
+      "comments": [
+        {
+          "sender": "신OO",
+          "content": "천근만근이어도 한 당신을 칭찬해!",
+          "ts": "2026-04-04T14:48:16.490092+00:00"
+        },
+        {
+          "sender": "이OO",
+          "content": "팀을 위해 완수해주셔서 너무 감사해요!",
+          "ts": "2026-04-04T14:51:59.654339+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "점심에 드신게 엄청 맛있어 보여요!!",
+          "ts": "2026-04-04T15:10:05.758289+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "팀을위해 🥹 화이팅 화이팅!!",
+          "ts": "2026-04-05T00:38:20.73753+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@한OO 제주 제 가게(투머치파이)에서 파는 미트파이입니당! 😋 맛있어용!",
+          "ts": "2026-04-05T01:51:46.127211+00:00"
+        },
+        {
+          "sender": "신OO",
+          "content": "제주가면 꼭 들릴게용  ❤︎ 맛있겠다",
+          "ts": "2026-04-05T02:09:10.09257+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "팀을 위해 좋네요!! 책임감🔥",
+          "ts": "2026-04-05T07:40:12.665095+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "@김OO 우왛 제주도 가게 되면 꼭 먹으러 갈게요!!!",
+          "ts": "2026-04-05T10:26:39.687042+00:00"
+        }
+      ]
+    },
+    {
+      "author": "김OO",
+      "day": 4,
+      "caption": "다이어트! \n\n오늘은 퇴원후 처음으로 케이크와 분식(맵고 튀긴거)을 일반식으로 먹었다 \n나름 다이어트 한다고 약간의 음식강박이 생겨나고 있는거같은데… 그건 끔찍하다\n식단은 그냥 습관처럼 꾸준히 하는거고.. 맛있는거 있으먄 적당히먹으면서 살수있어야한다 \n그렇게 쥐도새도 모르게 살은 자연스럽게 빠져있는 생활습관을 갖는게 목표다 (일단 빡쎄게 쫙한번 빼놓고 해야하는건가 싶기도 한데…) \n\n오늘처럼 뭔가 많이 먹은것 같은 날에 죄책감 갖지않도록 운동을 하늘을 우러러 한점 부끄럼 없을 정도로 운동시간만큼은 몰입해서 혼이 빠지도록 하고싶긴하다 \n이렇게 10분 20분 깨작하는걸로는 뭣도 안될거같다..\n어서 유산소 1시간을 부담없이 할수있는 루틴을 마련하고 싶다! \n\n오늘도 오전 러닝, 저녁에는 계단오르기를 했고 \n오늘은 10층을 더올라서 총 70층, 실소요시간 13분40초, 청소요시간 20분 기록했다 매일 마음의 장벽없이 100층 30분내로 돌파하는 그날까지 조금씩 늘려가야지!",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/8d3b12d3-c977-40a9-b161-95523a63592b/2026-04-05/exercise/1775353627923-kx0ou2ikwr.jpg",
+      "created_at": "2026-04-05T12:46:12.264751+00:00",
+      "comment_count": 8,
+      "comments": [
+        {
+          "sender": "신OO",
+          "content": "저도오늘 6시간동안 대청소했더니 손이달달...",
+          "ts": "2026-04-05T12:47:52.58008+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "건강이 우선이죠! 식단도 정말 강박 안생기고..건강하게 먹고...이거 너무 어려워요ㅠㅠ",
+          "ts": "2026-04-05T13:27:44.599152+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "운동엔 어서빨리는 없음. 그저 한다.",
+          "ts": "2026-04-05T14:43:42.771389+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@신OO 오노 대단한 운동인것…!",
+          "ts": "2026-04-05T14:55:54.411488+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@한OO 젤어려운거같아요… 습관으로 만들어버리기..!!",
+          "ts": "2026-04-05T14:56:14.672246+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@김OO 맞습니다 😂그냥한다!",
+          "ts": "2026-04-05T14:56:22.554644+00:00"
+        },
+        {
+          "sender": "이OO",
+          "content": "글에 지원짱의 의지의 향이 솔솔 묻어납니다…! 응원하겠습니다",
+          "ts": "2026-04-06T13:08:59.288951+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "@이OO 의지 엿보였나요 ㅋㅋㅋ 화이팅!!",
+          "ts": "2026-04-06T13:39:52.936887+00:00"
+        }
+      ]
+    },
+    {
+      "author": "한OO",
+      "day": 4,
+      "caption": "요즘에는 인스타 키우기 + 컨설팅 시스템화에 집중하고 있어요:) 클로드 코드사용해서 관리 자동화 시스템을 구축해 놓으니 너무 편하네요.. 번외로 매거진 운영도 시작했는데 여기도 콘텐츠 반자동화해서 운영중입니다 ㅎㅎ\n\n오늘은 진짜 무슨 아침부터 밤까제 계속 미팅이있어서 한끼도 못먹었어요ㅠㅠ\n갸우 쉐이크하나먹고 근력운동이랑 유산소 뛰고,, 마지막 미팅장소에서 커피 사주신거 하나 쪼꿈 마샸습니다.\n\n바쁘게 보낸 날은 성취감에 배가 고프지 않네용",
+      "media_url": "https://arjkkooducikmpjeudnc.supabase.co/storage/v1/object/public/mission-evidence/211cb2d6-b900-4f40-83db-ef7512b92d5c/2026-04-05/exercise/1775395416059-2kw7c1psvky.jpg",
+      "created_at": "2026-04-05T13:26:39.931769+00:00",
+      "comment_count": 8,
+      "comments": [
+        {
+          "sender": "신OO",
+          "content": "그러다쓰러져요 ㅠ ㅠ",
+          "ts": "2026-04-05T13:40:00.582445+00:00"
+        },
+        {
+          "sender": "서OO",
+          "content": "내일은 꼭 잘 챙겨먹어유!!!",
+          "ts": "2026-04-05T13:59:58.901381+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "다여트가 저절로… ㅠ 단백질 쉐이크라도 챙겨요!",
+          "ts": "2026-04-05T14:42:52.864533+00:00"
+        },
+        {
+          "sender": "김OO",
+          "content": "자동화 팁도 기회되면 들어보고싶네요~~ ㅎㅎㅎ 일+다이어트 일기 재밌습니다 :)",
+          "ts": "2026-04-05T14:55:33.197986+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "@김OO 신세계입니당 ㅎㅎ 바쁘게 지내면 먹을 생각두 사라지더라구요🥹",
+          "ts": "2026-04-06T00:58:39.637623+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "@김OO 단쉐는 너무 맛있어서 맨날 챙겨먹게 됩미댱 ㅎㅎ",
+          "ts": "2026-04-06T00:59:14.250032+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "@서OO 오늘 밥 먹을 생각에 신나는 중이예요 ㅋㅋㅋ",
+          "ts": "2026-04-06T00:59:27.941044+00:00"
+        },
+        {
+          "sender": "한OO",
+          "content": "@신OO 내일 꼭꼭 잘챙겨 먹어야지!!",
+          "ts": "2026-04-06T00:59:36.372315+00:00"
+        }
+      ]
+    }
+  ]
+}

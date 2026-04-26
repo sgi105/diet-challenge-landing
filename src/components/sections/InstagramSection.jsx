@@ -16,16 +16,14 @@ export default function InstagramSection() {
     <section className="py-14">
       <div className="px-6 max-w-lg mx-auto">
         <AnimateOnScroll>
-          <span className="text-accent-green text-sm font-semibold">@samurai_habit</span>
-          <h2 className="text-2xl md:text-4xl font-extrabold mt-2 mb-4">
-            116명이 바디프로필을 찍은
-            <br />
-            그 노하우.
+          <span className="pill text-accent-green">@samurai_habit</span>
+          <h2 className="font-kr text-3xl md:text-5xl font-black mt-4 mb-4 text-text-primary leading-tight">
+            사람을 매일 움직이는<br />엔진은 똑같습니다.
           </h2>
           <p className="text-text-secondary mb-8">
-            9기수의 오프라인 챌린지를 운영하며 쌓은 검증된 시스템을,
+            9기수 동안 다이어트로 검증된 구조 — <span className="text-text-primary font-bold">팀 + 경쟁(당근) + 보증금(채찍)</span>.
             <br />
-            <span className="text-text-primary font-semibold">이번엔 100% 온라인 30일 챌린지로 압축했습니다.</span>
+            <span className="text-text-primary font-bold">시즌 0는 그 엔진을 4주 러닝에 그대로 옮깁니다.</span>
           </p>
         </AnimateOnScroll>
       </div>
@@ -38,7 +36,7 @@ export default function InstagramSection() {
           {photos.map((photo, i) => (
             <div
               key={i}
-              className="snap-start shrink-0 w-[70vw] max-w-[280px] rounded-2xl overflow-hidden relative"
+              className="snap-start shrink-0 w-[70vw] max-w-[280px] rounded-3xl overflow-hidden relative shadow-[0_12px_30px_rgba(0,0,0,0.2)]"
             >
               <img
                 src={photo.src}
@@ -47,7 +45,7 @@ export default function InstagramSection() {
                 loading="lazy"
               />
               <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
-              <p className="absolute bottom-3 left-3 right-3 text-white text-sm font-semibold">
+              <p className="absolute bottom-3 left-3 right-3 text-white text-sm font-bold">
                 {photo.caption}
               </p>
             </div>
@@ -57,19 +55,19 @@ export default function InstagramSection() {
 
       {/* Online distinction */}
       <AnimateOnScroll className="mt-8 px-6 max-w-lg mx-auto">
-        <div className="bg-bg-card rounded-2xl p-6 border border-accent-green/30">
-          <p className="text-accent-green font-bold text-lg mb-3">
-            이번 챌린지는 다릅니다.
+        <div className="bg-bg-card rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
+          <p className="text-bg-primary font-extrabold text-lg mb-3 font-kr">
+            시즌 0는 다릅니다.
           </p>
-          <div className="space-y-2 text-sm text-text-secondary">
+          <div className="space-y-2 text-sm text-card-ink-muted">
             <p>
-              <span className="text-text-primary font-semibold">100% 온라인</span> — 오프라인 모임 없이 집에서 참여
+              <span className="text-card-ink font-bold">100% 온라인</span> — 오프라인 모임 없이 어디서든
             </p>
             <p>
-              <span className="text-text-primary font-semibold">바디프로필 아님</span> — 30일 5kg 감량에만 집중
+              <span className="text-card-ink font-bold">4주 러닝</span> — 다이어트 아닌 5km 완주에 집중
             </p>
             <p>
-              <span className="text-text-primary font-semibold">참가비 0원</span> — 예치금 20만원, 성공하면 24만원 환급
+              <span className="text-card-ink font-bold">3인 1팀</span> — 혼자 못 하는 걸 팀으로 강제
             </p>
           </div>
         </div>
@@ -80,10 +78,10 @@ export default function InstagramSection() {
           href="https://www.instagram.com/samurai_habit/"
           target="_blank"
           rel="noopener noreferrer"
-          className="block bg-bg-card rounded-xl p-4 border border-border text-center hover:border-accent-green transition-colors"
+          className="block bg-bg-card rounded-2xl p-4 text-center shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:translate-y-[-2px] transition-transform"
         >
-          <p className="text-text-secondary text-sm">
-            이전 기수 기록이 궁금하다면 <span className="text-accent-green font-semibold">@samurai_habit</span>
+          <p className="text-card-ink-muted text-sm">
+            이전 기수 기록은 <span className="text-bg-primary font-bold">@samurai_habit</span>
           </p>
         </a>
       </AnimateOnScroll>

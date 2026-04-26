@@ -1,23 +1,39 @@
 @import "tailwindcss";
 
 @theme {
-  --color-bg-primary: #0D0D0D;
-  --color-bg-card: #1A1A1A;
-  --color-bg-card-hover: #242424;
-  --color-accent-green: #00FF88;
-  --color-accent-orange: #FF6B35;
-  --color-text-primary: #FFFFFF;
-  --color-text-secondary: #B0B0B0;
-  --color-text-muted: #666666;
-  --color-border: #2A2A2A;
+  /* === Brand palette: Royal Blue + Lime Green === */
+  --color-bg-primary: #1e3cff;
+  --color-bg-deep: #0e29d6;
+  --color-bg-card: #ffffff;
+  --color-bg-card-hover: #f5f7ff;
 
-  --font-sans: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, Roboto, "Helvetica Neue", "Segoe UI", "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --color-accent-green: #c8ff4d;
+  --color-accent-green-bright: #d9ff66;
+  --color-accent-orange: #ff6b35;
+
+  /* Text on blue background */
+  --color-text-primary: #ffffff;
+  --color-text-secondary: rgba(255, 255, 255, 0.82);
+  --color-text-muted: rgba(255, 255, 255, 0.6);
+  --color-border: rgba(255, 255, 255, 0.18);
+
+  /* Text on white card */
+  --color-card-ink: #0a1f8a;
+  --color-card-ink-muted: rgba(10, 31, 138, 0.7);
+  --color-card-ink-faint: rgba(10, 31, 138, 0.5);
+  --color-card-border: rgba(30, 60, 255, 0.15);
+
+  --font-sans: "Black Han Sans", "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
+  --font-display: "Archivo Black", "Black Han Sans", "Pretendard Variable", system-ui, sans-serif;
+  --font-body: "Pretendard Variable", "Pretendard", -apple-system, BlinkMacSystemFont, system-ui, "Apple SD Gothic Neo", "Malgun Gothic", sans-serif;
 
   --animate-fade-up: fade-up 0.7s ease-out both;
   --animate-slide-in-left: slide-in-left 0.7s ease-out both;
   --animate-scale-in: scale-in 0.7s ease-out both;
   --animate-pulse-glow: pulse-glow 2s ease-in-out infinite;
   --animate-modal-in: modal-in 0.25s ease-out both;
+  --animate-spin-slow: spin 12s linear infinite;
+  --animate-spin-rev: spin-rev 12s linear infinite;
 
   @keyframes fade-up {
     from { opacity: 0; transform: translateY(30px); }
@@ -39,6 +55,10 @@
     from { opacity: 0; transform: scale(0.95) translateY(10px); }
     to { opacity: 1; transform: scale(1) translateY(0); }
   }
+  @keyframes spin-rev {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(-360deg); }
+  }
 }
 
 html {
@@ -49,17 +69,59 @@ body {
   margin: 0;
   background-color: var(--color-bg-primary);
   color: var(--color-text-primary);
+  font-family: var(--font-body);
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
+  background-image:
+    linear-gradient(rgba(255, 255, 255, 0.07) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(255, 255, 255, 0.07) 1px, transparent 1px);
+  background-size: 40px 40px;
+  background-position: -1px -1px;
+}
+
+/* Display headlines (영문) — Archivo Black */
+.font-display {
+  font-family: var(--font-display);
+  letter-spacing: -0.01em;
+  text-transform: uppercase;
+}
+
+/* Korean headline — Pretendard 900 (cleaner than Black Han Sans at large sizes) */
+.font-kr {
+  font-family: "Pretendard Variable", "Pretendard", var(--font-body);
+  font-weight: 900;
+  letter-spacing: -0.03em;
+  line-height: 1.1;
+}
+
+/* Hero/display ink-style highlight (uses lime as a clean accent block) */
+.lime-mark {
+  background: linear-gradient(180deg, transparent 60%, var(--color-accent-green) 60%);
+  padding: 0 0.1em;
+  color: inherit;
+}
+
+/* Pill badge — outline style */
+.pill {
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.9rem;
+  border-radius: 9999px;
+  border: 1.5px solid currentColor;
+  font-family: var(--font-display);
+  text-transform: uppercase;
+  letter-spacing: 0.12em;
+  font-size: 0.7rem;
+  font-weight: 700;
 }
 
 ::-webkit-scrollbar {
   width: 4px;
 }
 ::-webkit-scrollbar-track {
-  background: var(--color-bg-primary);
+  background: var(--color-bg-deep);
 }
 ::-webkit-scrollbar-thumb {
-  background: var(--color-border);
+  background: var(--color-accent-green);
   border-radius: 2px;
 }

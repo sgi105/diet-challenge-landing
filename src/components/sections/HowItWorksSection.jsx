@@ -1,37 +1,41 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 const steps = [
-  { num: 1, title: '신청 & 예치', desc: '20만원 결제하면 자동 등록', circleClass: 'bg-accent-green' },
-  { num: 2, title: '팀 매칭 & OT 세션', desc: '3인 1팀 배정 + 식단 방법론 안내', circleClass: 'bg-accent-green' },
-  { num: 3, title: '30일 미션 수행', desc: '매일 러닝 인증 + 식단 사진 + 체중 기록', circleClass: 'bg-accent-green' },
-  { num: 4, title: '정산', desc: '나만 성공: 20만원 / 팀 전원: 25만원 / 팀 1등: 30만원 / 실패: 전액 몰수', circleClass: 'bg-accent-orange' },
+  { num: 1, title: '지원 (4/26~4/27)', desc: '8문항 지원서 작성. 약 2분 소요.' },
+  { num: 2, title: '선발 (4/28 화)', desc: '30명 합격 발표 — 4/28(화) 16:00 문자 + 단톡방 안내. 입금 마감 4/28 23:59.' },
+  { num: 3, title: 'OT (5/3 토)', desc: '줌 오리엔테이션 + 3인 1팀 매칭. 러닝/식단 가이드 1시간.' },
+  { num: 4, title: '챌린지 (5/4~5/31)', desc: '4주 매일 러닝 인증. 팀원과 댓글 응원. 매주 점검 콜.' },
+  { num: 5, title: '5K 파이널 (5/31 일)', desc: '30명 동시 5km 완주. 팀 성과별 환급 정산.', highlight: true },
 ];
 
 export default function HowItWorksSection() {
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
-        <span className="text-accent-green text-sm font-semibold">참여 방법</span>
-        <h2 className="text-2xl md:text-4xl font-extrabold mt-2 mb-8">
-          4단계로 끝. 심플합니다.
+        <span className="pill text-accent-green">HOW IT WORKS</span>
+        <h2 className="font-kr text-3xl md:text-5xl font-black mt-4 mb-8 text-text-primary leading-tight">
+          5단계로 끝.<br />심플합니다.
         </h2>
       </AnimateOnScroll>
 
-
       <div className="relative">
         {/* Timeline line */}
-        <div className="absolute left-5 top-0 bottom-0 w-px bg-border" />
+        <div className="absolute left-6 top-0 bottom-0 w-0.5 bg-white/15" />
 
-        <div className="space-y-8">
+        <div className="space-y-5">
           {steps.map((step, i) => (
-            <AnimateOnScroll key={i} delay={i * 0.15}>
+            <AnimateOnScroll key={i} delay={i * 0.12}>
               <div className="flex items-start gap-5 relative">
-                <div className={`w-10 h-10 rounded-full ${step.circleClass} text-bg-primary font-bold flex items-center justify-center text-sm shrink-0 z-10`}>
+                <div className={`w-12 h-12 rounded-full font-extrabold flex items-center justify-center text-base shrink-0 z-10 shadow-[0_8px_24px_rgba(0,0,0,0.2)] ${
+                  step.highlight
+                    ? 'bg-accent-green text-bg-primary'
+                    : 'bg-white text-bg-primary'
+                }`}>
                   {step.num}
                 </div>
-                <div className="bg-bg-card rounded-xl p-5 flex-1">
-                  <h3 className="font-bold text-text-primary mb-1">{step.title}</h3>
-                  <p className="text-text-secondary text-sm">{step.desc}</p>
+                <div className="bg-bg-card rounded-2xl p-5 flex-1 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                  <h3 className="font-bold text-card-ink mb-1 text-base">{step.title}</h3>
+                  <p className="text-card-ink-muted text-sm">{step.desc}</p>
                 </div>
               </div>
             </AnimateOnScroll>
