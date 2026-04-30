@@ -94,14 +94,24 @@ async function modeSample() {
 }
 
 // ---- helpers ----
+// 한글 풀네임: 첫 글자 + O + 끝 글자 (e.g., "김혜인" → "김O인", "김인" → "김O").
+// 한글 이름(성 없는 given name)도 같은 규칙으로 적용 — "혜인" → "O인" 처리는
+// maskInlineNames의 given-name 패스에서 별도로 수행.
 function maskName(name) {
   if (!name) return '익명';
-  // Korean: keep first char, mask rest with O. Latin: first char + ***.
-  const trimmed = name.trim();
-  if (/^[ㄱ-힝]/.test(trimmed)) {
-    return trimmed[0] + 'OO';
-  }
-  return trimmed[0] + '***';
+  const s = name.trim();
+  if (!/^[ㄱ-힝]/.test(s)) return s[0] + '***';
+  if (s.length <= 1) return s;
+  if (s.length === 2) return s[0] + 'O';
+  if (s.length === 3) return s[0] + 'O' + s[2];
+  return s[0] + 'O'.repeat(s.length - 2) + s[s.length - 1];
+}
+
+// "혜인" → "O인", "혜진이" → "OO이" — 끝글자만 살리고 앞은 O로.
+function maskGivenName(g) {
+  if (!g) return g;
+  if (g.length <= 1) return g;
+  return 'O'.repeat(g.length - 1) + g[g.length - 1];
 }
 
 async function fetchCohortUserIds() {
@@ -123,20 +133,34 @@ async function loadAllNames() {
   return _allNames;
 }
 
-// Replace any @realname (or bare full name) found in `text` with masked form.
+// Replace any @realname OR bare given name found in `text` with masked form.
+// 두 패스: ① 풀네임 (e.g., "김혜인" → "김O인") ② given name (e.g., "혜인님" → "O인님")
 async function maskInlineNames(text) {
   if (!text) return text;
   const names = await loadAllNames();
-  // sort by length desc so longer matches win first
-  const sorted = [...names].sort((a, b) => b.length - a.length);
+  const sortedFull = [...names].sort((a, b) => b.length - a.length);
   let out = text;
-  for (const n of sorted) {
+
+  // ① 풀네임 패스 — @풀네임 또는 풀네임 자체
+  for (const n of sortedFull) {
     if (n.length < 2) continue;
-    // match @name OR bare name (Korean names without word boundary support)
     const escaped = n.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
     const re = new RegExp(`@?${escaped}`, 'g');
     out = out.replace(re, (m) => (m.startsWith('@') ? `@${maskName(n)}` : maskName(n)));
   }
+
+  // ② given name 패스 — 풀네임에서 성 한 글자 떼낸 given name (3자 이상 풀네임만 대상)
+  // 코호트/유저 given name이 일반 단어와 충돌할 수 있어, 길이 desc 정렬로 긴 것부터 매칭.
+  const givens = Array.from(new Set(
+    sortedFull.filter(n => n.length >= 3).map(n => n.slice(1)).filter(g => g.length >= 2)
+  )).sort((a, b) => b.length - a.length);
+
+  for (const g of givens) {
+    const escaped = g.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+    const re = new RegExp(`@?${escaped}`, 'g');
+    out = out.replace(re, (m) => (m.startsWith('@') ? `@${maskGivenName(g)}` : maskGivenName(g)));
+  }
+
   return out;
 }
 
@@ -270,7 +294,7 @@ async function modeComments() {
   // get all cohort posts
   const posts = await rest(
     `social_posts?user_id=in.${userInFilter}` +
-    `&select=id,user_id,program_day,caption,media_url,created_at,profiles(full_name)` +
+    `&select=id,user_id,program_day,caption,media_url,created_at,profiles(full_name,avatar_url)` +
     `&order=created_at.asc&limit=500`
   );
   const postIds = posts.map(p => p.id);
@@ -279,7 +303,7 @@ async function modeComments() {
   // pull all comments on these posts (including non-cohort commenters — they're real users)
   const comments = await rest(
     `post_comments?post_id=in.${postInFilter}` +
-    `&select=id,post_id,user_id,content,created_at,profiles(full_name)` +
+    `&select=id,post_id,user_id,content,created_at,profiles(full_name,avatar_url)` +
     `&order=created_at.asc&limit=1000`
   );
   console.log(`\n[COMMENTS] total comments on cohort posts: ${comments.length}`);
@@ -290,6 +314,7 @@ async function modeComments() {
     commentsByPost[c.post_id] = commentsByPost[c.post_id] || [];
     commentsByPost[c.post_id].push({
       sender: maskName(c.profiles?.full_name),
+      avatar: c.profiles?.avatar_url || '',
       content: await maskInlineNames((c.content || '').trim()),
       ts: c.created_at,
     });
@@ -301,6 +326,7 @@ async function modeComments() {
   const posted = await Promise.all(posts.map(async p => ({
     post_id: p.id,
     author: maskName(p.profiles?.full_name),
+    avatar: p.profiles?.avatar_url || '',
     day: p.program_day,
     caption: await maskInlineNames((p.caption || '').trim()),
     media_url: p.media_url,

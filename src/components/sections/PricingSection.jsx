@@ -1,6 +1,7 @@
 import { Link } from 'react-router-dom';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import Button from '../ui/Button';
+import { useCohortStatus, COPY, COPY_REFERRAL } from '../../hooks/useCohortStatus';
 
 const included = [
   '4주 매일 러닝 인증 (앱)',
@@ -12,7 +13,9 @@ const included = [
   '우승팀 시 +20만원 (40만 ≈ 러닝화)',
 ];
 
-export default function PricingSection({ onCTA }) {
+export default function PricingSection({ onCTA, variant = 'main' }) {
+  const status = useCohortStatus(variant);
+  const copy = (variant === 'referral' ? COPY_REFERRAL : COPY)[status];
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
@@ -25,17 +28,17 @@ export default function PricingSection({ onCTA }) {
         </h2>
       </AnimateOnScroll>
 
-      {/* Proof-of-success: 직전 기수(4월) 11명 전원 성공 */}
+      {/* Proof-of-success: 직전 30일 다이어트 기수 11명 전원 성공 */}
       <AnimateOnScroll>
         <div className="bg-bg-card rounded-3xl p-6 mb-6 shadow-[0_12px_30px_rgba(0,0,0,0.15)] border-l-[6px] border-accent-green">
           <div className="flex items-center gap-3 mb-2">
             <span className="text-2xl">🎯</span>
-            <p className="text-bg-primary font-extrabold text-lg">직전 기수(4월) 11명 — 전원 성공</p>
+            <p className="text-bg-primary font-extrabold text-lg">직전 다이어트 기수 11명 — 전원 성공</p>
           </div>
           <p className="text-card-ink-muted text-sm leading-relaxed">
             평균 미션 수행률 <span className="text-card-ink font-bold">95%</span>. 한 명도 빠짐없이 모두 성공했습니다.
             <br />
-            <span className="text-card-ink font-bold">참여만 하면 성공할 수밖에 없는 시스템입니다.</span>
+            <span className="text-card-ink font-bold">시즌 0는 같은 팀 시스템을 4주 러닝에 그대로 적용합니다.</span>
           </p>
         </div>
       </AnimateOnScroll>
@@ -57,8 +60,8 @@ export default function PricingSection({ onCTA }) {
           </div>
 
           <Button onClick={onCTA} className="w-full shadow-[0_8px_24px_rgba(30,60,255,0.3)] flex flex-col items-center justify-center leading-tight" size="md">
-            <span className="block">지원하기</span>
-            <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">4/27(일) 23:59 마감 · 2분 소요</span>
+            <span className="block">{copy.cta.pricing}</span>
+            <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
           </Button>
 
           <p className="text-card-ink-faint text-xs mt-4 font-semibold">

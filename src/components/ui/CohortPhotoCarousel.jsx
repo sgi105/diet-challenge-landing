@@ -28,7 +28,8 @@ function MediaTile({ url, alt }) {
 }
 
 export default function CohortPhotoCarousel() {
-  const posts = cohort.top_posts;
+  // 시즌 0는 러닝 챌린지라 푸시업/풀업 같은 시즌 외 운동 영상은 카루셀에서 제외 — 맥락이 안 맞음.
+  const posts = cohort.top_posts.filter(p => !/\/(pushup|pullup|squat)\//.test(p.media_url));
 
   return (
     <div className="flex gap-3 overflow-x-auto pb-3 snap-x snap-mandatory" style={{ scrollbarWidth: 'none' }}>

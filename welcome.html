@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>팀 다이어트 챌린지 — 환영합니다</title>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Noto Sans KR', sans-serif;
+      background: #111111;
+      color: #e8e8e8;
+      min-height: 100vh;
+      padding: 24px 16px 60px;
+    }
+
+    .wrap {
+      max-width: 480px;
+      margin: 0 auto;
+    }
+
+    /* ── 공통 카드 ── */
+    .card {
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 16px;
+      padding: 24px;
+      margin-bottom: 16px;
+    }
+
+    .section-label {
+      font-size: 12px;
+      font-weight: 700;
+      color: #00FF88;
+      letter-spacing: 0.08em;
+      text-transform: uppercase;
+      margin-bottom: 8px;
+    }
+
+    .section-title {
+      font-size: 20px;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1.4;
+      margin-bottom: 16px;
+    }
+
+    /* ── HERO ── */
+    .hero {
+      text-align: center;
+      padding: 40px 24px 32px;
+      margin-bottom: 16px;
+      background: #1a1a1a;
+      border: 1px solid #2a2a2a;
+      border-radius: 20px;
+    }
+
+    .hero-emoji {
+      font-size: 52px;
+      margin-bottom: 16px;
+      display: block;
+    }
+
+    .hero-title {
+      font-size: 28px;
+      font-weight: 900;
+      color: #ffffff;
+      margin-bottom: 8px;
+      line-height: 1.3;
+    }
+
+    .hero-sub {
+      font-size: 15px;
+      color: #aaaaaa;
+      line-height: 1.6;
+      margin-bottom: 24px;
+    }
+
+    .hero-sub strong {
+      color: #00FF88;
+    }
+
+    .badge-row {
+      display: flex;
+      gap: 8px;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    .badge {
+      font-size: 12px;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 999px;
+      border: 1px solid #2a2a2a;
+      color: #aaaaaa;
+    }
+
+    .badge.green {
+      border-color: #00FF88;
+      color: #00FF88;
+      background: rgba(0, 255, 136, 0.08);
+    }
+
+    /* ── 보상 구조 ── */
+    .reward-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .reward-card {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #222222;
+      border: 1px solid #2a2a2a;
+      border-radius: 12px;
+      padding: 14px 18px;
+    }
+
+    .reward-card.best {
+      border-color: #00FF88;
+      box-shadow: 0 0 20px rgba(0, 255, 136, 0.12);
+    }
+
+    .reward-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #cccccc;
+    }
+
+    .reward-label small {
+      display: block;
+      font-size: 11px;
+      font-weight: 400;
+      color: #666666;
+      margin-top: 2px;
+    }
+
+    .reward-amount {
+      font-size: 18px;
+      font-weight: 800;
+      color: #00FF88;
+    }
+
+    .reward-card.fail .reward-amount {
+      color: #FF6B35;
+    }
+
+    .reward-card.best .reward-amount::after {
+      content: ' 🏆';
+      font-size: 14px;
+    }
+
+    .reward-note {
+      font-size: 12px;
+      color: #888888;
+      background: rgba(255, 107, 53, 0.08);
+      border: 1px solid rgba(255, 107, 53, 0.2);
+      border-radius: 8px;
+      padding: 10px 14px;
+      line-height: 1.5;
+    }
+
+    .reward-note strong {
+      color: #FF6B35;
+    }
+
+    /* ── 미션 ── */
+    .mission-list {
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .mission-item {
+      display: flex;
+      gap: 14px;
+      align-items: flex-start;
+    }
+
+    .mission-icon {
+      font-size: 24px;
+      flex-shrink: 0;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #222;
+      border-radius: 10px;
+    }
+
+    .mission-content {}
+
+    .mission-title {
+      font-size: 15px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 3px;
+    }
+
+    .mission-tip {
+      font-size: 12px;
+      color: #888888;
+      line-height: 1.5;
+    }
+
+    .mission-tip .tip-green {
+      color: #00FF88;
+    }
+
+    .divider {
+      height: 1px;
+      background: #2a2a2a;
+      margin: 16px 0;
+    }
+
+    .app-row {
+      display: flex;
+      gap: 8px;
+    }
+
+    .app-badge {
+      font-size: 12px;
+      font-weight: 600;
+      padding: 6px 12px;
+      border-radius: 8px;
+      background: #222;
+      border: 1px solid #333;
+      color: #cccccc;
+    }
+
+    /* ── 준비물 ── */
+    .checklist {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .check-item {
+      display: flex;
+      gap: 10px;
+      align-items: flex-start;
+    }
+
+    .check-icon {
+      color: #00FF88;
+      font-weight: 700;
+      font-size: 14px;
+      flex-shrink: 0;
+      margin-top: 1px;
+    }
+
+    .check-text {
+      font-size: 14px;
+      color: #cccccc;
+      line-height: 1.5;
+    }
+
+    .check-text small {
+      display: block;
+      font-size: 12px;
+      color: #777777;
+      margin-top: 2px;
+    }
+
+    /* ── 성공 기준 ── */
+    .success-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+      margin-bottom: 14px;
+    }
+
+    .success-box {
+      background: #222;
+      border: 1px solid #333;
+      border-radius: 12px;
+      padding: 16px;
+      text-align: center;
+    }
+
+    .success-box .num {
+      font-size: 28px;
+      font-weight: 900;
+      color: #00FF88;
+      line-height: 1;
+      margin-bottom: 4px;
+    }
+
+    .success-box .unit {
+      font-size: 13px;
+      font-weight: 600;
+      color: #00FF88;
+    }
+
+    .success-box .desc {
+      font-size: 11px;
+      color: #666;
+      margin-top: 4px;
+      line-height: 1.4;
+    }
+
+    .success-note {
+      font-size: 13px;
+      color: #888888;
+      text-align: center;
+      line-height: 1.6;
+    }
+
+    /* ── 동기부여 ── */
+    .motivation-list {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .motivation-item {
+      font-size: 14px;
+      color: #cccccc;
+      line-height: 1.6;
+      padding-left: 4px;
+    }
+
+    .motivation-item::before {
+      content: '→ ';
+      color: #00FF88;
+      font-weight: 700;
+    }
+
+    /* ── OT ── */
+    .ot-box {
+      background: rgba(0, 255, 136, 0.06);
+      border: 1px solid rgba(0, 255, 136, 0.2);
+      border-radius: 12px;
+      padding: 18px;
+      margin-bottom: 14px;
+    }
+
+    .ot-time {
+      font-size: 20px;
+      font-weight: 800;
+      color: #00FF88;
+      margin-bottom: 4px;
+    }
+
+    .ot-sub {
+      font-size: 13px;
+      color: #888888;
+      margin-bottom: 12px;
+    }
+
+    .ot-detail-list {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .ot-detail {
+      font-size: 13px;
+      color: #cccccc;
+      padding-left: 4px;
+    }
+
+    .ot-detail::before {
+      content: '• ';
+      color: #00FF88;
+    }
+
+    .ot-note {
+      font-size: 12px;
+      color: #666666;
+      margin-top: 12px;
+      padding-top: 12px;
+      border-top: 1px solid #2a2a2a;
+    }
+
+    /* ── 푸터 ── */
+    .footer {
+      text-align: center;
+      padding: 32px 24px;
+    }
+
+    .footer-emoji {
+      font-size: 32px;
+      margin-bottom: 12px;
+      display: block;
+    }
+
+    .footer-msg {
+      font-size: 16px;
+      font-weight: 700;
+      color: #ffffff;
+      margin-bottom: 8px;
+    }
+
+    .footer-sub {
+      font-size: 13px;
+      color: #666666;
+      line-height: 1.6;
+    }
+
+    .footer-handle {
+      color: #00FF88;
+      font-weight: 600;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+
+    <!-- HERO -->
+    <div class="hero">
+      <span class="hero-emoji">🎉</span>
+      <div class="hero-title">참가 확정됐습니다!</div>
+      <p class="hero-sub">
+        20만원을 걸었습니다.<br />
+        이제 <strong>해내면 됩니다.</strong>
+      </p>
+      <div class="badge-row">
+        <span class="badge green">📅 OT 4/1(수) 21:00</span>
+        <span class="badge">🏃 시작 4/2(목)</span>
+      </div>
+    </div>
+
+    <!-- 보상 구조 -->
+    <div class="card">
+      <div class="section-label">보상 구조</div>
+      <div class="section-title">얼마를 돌려받나요?</div>
+
+      <div class="reward-grid">
+        <div class="reward-card fail">
+          <div class="reward-label">
+            실패
+            <small>미션 미달 또는 3kg 미감량</small>
+          </div>
+          <div class="reward-amount">0원</div>
+        </div>
+        <div class="reward-card">
+          <div class="reward-label">
+            나만 성공
+            <small>3kg 감량 + 미션 90%</small>
+          </div>
+          <div class="reward-amount">200,000원</div>
+        </div>
+        <div class="reward-card">
+          <div class="reward-label">
+            팀 전원 성공
+            <small>팀원 모두 성공</small>
+          </div>
+          <div class="reward-amount">250,000원</div>
+        </div>
+        <div class="reward-card best">
+          <div class="reward-label">
+            팀 1등
+            <small>감량률 팀 중 1위</small>
+          </div>
+          <div class="reward-amount">300,000원</div>
+        </div>
+      </div>
+
+      <div class="reward-note">
+        <strong>⚠️ 팀원이 포기하면</strong> 25만·30만원은 없어집니다.<br />
+        서로 붙잡아주세요. 그게 이 챌린지의 힘입니다.
+      </div>
+    </div>
+
+    <!-- 매일 미션 -->
+    <div class="card">
+      <div class="section-label">매일 미션</div>
+      <div class="section-title">3가지만 하면 됩니다</div>
+
+      <div class="mission-list">
+        <div class="mission-item">
+          <div class="mission-icon">🏃</div>
+          <div class="mission-content">
+            <div class="mission-title">러닝 인증 사진</div>
+            <div class="mission-tip">
+              거리·속도 상관없이 <span class="tip-green">나가는 것</span>이 전부입니다.<br />
+              걷기도 OK. 추천 앱 →
+            </div>
+            <div class="app-row" style="margin-top: 8px;">
+              <span class="app-badge">나이키런클럽</span>
+              <span class="app-badge">스트라바</span>
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="mission-item">
+          <div class="mission-icon">🥗</div>
+          <div class="mission-content">
+            <div class="mission-title">식단 사진</div>
+            <div class="mission-tip">
+              먹기 전에 찍으세요. 완벽한 식단 아니어도 됩니다.<br />
+              <span class="tip-green">기록 자체</span>가 식단을 바꿉니다.
+            </div>
+          </div>
+        </div>
+
+        <div class="divider"></div>
+
+        <div class="mission-item">
+          <div class="mission-icon">⚖️</div>
+          <div class="mission-content">
+            <div class="mission-title">체중 기록</div>
+            <div class="mission-tip">
+              아침에 일어나자마자, 화장실 다녀온 직후 측정.<br />
+              매일 같은 조건으로 재야 정확합니다.
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 준비할 것 -->
+    <div class="card">
+      <div class="section-label">준비할 것</div>
+      <div class="section-title">지금 당장 챙기세요</div>
+
+      <div class="checklist">
+        <div class="check-item">
+          <span class="check-icon">✓</span>
+          <div class="check-text">
+            체중계
+            <small>없으면 오늘 구매하세요. 기록이 시작입니다.</small>
+          </div>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">✓</span>
+          <div class="check-text">
+            런닝앱 설치 (나이키런클럽 or 스트라바)
+            <small>GPS 기록이 인증 사진에 찍혀야 합니다.</small>
+          </div>
+        </div>
+        <div class="check-item">
+          <span class="check-icon">✓</span>
+          <div class="check-text">
+            식단 마인드셋
+            <small>식단 방법은 OT에서 자세히 다룹니다. 미리 걱정 안 해도 됩니다.</small>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 성공 기준 -->
+    <div class="card">
+      <div class="section-label">성공 기준</div>
+      <div class="section-title">두 가지를 모두 충족해야 해요</div>
+
+      <div class="success-grid">
+        <div class="success-box">
+          <div class="num">3<span class="unit">kg</span></div>
+          <div class="desc">체중 감량<br />(시작 체중 기준)</div>
+        </div>
+        <div class="success-box">
+          <div class="num">90<span class="unit">%</span></div>
+          <div class="desc">미션 수행률<br />(30일 중 27일)</div>
+        </div>
+      </div>
+
+      <p class="success-note">
+        최대 3일까지는 빠져도 됩니다.<br />급한 일 생겨도 괜찮아요.
+      </p>
+    </div>
+
+    <!-- 동기부여 -->
+    <div class="card">
+      <div class="section-label">30일 후</div>
+      <div class="section-title">달라지는 것들</div>
+
+      <div class="motivation-list">
+        <div class="motivation-item">체중계 올라가는 게 무섭지 않아집니다</div>
+        <div class="motivation-item">아침에 일어나는 이유가 생깁니다</div>
+        <div class="motivation-item">운동 안 하면 오히려 찝찝해집니다</div>
+        <div class="motivation-item">팀원이 생기고, 혼자 하는 느낌이 사라집니다</div>
+        <div class="motivation-item">그리고, 거울 앞에서 표정이 달라집니다</div>
+      </div>
+    </div>
+
+    <!-- OT 안내 -->
+    <div class="card">
+      <div class="section-label">OT 안내</div>
+      <div class="section-title">첫 모임입니다, 꼭 오세요</div>
+
+      <div class="ot-box">
+        <div class="ot-time">4/1(수) 21:00 — 21:40</div>
+        <div class="ot-sub">온라인 진행 · 링크는 전날 DM으로 전달드려요</div>
+        <div class="ot-detail-list">
+          <div class="ot-detail">실전 식단 방법론 교육</div>
+          <div class="ot-detail">팀원 소개 및 카카오톡 팀방 개설</div>
+          <div class="ot-detail">챌린지 규칙 최종 안내</div>
+        </div>
+        <div class="ot-note">
+          불참 시 영상으로 자료 전달드립니다. 그래도 오시는 걸 강력 권장해요. 팀원들 만나는 자리라 분위기가 달라집니다.
+        </div>
+      </div>
+    </div>
+
+    <!-- 푸터 -->
+    <div class="footer">
+      <span class="footer-emoji">💪</span>
+      <div class="footer-msg">할 수 있습니다. 진심으로요.</div>
+      <div class="footer-sub">
+        궁금한 거, 걱정되는 거 있으면<br />
+        <span class="footer-handle">@bali_tarzan</span>으로 편하게 DM 주세요.<br /><br />
+        30일 뒤에 웃으면서 봐요 🙌
+      </div>
+    </div>
+
+  </div>
+</body>
+</html>

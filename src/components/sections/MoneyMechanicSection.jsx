@@ -33,8 +33,11 @@ export default function MoneyMechanicSection() {
         <h2 className="font-kr text-3xl md:text-5xl font-black text-center mt-4 mb-3 text-text-primary leading-tight">
           총 상금 풀 <span className="text-accent-green">168만원</span>
         </h2>
-        <p className="text-text-secondary text-center mb-8">
+        <p className="text-text-secondary text-center mb-4">
           미션 실패한 사람의 보증금이<br />우승팀에게 돌아갑니다.
+        </p>
+        <p className="text-text-muted text-center text-xs mb-8 font-semibold tracking-wide">
+          실패 <span className="text-accent-orange font-bold">-100%</span> · 개인 성공 <span className="text-text-primary font-bold">±0%</span> · 팀 성공 <span className="text-bg-primary font-bold">+20%</span> · 우승 <span className="text-accent-green font-bold">+100%</span>
         </p>
       </AnimateOnScroll>
 

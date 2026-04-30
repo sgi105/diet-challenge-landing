@@ -1,11 +1,12 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
+import VideoReviewsCarousel from '../ui/VideoReviewsCarousel';
 import CohortLeaderboard from '../ui/CohortLeaderboard';
 import CohortPhotoCarousel from '../ui/CohortPhotoCarousel';
 import CohortConversation from '../ui/CohortConversation';
 import cohort from '../../data/cohort.json';
 
 const stats = [
-  { value: '11/11', label: '전원 감량 성공' },
+  { value: '11명', label: '전원 감량 성공 (11명 중)' },
   { value: `-${cohort.stats.avgLossKg}kg`, label: '1인 평균 (Day 25)' },
   { value: `${cohort.stats.avgCertDays}일`, label: '평균 인증 (25일 중)' },
   { value: `-${cohort.stats.totalLossKg}kg`, label: '11명 누적 감량' },
@@ -19,13 +20,26 @@ export default function TestimonialSection() {
           <span className="pill text-accent-green">DIRECT EVIDENCE</span>
           <h2 className="font-kr text-3xl md:text-5xl mt-4 mb-4 text-text-primary">
             11명이 시작했고,<br />
-            <span className="text-accent-green">11명이 모두 줄었습니다</span>
+            <span className="text-accent-green">11명 모두 매일 움직이고 있습니다.</span>
           </h2>
           <p className="text-text-secondary mb-8 leading-relaxed">
-            다이어트도, 러닝도, 사람을 매일 움직이게 하는 시스템은 같습니다.<br />
-            직전 다이어트 30일 챌린지 — 시작 4월 2일, 오늘 25일차. 결과는 아래.
+            직전 30일 챌린지 — 오늘 Day 25, <span className="text-text-primary font-bold">한 명도 빠지지 않았습니다.</span>
+            <br />
+            같은 팀 시스템을 시즌 0는 4주 러닝에 그대로 적용합니다.
           </p>
         </AnimateOnScroll>
+
+        {/* Video reviews — 최상단 (가장 강한 증거) */}
+        <AnimateOnScroll>
+          <p className="text-text-muted text-xs font-bold tracking-widest mb-3">VIDEO REVIEWS · 직접 듣기</p>
+        </AnimateOnScroll>
+      </div>
+      <AnimateOnScroll>
+        <div className="px-6 mb-10">
+          <VideoReviewsCarousel />
+        </div>
+      </AnimateOnScroll>
+      <div className="px-6 max-w-lg mx-auto">
 
         {/* Stats grid */}
         <AnimateOnScroll>

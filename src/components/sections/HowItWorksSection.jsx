@@ -3,7 +3,7 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 const steps = [
   { num: 1, title: '지원 (4/26~4/27)', desc: '8문항 지원서 작성. 약 2분 소요.' },
   { num: 2, title: '선발 (4/28 화)', desc: '30명 합격 발표 — 4/28(화) 16:00 문자 + 단톡방 안내. 입금 마감 4/28 23:59.' },
-  { num: 3, title: 'OT (5/3 토)', desc: '줌 오리엔테이션 + 3인 1팀 매칭. 러닝/식단 가이드 1시간.' },
+  { num: 3, title: '온라인 OT (5/3 일)', desc: '줌 오리엔테이션 + 3인 1팀 매칭. 러닝/식단 가이드 1시간.' },
   { num: 4, title: '챌린지 (5/4~5/31)', desc: '4주 매일 러닝 인증. 팀원과 댓글 응원. 매주 점검 콜.' },
   { num: 5, title: '5K 파이널 (5/31 일)', desc: '30명 동시 5km 완주. 팀 성과별 환급 정산.', highlight: true },
 ];

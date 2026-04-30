@@ -9,8 +9,11 @@ const benefits = [
 ];
 
 export default function BenefitsSection({ onCTA }) {
-  const expired = new Date() > new Date(COHORT.dDayBenefitExpireAt);
+  const expireAt = new Date(COHORT.dDayBenefitExpireAt);
+  const expired = new Date() > expireAt;
   if (expired) return null;
+  const nextDay = new Date(expireAt.getTime() + 1000);
+  const tmLabel = `${nextDay.getMonth() + 1}/${nextDay.getDate()}`;
 
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
@@ -22,7 +25,7 @@ export default function BenefitsSection({ onCTA }) {
           오늘 지원하면<br /><span className="text-accent-green">3가지 혜택</span> 추가
         </h2>
         <p className="text-text-muted text-center text-sm mb-8 font-semibold">
-          내일(4/27)부터는 사라집니다
+          {tmLabel}부터는 사라집니다
         </p>
       </AnimateOnScroll>
 
@@ -50,7 +53,7 @@ export default function BenefitsSection({ onCTA }) {
       <AnimateOnScroll>
         <Button onClick={onCTA} className="w-full shadow-[0_12px_40px_rgba(200,255,77,0.4)] flex flex-col items-center justify-center leading-tight">
           <span className="block">오늘 혜택 받고 지원하기</span>
-          <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">4/27(일) 23:59 마감 · 2분 소요</span>
+          <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">오늘 23:59까지 · 2분 소요</span>
         </Button>
       </AnimateOnScroll>
     </section>

@@ -1,0 +1,17 @@
+# Vercel 업로드에서 제외 — Vercel은 dist 외에도 프로젝트 디렉토리를 스캔함.
+# 영상 원본 (.mov) 같이 build에 안 쓰이는 거대 파일을 빼야 함.
+
+_testimonial_originals/
+*.mov
+
+# 대용량 미디어 원본 (예시 — 필요 시 추가)
+**/*.bak
+
+# 채팅 기획·메모
+*.md
+!README.md
+
+# 로컬 환경
+.env
+.env.local
+.env.vercel

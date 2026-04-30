@@ -1,7 +1,10 @@
 import { useState, useEffect } from 'react';
+import { useCohortStatus, COPY, COPY_REFERRAL } from '../../hooks/useCohortStatus';
 
-export default function StickyCTA({ onCTA }) {
+export default function StickyCTA({ onCTA, variant = 'main' }) {
   const [show, setShow] = useState(false);
+  const status = useCohortStatus(variant);
+  const copy = (variant === 'referral' ? COPY_REFERRAL : COPY)[status];
 
   useEffect(() => {
     const hero = document.getElementById('hero');
@@ -22,8 +25,8 @@ export default function StickyCTA({ onCTA }) {
           onClick={onCTA}
           className="block w-full bg-accent-green text-bg-primary font-extrabold py-3 rounded-2xl text-center hover:brightness-110 transition-all duration-300 cursor-pointer shadow-[0_8px_24px_rgba(200,255,77,0.35)] leading-tight"
         >
-          <span className="block text-base">지원하기</span>
-          <span className="block text-[10px] font-bold opacity-80 mt-0.5 tracking-wide">4/27(일) 23:59 마감</span>
+          <span className="block text-base">{copy.cta.sticky}</span>
+          <span className="block text-[10px] font-bold opacity-80 mt-0.5 tracking-wide">{copy.stickySub}</span>
         </button>
       </div>
     </div>

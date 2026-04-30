@@ -1,3 +1,4 @@
+import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HeroSection from './components/sections/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
@@ -9,61 +10,85 @@ import HowItWorksSection from './components/sections/HowItWorksSection';
 import MoneyMechanicSection from './components/sections/MoneyMechanicSection';
 import TestimonialSection from './components/sections/TestimonialSection';
 import PricingSection from './components/sections/PricingSection';
+import LiveApplicantsSection from './components/sections/LiveApplicantsSection';
 import BenefitsSection from './components/sections/BenefitsSection';
+import ReferralBonusSection from './components/sections/ReferralBonusSection';
 import UrgencySection from './components/sections/UrgencySection';
 import FAQSection from './components/sections/FAQSection';
 import FinalCTASection from './components/sections/FinalCTASection';
 import StickyCTA from './components/layout/StickyCTA';
 import Footer from './components/layout/Footer';
-import IABGuide from './components/ui/IABGuide';
 import SuccessPage from './pages/SuccessPage';
 import FailPage from './pages/FailPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import RefundPage from './pages/RefundPage';
-import LandingPageApril from './pages/LandingPageApril';
 import ApplyPage from './pages/ApplyPage';
 import ApplyDonePage from './pages/ApplyDonePage';
 import AdminApplicationsPage from './pages/AdminApplicationsPage';
+import PayPage from './pages/PayPage';
+import WaitlistSection from './components/sections/WaitlistSection';
+import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
+export const REFERRAL_APPLY_PATH = '/apply?type=referral';
 
-function LandingPage() {
+function LandingPage({ variant = 'main' }) {
   const navigate = useNavigate();
-  const handleCTA = () => { navigate(APPLY_PATH); };
-  const scrollToHero = (e) => {
+  const status = useCohortStatus(variant);
+  const isClosed = status === 'closed';
+  const isReferral = variant === 'referral';
+  const copy = (isReferral ? COPY_REFERRAL : COPY)[status];
+
+  useEffect(() => {
+    if (!isReferral) return;
+    const prev = document.title;
+    document.title = '초대 전용 · 시즌 0 추천인 전형';
+    return () => { document.title = prev; };
+  }, [isReferral]);
+
+  // 마감 후에도 후순위로 지원 받기 — CTA는 항상 /apply로 이동.
+  const handleCTA = () => {
+    navigate(isReferral ? REFERRAL_APPLY_PATH : APPLY_PATH);
+  };
+  const scrollToCTA = (e) => {
     e.preventDefault();
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
   };
 
+  const bannerTone = isReferral
+    ? 'bg-accent-orange text-bg-primary'
+    : 'bg-accent-green text-bg-primary';
+
   return (
     <div className="min-h-screen">
       <a
-        href="#hero"
-        onClick={scrollToHero}
-        className="fixed top-0 left-0 right-0 z-50 bg-accent-green text-bg-primary text-center text-sm font-extrabold py-3 px-4 block hover:brightness-105 transition-all tracking-wide font-kr"
+        href={isClosed ? '#waitlist' : '#hero'}
+        onClick={scrollToCTA}
+        className={`fixed top-0 left-0 right-0 z-50 ${bannerTone} text-center text-sm font-extrabold py-3 px-4 block hover:brightness-105 transition-all tracking-wide font-kr`}
       >
-        🟢 시즌 0 지원 마감 D-1 · 4/27(일) 23:59 →
+        {copy.banner}
       </a>
       <div className="pt-12">
-        <HeroSection onCTA={handleCTA} />
-        <PainPointSection />
+        <HeroSection onCTA={handleCTA} variant={variant} />
+        {isReferral && !isClosed && <ReferralBonusSection onCTA={handleCTA} />}
+        <PainPointSection variant={variant} />
+        <TestimonialSection />
+        {!isReferral && !isClosed && <LiveApplicantsSection />}
         <StartingPointsSection />
         <FounderSection />
         <InstagramSection />
         <ProgramIntroSection />
         <HowItWorksSection />
         <MoneyMechanicSection />
-        <TestimonialSection />
-        <PricingSection onCTA={handleCTA} />
-        <BenefitsSection onCTA={handleCTA} />
-        <UrgencySection />
+        {isClosed ? <WaitlistSection /> : <PricingSection onCTA={handleCTA} variant={variant} />}
+        {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
+        {!isClosed && <UrgencySection variant={variant} />}
         <FAQSection />
-        <FinalCTASection onCTA={handleCTA} />
+        <FinalCTASection onCTA={handleCTA} variant={variant} />
         <Footer />
-        <StickyCTA onCTA={handleCTA} />
-        <IABGuide />
+        <StickyCTA onCTA={handleCTA} variant={variant} />
       </div>
     </div>
   );
@@ -73,7 +98,7 @@ export default function App() {
   return (
     <Routes>
       <Route path="/" element={<LandingPage />} />
-      <Route path="/april" element={<LandingPageApril />} />
+      <Route path="/referral" element={<LandingPage variant="referral" />} />
       <Route path="/apply" element={<ApplyPage />} />
       <Route path="/apply/done" element={<ApplyDonePage />} />
       <Route path="/admin/applications" element={<AdminApplicationsPage />} />
@@ -82,6 +107,7 @@ export default function App() {
       <Route path="/terms" element={<TermsPage />} />
       <Route path="/privacy" element={<PrivacyPage />} />
       <Route path="/refund" element={<RefundPage />} />
+      <Route path="/pay" element={<PayPage />} />
     </Routes>
   );
 }
