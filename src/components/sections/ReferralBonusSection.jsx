@@ -3,7 +3,7 @@ import Button from '../ui/Button';
 
 const bonuses = [
   { icon: '📋', title: '식단 피드백 1회', desc: '내가 먹은 식단 사진 보내면 1:1 코멘트', value: '50,000원' },
-  { icon: '🍱', title: '식단 PDF', desc: '4주 챌린지 전용 식단 가이드', value: null },
+  { icon: '🍱', title: '식단 PDF', desc: '21일 챌린지 전용 식단 가이드', value: null },
   { icon: '🏃', title: '러닝 폼 영상 1:1 분석', desc: '내 러닝 영상 1:1 코멘트', value: '50,000원' },
   { icon: '⭐', title: '우선 선발', desc: '같은 조건이면 추천인 전형 우선', value: null },
 ];
@@ -54,7 +54,7 @@ export default function ReferralBonusSection({ onCTA }) {
         >
           <span className="block">초대 전형으로 지원하기</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">
-            4/28(화) 14:00 마감 · 추천인 이름 필수
+            5/28(목) 24:00 마감 · 추천인 이름 필수
           </span>
         </Button>
         <p className="text-text-muted text-xs mt-4 text-center font-semibold">

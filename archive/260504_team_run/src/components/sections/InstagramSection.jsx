@@ -1,0 +1,90 @@
+import AnimateOnScroll from '../ui/AnimateOnScroll';
+
+const photos = [
+  { src: '/instagram/1.jpg', caption: 'SIX WEEKS CHALLENGE' },
+  { src: '/instagram/2.jpg', caption: '바디프로필 단체샷' },
+  { src: '/instagram/3.jpg', caption: 'MUSA' },
+  { src: '/instagram/4.jpg', caption: '풀파티 단체' },
+  { src: '/instagram/5.jpg', caption: '풀파티 드론샷' },
+  { src: '/instagram/6.jpg', caption: '풀파티 현장' },
+  { src: '/instagram/8.jpg', caption: '풀파티' },
+  { src: '/instagram/11.jpg', caption: '단체 바디프로필' },
+];
+
+export default function InstagramSection() {
+  return (
+    <section className="py-14">
+      <div className="px-6 max-w-lg mx-auto">
+        <AnimateOnScroll>
+          <span className="pill text-accent-green">@samurai_habit</span>
+          <h2 className="font-kr text-3xl md:text-5xl font-black mt-4 mb-4 text-text-primary leading-tight">
+            사람을 매일 움직이는<br />엔진은 똑같습니다.
+          </h2>
+          <p className="text-text-secondary mb-8">
+            9기수 동안 다이어트로 검증된 구조 — <span className="text-text-primary font-bold">팀 + 경쟁(당근) + 보증금(채찍)</span>.
+            <br />
+            <span className="text-text-primary font-bold">시즌 0는 그 엔진을 4주 러닝에 그대로 옮깁니다.</span>
+          </p>
+        </AnimateOnScroll>
+      </div>
+
+      <AnimateOnScroll>
+        <div
+          className="flex gap-3 overflow-x-auto px-6 pb-4 snap-x snap-mandatory"
+          style={{ scrollbarWidth: 'none' }}
+        >
+          {photos.map((photo, i) => (
+            <div
+              key={i}
+              className="snap-start shrink-0 w-[70vw] max-w-[280px] rounded-3xl overflow-hidden relative shadow-[0_12px_30px_rgba(0,0,0,0.2)]"
+            >
+              <img
+                src={photo.src}
+                alt={photo.caption}
+                className="w-full aspect-square object-cover"
+                loading="lazy"
+              />
+              <div className="absolute inset-0 bg-gradient-to-t from-black/70 via-transparent to-transparent" />
+              <p className="absolute bottom-3 left-3 right-3 text-white text-sm font-bold">
+                {photo.caption}
+              </p>
+            </div>
+          ))}
+        </div>
+      </AnimateOnScroll>
+
+      {/* Online distinction */}
+      <AnimateOnScroll className="mt-8 px-6 max-w-lg mx-auto">
+        <div className="bg-bg-card rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
+          <p className="text-bg-primary font-extrabold text-lg mb-3 font-kr">
+            시즌 0는 다릅니다.
+          </p>
+          <div className="space-y-2 text-sm text-card-ink-muted">
+            <p>
+              <span className="text-card-ink font-bold">100% 온라인</span> — 오프라인 모임 없이 어디서든
+            </p>
+            <p>
+              <span className="text-card-ink font-bold">4주 러닝</span> — 다이어트 아닌 5km 완주에 집중
+            </p>
+            <p>
+              <span className="text-card-ink font-bold">3인 1팀</span> — 혼자 못 하는 걸 팀으로 강제
+            </p>
+          </div>
+        </div>
+      </AnimateOnScroll>
+
+      <AnimateOnScroll className="mt-4 px-6 max-w-lg mx-auto">
+        <a
+          href="https://www.instagram.com/samurai_habit/"
+          target="_blank"
+          rel="noopener noreferrer"
+          className="block bg-bg-card rounded-2xl p-4 text-center shadow-[0_8px_24px_rgba(0,0,0,0.12)] hover:translate-y-[-2px] transition-transform"
+        >
+          <p className="text-card-ink-muted text-sm">
+            이전 기수 기록은 <span className="text-bg-primary font-bold">@samurai_habit</span>
+          </p>
+        </a>
+      </AnimateOnScroll>
+    </section>
+  );
+}

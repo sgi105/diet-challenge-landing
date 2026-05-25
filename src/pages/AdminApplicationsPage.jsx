@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useState } from 'react';
 import ApplicantAvatar from '../components/ui/ApplicantAvatar';
 import { matchTeams, SKILL_SCORE } from '../lib/teamMatching';
 import { normalizeInstagram } from '../lib/instagram';

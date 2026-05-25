@@ -20,7 +20,7 @@ export default function IABGuide() {
 
         <p className="text-card-ink-muted text-sm mb-4 leading-relaxed">
           인스타그램 내부 브라우저에서는 링크가 막혀요.<br />
-          외부 브라우저로 열면 바로 연결됩니다.
+          외부 브라우저로 열면 바로 연결돼.
         </p>
 
         <div className="bg-bg-primary/5 rounded-2xl p-4 space-y-2.5">

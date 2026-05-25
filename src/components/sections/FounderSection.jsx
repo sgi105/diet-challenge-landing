@@ -21,7 +21,7 @@ export default function FounderSection() {
       <AnimateOnScroll>
         <span className="pill text-accent-green">FOUNDER</span>
         <h2 className="text-3xl md:text-5xl font-extrabold mt-4 mb-6 text-text-primary leading-tight">
-          저도 1km부터<br />시작했습니다.
+          나도 1km부터<br />시작했어.
         </h2>
       </AnimateOnScroll>
 
@@ -31,17 +31,17 @@ export default function FounderSection() {
             <p>
               저도 10년째.
               <br />
-              <span className="text-card-ink font-bold">운동도, 다이어트도, 늘 작심삼일이었습니다.</span>
+              <span className="text-card-ink font-bold">운동도, 다이어트도, 늘 작심삼일이었어.</span>
             </p>
             <p>
-              그러다 깨달은 게 하나 있습니다.
+              그러다 깨달은 게 하나 있어.
               <br />
               <span className="text-bg-primary font-bold">"무언가 걸려야 움직인다."</span>
             </p>
             <p>
-              돈을 걸었더니 새벽 5시에 일어나게 됐습니다.
+              돈을 걸었더니 새벽 5시에 일어나게 됐어.
               <br />
-              사람들과 함께 하니까 포기가 안 됐습니다.
+              사람들과 함께 하니까 포기가 안 됐어.
             </p>
             <p className="text-card-ink font-semibold">
               결과요?
@@ -53,7 +53,7 @@ export default function FounderSection() {
               <br />
               2025 인천 HYROX <span className="text-bg-primary font-bold">버피 구간 전체 1등.</span>
               <br />
-              지금 이 순간에도 <span className="text-bg-primary font-bold">{runningDays}일째</span> 매일 뛰고 있습니다.
+              지금 이 순간에도 <span className="text-bg-primary font-bold">{runningDays}일째</span> 매일 뛰고 있어.
             </p>
 
             <div className="flex gap-2 overflow-x-auto -mx-1 px-1 pb-2" style={{ scrollbarWidth: 'none' }}>
@@ -71,7 +71,7 @@ export default function FounderSection() {
               ))}
             </div>
             <p className="text-card-ink font-bold">
-              그 경험을 4주짜리로 압축한 게 시즌 0입니다.
+              그 경험을 21일짜리로 압축한 게 시즌 1이야.
             </p>
           </div>
         </div>

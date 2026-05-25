@@ -46,11 +46,11 @@ export default function ApplyDonePage() {
   const handleAttachFriend = async () => {
     const v = friend.trim();
     if (!v) {
-      setAttachError('친구 이름이나 @아이디를 적어주세요.');
+      setAttachError('친구 이름이나 @아이디를 적어줘.');
       return;
     }
     if (!canAttach) {
-      setAttachError('새로고침 후에는 친구 정보를 추가할 수 없어요. DM으로 알려주세요!');
+      setAttachError('새로고침 후에는 친구 정보를 추가할 수 없어요. DM으로 알려줘!');
       return;
     }
     setAttaching(true);
@@ -78,12 +78,10 @@ export default function ApplyDonePage() {
             지원 완료!
           </h2>
           <p className="text-card-ink-muted leading-relaxed mb-3">
-            합격 결과는 <span className="text-bg-primary font-bold">4/28(화) 16:00</span> 문자 및
-            <br />
-            인스타 단톡방으로 안내됩니다.
+            합격 결과는 <span className="text-bg-primary font-bold">5/29(금) 12:00</span> 인스타로 안내돼.
           </p>
           <p className="text-card-ink-faint text-sm font-semibold">
-            합격 시 4/28(화) 23:59까지 입금하셔야 선발 확정됩니다.
+            합격 시 5/29(금) 24:00까지 입금해야 선발 확정돼.
           </p>
         </div>
 
@@ -95,7 +93,7 @@ export default function ApplyDonePage() {
           </h3>
           <p className="text-card-ink-muted text-sm leading-relaxed mb-5">
             둘이 <span className="text-bg-primary font-bold">같은 팀 배정 보장</span> ✌️
-            <br />친구도 폼을 작성해야 매칭됩니다.
+            <br />친구도 폼을 작성해야 매칭돼.
           </p>
 
           <button
@@ -106,7 +104,7 @@ export default function ApplyDonePage() {
             {linkCopied ? '✓ 링크가 복사되었어요' : '🔗 신청 페이지 링크 복사하기'}
           </button>
           <p className="text-card-ink-faint text-xs mt-3 text-center">
-            친구에게 카톡·DM으로 보내주세요
+            친구에게 카톡·DM으로 보내줘
           </p>
 
           {canAttach && !attached && (
@@ -137,8 +135,8 @@ export default function ApplyDonePage() {
           )}
           {attached && (
             <div className="mt-6 pt-6 border-t border-card-ink-faint/20 text-center">
-              <p className="text-bg-primary font-bold">✓ 친구 정보가 추가되었습니다</p>
-              <p className="text-card-ink-faint text-xs mt-2">친구도 폼을 제출해야 매칭됩니다.</p>
+              <p className="text-bg-primary font-bold">✓ 친구 정보가 추가됐어</p>
+              <p className="text-card-ink-faint text-xs mt-2">친구도 폼을 제출해야 매칭돼.</p>
             </div>
           )}
         </div>

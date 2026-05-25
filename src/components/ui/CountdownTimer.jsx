@@ -1,10 +1,30 @@
 import { useCountdown } from '../../hooks/useCountdown';
 
-export default function CountdownTimer({ targetDate, size = 'md' }) {
+export default function CountdownTimer({ targetDate, size = 'md', format = 'cells', expiredText = '모집이 마감되었습니다' }) {
   const { days, hours, minutes, seconds, isExpired } = useCountdown(targetDate);
 
   if (isExpired) {
-    return <p className="text-accent-orange font-bold tracking-wide">모집이 마감되었습니다</p>;
+    return <p className="text-accent-orange font-bold tracking-wide">{expiredText}</p>;
+  }
+
+  if (format === 'adaptive') {
+    const pad = (n) => String(n).padStart(2, '0');
+    let text;
+    if (days >= 1) {
+      text = `${days}일 ${hours}시간`;
+    } else if (hours >= 1) {
+      text = `${pad(hours)}:${pad(minutes)}:${pad(seconds)}`;
+    } else {
+      text = `${pad(minutes)}:${pad(seconds)}`;
+    }
+    const textSize = size === 'lg' ? 'text-4xl md:text-5xl' : 'text-3xl md:text-4xl';
+    return (
+      <div className="flex justify-center">
+        <span className={`font-kr font-black tabular-nums tracking-wide text-accent-green ${textSize}`}>
+          {text}
+        </span>
+      </div>
+    );
   }
 
   const units = [

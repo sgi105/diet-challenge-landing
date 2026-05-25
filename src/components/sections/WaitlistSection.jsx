@@ -50,7 +50,7 @@ export default function WaitlistSection() {
             <p className="text-3xl mb-3">✅</p>
             <p className="text-card-ink font-extrabold text-lg mb-2">신청 완료</p>
             <p className="text-card-ink-muted text-sm leading-relaxed">
-              시즌 1 오픈 시 가장 먼저 안내드립니다.<br />
+              시즌 1 오픈 시 가장 먼저 알려줄게.<br />
               그동안 <a href="https://www.instagram.com/samurai_habit/" target="_blank" rel="noopener noreferrer" className="text-bg-primary font-bold underline">@samurai_habit</a> 에서 직전 기수 기록 확인하세요.
             </p>
           </div>
@@ -121,7 +121,7 @@ export default function WaitlistSection() {
               {submitting ? '신청 중...' : '시즌 1 사전알림 받기 →'}
             </button>
             <p className="text-card-ink-faint text-[11px] text-center font-semibold">
-              연락처는 다음 시즌 안내 외 다른 용도로 사용되지 않습니다.
+              연락처는 다음 시즌 안내 외 다른 용도로 쓰지 않아.
             </p>
           </form>
         )}

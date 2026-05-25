@@ -19,7 +19,7 @@ export default function SuccessPage() {
         <p className="text-text-secondary leading-relaxed mb-8">
           200,000원이 성공적으로 예치되었습니다.
           <br />
-          <span className="text-accent-green font-semibold">30일 후 240,000원</span>을 돌려받을 준비가 되었습니다.
+          <span className="text-accent-green font-semibold">21일 후 240,000원</span>을 돌려받을 준비가 되었습니다.
         </p>
 
         <div className="bg-bg-card rounded-2xl p-6 border border-border text-left space-y-4 mb-8">
@@ -35,13 +35,13 @@ export default function SuccessPage() {
             <span className="shrink-0 w-7 h-7 rounded-full bg-accent-green/20 text-accent-green text-sm font-bold flex items-center justify-center">2</span>
             <div>
               <p className="text-text-primary font-semibold text-sm">OT 참여 (챌린지 시작 전)</p>
-              <p className="text-text-muted text-xs">식단 원리와 미션 수행 방법을 안내드립니다.</p>
+              <p className="text-text-muted text-xs">러닝 가이드와 미션 수행 방법을 안내드립니다.</p>
             </div>
           </div>
           <div className="flex items-start gap-3">
             <span className="shrink-0 w-7 h-7 rounded-full bg-accent-green/20 text-accent-green text-sm font-bold flex items-center justify-center">3</span>
             <div>
-              <p className="text-text-primary font-semibold text-sm">30일 미션 시작</p>
+              <p className="text-text-primary font-semibold text-sm">21일 미션 시작</p>
               <p className="text-text-muted text-xs">매일 앱으로 미션이 제공됩니다. 90% 이상 완료하세요.</p>
             </div>
           </div>

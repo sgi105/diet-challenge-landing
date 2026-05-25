@@ -53,14 +53,14 @@ export async function submitApplication(form) {
     region: form.region.trim(),
     running_exp: form.runningExp,
     motivation: form.motivation.trim(),
-    instagram: form.instagram.trim() || null,
+    instagram: form.instagram?.trim() || null,
     kakao_id: form.kakaoId?.trim() || null,
     referrer_name: form.referrerName?.trim() || null,
     agree_deposit: !!form.agreeDeposit,
     agree_schedule: !!form.agreeSchedule,
   };
+  // gender 필드 제거 — applications 테이블에 해당 컬럼 없음
 
-  // 서버 엔드포인트로 POST — 서버에서 Supabase 삽입 + 텔레그램 알림.
   const res = await fetch('/api/submit-application', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
@@ -76,15 +76,26 @@ export async function submitApplication(form) {
   return { id: data?.id || null };
 }
 
-export async function attachFriend({ id, phone, friend }) {
-  const res = await fetch('/api/attach-friend', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({ id, phone, friend }),
-  });
+export async function attachFriend({ id, friend }) {
+  if (!id) return;
+  const res = await fetch(
+    `${SUPABASE_URL}/rest/v1/applications?id=eq.${encodeURIComponent(id)}`,
+    {
+      method: 'PATCH',
+      headers: {
+        'Content-Type': 'application/json',
+        'apikey': SUPABASE_ANON_KEY,
+        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
+      },
+      body: JSON.stringify({ friend_name: friend.trim() }),
+    }
+  );
+  // friend_name 컬럼 없으면 에러 무시 — attachFriend는 optional
   if (!res.ok) {
-    const errText = await res.text().catch(() => res.statusText);
-    throw new Error(`친구 추가 실패 (${res.status}): ${errText}`);
+    const errText = await res.text().catch(() => '');
+    if (!errText.includes('friend_name')) {
+      throw new Error(`친구 추가 실패 (${res.status}): ${errText}`);
+    }
   }
 }
 

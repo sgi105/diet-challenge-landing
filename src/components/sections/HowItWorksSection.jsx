@@ -1,11 +1,11 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 const steps = [
-  { num: 1, title: '지원 (4/26~4/27)', desc: '8문항 지원서 작성. 약 2분 소요.' },
-  { num: 2, title: '선발 (4/28 화)', desc: '30명 합격 발표 — 4/28(화) 16:00 문자 + 단톡방 안내. 입금 마감 4/28 23:59.' },
-  { num: 3, title: '온라인 OT (5/3 일)', desc: '줌 오리엔테이션 + 3인 1팀 매칭. 러닝/식단 가이드 1시간.' },
-  { num: 4, title: '챌린지 (5/4~5/31)', desc: '4주 매일 러닝 인증. 팀원과 댓글 응원. 매주 점검 콜.' },
-  { num: 5, title: '5K 파이널 (5/31 일)', desc: '30명 동시 5km 완주. 팀 성과별 환급 정산.', highlight: true },
+  { num: 1, title: '지원 (5/25~5/28)', desc: '8문항 지원서 작성. 약 2분 소요. 5/28(목) 24:00 마감.' },
+  { num: 2, title: '선발 (5/29 금)', desc: '30명 합격 발표 — 5/29(금) 12:00 인스타 단톡방 안내. 입금 마감 5/29(금) 24:00.' },
+  { num: 3, title: '온라인 OT (5/31 일)', desc: '줌 오리엔테이션 16:00-16:30 + 3인 1팀 매칭. 러닝 가이드.' },
+  { num: 4, title: '챌린지 (6/1~6/21)', desc: '21일 매일 러닝 인증. 팀원과 댓글 응원.' },
+  { num: 5, title: '5K 파이널 (6/21 일)', desc: '30명 동시 5km 완주. 팀 성과별 환급 정산.', highlight: true },
 ];
 
 export default function HowItWorksSection() {
@@ -14,7 +14,7 @@ export default function HowItWorksSection() {
       <AnimateOnScroll>
         <span className="pill text-accent-green">HOW IT WORKS</span>
         <h2 className="font-kr text-3xl md:text-5xl font-black mt-4 mb-8 text-text-primary leading-tight">
-          5단계로 끝.<br />심플합니다.
+          5단계로 끝.<br />심플해.
         </h2>
       </AnimateOnScroll>
 

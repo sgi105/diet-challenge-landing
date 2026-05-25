@@ -30,7 +30,7 @@ export default function FailPage() {
         <p className="text-text-secondary leading-relaxed mb-8">
           아직 포기하지 마세요.
           <br />
-          다시 시도하면 <span className="text-accent-green font-semibold">30일 후 24만원</span>이 기다립니다.
+          다시 시도하면 <span className="text-accent-green font-semibold">21일 후 20만원 환급 + 러닝화</span>가 기다립니다.
         </p>
 
         {message && (

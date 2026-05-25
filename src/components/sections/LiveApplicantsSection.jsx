@@ -55,7 +55,7 @@ export default function LiveApplicantsSection() {
           지금<br />지원하는 사람들
         </h2>
         <p className="text-text-muted text-center text-xs mb-8">
-          4/27(일) 23:59 마감 · 같은 조건이면 일찍 지원한 사람 우선
+          5/28(목) 24:00 마감 · 같은 조건이면 일찍 지원한 사람 우선
         </p>
       </AnimateOnScroll>
 

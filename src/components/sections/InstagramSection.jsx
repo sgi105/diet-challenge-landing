@@ -23,7 +23,7 @@ export default function InstagramSection() {
           <p className="text-text-secondary mb-8">
             9기수 동안 다이어트로 검증된 구조 — <span className="text-text-primary font-bold">팀 + 경쟁(당근) + 보증금(채찍)</span>.
             <br />
-            <span className="text-text-primary font-bold">시즌 0는 그 엔진을 4주 러닝에 그대로 옮깁니다.</span>
+            <span className="text-text-primary font-bold">시즌 1은 그 엔진을 21일 러닝에 그대로 옮겨.</span>
           </p>
         </AnimateOnScroll>
       </div>
@@ -57,14 +57,14 @@ export default function InstagramSection() {
       <AnimateOnScroll className="mt-8 px-6 max-w-lg mx-auto">
         <div className="bg-bg-card rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <p className="text-bg-primary font-extrabold text-lg mb-3 font-kr">
-            시즌 0는 다릅니다.
+            시즌 1은 다릅니다.
           </p>
           <div className="space-y-2 text-sm text-card-ink-muted">
             <p>
               <span className="text-card-ink font-bold">100% 온라인</span> — 오프라인 모임 없이 어디서든
             </p>
             <p>
-              <span className="text-card-ink font-bold">4주 러닝</span> — 다이어트 아닌 5km 완주에 집중
+              <span className="text-card-ink font-bold">21일 러닝</span> — 다이어트 아닌 5km 완주에 집중
             </p>
             <p>
               <span className="text-card-ink font-bold">3인 1팀</span> — 혼자 못 하는 걸 팀으로 강제

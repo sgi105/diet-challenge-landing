@@ -29,3 +29,4 @@ dist-ssr
 .vercel
 raw-videos/
 _testimonial_originals/
+.env*.local

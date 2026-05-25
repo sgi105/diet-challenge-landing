@@ -30,7 +30,8 @@ export default function RefundPage() {
           <p>성공 기준을 충족한 경우:</p>
           <ul className="list-disc pl-5 space-y-1 mt-2">
             <li>예치금 전액 환급</li>
-            <li>성공 보너스 40,000원 추가 지급</li>
+            <li>팀 전원 성공 시 20,000원 추가 지급</li>
+            <li>우승팀 선정 시 팀원 전원에게 15만원 상당 러닝화 지급</li>
             <li>환급은 챌린지 종료 후 7일 이내 처리</li>
           </ul>
         </section>

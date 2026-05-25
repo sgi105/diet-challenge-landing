@@ -3,7 +3,7 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 const points = [
   { tag: '처음', goal: '생애 첫 5km 완주' },
   { tag: '복귀', goal: '다시 러너로' },
-  { tag: '감량', goal: '4주 -3kg' },
+  { tag: '감량', goal: '21일 -2kg' },
   { tag: '대회', goal: '기록 향상' },
 ];
 
@@ -14,10 +14,10 @@ export default function StartingPointsSection() {
         <span className="pill text-accent-green">YOUR GOAL</span>
         <h2 className="font-kr text-3xl md:text-5xl mt-4 mb-3 text-text-primary">
           출발점은 달라도,<br />
-          <span className="text-accent-green">같은 4주.</span>
+          <span className="text-accent-green">같은 21일.</span>
         </h2>
         <p className="text-text-secondary mb-8">
-          어디서 시작하든, 팀이 끝까지 같이 갑니다.
+          어디서 시작하든, 팀이 끝까지 같이 가.
         </p>
       </AnimateOnScroll>
 

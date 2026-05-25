@@ -27,7 +27,6 @@ import ApplyPage from './pages/ApplyPage';
 import ApplyDonePage from './pages/ApplyDonePage';
 import AdminApplicationsPage from './pages/AdminApplicationsPage';
 import PayPage from './pages/PayPage';
-import WaitlistSection from './components/sections/WaitlistSection';
 import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
@@ -40,18 +39,17 @@ function LandingPage({ variant = 'main' }) {
   const isClosed = status === 'closed';
   const isReferral = variant === 'referral';
   const copy = (isReferral ? COPY_REFERRAL : COPY)[status];
-
   useEffect(() => {
     if (!isReferral) return;
     const prev = document.title;
-    document.title = '초대 전용 · 시즌 0 추천인 전형';
+    document.title = '초대 전용 · 시즌 1 추천인 전형';
     return () => { document.title = prev; };
   }, [isReferral]);
 
-  // 마감 후에도 후순위로 지원 받기 — CTA는 항상 /apply로 이동.
   const handleCTA = () => {
     navigate(isReferral ? REFERRAL_APPLY_PATH : APPLY_PATH);
   };
+
   const scrollToCTA = (e) => {
     e.preventDefault();
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
@@ -72,6 +70,7 @@ function LandingPage({ variant = 'main' }) {
       </a>
       <div className="pt-12">
         <HeroSection onCTA={handleCTA} variant={variant} />
+        {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
         {isReferral && !isClosed && <ReferralBonusSection onCTA={handleCTA} />}
         <PainPointSection variant={variant} />
         <TestimonialSection />
@@ -82,8 +81,7 @@ function LandingPage({ variant = 'main' }) {
         <ProgramIntroSection />
         <HowItWorksSection />
         <MoneyMechanicSection />
-        {isClosed ? <WaitlistSection /> : <PricingSection onCTA={handleCTA} variant={variant} />}
-        {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
+        <PricingSection onCTA={handleCTA} variant={variant} />
         {!isClosed && <UrgencySection variant={variant} />}
         <FAQSection />
         <FinalCTASection onCTA={handleCTA} variant={variant} />

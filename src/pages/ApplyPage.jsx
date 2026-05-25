@@ -1,15 +1,16 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { submitApplication, attachFriend } from '../lib/applyApi';
 import { useCohortStatus } from '../hooks/useCohortStatus';
 
-const STORAGE_KEY_MAIN = 'samurai-season0-apply-v2';
-const STORAGE_KEY_REFERRAL = 'samurai-season0-apply-referral-v1';
+const STORAGE_KEY_MAIN = 'samurai-season1-apply-v1';
+const STORAGE_KEY_REFERRAL = 'samurai-season1-apply-referral-v1';
 
 const initialForm = {
   name: '',
   age: '',
+  gender: '',
   phoneCountry: 'KR',
   phone: '',
   job: '',
@@ -33,8 +34,8 @@ const runningExpOptions = [
   { value: 'almost_none', label: '거의 안 뛰어봤다' },
 ];
 
-const MAIN_STEPS = ['intro', 'name', 'age', 'phone', 'job', 'region', 'runningExp', 'motivation', 'instagram', 'friend', 'deposit', 'schedule'];
-const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'phone', 'job', 'region', 'runningExp', 'motivation', 'instagram', 'deposit', 'schedule'];
+const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'instagram', 'friend', 'deposit', 'schedule'];
+const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'instagram', 'deposit', 'schedule'];
 
 function loadState(storageKey) {
   try {
@@ -83,7 +84,7 @@ export default function ApplyPage() {
   useEffect(() => {
     if (!isReferral) return;
     const prev = document.title;
-    document.title = '초대 전용 · 시즌 0 추천인 전형 신청';
+    document.title = '초대 전용 · 시즌 1 추천인 전형 신청';
     return () => { document.title = prev; };
   }, [isReferral]);
 
@@ -152,7 +153,7 @@ export default function ApplyPage() {
         attempt++;
         if (attempt >= 2) {
           track('apply_submit_failed', { message: String(e?.message || e).slice(0, 120), isReferral });
-          setError(e.message || '제출 중 오류가 발생했습니다. 다시 시도해주세요.');
+          setError(e.message || '제출 중 오류가 발생했어. 다시 시도해줘.');
           setSubmitting(false);
           return;
         }
@@ -174,8 +175,17 @@ export default function ApplyPage() {
     return '다음 →';
   })();
 
+  const handleKeyDown = (e) => {
+    if (e.key !== 'Enter') return;
+    if (e.target.tagName === 'TEXTAREA') return;
+    if (e.target.tagName === 'BUTTON') return;
+    e.preventDefault();
+    if (step < TOTAL_QUESTIONS) goNext();
+    else if (step === TOTAL_QUESTIONS && !submitting) handleSubmit();
+  };
+
   return (
-    <div className="min-h-screen flex flex-col">
+    <div className="min-h-screen flex flex-col" onKeyDown={handleKeyDown}>
       <header className="px-5 py-4 flex items-center justify-between border-b border-white/10">
         <Link to="/" className="text-text-muted text-sm hover:text-accent-green transition-colors font-semibold">← 메인</Link>
         <div className="flex items-center gap-2">
@@ -267,6 +277,55 @@ export default function ApplyPage() {
   );
 }
 
+const AGES = Array.from({ length: 67 }, (_, i) => i + 14);
+const ITEM_H = 56;
+
+function AgeScrollPicker({ value, onChange }) {
+  const ref = useRef(null);
+
+  useEffect(() => {
+    if (!ref.current) return;
+    const idx = AGES.indexOf(parseInt(value) || 30);
+    ref.current.scrollTop = (idx < 0 ? AGES.indexOf(30) : idx) * ITEM_H;
+  }, []);
+
+  const onScroll = () => {
+    if (!ref.current) return;
+    clearTimeout(ref.current._t);
+    ref.current._t = setTimeout(() => {
+      const idx = Math.round(ref.current.scrollTop / ITEM_H);
+      const clamped = Math.max(0, Math.min(idx, AGES.length - 1));
+      ref.current.scrollTop = clamped * ITEM_H;
+      onChange(String(AGES[clamped]));
+    }, 80);
+  };
+
+  const selected = parseInt(value);
+  return (
+    <div className="relative h-[168px] overflow-hidden rounded-2xl bg-bg-card border-2 border-white/20">
+      <div className="absolute inset-x-0 top-[56px] h-14 bg-accent-green/15 border-y border-accent-green/40 pointer-events-none z-10" />
+      <div
+        ref={ref}
+        onScroll={onScroll}
+        className="h-full overflow-y-scroll"
+        style={{ scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}
+      >
+        <div style={{ height: ITEM_H }} />
+        {AGES.map(age => (
+          <div
+            key={age}
+            style={{ scrollSnapAlign: 'center', height: ITEM_H }}
+            className={`flex items-center justify-center text-2xl font-bold transition-colors ${selected === age ? 'text-accent-green font-extrabold' : 'text-card-ink font-semibold'}`}
+          >
+            {age}세
+          </div>
+        ))}
+        <div style={{ height: ITEM_H }} />
+      </div>
+    </div>
+  );
+}
+
 function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
   switch (stepKey) {
     case 'intro':
@@ -280,24 +339,45 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           placeholder="당신을 초대해 준 멤버 이름"
           value={form.referrerName}
           onChange={v => update('referrerName', v)}
-          hint="추천인 전형 필수 항목입니다. 보너스 4종은 추천인 확인 후 지급됩니다."
+          hint="추천인 전형 필수 항목이야. 보너스 4종은 추천인 확인 후 지급돼."
           autoComplete="off"
           autoFocus
         />
       );
     case 'age':
       return (
-        <TextStep
-          label="나이"
-          placeholder="28"
-          value={form.age}
-          onChange={v => update('age', v.replace(/\D/g, '').slice(0, 3))}
-          inputMode="numeric"
-          autoComplete="off"
-          autoFocus
-          suffix="세"
-        />
+        <div className="flex-1 flex flex-col justify-center">
+          <label className="block text-text-primary text-2xl font-black font-kr mb-6">나이 (만나이)</label>
+          <AgeScrollPicker value={form.age || '30'} onChange={v => update('age', v)} />
+        </div>
       );
+    case 'gender': {
+      const genderOptions = [
+        { value: 'male', label: '남성' },
+        { value: 'female', label: '여성' },
+      ];
+      return (
+        <div className="flex-1 flex flex-col justify-center">
+          <label className="block text-text-primary text-2xl font-black font-kr mb-2">성별</label>
+          <div className="flex gap-3 mt-4">
+            {genderOptions.map(opt => (
+              <button
+                key={opt.value}
+                type="button"
+                onClick={() => update('gender', opt.value)}
+                className={`flex-1 py-5 rounded-2xl text-lg font-extrabold border-2 transition-all ${
+                  form.gender === opt.value
+                    ? 'bg-accent-green text-bg-primary border-accent-green'
+                    : 'bg-bg-card text-card-ink border-white/20 hover:border-accent-green/50'
+                }`}
+              >
+                {opt.label}
+              </button>
+            ))}
+          </div>
+        </div>
+      );
+    }
     case 'phone':
       return <PhoneStep form={form} update={update} />;
     case 'job':
@@ -340,7 +420,7 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           placeholder="친구 이름 또는 @인스타 아이디"
           value={form.friend}
           onChange={v => update('friend', v)}
-          hint="둘 다 폼을 작성하면 같은 팀으로 배정됩니다. 없으면 비워두고 다음으로."
+          hint="둘 다 폼을 작성하면 같은 팀으로 배정돼. 최대 2명까지 같은 팀 배정 가능. 없으면 비워두고 다음으로."
           autoComplete="off"
           autoFocus
         />
@@ -379,28 +459,28 @@ function IntroStep({ isReferral, totalQuestions }) {
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>🎁 <span className="text-card-ink font-bold">보너스</span>: 식단 PDF · 식단 피드백 · 러닝 폼 분석 · 우선 선발</li>
-          <li>📅 마감 <span className="text-accent-orange font-bold">4/28(화) 14:00</span></li>
-          <li>📨 합격 발표 <span className="text-card-ink font-bold">4/28(화) 16:00</span> 문자</li>
+          <li>🎁 <span className="text-card-ink font-bold">보너스</span>: 러닝 폼 분석 · 우선 선발 · 환급 우선순위</li>
+          <li>📅 마감 <span className="text-accent-orange font-bold">5/28(목) 24:00</span></li>
+          <li>📨 합격 발표 <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타</li>
         </ul>
       </div>
     );
   }
   return (
     <div className="flex-1 flex flex-col justify-center text-center">
-      <span className="pill text-accent-green block w-fit mx-auto mb-4">SEASON [0] · APPLY</span>
+      <span className="pill text-accent-green block w-fit mx-auto mb-4">SEASON [1] · APPLY</span>
       <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
         2분이면<br />지원 끝
       </h1>
       <p className="text-text-secondary leading-relaxed">
         30명 한정 모집.<br />
-        모든 항목은 선발과 팀 매칭에 사용됩니다.
+        모든 항목은 선발과 팀 매칭에 사용돼.
       </p>
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (새로고침 안전)</li>
-        <li>🏆 우승팀 시 <span className="text-bg-primary font-bold">최대 40만원 환급</span></li>
-        <li>📨 합격 발표 <span className="text-card-ink font-bold">4/28(화) 16:00</span> 문자</li>
+        <li>🏆 우승팀 시 <span className="text-bg-primary font-bold">20만 환급 + 러닝화</span></li>
+        <li>📨 합격 발표 <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타</li>
       </ul>
     </div>
   );
@@ -438,7 +518,7 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao }) {
     return (
       <div className="flex-1 flex flex-col justify-center">
         <label className="block text-text-primary text-2xl font-black font-kr mb-2">카톡 ID</label>
-        <p className="text-text-muted text-sm mb-4">합격하면 여기로 단톡방 초대를 보냅니다.</p>
+        <p className="text-text-muted text-sm mb-4">합격하면 여기로 단톡방 초대를 보내.</p>
         <div className="relative mt-3">
           <input
             type="text"
@@ -463,16 +543,17 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">인스타 아이디</label>
-      <p className="text-text-muted text-sm mb-4">합격하면 여기로 단톡방 초대를 보냅니다.</p>
+      <p className="text-text-muted text-sm mb-4">이 계정으로 합격 소식을 보낼거니 정확히 입력해줘.</p>
       <div className="relative mt-3">
+        <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-card-ink select-none pointer-events-none">@</span>
         <input
           type="text"
           autoComplete="username"
           value={instagram}
-          onChange={e => onInstagram(e.target.value)}
-          placeholder="@your_handle"
+          onChange={e => onInstagram(e.target.value.replace(/^@+/, ''))}
+          placeholder="your_handle"
           autoFocus
-          className="w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-4 text-lg text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors"
+          className="w-full bg-bg-card border-2 border-white/20 rounded-2xl pl-8 pr-4 py-4 text-lg text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors"
         />
       </div>
       <button
@@ -540,7 +621,7 @@ function PhoneStep({ form, update }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">연락처</label>
-      <p className="text-text-muted text-sm mb-4">합격 안내·입금 확인용입니다.</p>
+      <p className="text-text-muted text-sm mb-4">합격 안내·입금 확인용이야.</p>
 
       <div className="flex gap-2 mb-4">
         {[
@@ -575,7 +656,7 @@ function PhoneStep({ form, update }) {
         className="w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-4 text-lg text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors"
       />
       <p className="text-text-muted text-xs mt-2 font-semibold">
-        {isKR ? '010으로 시작하는 휴대폰. 자동 포맷됩니다.' : '국가번호 포함. 예: +1 415 555 0123'}
+        {isKR ? '010으로 시작하는 휴대폰. 자동 포맷돼.' : '국가번호 포함. 예: +1 415 555 0123'}
       </p>
     </div>
   );
@@ -612,9 +693,9 @@ function ConsentShell({ label, children, checked, onChange, checkboxLabel }) {
 function DepositConsentStep({ checked, onChange }) {
   // 환급 시나리오 — 조건 / 금액(+ 보너스). boost는 시각 위계상 보조로 작게 처리.
   const refundRows = [
-    { cond: '4주 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
-    { cond: '팀 전원 성공', amount: '24만원 환급', boost: '+4만원', tone: 'pos' },
-    { cond: '팀 우승', amount: '40만원 환급', boost: '+20만원', tone: 'pos' },
+    { cond: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
+    { cond: '팀 전원 성공', amount: '22만원 환급', boost: '+2만원', tone: 'pos' },
+    { cond: '팀 우승', amount: '20만 + 러닝화', boost: '+러닝화', tone: 'pos' },
     { cond: '중도 포기', amount: '0원', tone: 'neg' },
   ];
 
@@ -623,10 +704,10 @@ function DepositConsentStep({ checked, onChange }) {
       label="보증금 안내"
       checked={checked}
       onChange={onChange}
-      checkboxLabel="20만원 보증금 시스템을 이해했습니다"
+      checkboxLabel="20만원 보증금 시스템을 이해했어"
     >
       <p className="mb-4 text-card-ink text-[15px] leading-relaxed">
-        <span className="font-bold">끝까지 완주할 사람만 선발하기 위해</span> 보증금 20만원을 받아요. 직전 기수 <span className="font-extrabold text-bg-primary">평균 수행률 95%, 11명 중 11명 전원 환급 받아갔어요</span>.
+        <span className="font-bold">끝까지 완주할 사람만 선발하기 위해</span> 보증금 20만원을 받아요. <span className="font-extrabold text-bg-primary">직전 시즌0 30명 중 30명 전원 21일 완주 성공</span>.
       </p>
 
       <p className="text-card-ink-faint text-[11px] font-bold tracking-widest mb-2">합격 후 20만원 입금 → 환급</p>
@@ -645,7 +726,7 @@ function DepositConsentStep({ checked, onChange }) {
         ))}
       </div>
 
-      <p className="mt-4 text-card-ink-faint text-sm">🛡️ 합격 후 OT(5/3) 전까지 마음 바뀌면 전액 환불</p>
+      <p className="mt-4 text-card-ink-faint text-xs whitespace-nowrap">🛡️ 합격 후 OT(5/31) 전까지 마음 바뀌면 전액 환불</p>
     </ConsentShell>
   );
 }
@@ -656,16 +737,20 @@ function ScheduleConsentStep({ checked, onChange, isReferral }) {
       label="합격 · 입금 일정"
       checked={checked}
       onChange={onChange}
-      checkboxLabel="합격 발표·입금 마감 일정을 확인했습니다"
+      checkboxLabel="합격 발표·입금 마감 일정을 확인했어"
     >
       <ul className="space-y-3 text-sm">
         {isReferral && (
-          <li>🟧 <span className="font-semibold">추천인 전형 마감:</span> <span className="text-accent-orange font-bold">4/28(화) 14:00</span></li>
+          <li>🟧 <span className="font-semibold">추천인 전형 마감:</span> <span className="text-accent-orange font-bold">5/28(목) 24:00</span></li>
         )}
-        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">4/28(화) 16:00</span> 문자 + 인스타 단톡방 안내</li>
-        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">4/28(화) 23:59</span></li>
-        <li>⚠️ 마감까지 <span className="text-accent-orange font-bold">미입금 시 자동으로 다음 순번</span>으로 넘어갑니다</li>
-        <li>🏃 <span className="font-semibold">온라인 OT:</span> 5/3(일) · <span className="font-semibold">챌린지:</span> 5/4(월) ~ 5/31(일)</li>
+        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타 단톡방 안내</li>
+        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">5/29(금) 24:00</span></li>
+        <li>⚠️ 마감까지 <span className="text-accent-orange font-bold">미입금 시 자동으로 다음 순번</span>으로 넘어가</li>
+        <li>
+          🏃 <span className="font-semibold">온라인 OT:</span> 5/31(일) <span className="text-card-ink font-bold">16:00-16:30</span>
+          <br />
+          🗓️ <span className="font-semibold">챌린지:</span> 6/1(월) ~ 6/21(일)
+        </li>
       </ul>
     </ConsentShell>
   );
@@ -676,53 +761,56 @@ function validateStep(stepKey, form) {
     case 'intro':
       return null;
     case 'name':
-      if (!form.name.trim()) return '이름을 입력해주세요.';
-      if (form.name.trim().length < 2) return '이름을 2자 이상 입력해주세요.';
+      if (!form.name.trim()) return '이름을 입력해줘.';
+      if (form.name.trim().length < 2) return '이름을 2자 이상 입력해줘.';
       return null;
     case 'referrer':
-      if (!form.referrerName?.trim()) return '추천인 이름을 입력해주세요.';
-      if (form.referrerName.trim().length < 2) return '추천인 이름을 2자 이상 입력해주세요.';
+      if (!form.referrerName?.trim()) return '추천인 이름을 입력해줘.';
+      if (form.referrerName.trim().length < 2) return '추천인 이름을 2자 이상 입력해줘.';
       return null;
     case 'age': {
       const n = parseInt(form.age, 10);
-      if (!form.age || isNaN(n)) return '나이를 입력해주세요.';
-      if (n < 14 || n > 80) return '14~80세 사이로 입력해주세요.';
+      if (!form.age || isNaN(n)) return '나이를 입력해줘.';
+      if (n < 14 || n > 80) return '14~80세 사이로 입력해줘.';
       return null;
     }
+    case 'gender':
+      if (!form.gender) return '성별을 선택해줘.';
+      return null;
     case 'phone':
-      if (!form.phone.trim()) return '연락처를 입력해주세요.';
+      if (!form.phone.trim()) return '연락처를 입력해줘.';
       if (form.phoneCountry === 'KR') {
         const digits = form.phone.replace(/\D/g, '');
-        if (!/^01[016789]\d{7,8}$/.test(digits)) return '한국 휴대폰 번호 형식이 맞지 않습니다. (010으로 시작 11자리)';
+        if (!/^01[016789]\d{7,8}$/.test(digits)) return '한국 휴대폰 번호 형식이 맞지 않아. (010으로 시작 11자리)';
       } else {
-        if (form.phone.replace(/\D/g, '').length < 7) return '국가번호 포함 7자 이상의 숫자를 입력해주세요.';
+        if (form.phone.replace(/\D/g, '').length < 7) return '국가번호 포함 7자 이상의 숫자를 입력해줘.';
       }
       return null;
     case 'job':
-      if (!form.job.trim()) return '하는 일을 입력해주세요.';
+      if (!form.job.trim()) return '하는 일을 입력해줘.';
       return null;
     case 'region':
-      if (!form.region.trim()) return '거주 지역을 입력해주세요.';
+      if (!form.region.trim()) return '거주 지역을 입력해줘.';
       return null;
     case 'runningExp':
-      if (!form.runningExp) return '러닝 경력을 선택해주세요.';
+      if (!form.runningExp) return '러닝 경력을 선택해줘.';
       return null;
     case 'motivation':
-      if (!form.motivation.trim()) return '지원 동기를 입력해주세요.';
-      if (form.motivation.trim().length < 10) return '최소 10자 이상 입력해주세요.';
+      if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
+      if (form.motivation.trim().length < 10) return '최소 10자 이상 입력해줘.';
       return null;
     case 'instagram':
       if (!form.instagram.trim() && !form.kakaoId.trim()) {
-        return '연락받을 인스타 또는 카톡 ID를 입력해주세요.';
+        return '연락받을 인스타 또는 카톡 ID를 입력해줘.';
       }
       return null;
     case 'friend':
       return null;
     case 'deposit':
-      if (!form.agreeDeposit) return '보증금 안내에 동의해주세요.';
+      if (!form.agreeDeposit) return '보증금 안내에 동의해줘.';
       return null;
     case 'schedule':
-      if (!form.agreeSchedule) return '합격·입금 일정에 동의해주세요.';
+      if (!form.agreeSchedule) return '합격·입금 일정에 동의해줘.';
       return null;
     default:
       return null;

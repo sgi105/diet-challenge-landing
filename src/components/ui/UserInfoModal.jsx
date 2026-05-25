@@ -17,10 +17,10 @@ export default function UserInfoModal({ isOpen, onClose, onSubmit }) {
 
   const validate = () => {
     const newErrors = {};
-    if (!form.name.trim()) newErrors.name = '이름을 입력해주세요.';
-    if (!form.phone.trim() || !/^01[0-9]{8,9}$/.test(form.phone.replace(/-/g, ''))) newErrors.phone = '휴대폰 번호를 올바르게 입력해주세요.';
-    if (!form.age || form.age < 1 || form.age > 100) newErrors.age = '나이를 올바르게 입력해주세요.';
-    if (!form.gender) newErrors.gender = '성별을 선택해주세요.';
+    if (!form.name.trim()) newErrors.name = '이름을 입력해줘.';
+    if (!form.phone.trim() || !/^01[0-9]{8,9}$/.test(form.phone.replace(/-/g, ''))) newErrors.phone = '휴대폰 번호를 올바르게 입력해줘.';
+    if (!form.age || form.age < 1 || form.age > 100) newErrors.age = '나이를 올바르게 입력해줘.';
+    if (!form.gender) newErrors.gender = '성별을 선택해줘.';
     setErrors(newErrors);
     return Object.keys(newErrors).length === 0;
   };

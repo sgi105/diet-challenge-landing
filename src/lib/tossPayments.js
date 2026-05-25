@@ -6,14 +6,14 @@ export async function requestPayment(userInfo = {}) {
     throw new Error('PortOne SDK 로딩 실패');
   }
 
-  const paymentId = `payment-${crypto.randomUUID()}`;
+  const paymentId = `pay-${crypto.randomUUID()}`;
 
   const response = await window.PortOne.requestPayment({
     storeId: STORE_ID,
     channelKey: CHANNEL_KEY,
     paymentId,
-    orderName: '30일 다이어트 챌린지 예치금',
-    totalAmount: 200000,
+    orderName: '21일 러닝 챌린지 예치금',
+    totalAmount: 100, // 테스트용 — 실배포 전 200000으로 복구
     currency: 'CURRENCY_KRW',
     payMethod: 'CARD',
     customer: {
