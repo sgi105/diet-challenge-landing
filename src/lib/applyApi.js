@@ -61,7 +61,8 @@ export async function submitApplication(form) {
   };
   // gender 필드 제거 — applications 테이블에 해당 컬럼 없음
 
-  const res = await fetch('/api/submit-application', {
+  const API_BASE = import.meta.env.DEV ? 'https://challenge.samuraihabits.com' : '';
+  const res = await fetch(`${API_BASE}/api/submit-application`, {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
     body: JSON.stringify(payload),
