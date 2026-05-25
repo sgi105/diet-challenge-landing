@@ -18,7 +18,7 @@ export default function InstagramSection() {
         <AnimateOnScroll>
           <span className="pill text-accent-green">@samurai_habit</span>
           <h2 className="font-kr text-3xl md:text-5xl font-black mt-4 mb-4 text-text-primary leading-tight">
-            사람을 매일 움직이는<br />엔진은 똑같습니다.
+            사람을 매일 움직이는<br />엔진은 똑같아.
           </h2>
           <p className="text-text-secondary mb-8">
             9기수 동안 다이어트로 검증된 구조 — <span className="text-text-primary font-bold">팀 + 경쟁(당근) + 보증금(채찍)</span>.
@@ -57,7 +57,7 @@ export default function InstagramSection() {
       <AnimateOnScroll className="mt-8 px-6 max-w-lg mx-auto">
         <div className="bg-bg-card rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <p className="text-bg-primary font-extrabold text-lg mb-3 font-kr">
-            시즌 1은 다릅니다.
+            시즌 1은 달라.
           </p>
           <div className="space-y-2 text-sm text-card-ink-muted">
             <p>

@@ -157,6 +157,11 @@ const stats = [
   { value: '10팀', label: '3인 × 10팀 운영' },
 ];
 
+function anonymize(name) {
+  if (name.length <= 2) return name[0] + '*';
+  return name[0] + '*'.repeat(name.length - 2) + name[name.length - 1];
+}
+
 function renderCaption(caption, highlights) {
   if (!highlights || highlights.length === 0) return caption;
 
@@ -208,7 +213,7 @@ function TestimonialCard({ t }) {
       <div className="px-5 pt-4 pb-4 flex flex-col gap-3">
         {/* Name + type badge */}
         <div className="flex flex-wrap items-center gap-2">
-          <span className="text-card-ink font-extrabold text-sm">{t.name}</span>
+          <span className="text-card-ink font-extrabold text-sm">{anonymize(t.name)}</span>
           <span className={`text-[10px] font-extrabold px-2 py-0.5 rounded-full leading-none ${meta.bg} ${meta.text}`}>
             {t.type}
           </span>

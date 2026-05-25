@@ -108,13 +108,13 @@ export default function MoneyMechanicSection() {
 
         {/* Row 4: 그랜드 챔피언 */}
         <AnimateOnScroll animation="animate-scale-in" delay={0.2}>
-          <div className="rounded-2xl p-6 text-center border-2 border-yellow-400/60 bg-gradient-to-br from-yellow-400/15 to-yellow-400/5 shadow-[0_8px_32px_rgba(250,200,0,0.2)]">
-            <CardLabel className="text-yellow-400">그랜드 챔피언 🏝️</CardLabel>
-            <p className="text-3xl font-black text-text-primary mb-1">발리 왕복 항공권</p>
-            <p className="text-yellow-300 text-2xl font-black tabular-nums">
-              1,000,000<span className="text-sm font-semibold ml-0.5">원</span><span className="text-sm font-semibold ml-1">상당</span>
+          <div className="bg-bg-card rounded-2xl p-6 text-center border-2 border-yellow-400 shadow-[0_12px_48px_rgba(250,200,0,0.35)]">
+            <CardLabel className="text-yellow-400">🏝️ GRAND CHAMPION</CardLabel>
+            <p className="text-4xl font-black text-card-ink leading-tight mb-3 break-keep">발리 왕복 항공권</p>
+            <p className="text-yellow-500 text-2xl font-black tabular-nums mb-3">
+              1,000,000<span className="text-sm font-semibold ml-1">원 상당</span>
             </p>
-            <p className="text-text-secondary text-xs mt-2">이번 시즌 전체 1등 · 1명 한정</p>
+            <p className="text-card-ink-muted text-xs font-semibold tracking-wide">이번 시즌 전체 1등 · 1명 한정</p>
           </div>
         </AnimateOnScroll>
 
