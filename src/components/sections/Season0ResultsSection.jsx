@@ -2,7 +2,7 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 import BigStatsCards from '../cohort-result/BigStatsCards';
 import AttendanceGrid from '../cohort-result/AttendanceGrid';
 import CumulativeDistanceChart from '../cohort-result/CumulativeDistanceChart';
-import TimeHeatmap from '../cohort-result/TimeHeatmap';
+import MiracleMorningStat from '../cohort-result/MiracleMorningStat';
 
 export default function Season0ResultsSection() {
   return (
@@ -23,7 +23,7 @@ export default function Season0ResultsSection() {
         <BigStatsCards />
         <AttendanceGrid />
         <CumulativeDistanceChart />
-        <TimeHeatmap />
+        <MiracleMorningStat />
       </div>
 
       <p className="text-text-muted text-[11px] mt-6 text-center leading-relaxed">

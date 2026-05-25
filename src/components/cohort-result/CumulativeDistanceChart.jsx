@@ -11,12 +11,11 @@ const CHART_W = W - PAD_L - PAD_R;
 const CHART_H = H - PAD_T - PAD_B;
 
 function compareToFamiliarRoute(totalKm) {
-  // Common Korean reference distances
-  if (totalKm >= 1400) return `서울→부산 4번 왕복 (~1,640km)`;
-  if (totalKm >= 800) return `서울→부산 2번 왕복 (~820km)`;
-  if (totalKm >= 400) return `서울→부산 한 번 왕복 (~410km)`;
-  if (totalKm >= 100) return `서울→대전 한 번 (~150km)`;
-  return '';
+  if (totalKm >= 1400) return { label: '서울 ↔ 부산', detail: '4번 왕복', km: '약 1,640km' };
+  if (totalKm >= 800) return { label: '서울 ↔ 부산', detail: '2번 왕복', km: '약 820km' };
+  if (totalKm >= 400) return { label: '서울 ↔ 부산', detail: '한 번 왕복', km: '약 410km' };
+  if (totalKm >= 100) return { label: '서울 → 대전', detail: '한 번', km: '약 150km' };
+  return null;
 }
 
 export default function CumulativeDistanceChart() {
@@ -34,17 +33,14 @@ export default function CumulativeDistanceChart() {
     totalKm: d.totalKm,
   }));
 
-  // Build smooth area path
   const linePath = points.map((p, i) => `${i ? 'L' : 'M'} ${p.x.toFixed(1)} ${p.y.toFixed(1)}`).join(' ');
   const areaPath = `${linePath} L ${points[points.length - 1].x.toFixed(1)} ${(PAD_T + CHART_H).toFixed(1)} L ${points[0].x.toFixed(1)} ${(PAD_T + CHART_H).toFixed(1)} Z`;
 
-  // Y-axis ticks (4)
   const yTicks = [0, 0.5, 1].map((p) => ({
     value: Math.round(maxKm * p),
     y: PAD_T + CHART_H - p * CHART_H,
   }));
 
-  // X-axis ticks every 5 days + last
   const xTicks = [1, 5, 10, 15, 20, 21].filter((d, i, a) => a.indexOf(d) === i);
 
   return (
@@ -75,7 +71,6 @@ export default function CumulativeDistanceChart() {
             </linearGradient>
           </defs>
 
-          {/* y grid */}
           {yTicks.map((t, i) => (
             <g key={i}>
               <line
@@ -99,9 +94,7 @@ export default function CumulativeDistanceChart() {
             </g>
           ))}
 
-          {/* area */}
           <path d={areaPath} fill="url(#cumGrad)" />
-          {/* line */}
           <path
             d={linePath}
             fill="none"
@@ -110,7 +103,6 @@ export default function CumulativeDistanceChart() {
             strokeLinejoin="round"
           />
 
-          {/* end point dot */}
           <circle
             cx={points[points.length - 1].x}
             cy={points[points.length - 1].y}
@@ -120,7 +112,6 @@ export default function CumulativeDistanceChart() {
             strokeWidth="2"
           />
 
-          {/* x ticks */}
           {xTicks.map((d) => {
             const p = points[d - 1];
             return (
@@ -140,9 +131,23 @@ export default function CumulativeDistanceChart() {
         </svg>
 
         {familiar && (
-          <p className="mt-2 text-[11px] text-card-ink-muted leading-relaxed">
-            🛣️ 비유 — <span className="font-extrabold text-card-ink">{familiar}</span>
-          </p>
+          <div className="mt-4 bg-accent-green/15 border border-accent-green/40 rounded-xl px-4 py-3 flex items-center gap-3">
+            <span className="text-2xl shrink-0">🛣️</span>
+            <div className="flex-1 min-w-0">
+              <p className="text-card-ink-muted text-[10px] font-bold tracking-widest uppercase">
+                이게 어느 정도냐면
+              </p>
+              <p className="text-card-ink text-xl md:text-2xl font-black leading-tight tracking-tight">
+                {familiar.label}{' '}
+                <span className="text-accent-green-bright bg-bg-primary px-1.5 py-0.5 rounded-md">
+                  {familiar.detail}
+                </span>
+              </p>
+              <p className="text-card-ink-faint text-[10px] font-semibold mt-0.5">
+                {familiar.km}
+              </p>
+            </div>
+          </div>
         )}
       </div>
     </AnimateOnScroll>

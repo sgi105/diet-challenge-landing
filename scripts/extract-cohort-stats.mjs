@@ -164,6 +164,33 @@ for (const w of Object.keys(hourlyByWeekday)) {
 const sortedHours = Object.entries(hourTotals).sort((a, b) => b[1] - a[1]).slice(0, 5);
 console.log(`[5] top hour buckets (KST):`, sortedHours);
 
+// Miracle morning: KST 5-9시 인증 수. 1인당 평균 일수도 계산.
+const MIRACLE_START = 5;
+const MIRACLE_END = 9; // inclusive end-of-hour means logs with hour <= 9 (i.e., 5,6,7,8,9시)
+const totalLogs = Object.values(hourTotals).reduce((a, b) => a + b, 0);
+const miracleLogs = [5, 6, 7, 8, 9].reduce((s, h) => s + (hourTotals[h] || 0), 0);
+const miracleRate = totalLogs ? miracleLogs / totalLogs : 0;
+
+// 1인당 미라클 모닝 일수 — user별, 날짜별로 5-9시 KST에 인증한 로그가 있는지 set 집계
+const miracleDaysByUser = {};
+for (const u of members) miracleDaysByUser[u.id] = new Set();
+for (const l of logs) {
+  const d = new Date(l.logged_at);
+  const kst = new Date(d.getTime() + TZ_OFFSET_HOURS * 3600 * 1000);
+  const hour = kst.getUTCHours();
+  if (hour < MIRACLE_START || hour > MIRACLE_END) continue;
+  const dateStr = kst.toISOString().slice(0, 10);
+  if (dateToIdx[dateStr] == null) continue;
+  miracleDaysByUser[l.user_id]?.add(dateStr);
+}
+const miracleDayCounts = Object.values(miracleDaysByUser).map((s) => s.size);
+const avgMiracleDays = miracleDayCounts.length
+  ? miracleDayCounts.reduce((a, b) => a + b, 0) / miracleDayCounts.length
+  : 0;
+const peakHour = sortedHours.length ? Number(sortedHours[0][0]) : null;
+const peakHourCount = sortedHours.length ? Number(sortedHours[0][1]) : 0;
+console.log(`[6] miracle morning 5-9시: ${miracleLogs}/${totalLogs} (${(miracleRate * 100).toFixed(1)}%), 1인 평균 ${avgMiracleDays.toFixed(1)}일`);
+
 const out = {
   generated_at: new Date().toISOString(),
   cohort: { code: '260504_team_run', cohort_id: COHORT_ID, day1: DAY1, day21: DAY21 },
@@ -181,6 +208,15 @@ const out = {
     totalKm: +totalKm.toFixed(2),
     perPersonKm: +(totalKm / members.length).toFixed(2),
     topHoursKST: sortedHours.map(([h, c]) => ({ hour: Number(h), count: c })),
+    miracleMorning: {
+      windowKST: '05:00–09:59',
+      logs: miracleLogs,
+      totalLogs,
+      rate: +miracleRate.toFixed(4),
+      avgDaysPerPerson: +avgMiracleDays.toFixed(2),
+      peakHour,
+      peakHourCount,
+    },
   },
 };
 

@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-25T21:24:24.821Z",
+  "generated_at": "2026-05-25T21:51:45.369Z",
   "cohort": {
     "code": "260504_team_run",
     "cohort_id": "cf14f8e6-6c3f-4c3f-9837-14a714a0233c",
@@ -904,7 +904,7 @@
       "3": 3,
       "4": 2,
       "5": 4,
-      "6": 11,
+      "6": 14,
       "7": 5,
       "8": 27,
       "9": 3,
@@ -1214,6 +1214,15 @@
         "hour": 21,
         "count": 64
       }
-    ]
+    ],
+    "miracleMorning": {
+      "windowKST": "05:00–09:59",
+      "logs": 392,
+      "totalLogs": 997,
+      "rate": 0.3932,
+      "avgDaysPerPerson": 8.2,
+      "peakHour": 8,
+      "peakHourCount": 212
+    }
   }
 }

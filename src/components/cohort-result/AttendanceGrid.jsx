@@ -20,12 +20,12 @@ export default function AttendanceGrid() {
         </div>
 
         {/* day axis */}
-        <div className="flex items-center gap-1.5 mb-2 pl-12">
+        <div className="flex items-center gap-[3px] mb-2 pl-8">
           {Array.from({ length: 21 }, (_, i) => i + 1).map((d) => (
             <span
               key={d}
-              className={`text-[8px] font-bold tabular-nums w-[10px] text-center ${
-                d % 7 === 0 || d === 1 ? 'text-card-ink-muted' : 'text-transparent'
+              className={`text-[8px] font-bold tabular-nums w-[8px] text-center ${
+                d === 1 || d === 7 || d === 14 || d === 21 ? 'text-card-ink-muted' : 'text-transparent'
               }`}
             >
               {d}
@@ -33,40 +33,37 @@ export default function AttendanceGrid() {
           ))}
         </div>
 
-        <div className={expanded ? 'space-y-1.5' : 'space-y-1.5'}>
+        <div className="space-y-1">
           {shown.map((m) => {
             const row = matrix[m.id] || [];
             const count = row.filter(Boolean).length;
             return (
-              <div key={m.id} className="flex items-center gap-2">
-                <div className="flex items-center gap-1.5 w-10 shrink-0">
-                  {m.avatar_url ? (
-                    <img
-                      src={m.avatar_url}
-                      alt=""
-                      className="w-5 h-5 rounded-full object-cover bg-card-border"
-                      loading="lazy"
-                    />
-                  ) : (
-                    <span className="w-5 h-5 rounded-full bg-card-border flex items-center justify-center text-[9px] font-extrabold text-card-ink">
-                      {m.initial}
-                    </span>
-                  )}
-                  <span className="text-[10px] font-bold text-card-ink-muted">{m.initial}★</span>
-                </div>
-                <div className="flex items-center gap-1.5 flex-1">
+              <div key={m.id} className="flex items-center gap-1.5">
+                {m.avatar_url ? (
+                  <img
+                    src={m.avatar_url}
+                    alt=""
+                    className="w-6 h-6 rounded-full object-cover bg-card-border shrink-0"
+                    loading="lazy"
+                  />
+                ) : (
+                  <span className="w-6 h-6 rounded-full bg-card-border flex items-center justify-center text-[9px] font-extrabold text-card-ink shrink-0">
+                    {m.initial}
+                  </span>
+                )}
+                <div className="flex items-center gap-[3px] flex-1">
                   {row.map((cell, i) => (
                     <span
                       key={i}
-                      className={`w-[10px] h-[10px] rounded-[2px] block ${
+                      className={`w-[8px] h-[8px] rounded-[2px] block ${
                         cell ? 'bg-accent-green' : 'bg-card-border'
                       }`}
                       title={`day${i + 1} ${cell ? '인증' : '미인증'}`}
                     />
                   ))}
                 </div>
-                <span className="text-[10px] tabular-nums font-extrabold text-card-ink w-8 text-right">
-                  {count}/21
+                <span className="text-[10px] tabular-nums font-extrabold text-card-ink w-6 text-right shrink-0">
+                  {count}
                 </span>
               </div>
             );
@@ -88,6 +85,7 @@ export default function AttendanceGrid() {
           인증 완료
           <span className="inline-block w-2 h-2 bg-card-border rounded-sm ml-3 mr-1 align-middle" />
           미인증
+          <span className="ml-3 text-card-ink-muted">· 우측은 21일 중 인증 일수</span>
         </p>
       </div>
     </AnimateOnScroll>
