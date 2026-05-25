@@ -7,11 +7,11 @@ const VARIANT_COPY = {
   main: {
     pill: 'SEASON [1] · 21D RUN',
     pillTone: 'text-accent-green',
-    headlineTop: '팀과 함께 21일',
     headlineMid: '매일 뛰는 게 이렇게',
     headlineHighlight: '재밌을 줄',
     headlineTail: ' 몰랐다',
     badges: ['100% 온라인', '3인 1팀', '30명 한정'],
+    headlineSub: '팀과 함께 21일',
     sub1Top: '혼자였으면 안 했을 일,',
     sub1Bottom: '팀이 만들어줘.',
     sub2: (
@@ -59,19 +59,24 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
         </div>
 
         <h1 className="font-kr text-4xl md:text-6xl font-black leading-tight break-keep mb-6 animate-fade-up text-text-primary" style={{ animationDelay: '0.1s' }}>
-          {v.headlineTop}
-          <br />
+          {v.headlineTop && <>{v.headlineTop}<br /></>}
           {v.headlineMid && <>{v.headlineMid}<br /></>}
           <span className={highlightTone}>{v.headlineHighlight}</span>{v.headlineTail}
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-7 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+        <div className="flex flex-wrap justify-center gap-2 mb-4 animate-fade-up" style={{ animationDelay: '0.15s' }}>
           {v.badges.map((t) => (
             <span key={t} className="inline-flex items-center px-4 py-1.5 rounded-full bg-white text-bg-primary text-xs font-extrabold whitespace-nowrap">
               {t}
             </span>
           ))}
         </div>
+
+        {v.headlineSub && (
+          <p className="font-kr text-xl md:text-2xl font-black text-accent-green mb-6 animate-fade-up" style={{ animationDelay: '0.18s' }}>
+            {v.headlineSub}
+          </p>
+        )}
 
         <p className="text-text-secondary text-base leading-relaxed mb-3 animate-fade-up" style={{ animationDelay: '0.22s' }}>
           {v.sub1Top}<br />
