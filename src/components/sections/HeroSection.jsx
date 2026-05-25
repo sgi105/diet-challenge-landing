@@ -64,34 +64,28 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
           <span className={highlightTone}>{v.headlineHighlight}</span>{v.headlineTail}
         </h1>
 
-        <div className="flex flex-wrap justify-center gap-2 mb-4 animate-fade-up" style={{ animationDelay: '0.15s' }}>
-          {v.badges.map((t) => (
-            <span key={t} className="inline-flex items-center px-4 py-1.5 rounded-full bg-white text-bg-primary text-xs font-extrabold whitespace-nowrap">
-              {t}
-            </span>
-          ))}
-        </div>
+        <p className="text-text-secondary text-xs font-bold tracking-wider mb-5 animate-fade-up" style={{ animationDelay: '0.15s' }}>
+          {v.badges.join(' · ')}
+        </p>
 
         {v.headlineSub && (
-          <div className="flex justify-center mb-6 animate-fade-up" style={{ animationDelay: '0.18s' }}>
-            <span
-              className="font-kr text-2xl md:text-3xl font-black text-accent-green px-6 py-2.5 rounded-full border-2 border-accent-green bg-accent-green/10"
-              style={{ boxShadow: '0 0 36px rgba(200,255,77,0.4)' }}
-            >
-              {v.headlineSub}
-            </span>
-          </div>
+          <p
+            className="font-kr text-3xl md:text-4xl font-black text-accent-green mb-8 animate-fade-up tracking-tight"
+            style={{ animationDelay: '0.18s', textShadow: '0 0 32px rgba(200,255,77,0.55)' }}
+          >
+            {v.headlineSub}
+          </p>
         )}
 
-        <p className="text-text-secondary text-base leading-relaxed mb-3 animate-fade-up" style={{ animationDelay: '0.22s' }}>
+        <p className="text-text-secondary text-base leading-relaxed mb-4 animate-fade-up" style={{ animationDelay: '0.22s' }}>
           {v.sub1Top}<br />
           <span className="text-text-primary font-bold">{v.sub1Bottom}</span>
         </p>
-        <p className="text-text-muted text-xs mb-3 animate-fade-up font-semibold tracking-wide" style={{ animationDelay: '0.26s' }}>
+        <p className="text-text-muted text-xs mb-2 animate-fade-up font-semibold tracking-wide" style={{ animationDelay: '0.26s' }}>
           {v.sub2}
         </p>
-        <p className="text-text-muted text-[11px] mb-9 animate-fade-up font-bold tracking-widest" style={{ animationDelay: '0.28s' }}>
-          🏁 챌린지 시작 <span className="text-text-primary">6/1(월)</span> · 5K 파이널 <span className="text-text-primary">6/21(일)</span>
+        <p className="text-text-muted text-[11px] mb-10 animate-fade-up font-bold tracking-widest" style={{ animationDelay: '0.28s' }}>
+          챌린지 시작 <span className="text-text-primary">6/1(월)</span>  ·  파이널 <span className="text-text-primary">6/21(일)</span>
         </p>
 
         <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
