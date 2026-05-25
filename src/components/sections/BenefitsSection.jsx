@@ -4,8 +4,7 @@ import CountdownTimer from '../ui/CountdownTimer';
 import { COHORT } from '../../data/config';
 
 const benefits = [
-  { icon: '⭐', title: '선발 가산점', desc: '같은 조건이면 오늘 지원자 우선 선발' },
-  { icon: '🎥', title: '러닝 폼 1:1 영상 분석', desc: '챌린지 기간 내 언제든 영상 찍어서 요청 가능 · 5만원 가치', value: '50,000원' },
+  { icon: '🎥', title: '러닝 폼 1:1 영상 분석', desc: '챌린지 기간 내 영상 찍어서 요청 3회까지 가능 · 5만원 가치', value: '50,000원' },
 ];
 
 export default function BenefitsSection({ onCTA }) {
@@ -34,7 +33,7 @@ export default function BenefitsSection({ onCTA }) {
     pillLabel = 'FIRST-DAY ONLY';
   } else {
     headline = (
-      <>오늘 지원하면<br /><span className="text-accent-green">2가지 혜택</span> 추가</>
+      <>오늘 지원하면<br /><span className="text-accent-green">특별 혜택</span>으로</>
     );
     subline = `${tmLabel}부터는 사라져`;
     pillLabel = 'TODAY ONLY';

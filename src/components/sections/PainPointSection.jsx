@@ -53,7 +53,7 @@ export default function PainPointSection({ variant = 'main' }) {
           {copy.why}
         </p>
         <p className="text-text-primary text-2xl font-kr leading-tight">
-          '잃을 것'도, '<span className="text-accent-green">{copy.pairLabel}</span>'도<br />없었기 때문입니다.
+          '잃을 것'도, '<span className="text-accent-green">{copy.pairLabel}</span>'도<br />없었기 때문이야.
         </p>
       </AnimateOnScroll>
     </section>
