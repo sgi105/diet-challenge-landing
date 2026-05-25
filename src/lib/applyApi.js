@@ -47,6 +47,7 @@ export async function submitApplication(form) {
   const payload = {
     name: form.name.trim(),
     age: parseInt(form.age, 10),
+    gender: form.gender === 'M' || form.gender === 'F' ? form.gender : null,
     phone: form.phone.trim(),
     phone_country: form.phoneCountry,
     job: form.job.trim(),
@@ -59,7 +60,6 @@ export async function submitApplication(form) {
     agree_deposit: !!form.agreeDeposit,
     agree_schedule: !!form.agreeSchedule,
   };
-  // gender 필드 제거 — applications 테이블에 해당 컬럼 없음
 
   const API_BASE = import.meta.env.DEV ? 'https://challenge.samuraihabits.com' : '';
   const res = await fetch(`${API_BASE}/api/submit-application`, {

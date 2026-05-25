@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';
 import ApplicantAvatar from '../components/ui/ApplicantAvatar';
 import { matchTeams, SKILL_SCORE } from '../lib/teamMatching';
 import { normalizeInstagram } from '../lib/instagram';
@@ -65,6 +66,7 @@ export default function AdminApplicationsPage() {
   const [teamCount, setTeamCount] = useState(10);
   const [matching, setMatching] = useState(false);
   const [unpaidOnly, setUnpaidOnly] = useState(false);
+  const [cohortTab, setCohortTab] = useState('season1'); // all | season0 | season1
 
   const fetchData = async (t) => {
     setLoading(true);
@@ -329,15 +331,15 @@ export default function AdminApplicationsPage() {
 
   // ---------- 팀 매칭 실행 + 저장 ----------
   const runMatching = async () => {
-    if (!data?.rows?.length) return;
+    if (!rows.length) return;
     if (matching) return;
-    const eligible = data.rows.filter((r) => !r.excluded);
-    const ok = confirm(`매칭 대상 ${eligible.length}명 (배제 ${data.rows.length - eligible.length}명 제외)을 ${teamCount}개 팀으로 자동 배정합니다.\n기존 팀 배정은 덮어씁니다. 진행할까요?`);
+    const eligible = rows.filter((r) => !r.excluded);
+    const ok = confirm(`매칭 대상 ${eligible.length}명 (배제 ${rows.length - eligible.length}명 제외)을 ${teamCount}개 팀으로 자동 배정합니다.\n기존 팀 배정은 덮어씁니다. 진행할까요?`);
     if (!ok) return;
     setMatching(true);
     setError('');
     try {
-      const result = matchTeams(data.rows, teamCount);
+      const result = matchTeams(rows, teamCount);
       const { assignments, conflicts } = result;
 
       // 모두 PATCH (병렬, 세마포어 5)
@@ -453,7 +455,15 @@ export default function AdminApplicationsPage() {
     );
   }
 
-  const rows = data.rows || [];
+  const allRows = data.rows || [];
+  const SEASON1_CUTOFF = new Date('2026-05-24T15:00:00.000Z'); // 2026-05-25 00:00 KST
+  const season0Count = allRows.filter((r) => new Date(r.created_at) < SEASON1_CUTOFF).length;
+  const season1Count = allRows.length - season0Count;
+  const rows = cohortTab === 'season0'
+    ? allRows.filter((r) => new Date(r.created_at) < SEASON1_CUTOFF)
+    : cohortTab === 'season1'
+      ? allRows.filter((r) => new Date(r.created_at) >= SEASON1_CUTOFF)
+      : allRows;
   const teamGroups = {};
   rows.forEach((r) => {
     const t = r.team_id;
@@ -492,8 +502,15 @@ export default function AdminApplicationsPage() {
       <div className="max-w-5xl mx-auto">
         <div className="flex items-baseline justify-between mb-4 flex-wrap gap-2">
           <div>
-            <h1 className="text-text-primary font-extrabold text-2xl">지원자 {data.count}명</h1>
-            <p className="text-text-muted text-xs">최신순 정렬 · 새로고침으로 갱신</p>
+            <h1 className="text-text-primary font-extrabold text-2xl">
+              지원자 {rows.length}명
+              {cohortTab !== 'all' && <span className="text-text-muted text-base font-bold"> / 전체 {allRows.length}</span>}
+            </h1>
+            <p className="text-text-muted text-xs">
+              최신순 정렬 · 새로고침으로 갱신
+              {' · '}
+              <Link to="/admin/testimonials" className="underline hover:text-text-primary">후기 관리 →</Link>
+            </p>
           </div>
           <div className="flex gap-2">
             <button onClick={() => fetchData(token)} className="px-3 py-2 rounded-lg bg-bg-card text-card-ink text-xs font-bold hover:bg-bg-card-hover">
@@ -503,6 +520,23 @@ export default function AdminApplicationsPage() {
               로그아웃
             </button>
           </div>
+        </div>
+
+        {/* 코호트 탭 — 5/25 KST 기준 분할 */}
+        <div className="flex gap-1 bg-bg-card rounded-xl p-1 mb-4 w-fit">
+          {[
+            { key: 'season1', label: '시즌1', count: season1Count },
+            { key: 'season0', label: '260504_team_run', count: season0Count },
+            { key: 'all', label: '전체', count: allRows.length },
+          ].map(({ key, label, count }) => (
+            <button
+              key={key}
+              onClick={() => setCohortTab(key)}
+              className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-colors ${cohortTab === key ? 'bg-bg-primary text-white' : 'text-card-ink-muted hover:text-card-ink'}`}
+            >
+              {label} <span className="tabular-nums opacity-80">{count}</span>
+            </button>
+          ))}
         </div>
 
         {/* 팀 매칭 툴바 */}

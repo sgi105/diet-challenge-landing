@@ -38,6 +38,7 @@ export default async function handler(req, res) {
   const payload = {
     name: String(body.name).trim().slice(0, 50),
     age: parseInt(body.age, 10),
+    gender: body.gender === 'M' || body.gender === 'F' ? body.gender : null,
     phone: String(body.phone).trim().slice(0, 30),
     phone_country: String(body.phone_country || 'KR').slice(0, 4),
     job: String(body.job).trim().slice(0, 100),
