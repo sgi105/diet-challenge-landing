@@ -73,9 +73,14 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
         </div>
 
         {v.headlineSub && (
-          <p className="font-kr text-xl md:text-2xl font-black text-accent-green mb-6 animate-fade-up" style={{ animationDelay: '0.18s' }}>
-            {v.headlineSub}
-          </p>
+          <div className="flex justify-center mb-6 animate-fade-up" style={{ animationDelay: '0.18s' }}>
+            <span
+              className="font-kr text-2xl md:text-3xl font-black text-accent-green px-6 py-2.5 rounded-full border-2 border-accent-green bg-accent-green/10"
+              style={{ boxShadow: '0 0 36px rgba(200,255,77,0.4)' }}
+            >
+              {v.headlineSub}
+            </span>
+          </div>
         )}
 
         <p className="text-text-secondary text-base leading-relaxed mb-3 animate-fade-up" style={{ animationDelay: '0.22s' }}>
