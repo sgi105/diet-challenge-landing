@@ -1,5 +1,6 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import BigStatsCards from '../cohort-result/BigStatsCards';
+import PhotoGrid from '../cohort-result/PhotoGrid';
 import AttendanceGrid from '../cohort-result/AttendanceGrid';
 import CumulativeDistanceChart from '../cohort-result/CumulativeDistanceChart';
 import MiracleMorningStat from '../cohort-result/MiracleMorningStat';
@@ -21,6 +22,7 @@ export default function Season0ResultsSection() {
 
       <div className="space-y-4">
         <BigStatsCards />
+        <PhotoGrid />
         <AttendanceGrid />
         <CumulativeDistanceChart />
         <MiracleMorningStat />

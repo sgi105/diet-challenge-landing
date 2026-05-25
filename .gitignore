@@ -30,3 +30,4 @@ dist-ssr
 raw-videos/
 _testimonial_originals/
 .env*.local
+scripts/.curate-photos-debug.json
