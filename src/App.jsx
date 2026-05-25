@@ -2,6 +2,7 @@ import { useEffect } from 'react';
 import { Routes, Route, useNavigate } from 'react-router-dom';
 import HeroSection from './components/sections/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
+import Season0ResultsSection from './components/sections/Season0ResultsSection';
 import StartingPointsSection from './components/sections/StartingPointsSection';
 import FounderSection from './components/sections/FounderSection';
 import InstagramSection from './components/sections/InstagramSection';
@@ -65,7 +66,7 @@ function LandingPage({ variant = 'main' }) {
       <a
         href={isClosed ? '#waitlist' : '#hero'}
         onClick={scrollToCTA}
-        className={`fixed top-0 left-0 right-0 z-50 ${bannerTone} text-center text-sm font-extrabold py-3 px-4 block hover:brightness-105 transition-all tracking-wide font-kr`}
+        className={`fixed top-0 left-0 right-0 z-50 ${bannerTone} text-center text-[11px] sm:text-sm font-extrabold py-2.5 px-3 block hover:brightness-105 transition-all tracking-tight leading-tight font-kr whitespace-nowrap overflow-hidden text-ellipsis`}
       >
         {copy.banner}
       </a>
@@ -74,6 +75,7 @@ function LandingPage({ variant = 'main' }) {
         {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
         {isReferral && !isClosed && <ReferralBonusSection onCTA={handleCTA} />}
         <PainPointSection variant={variant} />
+        <Season0ResultsSection />
         <TestimonialSection />
         {!isReferral && !isClosed && <LiveApplicantsSection />}
         <StartingPointsSection />
