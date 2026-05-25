@@ -133,7 +133,7 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
         {!isClosed && (
           <div className="mt-10 animate-fade-up" style={{ animationDelay: '0.5s' }}>
             <p className="text-text-secondary text-xs mb-3 font-bold tracking-widest">{countdownLabel}</p>
-            <CountdownTimer targetDate={countdownTarget} size="md" format="adaptive" />
+            <CountdownTimer targetDate={countdownTarget} size="md" />
           </div>
         )}
       </div>

@@ -60,7 +60,7 @@ export default function FinalCTASection({ onCTA, variant = 'main' }) {
             </p>
             <div className="mt-5">
               <p className="text-text-muted text-[11px] mb-2 font-bold tracking-widest">OPENS IN · 신청 오픈까지</p>
-              <CountdownTimer targetDate={countdownTarget} size="md" format="adaptive" />
+              <CountdownTimer targetDate={countdownTarget} size="md" />
             </div>
             <p className="text-text-muted text-[11px] mt-3 font-semibold">
               6/1(월) 시작 · 5K 파이널 6/21(일)
@@ -73,7 +73,7 @@ export default function FinalCTASection({ onCTA, variant = 'main' }) {
             </p>
             <div className="mt-5">
               <p className="text-text-muted text-[11px] mb-2 font-bold tracking-widest">DEADLINE · 마감까지</p>
-              <CountdownTimer targetDate={countdownTarget} size="md" format="adaptive" />
+              <CountdownTimer targetDate={countdownTarget} size="md" />
             </div>
           </>
         )}
