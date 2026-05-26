@@ -14,9 +14,12 @@ export default function FinalCTASection({ onCTA, variant = 'main' }) {
   return (
     <section className="px-6 py-16 max-w-lg mx-auto text-center">
       <AnimateOnScroll>
-        <h2 className="font-kr text-3xl md:text-5xl font-black mb-8 leading-tight text-text-primary">
-          21일 후, 당신은<br />두 사람 중 하나야.
+        <h2 className="font-kr text-3xl md:text-5xl font-black text-text-primary leading-tight text-center mb-3">
+          혼자선 맨날 실패한 러닝
         </h2>
+        <p className="text-accent-green text-xl md:text-2xl font-black text-center mb-8">
+          30명 중 30명 전원 성공한 미친 결과
+        </p>
       </AnimateOnScroll>
 
       <AnimateOnScroll>
@@ -69,7 +72,7 @@ export default function FinalCTASection({ onCTA, variant = 'main' }) {
         ) : (
           <>
             <p className="text-text-muted text-sm mt-4 font-semibold">
-              팀 우승 시 20만 환급 + 러닝화 · 30명 한정 · 6/1(월) 시작
+              팀 우승 시 전액 환급 + 고급 러닝화까지 · 30명 한정 · 6/1(월) 시작
             </p>
             <div className="mt-5">
               <p className="text-text-muted text-[11px] mb-2 font-bold tracking-widest">DEADLINE · 마감까지</p>

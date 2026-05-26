@@ -16,7 +16,10 @@ const VARIANT_COPY = {
     sub1Bottom: '팀이 만들어줘.',
     sub2: (
       <>
-        직전 시즌0 <span className="text-accent-green font-bold">30명 중 30명 전원 21일 완주 성공</span>
+        <span className="block text-text-secondary text-sm font-bold">혼자선 맨날 실패한 러닝</span>
+        <span className="block text-text-primary text-base font-black mt-1">
+          30명 중 30명 전원 성공한 <span className="text-accent-green">미친 결과</span>
+        </span>
       </>
     ),
   },
@@ -30,9 +33,9 @@ const VARIANT_COPY = {
     sub1Top: '기존 멤버가 데려온 사람만,',
     sub1Bottom: '추가 보너스로 시작해.',
     sub2: (
-      <>
+      <span className="block text-text-muted text-xs font-semibold tracking-wide">
         5/28(목) <span className="text-accent-orange font-bold">23:59 마감</span> · 신청 폼에 추천인 이름 필수
-      </>
+      </span>
     ),
   },
 };
@@ -111,9 +114,11 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
             {v.sub1Top}<br />
             <span className="text-text-primary font-bold">{v.sub1Bottom}</span>
           </p>
-          <p className="text-text-muted text-xs mb-4 animate-fade-up font-semibold tracking-wide">
-            {v.sub2}
-          </p>
+          {v.sub2 && (
+            <div className="text-center mb-4 animate-fade-up">
+              {v.sub2}
+            </div>
+          )}
           <p className="text-text-muted text-[11px] mb-8 animate-fade-up font-bold tracking-widest">
             챌린지 시작 <span className="text-text-primary">6/1(월)</span>  ·  파이널 <span className="text-text-primary">6/21(일)</span>
           </p>

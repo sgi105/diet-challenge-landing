@@ -18,6 +18,7 @@ import FAQSection from './components/sections/FAQSection';
 import FinalCTASection from './components/sections/FinalCTASection';
 import StickyCTA from './components/layout/StickyCTA';
 import Footer from './components/layout/Footer';
+import Button from './components/ui/Button';
 import SuccessPage from './pages/SuccessPage';
 import FailPage from './pages/FailPage';
 import TermsPage from './pages/TermsPage';
@@ -70,7 +71,17 @@ function LandingPage({ variant = 'main' }) {
       <div className="pt-12">
         <HeroSection onCTA={handleCTA} variant={variant} />
         <PainPointSection variant={variant} />
+        <StartingPointsSection />
         <Season0ResultsSection />
+        {!isClosed && (
+          <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
+            <p className="text-text-secondary text-sm mb-4">
+              혼자선 맨날 실패한 러닝.<br />
+              <span className="text-accent-green font-bold">30명 중 30명 전원 성공한 미친 결과</span>
+            </p>
+            <Button onClick={handleCTA} className="w-full max-w-xs">지원하기 →</Button>
+          </section>
+        )}
         <TestimonialSection />
         <FounderSection />
         {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
@@ -78,9 +89,17 @@ function LandingPage({ variant = 'main' }) {
         {!isReferral && !isClosed && <LiveApplicantsSection />}
         <SystemSection />
         <MoneyMechanicSection />
+        {!isClosed && (
+          <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
+            <p className="text-text-secondary text-sm mb-4">
+              30명이 다 받아간 환급금.<br />
+              <span className="text-accent-green font-bold">시즌1도 합류해</span>
+            </p>
+            <Button onClick={handleCTA} className="w-full max-w-xs">지원하기 →</Button>
+          </section>
+        )}
         <PricingSection onCTA={handleCTA} variant={variant} />
         <InstagramSection />
-        <StartingPointsSection />
         {!isClosed && <UrgencySection variant={variant} />}
         <FAQSection />
         <FinalCTASection onCTA={handleCTA} variant={variant} />
