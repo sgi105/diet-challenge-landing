@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { submitApplication } from '../lib/applyApi';
 import { useCohortStatus } from '../hooks/useCohortStatus';
+import { GOAL_OPTIONS, MAX_GOALS } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season1-apply-v1';
 const STORAGE_KEY_REFERRAL = 'samurai-season1-apply-referral-v1';
@@ -17,6 +18,8 @@ const initialForm = {
   region: '',
   runningExp: '',
   motivation: '',
+  goals: [],
+  goalsOther: '',
   instagram: '',
   kakaoId: '',
   friend: '',
@@ -34,8 +37,8 @@ const runningExpOptions = [
   { value: 'almost_none', label: '거의 안 뛰어봤다' },
 ];
 
-const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'instagram', 'friend', 'deposit', 'schedule'];
-const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'instagram', 'deposit', 'schedule'];
+const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'goals', 'instagram', 'friend', 'deposit', 'schedule'];
+const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'goals', 'instagram', 'deposit', 'schedule'];
 
 function loadState(storageKey) {
   try {
@@ -409,6 +412,22 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           autoFocus
         />
       );
+    case 'goals':
+      return (
+        <GoalsStep
+          goals={form.goals || []}
+          goalsOther={form.goalsOther || ''}
+          onToggle={(v) => {
+            const cur = form.goals || [];
+            if (cur.includes(v)) {
+              update('goals', cur.filter(g => g !== v));
+            } else if (cur.length < MAX_GOALS) {
+              update('goals', [...cur, v]);
+            }
+          }}
+          onOtherChange={(v) => update('goalsOther', v)}
+        />
+      );
     case 'instagram':
       return (
         <ContactStep
@@ -755,6 +774,58 @@ function ScheduleConsentStep({ checked, onChange, isReferral }) {
   );
 }
 
+function GoalsStep({ goals, goalsOther, onToggle, onOtherChange }) {
+  const isOtherSelected = goals.includes('other');
+  const maxReached = goals.length >= MAX_GOALS;
+  return (
+    <div className="flex-1 flex flex-col justify-center">
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">달성하고 싶은 목표</label>
+      <p className="text-text-muted text-sm mb-5">
+        최대 2개 선택 (필수) · 선발 시 팀 매칭과 코칭 방향에 사용돼.
+      </p>
+      <div className="space-y-2">
+        {GOAL_OPTIONS.map(opt => {
+          const selected = goals.includes(opt.value);
+          const disabled = !selected && maxReached;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onToggle(opt.value)}
+              disabled={disabled}
+              className={`w-full text-left flex items-center gap-3 px-4 py-3 rounded-2xl border-2 font-bold text-[15px] transition-colors ${
+                selected
+                  ? 'border-accent-green bg-accent-green text-bg-primary'
+                  : 'border-white/20 bg-bg-card text-card-ink hover:border-accent-green/60'
+              } ${disabled ? 'opacity-40 cursor-not-allowed' : 'cursor-pointer'}`}
+            >
+              <span className={`w-5 h-5 rounded-md border-2 flex items-center justify-center text-xs font-extrabold shrink-0 ${
+                selected ? 'border-bg-primary bg-bg-primary text-accent-green' : 'border-card-ink-faint text-transparent'
+              }`}>
+                ✓
+              </span>
+              <span>{opt.label}</span>
+            </button>
+          );
+        })}
+      </div>
+      {isOtherSelected && (
+        <textarea
+          value={goalsOther}
+          onChange={e => onOtherChange(e.target.value)}
+          placeholder="구체적인 목표를 적어줘"
+          rows={3}
+          autoFocus
+          className="mt-4 w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-3 text-base text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors resize-none"
+        />
+      )}
+      <p className={`text-xs mt-3 text-right font-semibold ${goals.length > 0 ? 'text-accent-green' : 'text-text-muted'}`}>
+        {goals.length} / {MAX_GOALS} 선택
+      </p>
+    </div>
+  );
+}
+
 function validateStep(stepKey, form) {
   switch (stepKey) {
     case 'intro':
@@ -798,6 +869,12 @@ function validateStep(stepKey, form) {
       if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
       if (form.motivation.trim().length < 10) return '최소 10자 이상 입력해줘.';
       return null;
+    case 'goals': {
+      const goals = form.goals || [];
+      if (goals.length === 0) return '목표를 1개 이상 선택해줘.';
+      if (goals.includes('other') && !(form.goalsOther || '').trim()) return '"기타" 선택 시 구체적인 목표를 적어줘.';
+      return null;
+    }
     case 'instagram':
       if (!form.instagram.trim() && !form.kakaoId.trim()) {
         return '연락받을 인스타 또는 카톡 ID를 입력해줘.';

@@ -25,6 +25,8 @@ function combineMotivationWithFriend(motivation, friend) {
 
 export async function submitApplication(form) {
   const motivation = combineMotivationWithFriend(form.motivation, form.friend);
+  const goals = Array.isArray(form.goals) ? form.goals.slice(0, 5) : [];
+  const goalsOther = form.goalsOther?.trim().slice(0, 500) || null;
   const payload = {
     name: form.name.trim().slice(0, 50),
     age: parseInt(form.age, 10),
@@ -35,6 +37,8 @@ export async function submitApplication(form) {
     region: form.region.trim().slice(0, 100),
     running_exp: String(form.runningExp || '').slice(0, 30),
     motivation,
+    goals,
+    goals_other: goals.includes('other') ? goalsOther : null,
     instagram: form.instagram?.trim().slice(0, 100) || null,
     kakao_id: form.kakaoId?.trim().slice(0, 50) || null,
     referrer_name: form.referrerName?.trim().slice(0, 50) || null,
