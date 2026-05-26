@@ -253,6 +253,43 @@ function WithPromptCard({ t }) {
   );
 }
 
+// ─── 7) WITH PROMPT (1:1) ──── 그날 질문 + 정사각 사진 + 답변 본문
+function WithPromptSquareCard({ t }) {
+  return (
+    <div className="max-w-lg mx-auto w-full bg-bg-card rounded-3xl overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.14)]">
+      {t.prompt && (
+        <div className="px-5 pt-4 pb-3 border-b border-card-border bg-bg-card-hover/40">
+          <div className="text-[10px] text-card-ink-faint font-bold uppercase tracking-wider mb-1">
+            {t.programDay ? `Day ${t.programDay} · 질문` : '질문'}
+          </div>
+          <p className="text-card-ink font-extrabold text-sm leading-snug">{t.prompt}</p>
+        </div>
+      )}
+      {t.img && (
+        <div className="relative w-full aspect-square bg-bg-card-hover">
+          <img
+            src={t.img}
+            alt={`${t.name} 인증`}
+            loading="lazy"
+            className="w-full h-full object-cover"
+            onError={(e) => { e.currentTarget.style.opacity = '0.3'; }}
+          />
+        </div>
+      )}
+      <div className="px-5 pt-4 pb-4 flex flex-col gap-2">
+        <div className="flex items-center gap-2">
+          <span className="text-card-ink font-extrabold text-sm">{anonymize(t.name)}</span>
+          <span className="text-card-ink-faint text-[11px]">의 답변</span>
+        </div>
+        <p className="text-card-ink-muted text-[12px] leading-relaxed">
+          {renderCaption(t.caption, t.highlight)}
+        </p>
+        <Likes t={t} />
+      </div>
+    </div>
+  );
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const CARD_STYLES = {
   classic: { label: 'Classic', desc: '큰 사진 + 강조 본문', Component: ClassicCard },
@@ -261,6 +298,7 @@ export const CARD_STYLES = {
   polaroid:{ label: 'Polaroid',desc: '폴라로이드 캡션',     Component: PolaroidCard },
   minimal: { label: 'Minimal', desc: '아바타 원형 + 텍스트',Component: MinimalCard },
   with_prompt: { label: 'WithPrompt', desc: '그날 질문 + 답변', Component: WithPromptCard },
+  with_prompt_square: { label: 'WithPrompt 1:1', desc: '그날 질문 + 정사각 사진', Component: WithPromptSquareCard },
 };
 
 export function CardByStyle({ style, t }) {
