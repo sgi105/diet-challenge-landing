@@ -46,18 +46,28 @@ export default function CumulativeDistanceChart() {
   return (
     <AnimateOnScroll className="max-w-md mx-auto w-full">
       <div className="bg-bg-card rounded-2xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-        <div className="flex items-baseline justify-between mb-1">
+        <div className="flex items-baseline justify-between mb-3">
           <p className="text-card-ink text-sm font-extrabold">누적 달린 거리</p>
           <p className="text-card-ink-faint text-[10px] font-semibold">day1 → day21</p>
         </div>
-        <p className="text-card-ink-muted text-[11px] mb-3">
-          총{' '}
-          <span className="font-extrabold text-card-ink tabular-nums">
-            {totalKm.toLocaleString()}km
-          </span>{' '}
-          · 1인당 평균{' '}
-          <span className="font-extrabold text-card-ink tabular-nums">{perPersonKm}km</span>
-        </p>
+
+        <div className="mb-4 flex items-baseline gap-3">
+          <div>
+            <p className="text-card-ink-muted text-[10px] font-bold tracking-widest uppercase mb-0.5">
+              1인당 평균
+            </p>
+            <p className="text-card-ink text-4xl md:text-5xl font-black tabular-nums leading-none">
+              <span className="lime-mark">{perPersonKm}</span>
+              <span className="text-2xl font-extrabold ml-1">km</span>
+            </p>
+          </div>
+          <div className="text-right ml-auto">
+            <p className="text-card-ink-faint text-[10px] font-bold">30명 누적</p>
+            <p className="text-card-ink text-base font-extrabold tabular-nums">
+              {totalKm.toLocaleString()}<span className="text-xs ml-0.5">km</span>
+            </p>
+          </div>
+        </div>
 
         <svg
           viewBox={`0 0 ${W} ${H}`}

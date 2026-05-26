@@ -37,7 +37,7 @@ export default function MiracleMorningStat() {
       >
         <div className="flex items-baseline justify-between mb-1">
           <p className="text-card-ink text-sm font-extrabold">미라클 모닝</p>
-          <p className="text-card-ink-faint text-[10px] font-semibold">새벽-아침 5-9시 KST</p>
+          <p className="text-card-ink-faint text-[10px] font-semibold">새벽-아침 5-9시</p>
         </div>
         <p className="text-card-ink-muted text-[11px] mb-4">
           전체 운동 인증 중 {mm.logs}건이 출근 직전 새벽-아침 시간대.
@@ -96,7 +96,7 @@ export default function MiracleMorningStat() {
         </div>
 
         <p className="mt-4 text-[11px] text-card-ink-muted leading-relaxed text-center">
-          🌅 출근 전, 5-9시 KST. 평균적으로 한 사람이{' '}
+          🌅 출근 전 새벽-아침. 평균적으로 한 사람이{' '}
           <span className="font-extrabold text-card-ink">21일 중 {mm.avgDaysPerPerson.toFixed(1)}일</span>
           은 새벽에 뛰었다.
         </p>

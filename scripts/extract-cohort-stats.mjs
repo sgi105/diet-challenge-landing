@@ -45,13 +45,11 @@ function initialOf(name) {
 const memberships = await rest(
   `cohort_memberships?cohort_id=eq.${COHORT_ID}&status=eq.active&select=user_id,profiles(id,full_name,avatar_url)`
 );
-const members = memberships
-  .map((m) => ({
-    id: m.user_id,
-    initial: initialOf(m.profiles?.full_name),
-    avatar_url: m.profiles?.avatar_url || null,
-  }))
-  .sort((a, b) => a.initial.localeCompare(b.initial, 'ko'));
+const members = memberships.map((m) => ({
+  id: m.user_id,
+  initial: initialOf(m.profiles?.full_name),
+  avatar_url: m.profiles?.avatar_url || null,
+}));
 const userIds = members.map((m) => m.id);
 console.log(`[1] cohort members: ${members.length}`);
 
@@ -84,6 +82,14 @@ for (const m of missions) {
   if (!attendanceMatrix[m.user_id]) continue;
   attendanceMatrix[m.user_id][idx] = true;
 }
+
+// Sort members by attendance count desc (가장 많이 출석한 사람 위로). Tiebreaker: 한글 이니셜 asc
+members.sort((a, b) => {
+  const aCount = attendanceMatrix[a.id].filter(Boolean).length;
+  const bCount = attendanceMatrix[b.id].filter(Boolean).length;
+  if (aCount !== bCount) return bCount - aCount;
+  return a.initial.localeCompare(b.initial, 'ko');
+});
 
 const totalAttendance = Object.values(attendanceMatrix).reduce(
   (sum, arr) => sum + arr.filter(Boolean).length,
