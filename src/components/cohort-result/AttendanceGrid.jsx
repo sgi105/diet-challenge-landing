@@ -62,8 +62,8 @@ export default function AttendanceGrid() {
                     />
                   ))}
                 </div>
-                <span className="text-[10px] tabular-nums font-extrabold text-card-ink w-6 text-right shrink-0">
-                  {count}
+                <span className="text-[10px] tabular-nums font-extrabold text-card-ink w-9 text-right shrink-0">
+                  {Math.round((count / 21) * 100)}%
                 </span>
               </div>
             );
@@ -85,7 +85,7 @@ export default function AttendanceGrid() {
           인증 완료
           <span className="inline-block w-2 h-2 bg-card-border rounded-sm ml-3 mr-1 align-middle" />
           미인증
-          <span className="ml-3 text-card-ink-muted">· 우측은 21일 중 인증 일수</span>
+          <span className="ml-3 text-card-ink-muted">· 우측은 인증률</span>
         </p>
       </div>
     </AnimateOnScroll>
