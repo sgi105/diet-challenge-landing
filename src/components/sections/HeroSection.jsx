@@ -31,7 +31,7 @@ const VARIANT_COPY = {
     sub1Bottom: '추가 보너스로 시작해.',
     sub2: (
       <>
-        5/28(목) <span className="text-accent-orange font-bold">24:00 마감</span> · 신청 폼에 추천인 이름 필수
+        5/28(목) <span className="text-accent-orange font-bold">23:59 마감</span> · 신청 폼에 추천인 이름 필수
       </>
     ),
   },
@@ -84,6 +84,9 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
         <p className="text-text-muted text-xs mb-2 animate-fade-up font-semibold tracking-wide" style={{ animationDelay: '0.26s' }}>
           {v.sub2}
         </p>
+        <p className="text-sm text-text-secondary mt-2 mb-3 animate-fade-up" style={{ animationDelay: '0.27s' }}>
+          💰 보증금 20만원 · 미션 90% 달성 시 <span className="text-accent-green font-bold">100% 환급</span>
+        </p>
         <p className="text-text-muted text-[11px] mb-10 animate-fade-up font-bold tracking-widest" style={{ animationDelay: '0.28s' }}>
           챌린지 시작 <span className="text-text-primary">6/1(월)</span>  ·  파이널 <span className="text-text-primary">6/21(일)</span>
         </p>
@@ -102,7 +105,7 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
             <div className="mt-3 inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-accent-orange/15 border border-accent-orange/50">
               <span className="text-sm">🎁</span>
               <span className="text-accent-orange text-[11px] font-extrabold tracking-wide">
-                첫날 신청 시 환급 <span className="text-accent-orange">+1만</span> 보너스 · 5/26 24:00 마감
+                첫날 신청 시 환급 <span className="text-accent-orange">+1만</span> 보너스 · 5/26 23:59 마감
               </span>
             </div>
           )}

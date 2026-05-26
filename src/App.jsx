@@ -6,8 +6,7 @@ import Season0ResultsSection from './components/sections/Season0ResultsSection';
 import StartingPointsSection from './components/sections/StartingPointsSection';
 import FounderSection from './components/sections/FounderSection';
 import InstagramSection from './components/sections/InstagramSection';
-import ProgramIntroSection from './components/sections/ProgramIntroSection';
-import HowItWorksSection from './components/sections/HowItWorksSection';
+import SystemSection from './components/sections/SystemSection';
 import MoneyMechanicSection from './components/sections/MoneyMechanicSection';
 import TestimonialSection from './components/sections/TestimonialSection';
 import PricingSection from './components/sections/PricingSection';
@@ -70,19 +69,18 @@ function LandingPage({ variant = 'main' }) {
       </a>
       <div className="pt-12">
         <HeroSection onCTA={handleCTA} variant={variant} />
-        {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
-        {isReferral && !isClosed && <ReferralBonusSection onCTA={handleCTA} />}
         <PainPointSection variant={variant} />
         <Season0ResultsSection />
         <TestimonialSection />
-        {!isReferral && !isClosed && <LiveApplicantsSection />}
-        <StartingPointsSection />
         <FounderSection />
-        <InstagramSection />
-        <ProgramIntroSection />
-        <HowItWorksSection />
+        {!isClosed && !isReferral && <BenefitsSection onCTA={handleCTA} />}
+        {isReferral && !isClosed && <ReferralBonusSection onCTA={handleCTA} />}
+        {!isReferral && !isClosed && <LiveApplicantsSection />}
+        <SystemSection />
         <MoneyMechanicSection />
         <PricingSection onCTA={handleCTA} variant={variant} />
+        <InstagramSection />
+        <StartingPointsSection />
         {!isClosed && <UrgencySection variant={variant} />}
         <FAQSection />
         <FinalCTASection onCTA={handleCTA} variant={variant} />
