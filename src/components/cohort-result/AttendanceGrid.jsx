@@ -14,9 +14,8 @@ export default function AttendanceGrid() {
   return (
     <AnimateOnScroll className="max-w-md mx-auto w-full">
       <div className="bg-bg-card rounded-2xl p-4 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-        <div className="flex items-baseline justify-between mb-3">
-          <p className="text-card-ink text-sm font-extrabold">출석 그리드</p>
-          <p className="text-card-ink-faint text-[10px] font-semibold">30명 × 21일</p>
+        <div className="mb-3">
+          <p className="text-card-ink text-sm font-extrabold">30명 평균 인증률 94.6%</p>
         </div>
 
         {/* day axis */}
@@ -36,7 +35,6 @@ export default function AttendanceGrid() {
         <div className="space-y-1">
           {shown.map((m) => {
             const row = matrix[m.id] || [];
-            const count = row.filter(Boolean).length;
             return (
               <div key={m.id} className="flex items-center gap-1.5">
                 {m.avatar_url ? (
@@ -62,8 +60,8 @@ export default function AttendanceGrid() {
                     />
                   ))}
                 </div>
-                <span className="text-[10px] tabular-nums font-extrabold text-card-ink w-9 text-right shrink-0">
-                  {Math.round((count / 21) * 100)}%
+                <span className="text-[12px] font-extrabold text-accent-green w-6 text-right shrink-0" aria-label="성공">
+                  ✓
                 </span>
               </div>
             );
@@ -85,7 +83,7 @@ export default function AttendanceGrid() {
           인증 완료
           <span className="inline-block w-2 h-2 bg-card-border rounded-sm ml-3 mr-1 align-middle" />
           미인증
-          <span className="ml-3 text-card-ink-muted">· 우측은 인증률</span>
+          <span className="ml-3 text-card-ink-muted">· 우측 ✓는 5K 완주 성공</span>
         </p>
       </div>
     </AnimateOnScroll>
