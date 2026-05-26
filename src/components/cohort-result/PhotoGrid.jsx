@@ -21,10 +21,6 @@ export default function PhotoGrid() {
             <PhotoCard key={p.id} photo={p} />
           ))}
         </div>
-
-        <p className="mt-3 px-1 text-[10px] text-card-ink-faint leading-relaxed">
-          가명(★) 처리 · 거리/시간/페이스는 가민·나이키·삼성헬스 자동 동기화
-        </p>
       </div>
     </AnimateOnScroll>
   );
