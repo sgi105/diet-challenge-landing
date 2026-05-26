@@ -20,10 +20,10 @@ export default function InstagramSection() {
           <h2 className="font-kr text-3xl md:text-5xl font-black mt-4 mb-4 text-text-primary leading-tight">
             사람을 매일 움직이는<br />엔진은 똑같아.
           </h2>
-          <p className="text-text-secondary mb-8">
-            9기수 동안 다이어트로 검증된 구조 — <span className="text-text-primary font-bold">팀 + 경쟁(당근) + 보증금(채찍)</span>.
+          <p className="text-text-secondary mb-8 break-keep leading-relaxed">
+            9기 동안 총 <span className="text-text-primary font-bold">116명</span>에게 검증된 구조 — <span className="text-text-primary font-bold">팀 + 경쟁(당근) + 보증금(채찍)</span>.
             <br />
-            <span className="text-text-primary font-bold">시즌 1은 그 엔진을 21일 러닝에 그대로 옮겨.</span>
+            <span className="text-text-primary font-bold">런클럽 시즌 1은 그 엔진을 21일 러닝에 그대로 옮겼어.</span>
           </p>
         </AnimateOnScroll>
       </div>
@@ -56,18 +56,18 @@ export default function InstagramSection() {
       {/* Online distinction */}
       <AnimateOnScroll className="mt-8 px-6 max-w-lg mx-auto">
         <div className="bg-bg-card rounded-3xl p-6 shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
-          <p className="text-bg-primary font-extrabold text-lg mb-3 font-kr">
-            시즌 1은 달라.
+          <p className="text-bg-primary font-extrabold text-lg mb-3 font-kr break-keep">
+            런클럽 시즌 1은 오히려 더 좋아.
           </p>
-          <div className="space-y-2 text-sm text-card-ink-muted">
+          <div className="space-y-2 text-sm text-card-ink-muted break-keep leading-relaxed">
             <p>
-              <span className="text-card-ink font-bold">100% 온라인</span> — 오프라인 모임 없이 어디서든
+              <span className="text-card-ink font-bold">100% 온라인</span> — 서울·부산·발리·뉴욕, 어디서든 같이 뛰어
             </p>
             <p>
-              <span className="text-card-ink font-bold">21일 러닝</span> — 다이어트 아닌 5km 완주에 집중
+              <span className="text-card-ink font-bold">시간 자유</span> — 출퇴근 시간 0. 새벽이든 점심이든 가능
             </p>
             <p>
-              <span className="text-card-ink font-bold">3인 1팀</span> — 혼자 못 하는 걸 팀으로 강제
+              <span className="text-card-ink font-bold">21일 러닝 · 3인 1팀</span> — 5km 완주 목표, 혼자 못 하는 걸 팀으로 강제
             </p>
           </div>
         </div>
