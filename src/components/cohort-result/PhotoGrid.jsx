@@ -1,10 +1,10 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
-import photoData from '../../data/season0-photos.json';
 import PhotoCard from './PhotoCard';
+import { useTestimonialPicks } from '../../hooks/useTestimonialPicks';
 
 export default function PhotoGrid() {
-  const photos = photoData.photos ?? [];
-  if (!photos.length) return null;
+  const { photoRows } = useTestimonialPicks();
+  if (!photoRows.length) return null;
 
   return (
     <AnimateOnScroll className="w-full max-w-2xl mx-auto">
@@ -17,7 +17,7 @@ export default function PhotoGrid() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
-          {photos.map((p) => (
+          {photoRows.map((p) => (
             <PhotoCard key={p.id} photo={p} />
           ))}
         </div>

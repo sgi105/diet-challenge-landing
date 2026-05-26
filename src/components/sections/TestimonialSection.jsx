@@ -1,90 +1,13 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import { CardByStyle } from './TestimonialCards';
-import { getFeedPrompt } from '../../data/feedPrompts';
-
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
+import { useTestimonialPicks } from '../../hooks/useTestimonialPicks';
 
 const INITIAL_COUNT = 6;
 
-function getVersionOverride() {
-  if (typeof window === 'undefined') return null;
-  const p = new URLSearchParams(window.location.search);
-  return p.get('version') || null;
-}
-
 export default function TestimonialSection() {
   const [expanded, setExpanded] = useState(false);
-  const [rows, setRows] = useState([]);
-  const [cardStyle, setCardStyle] = useState('classic');
-
-  useEffect(() => {
-    if (!SUPABASE_URL || !SUPABASE_ANON) return;
-    let alive = true;
-    (async () => {
-      try {
-        const headers = { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` };
-
-        const override = getVersionOverride();
-        const versionUrl = override
-          ? `${SUPABASE_URL}/rest/v1/landing_versions?name=eq.${encodeURIComponent(override)}&select=*&limit=1`
-          : `${SUPABASE_URL}/rest/v1/landing_versions?is_current=eq.true&select=*&limit=1`;
-        const vr = await fetch(versionUrl, { headers });
-        if (!vr.ok) return;
-        const versions = await vr.json();
-        const version = versions[0];
-        if (!alive || !version) return;
-        setCardStyle(version.card_style || 'classic');
-
-        const picksUrl = `${SUPABASE_URL}/rest/v1/landing_testimonial_picks?landing_version_id=eq.${version.id}&order=display_order.asc&select=display_order,social_posts:post_id(id,caption,media_url,like_count,created_at,prompt_set_key,program_day,profiles!social_posts_user_id_fkey(full_name))`;
-        const pr = await fetch(picksUrl, { headers });
-        if (!pr.ok) return;
-        const picks = await pr.json();
-        if (!alive) return;
-
-        const postIds = picks.map(p => p.social_posts?.id).filter(Boolean);
-        const commentMap = new Map();
-        if (postIds.length > 0) {
-          const inList = postIds.map(id => `"${id}"`).join(',');
-          const cr = await fetch(
-            `${SUPABASE_URL}/rest/v1/post_comments?post_id=in.(${inList})&select=post_id`,
-            { headers }
-          );
-          if (cr.ok) {
-            const comments = await cr.json();
-            for (const c of comments) {
-              commentMap.set(c.post_id, (commentMap.get(c.post_id) || 0) + 1);
-            }
-          }
-        }
-
-        const mapped = picks
-          .map(pk => {
-            const p = pk.social_posts;
-            if (!p) return null;
-            return {
-              id: p.id,
-              name: p.profiles?.full_name || '익명',
-              caption: p.caption || '',
-              img: p.media_url || '',
-              type: '',
-              likes: p.like_count || 0,
-              comments: commentMap.get(p.id) || 0,
-              highlight: null,
-              prompt: getFeedPrompt(p.program_day, p.prompt_set_key) || '',
-              programDay: p.program_day || null,
-            };
-          })
-          .filter(Boolean);
-
-        if (alive) setRows(mapped);
-      } catch {
-        // silent — section just stays empty
-      }
-    })();
-    return () => { alive = false; };
-  }, []);
+  const { rows, cardStyle } = useTestimonialPicks();
 
   const visible = expanded ? rows : rows.slice(0, INITIAL_COUNT);
   const hasMore = rows.length > INITIAL_COUNT;
