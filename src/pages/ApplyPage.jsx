@@ -344,8 +344,8 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
       );
     case 'gender': {
       const genderOptions = [
-        { value: 'male', label: '남성' },
-        { value: 'female', label: '여성' },
+        { value: 'M', label: '남성' },
+        { value: 'F', label: '여성' },
       ];
       return (
         <div className="flex-1 flex flex-col justify-center">
