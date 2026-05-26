@@ -682,8 +682,8 @@ function DepositConsentStep({ checked, onChange }) {
   // 환급 시나리오 — 조건 / 금액(+ 보너스). boost는 시각 위계상 보조로 작게 처리.
   const refundRows = [
     { cond: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
-    { cond: '팀 전원 성공', amount: '전액 환급', boost: '+2만원', tone: 'pos' },
-    { cond: '팀 우승', amount: '전액 환급', boost: '+러닝화 15만원 상당', tone: 'pos' },
+    { cond: '팀 전원 성공', amount: '전액 환급 +2만원', tone: 'pos' },
+    { cond: '팀 우승', amount: '전액 환급 +러닝화', boost: '15만원 상당', tone: 'pos' },
     { cond: '중도 포기', amount: '0원', tone: 'neg' },
   ];
 
@@ -703,10 +703,10 @@ function DepositConsentStep({ checked, onChange }) {
         {refundRows.map((r, i) => (
           <div
             key={i}
-            className={`flex items-center justify-between px-4 py-4 ${i > 0 ? 'border-t border-card-border' : ''} ${r.tone === 'neg' ? 'bg-accent-orange/5' : ''}`}
+            className={`flex items-center justify-between flex-wrap gap-x-3 gap-y-1 px-4 py-4 ${i > 0 ? 'border-t border-card-border' : ''} ${r.tone === 'neg' ? 'bg-accent-orange/5' : ''}`}
           >
             <span className="text-card-ink text-[15px]">{r.cond}</span>
-            <span className="flex items-baseline gap-1.5">
+            <span className="flex items-baseline gap-1.5 ml-auto">
               <span className={`font-extrabold text-[18px] ${r.tone === 'neg' ? 'text-accent-orange' : 'text-bg-primary'}`}>{r.amount}</span>
               {r.boost && <span className="text-[12px] font-extrabold text-bg-primary">({r.boost})</span>}
             </span>
