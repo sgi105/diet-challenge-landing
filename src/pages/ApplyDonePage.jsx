@@ -10,7 +10,7 @@ export default function ApplyDonePage() {
 
   const handleCopy = async () => {
     track('apply_done_copy_link');
-    const url = `${window.location.origin}/apply`;
+    const url = `${window.location.origin}/`;
     try {
       await navigator.clipboard.writeText(url);
       setLinkCopied(true);
@@ -68,7 +68,7 @@ export default function ApplyDonePage() {
             onClick={handleCopy}
             className="w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
           >
-            {linkCopied ? '✓ 링크가 복사되었어요' : '🔗 신청 페이지 링크 복사하기'}
+            {linkCopied ? '✓ 링크가 복사되었어요' : '🔗 챌린지 페이지 링크 복사하기'}
           </button>
           <p className="text-card-ink-faint text-xs mt-3 text-center">
             친구에게 카톡·DM으로 보내줘
