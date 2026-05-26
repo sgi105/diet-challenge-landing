@@ -106,15 +106,58 @@ export default function MoneyMechanicSection() {
           </div>
         </AnimateOnScroll>
 
-        {/* Row 4: 그랜드 챔피언 */}
+        {/* Row 4: 그랜드 챔피언 — BOARDING PASS */}
         <AnimateOnScroll animation="animate-scale-in" delay={0.2}>
-          <div className="bg-bg-card rounded-2xl p-6 text-center border-2 border-yellow-400 shadow-[0_12px_48px_rgba(250,200,0,0.35)]">
-            <CardLabel className="text-yellow-400">🏝️ GRAND CHAMPION</CardLabel>
-            <p className="text-4xl font-black text-card-ink leading-tight mb-3 break-keep">발리 왕복 항공권</p>
-            <p className="text-yellow-500 text-2xl font-black tabular-nums mb-3">
-              1,000,000<span className="text-sm font-semibold ml-1">원 상당</span>
-            </p>
-            <p className="text-card-ink-muted text-xs font-semibold tracking-wide">이번 시즌 전체 1등 · 1명 한정</p>
+          <div className="bg-bg-card rounded-2xl overflow-hidden border-2 border-yellow-400 shadow-[0_12px_48px_rgba(250,200,0,0.35)] flex h-[280px]">
+            <div className="relative w-2/5 overflow-hidden bg-card-border">
+              <video
+                autoPlay
+                muted
+                loop
+                playsInline
+                preload="metadata"
+                className="absolute inset-0 w-full h-full object-cover"
+              >
+                <source src="/baliruns.mp4" type="video/mp4" />
+                <source src="/baliruns.mov" type="video/quicktime" />
+              </video>
+              <div className="absolute top-2 left-2 z-10">
+                <span className="bg-black/60 text-white text-[8px] font-extrabold tracking-widest px-1.5 py-0.5 rounded">발리</span>
+              </div>
+            </div>
+            <div
+              className="w-3 shrink-0 bg-yellow-400"
+              style={{
+                backgroundImage:
+                  'radial-gradient(circle at 5px 6px, rgba(255,255,255,0.55) 3.5px, transparent 4.5px)',
+                backgroundSize: '10px 14px',
+                backgroundRepeat: 'repeat-y',
+                backgroundPosition: 'center',
+              }}
+            />
+            <div className="flex-1 p-4 flex flex-col justify-between">
+              <div>
+                <CardLabel className="text-yellow-500">🏝️ GRAND CHAMPION</CardLabel>
+                <div className="flex items-baseline gap-2 mb-3 mt-1">
+                  <div>
+                    <p className="text-card-ink-faint text-[9px] font-bold">FROM</p>
+                    <p className="text-card-ink text-base font-black">ICN</p>
+                  </div>
+                  <p className="text-card-ink-faint text-xs">→</p>
+                  <div>
+                    <p className="text-card-ink-faint text-[9px] font-bold">TO</p>
+                    <p className="text-card-ink text-base font-black">DPS</p>
+                  </div>
+                </div>
+                <p className="text-card-ink text-xl font-black leading-tight break-keep">발리 왕복<br />항공권</p>
+              </div>
+              <div className="border-t border-dashed border-card-ink/20 pt-2">
+                <p className="text-yellow-500 text-lg font-black tabular-nums">
+                  1,000,000<span className="text-[10px] font-semibold ml-0.5">원</span>
+                </p>
+                <p className="text-card-ink-faint text-[10px] font-semibold mt-0.5">전체 1등 · 1명 한정</p>
+              </div>
+            </div>
           </div>
         </AnimateOnScroll>
 
