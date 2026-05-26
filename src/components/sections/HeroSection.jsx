@@ -7,21 +7,14 @@ const VARIANT_COPY = {
   main: {
     pill: 'SEASON [1] · 21D RUN',
     pillTone: 'text-accent-green',
-    headlineMid: '매일 뛰는 게 이렇게',
-    headlineHighlight: '재밌을 줄',
-    headlineTail: ' 몰랐다',
+    uspLine1: '혼자선 맨날 실패한 러닝',
+    uspLine2Top: '30명 중 30명 전원',
+    uspLine2Bottom: '성공한 미친 결과',
     badges: ['100% 온라인', '3인 1팀', '30명 한정'],
     headlineSub: '팀과 함께 21일',
     sub1Top: '혼자였으면 안 했을 일,',
     sub1Bottom: '팀이 만들어줘.',
-    sub2: (
-      <>
-        <span className="block text-text-secondary text-sm font-bold">혼자선 맨날 실패한 러닝</span>
-        <span className="block text-text-primary text-base font-black mt-1">
-          30명 중 30명 전원 성공한 <span className="text-accent-green">미친 결과</span>
-        </span>
-      </>
-    ),
+    sub2: null,
   },
   referral: {
     pill: 'REFERRAL · 초대 전용',
@@ -67,11 +60,29 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
             <span className={`pill ${v.pillTone}`}>{v.pill}</span>
           </div>
 
-          <h1 className="font-kr text-4xl md:text-6xl font-black leading-tight break-keep mb-7 animate-fade-up text-text-primary" style={{ animationDelay: '0.1s' }}>
-            {v.headlineTop && <>{v.headlineTop}<br /></>}
-            {v.headlineMid && <>{v.headlineMid}<br /></>}
-            <span className={highlightTone}>{v.headlineHighlight}</span>{v.headlineTail}
-          </h1>
+          {variant === 'main' ? (
+            <>
+              <h1
+                className="font-kr text-2xl md:text-4xl font-black leading-tight break-keep mb-2 animate-fade-up text-text-primary"
+                style={{ animationDelay: '0.1s' }}
+              >
+                {v.uspLine1}
+              </h1>
+              <p
+                className="font-kr text-4xl md:text-6xl font-black text-accent-green leading-[1.15] break-keep mb-7 animate-fade-up"
+                style={{ animationDelay: '0.18s', textShadow: '0 0 32px rgba(200,255,77,0.5)' }}
+              >
+                {v.uspLine2Top}<br />
+                {v.uspLine2Bottom}
+              </p>
+            </>
+          ) : (
+            <h1 className="font-kr text-4xl md:text-6xl font-black leading-tight break-keep mb-7 animate-fade-up text-text-primary" style={{ animationDelay: '0.1s' }}>
+              {v.headlineTop && <>{v.headlineTop}<br /></>}
+              {v.headlineMid && <>{v.headlineMid}<br /></>}
+              <span className={highlightTone}>{v.headlineHighlight}</span>{v.headlineTail}
+            </h1>
+          )}
 
           <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border ${uspBoxTone} mb-8 animate-fade-up`} style={{ animationDelay: '0.18s' }}>
             <span className="text-base">💰</span>
