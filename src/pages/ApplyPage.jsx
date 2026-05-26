@@ -97,7 +97,17 @@ export default function ApplyPage() {
   }, [step, stepKey, isReferral, status]);
 
   useEffect(() => {
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    // 동의 step(보증금/일정)은 본문이 길어 top으로 가면 체크박스가 viewport 밖.
+    // → 체크박스로 직접 스크롤. 다른 step은 페이지 상단으로.
+    const id = requestAnimationFrame(() => {
+      const checkbox = document.querySelector('[data-consent-checkbox="true"]');
+      if (checkbox) {
+        checkbox.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      } else {
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    });
+    return () => cancelAnimationFrame(id);
   }, [step]);
 
   // 마감 후에도 후순위 지원 받음 — 폼은 그대로 보여주고 상단에 작은 배너로 표시.
@@ -658,6 +668,7 @@ function ConsentShell({ label, children, checked, onChange, checkboxLabel }) {
         {children}
       </div>
       <button
+        data-consent-checkbox="true"
         onClick={() => onChange(!checked)}
         className={`mt-5 flex items-center gap-3 px-5 py-4 rounded-2xl border-2 text-left transition-colors ${
           checked
