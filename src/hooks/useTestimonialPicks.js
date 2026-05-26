@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { getFeedPrompt } from '../data/feedPrompts';
+import { extractHighlights } from '../lib/highlightCaption';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -78,7 +79,7 @@ async function fetchAll() {
       type: '',
       likes: p.like_count || 0,
       comments: commentMap.get(p.id) || 0,
-      highlight: null,
+      highlight: extractHighlights(p.caption || ''),
       prompt: getFeedPrompt(p.program_day, p.prompt_set_key) || '',
       programDay: p.program_day || null,
     });

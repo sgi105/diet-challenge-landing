@@ -34,7 +34,7 @@ export function renderCaption(caption, highlights) {
     if (idx < cursor) continue;
     if (idx > cursor) parts.push(<span key={`p-${cursor}`}>{caption.slice(cursor, idx)}</span>);
     parts.push(
-      <span key={`h-${idx}`} className="text-bg-deep font-extrabold">{hl}</span>
+      <span key={`h-${idx}`} className="text-accent-green font-extrabold">{hl}</span>
     );
     cursor = idx + hl.length;
   }
