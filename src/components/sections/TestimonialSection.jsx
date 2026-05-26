@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import { CardByStyle } from './TestimonialCards';
+import { getFeedPrompt } from '../../data/feedPrompts';
 
 const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
 const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
@@ -36,7 +37,7 @@ export default function TestimonialSection() {
         if (!alive || !version) return;
         setCardStyle(version.card_style || 'classic');
 
-        const picksUrl = `${SUPABASE_URL}/rest/v1/landing_testimonial_picks?landing_version_id=eq.${version.id}&order=display_order.asc&select=display_order,social_posts:post_id(id,caption,media_url,like_count,created_at,profiles!social_posts_user_id_fkey(full_name))`;
+        const picksUrl = `${SUPABASE_URL}/rest/v1/landing_testimonial_picks?landing_version_id=eq.${version.id}&order=display_order.asc&select=display_order,social_posts:post_id(id,caption,media_url,like_count,created_at,prompt_set_key,program_day,profiles!social_posts_user_id_fkey(full_name))`;
         const pr = await fetch(picksUrl, { headers });
         if (!pr.ok) return;
         const picks = await pr.json();
@@ -71,6 +72,8 @@ export default function TestimonialSection() {
               likes: p.like_count || 0,
               comments: commentMap.get(p.id) || 0,
               highlight: null,
+              prompt: getFeedPrompt(p.program_day, p.prompt_set_key) || '',
+              programDay: p.program_day || null,
             };
           })
           .filter(Boolean);

@@ -214,6 +214,43 @@ function MinimalCard({ t }) {
   );
 }
 
+// ─── 6) WITH PROMPT ──── 그날 질문 + 답변 형식 (사진 우측)
+function WithPromptCard({ t }) {
+  return (
+    <div className="max-w-lg mx-auto w-full bg-bg-card rounded-3xl overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.14)]">
+      {t.prompt && (
+        <div className="px-5 pt-4 pb-3 border-b border-card-border bg-bg-card-hover/40">
+          <div className="text-[10px] text-card-ink-faint font-bold uppercase tracking-wider mb-1">
+            {t.programDay ? `Day ${t.programDay} · 질문` : '질문'}
+          </div>
+          <p className="text-card-ink font-extrabold text-sm leading-snug">{t.prompt}</p>
+        </div>
+      )}
+      <div className="flex gap-3 p-4">
+        {t.img && (
+          <div className="shrink-0 w-24 h-24 rounded-xl overflow-hidden bg-bg-card-hover">
+            <img src={t.img} alt={`${t.name} 인증`} loading="lazy" className="w-full h-full object-cover"
+                 onError={(e) => { e.currentTarget.style.opacity = '0.3'; }} />
+          </div>
+        )}
+        <div className="flex flex-col gap-2 flex-1 min-w-0">
+          <div className="flex items-center gap-2">
+            <span className="text-card-ink font-extrabold text-sm">{anonymize(t.name)}</span>
+            <span className="text-card-ink-faint text-[11px]">의 답변</span>
+          </div>
+          <p className="text-card-ink-muted text-[12px] leading-relaxed">
+            {renderCaption(t.caption, t.highlight)}
+          </p>
+          <div className="flex items-center gap-3 text-card-ink-faint text-[10px] font-bold pt-1">
+            <span>♥ {t.likes || 0}</span>
+            <span>💬 {t.comments || 0}</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const CARD_STYLES = {
   classic: { label: 'Classic', desc: '큰 사진 + 강조 본문', Component: ClassicCard },
@@ -221,6 +258,7 @@ export const CARD_STYLES = {
   quote:   { label: 'Quote',   desc: '인용문 큰 따옴표',    Component: QuoteCard },
   polaroid:{ label: 'Polaroid',desc: '폴라로이드 캡션',     Component: PolaroidCard },
   minimal: { label: 'Minimal', desc: '아바타 원형 + 텍스트',Component: MinimalCard },
+  with_prompt: { label: 'WithPrompt', desc: '그날 질문 + 답변', Component: WithPromptCard },
 };
 
 export function CardByStyle({ style, t }) {
