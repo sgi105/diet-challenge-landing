@@ -10,12 +10,13 @@ export default function Season0ResultsSection() {
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
         <span className="pill text-accent-green block w-fit mx-auto">REAL DATA</span>
-        <h2 className="font-kr text-3xl md:text-5xl font-black text-center mt-4 mb-3 text-text-primary leading-tight">
+        <h2 className="font-kr text-[26px] md:text-5xl font-black text-center mt-4 mb-3 text-text-primary leading-tight break-keep">
           후기는 누구나 만들지.<br />
           <span className="text-accent-green">우리는 30명 데이터를 공개한다</span>
         </h2>
-        <p className="text-text-secondary text-center mb-8">
-          2026-05-04 ~ 05-24 · 시즌0 21일 · 30명 91% 출석률
+        <p className="text-text-secondary text-center mb-8 text-sm break-keep">
+          2026-05-04 ~ 05-24 · 시즌0 21일<br />
+          30명 · 91% 출석률
         </p>
       </AnimateOnScroll>
 
