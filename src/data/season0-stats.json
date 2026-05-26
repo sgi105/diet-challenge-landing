@@ -1,5 +1,5 @@
 {
-  "generated_at": "2026-05-25T21:51:45.369Z",
+  "generated_at": "2026-05-26T02:01:42.200Z",
   "cohort": {
     "code": "260504_team_run",
     "cohort_id": "cf14f8e6-6c3f-4c3f-9837-14a714a0233c",
@@ -620,12 +620,12 @@
       true
     ],
     "08094f75-2713-42a2-a276-c7e9c1bd2ec6": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
       true,
       true,
       true,
@@ -666,13 +666,13 @@
       true
     ],
     "a5d12622-ff6a-4393-bdac-8ecbf06a926a": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
       false,
       true,
       true,
@@ -689,12 +689,12 @@
       true
     ],
     "5e3f6425-37b3-43b7-afcb-f743eb04f034": [
-      false,
-      false,
-      false,
-      false,
-      false,
-      false,
+      true,
+      true,
+      true,
+      true,
+      true,
+      true,
       true,
       true,
       false,
@@ -851,13 +851,13 @@
     ]
   },
   "perDayAttendance": [
-    26,
-    26,
-    27,
-    26,
-    27,
-    26,
     29,
+    29,
+    30,
+    29,
+    30,
+    29,
+    30,
     27,
     27,
     29,
@@ -904,8 +904,8 @@
       "3": 3,
       "4": 2,
       "5": 4,
-      "6": 14,
-      "7": 5,
+      "6": 15,
+      "7": 7,
       "8": 27,
       "9": 3,
       "10": 8,
@@ -1187,10 +1187,10 @@
   ],
   "summary": {
     "cohortSize": 30,
-    "totalAttendance": 577,
+    "totalAttendance": 596,
     "possibleAttendance": 630,
-    "rate": 0.9159,
-    "perfectDays": 2,
+    "rate": 0.946,
+    "perfectDays": 5,
     "totalKm": 1655.19,
     "perPersonKm": 55.17,
     "topHoursKST": [
@@ -1208,7 +1208,7 @@
       },
       {
         "hour": 7,
-        "count": 75
+        "count": 77
       },
       {
         "hour": 21,
@@ -1217,9 +1217,9 @@
     ],
     "miracleMorning": {
       "windowKST": "05:00–09:59",
-      "logs": 392,
-      "totalLogs": 997,
-      "rate": 0.3932,
+      "logs": 395,
+      "totalLogs": 1000,
+      "rate": 0.395,
       "avgDaysPerPerson": 8.2,
       "peakHour": 8,
       "peakHourCount": 212

@@ -41,7 +41,7 @@ export default function CumulativeDistanceChart() {
     y: PAD_T + CHART_H - p * CHART_H,
   }));
 
-  const xTicks = [1, 5, 10, 15, 20, 21].filter((d, i, a) => a.indexOf(d) === i);
+  const xTicks = [1, 5, 10, 15, 21];
 
   return (
     <AnimateOnScroll className="max-w-md mx-auto w-full">

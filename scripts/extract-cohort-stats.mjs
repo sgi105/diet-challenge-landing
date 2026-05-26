@@ -55,11 +55,14 @@ const members = memberships
 const userIds = members.map((m) => m.id);
 console.log(`[1] cohort members: ${members.length}`);
 
-// ---- 2) attendance matrix (daily_missions where status=success) ----
+// ---- 2) attendance matrix (daily_missions where status=success or pass) ----
+// 'pass' = 코치가 늦은 합류 보상으로 통과 처리한 날 (성공으로 인정)
 const missions = await rest(
-  `daily_missions?user_id=in.${inFilter(userIds)}&date=gte.${DAY1}&date=lte.${DAY21}&status=eq.success&select=user_id,date`
+  `daily_missions?user_id=in.${inFilter(userIds)}&date=gte.${DAY1}&date=lte.${DAY21}&status=in.(success,pass)&select=user_id,date,status`
 );
-console.log(`[2] success-status daily_missions rows: ${missions.length}`);
+const successCount = missions.filter((m) => m.status === 'success').length;
+const passCount = missions.filter((m) => m.status === 'pass').length;
+console.log(`[2] daily_missions: ${missions.length}건 (success=${successCount}, pass=${passCount})`);
 
 // Build day list day1..day21
 const dayDates = [];
