@@ -91,7 +91,7 @@ export default function MoneyMechanicSection() {
             <CardLabel className="text-bg-primary">우승팀 🏆</CardLabel>
             <div className="flex items-center gap-4">
               <div className="relative flex-shrink-0">
-                <img src={DARIMATI_SHOE_IMG} alt="DARIMATI 러닝화" className="w-20 h-20 object-contain" />
+                <img src={DARIMATI_SHOE_IMG} alt="DARIMATI 러닝화" className="w-24 h-24 object-contain" />
                 <span className="absolute -top-1 -right-2 bg-bg-primary text-accent-green text-[10px] font-extrabold px-1.5 py-0.5 rounded-full">×3</span>
               </div>
               <div className="flex-1 min-w-0">
