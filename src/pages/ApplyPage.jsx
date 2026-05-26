@@ -96,6 +96,10 @@ export default function ApplyPage() {
     track('apply_step_view', { step, stepKey, isReferral, isClosed: status === 'closed' });
   }, [step, stepKey, isReferral, status]);
 
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }, [step]);
+
   // 마감 후에도 후순위 지원 받음 — 폼은 그대로 보여주고 상단에 작은 배너로 표시.
   const isClosed = status === 'closed';
 
@@ -678,8 +682,8 @@ function DepositConsentStep({ checked, onChange }) {
   // 환급 시나리오 — 조건 / 금액(+ 보너스). boost는 시각 위계상 보조로 작게 처리.
   const refundRows = [
     { cond: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
-    { cond: '팀 전원 성공', amount: '22만원 환급', boost: '+2만원', tone: 'pos' },
-    { cond: '팀 우승', amount: '20만 + 러닝화', boost: '+러닝화', tone: 'pos' },
+    { cond: '팀 전원 성공', amount: '전액 환급', boost: '+2만원', tone: 'pos' },
+    { cond: '팀 우승', amount: '전액 환급', boost: '+러닝화 15만원 상당', tone: 'pos' },
     { cond: '중도 포기', amount: '0원', tone: 'neg' },
   ];
 
