@@ -29,22 +29,32 @@ export default function FounderSection() {
         <div className="bg-bg-card rounded-3xl p-7 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
           <div className="space-y-4 text-card-ink-muted leading-relaxed text-sm">
             <p>
-              저도 10년째.
+              <span className="text-card-ink font-bold">나도 10년째 운동을 꾸준히 못했어.</span>
               <br />
-              <span className="text-card-ink font-bold">운동도, 다이어트도, 늘 작심삼일이었어.</span>
+              "이번엔 진짜!!!" 하고 바로 작심삼일.
+              <br />
+              내 자신에게 또 실망하고.
+              <br />
+              나중엔 결국 시도도 안 하고.
             </p>
             <p>
-              그러다 깨달은 게 하나 있어.
-              <br />
-              <span className="text-bg-primary font-bold">"무언가 걸려야 움직인다."</span>
+              그러다 깨달은 게 <span className="text-card-ink font-bold">두 가지</span>야.
             </p>
             <p>
-              돈을 걸었더니 새벽 5시에 일어나게 됐어.
+              <span className="text-bg-primary font-bold">1. 같이 해야 재밌고, 재밌어야 꾸준히 한다.</span>
               <br />
-              사람들과 함께 하니까 포기가 안 됐어.
+              <span className="text-bg-primary font-bold">2. 돈이 걸려야 제대로 한다.</span>
+            </p>
+            <p>
+              이 두 개가 만난 게 챌린지야.
+              <br />
+              <span className="text-card-ink font-bold">함께 + 돈.</span>
             </p>
             <p className="text-card-ink font-semibold">
-              결과요?
+              작심삼일이 100일, 200일이 되더라.
+            </p>
+            <p className="text-card-ink font-semibold">
+              결과?
             </p>
             <p>
               풀마라톤 완주.
@@ -71,7 +81,7 @@ export default function FounderSection() {
               ))}
             </div>
             <p className="text-card-ink font-bold">
-              그 경험을 21일짜리로 압축한 게 시즌 1이야.
+              그 경험을 21일짜리로 압축한 게 바로 런클럽 챌린지야.
             </p>
           </div>
         </div>
