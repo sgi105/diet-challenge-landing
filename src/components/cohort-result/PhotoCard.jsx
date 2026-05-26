@@ -46,22 +46,19 @@ export default function PhotoCard({ photo }) {
       />
 
       {/* 아바타 — 좌상단 */}
-      <div className="absolute top-2 left-2 flex items-center gap-1.5 bg-black/45 backdrop-blur-sm rounded-full pl-1 pr-2 py-1">
+      <div className="absolute top-2 left-2">
         {photo.avatar_url ? (
           <img
             src={photo.avatar_url}
             alt=""
-            className="w-5 h-5 rounded-full object-cover bg-white/20"
+            className="w-7 h-7 rounded-full object-cover bg-white/20 ring-2 ring-white/30 shadow-[0_2px_8px_rgba(0,0,0,0.35)]"
             loading="lazy"
           />
         ) : (
-          <span className="w-5 h-5 rounded-full bg-white/20 flex items-center justify-center text-[10px] font-extrabold text-white">
+          <span className="w-7 h-7 rounded-full bg-black/45 backdrop-blur-sm ring-2 ring-white/30 flex items-center justify-center text-[11px] font-extrabold text-white shadow-[0_2px_8px_rgba(0,0,0,0.35)]">
             {photo.user_initial}
           </span>
         )}
-        <span className="text-white text-[10px] font-extrabold leading-none">
-          {photo.user_initial}★
-        </span>
       </div>
 
       {/* 좋아요 — 우상단 (좋아요 1+ 일 때만) */}
