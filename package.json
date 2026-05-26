@@ -11,6 +11,7 @@
     "cohort:extract": "node --env-file=.env.local scripts/extract-cohort-data.mjs all"
   },
   "dependencies": {
+    "@supabase/supabase-js": "^2.106.2",
     "@tosspayments/tosspayments-sdk": "^2.5.0",
     "@vercel/analytics": "^2.0.1",
     "react": "^19.2.0",

@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { submitApplication, attachFriend } from '../lib/applyApi';
+import { submitApplication } from '../lib/applyApi';
 import { useCohortStatus } from '../hooks/useCohortStatus';
 
 const STORAGE_KEY_MAIN = 'samurai-season1-apply-v1';
@@ -135,17 +135,8 @@ export default function ApplyPage() {
       try {
         const { id } = await submitApplication(form);
         track('apply_submit_success', { isReferral });
-        const friend = (form.friend || '').trim();
-        let friendAttached = false;
-        if (friend && id) {
-          try {
-            await attachFriend({ id, phone: form.phone.trim(), friend });
-            friendAttached = true;
-            track('apply_submit_friend_attached');
-          } catch {
-            /* 친구 매칭 실패는 done 페이지에서 다시 시도 가능하므로 무시 */
-          }
-        }
+        const friendAttached = !!(form.friend || '').trim();
+        if (friendAttached) track('apply_submit_friend_attached');
         clearState(STORAGE_KEY);
         navigate('/apply/done', { state: { id, phone: form.phone.trim(), friendAttached, isReferral } });
         return;
@@ -460,7 +451,7 @@ function IntroStep({ isReferral, totalQuestions }) {
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
           <li>🎁 <span className="text-card-ink font-bold">보너스</span>: 러닝 폼 분석 · 우선 선발 · 환급 우선순위</li>
-          <li>📅 마감 <span className="text-accent-orange font-bold">5/28(목) 24:00</span></li>
+          <li>📅 마감 <span className="text-accent-orange font-bold">5/28(목) 23:59</span></li>
           <li>📨 합격 발표 <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타</li>
         </ul>
       </div>
@@ -556,13 +547,6 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao }) {
           className="w-full bg-bg-card border-2 border-white/20 rounded-2xl pl-8 pr-4 py-4 text-lg text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors"
         />
       </div>
-      <button
-        type="button"
-        onClick={() => { onInstagram(''); setMode('kakao'); }}
-        className="mt-4 text-text-muted text-xs underline self-start hover:text-text-primary"
-      >
-        인스타 없어요 → 카톡 ID로 입력하기
-      </button>
     </div>
   );
 }
@@ -741,10 +725,10 @@ function ScheduleConsentStep({ checked, onChange, isReferral }) {
     >
       <ul className="space-y-3 text-sm">
         {isReferral && (
-          <li>🟧 <span className="font-semibold">추천인 전형 마감:</span> <span className="text-accent-orange font-bold">5/28(목) 24:00</span></li>
+          <li>🟧 <span className="font-semibold">추천인 전형 마감:</span> <span className="text-accent-orange font-bold">5/28(목) 23:59</span></li>
         )}
         <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타 단톡방 안내</li>
-        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">5/29(금) 24:00</span></li>
+        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">5/29(금) 23:59</span></li>
         <li>⚠️ 마감까지 <span className="text-accent-orange font-bold">미입금 시 자동으로 다음 순번</span>으로 넘어가</li>
         <li>
           🏃 <span className="font-semibold">온라인 OT:</span> 5/31(일) <span className="text-card-ink font-bold">16:00-16:30</span>

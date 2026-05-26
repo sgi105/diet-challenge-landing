@@ -1,19 +1,11 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { attachFriend } from '../lib/applyApi';
 
 export default function ApplyDonePage() {
   const location = useLocation();
   const navState = location.state || {};
-  const id = navState.id || null;
-  const phone = navState.phone || '';
-  const canAttach = !!(id && phone);
-
-  const [friend, setFriend] = useState('');
-  const [attaching, setAttaching] = useState(false);
-  const [attached, setAttached] = useState(!!navState.friendAttached);
-  const [attachError, setAttachError] = useState('');
+  const friendAttached = !!navState.friendAttached;
   const [linkCopied, setLinkCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -43,31 +35,6 @@ export default function ApplyDonePage() {
     }
   };
 
-  const handleAttachFriend = async () => {
-    const v = friend.trim();
-    if (!v) {
-      setAttachError('친구 이름이나 @아이디를 적어줘.');
-      return;
-    }
-    if (!canAttach) {
-      setAttachError('새로고침 후에는 친구 정보를 추가할 수 없어요. DM으로 알려줘!');
-      return;
-    }
-    setAttaching(true);
-    setAttachError('');
-    track('apply_done_attach_friend_attempt');
-    try {
-      await attachFriend({ id, phone, friend: v });
-      track('apply_done_attach_friend_success');
-      setAttached(true);
-    } catch (e) {
-      track('apply_done_attach_friend_failed', { message: String(e?.message || e).slice(0, 120) });
-      setAttachError(e.message || '친구 추가 중 오류가 발생했습니다.');
-    } finally {
-      setAttaching(false);
-    }
-  };
-
   return (
     <div className="min-h-screen px-6 py-10 flex flex-col items-center justify-center">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
@@ -81,7 +48,7 @@ export default function ApplyDonePage() {
             합격 결과는 <span className="text-bg-primary font-bold">5/29(금) 12:00</span> 인스타로 안내돼.
           </p>
           <p className="text-card-ink-faint text-sm font-semibold">
-            합격 시 5/29(금) 24:00까지 입금해야 선발 확정돼.
+            합격 시 5/29(금) 23:59까지 입금해야 선발 확정돼.
           </p>
         </div>
 
@@ -107,35 +74,9 @@ export default function ApplyDonePage() {
             친구에게 카톡·DM으로 보내줘
           </p>
 
-          {canAttach && !attached && (
-            <div className="mt-6 pt-6 border-t border-card-ink-faint/20">
-              <p className="text-card-ink-muted text-sm font-semibold mb-3">
-                친구 이름이나 인스타 @아이디 (선택)
-              </p>
-              <input
-                type="text"
-                value={friend}
-                onChange={e => setFriend(e.target.value)}
-                placeholder="친구 이름 또는 @아이디"
-                disabled={attaching}
-                className="w-full bg-white border-2 border-card-ink-faint/30 rounded-2xl px-4 py-3.5 text-base text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-bg-primary transition-colors"
-              />
-              <button
-                type="button"
-                onClick={handleAttachFriend}
-                disabled={attaching}
-                className="mt-3 w-full bg-bg-primary/10 text-bg-primary font-bold py-3.5 rounded-2xl hover:bg-bg-primary/15 transition-all disabled:opacity-50"
-              >
-                {attaching ? '추가 중...' : '친구 정보 추가하기'}
-              </button>
-              {attachError && (
-                <p className="text-accent-orange text-sm mt-3 font-semibold">{attachError}</p>
-              )}
-            </div>
-          )}
-          {attached && (
+          {friendAttached && (
             <div className="mt-6 pt-6 border-t border-card-ink-faint/20 text-center">
-              <p className="text-bg-primary font-bold">✓ 친구 정보가 추가됐어</p>
+              <p className="text-bg-primary font-bold">✓ 친구 정보가 함께 등록됐어</p>
               <p className="text-card-ink-faint text-xs mt-2">친구도 폼을 제출해야 매칭돼.</p>
             </div>
           )}

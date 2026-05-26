@@ -1,6 +1,6 @@
 {
   "devCommand": "npm run dev",
   "rewrites": [
-    { "source": "/((?!api/).*)", "destination": "/" }
+    { "source": "/(.*)", "destination": "/" }
   ]
 }

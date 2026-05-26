@@ -26,8 +26,6 @@ import PrivacyPage from './pages/PrivacyPage';
 import RefundPage from './pages/RefundPage';
 import ApplyPage from './pages/ApplyPage';
 import ApplyDonePage from './pages/ApplyDonePage';
-import AdminApplicationsPage from './pages/AdminApplicationsPage';
-import AdminTestimonialsPage from './pages/AdminTestimonialsPage';
 import PayPage from './pages/PayPage';
 import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
 
@@ -102,8 +100,6 @@ export default function App() {
       <Route path="/referral" element={<LandingPage variant="referral" />} />
       <Route path="/apply" element={<ApplyPage />} />
       <Route path="/apply/done" element={<ApplyDonePage />} />
-      <Route path="/admin/applications" element={<AdminApplicationsPage />} />
-      <Route path="/admin/testimonials" element={<AdminTestimonialsPage />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/fail" element={<FailPage />} />
       <Route path="/terms" element={<TermsPage />} />

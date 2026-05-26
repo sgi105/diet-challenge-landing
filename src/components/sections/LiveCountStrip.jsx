@@ -1,5 +1,6 @@
 import { useEffect, useState } from 'react';
 import { COHORT } from '../../data/config';
+import { listApplicantsPublic } from '../../lib/applyApi';
 
 export default function LiveCountStrip() {
   const [data, setData] = useState(null);
@@ -8,9 +9,7 @@ export default function LiveCountStrip() {
     let alive = true;
     async function load() {
       try {
-        const r = await fetch('/api/applicants-public');
-        if (!r.ok) return;
-        const json = await r.json();
+        const json = await listApplicantsPublic();
         if (alive) setData(json);
       } catch {
         /* swallow — strip is non-critical */

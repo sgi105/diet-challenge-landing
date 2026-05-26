@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import ApplicantAvatar from '../ui/ApplicantAvatar';
+import { listApplicantsPublic } from '../../lib/applyApi';
 
 const RUN_LABELS = {
   full_marathon: '풀마라톤',
@@ -30,9 +31,7 @@ export default function LiveApplicantsSection() {
     let alive = true;
     async function load() {
       try {
-        const r = await fetch('/api/applicants-public');
-        if (!r.ok) throw new Error(`HTTP ${r.status}`);
-        const json = await r.json();
+        const json = await listApplicantsPublic();
         if (alive) setData(json);
       } catch (e) {
         if (alive) setError(e.message || String(e));
@@ -55,7 +54,7 @@ export default function LiveApplicantsSection() {
           지금<br />지원하는 사람들
         </h2>
         <p className="text-text-muted text-center text-xs mb-8">
-          5/28(목) 24:00 마감 · 같은 조건이면 일찍 지원한 사람 우선
+          5/28(목) 23:59 마감 · 같은 조건이면 일찍 지원한 사람 우선
         </p>
       </AnimateOnScroll>
 

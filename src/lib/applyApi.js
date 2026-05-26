@@ -1,120 +1,82 @@
-// Supabase REST insert (no SDK dependency)
+// Supabase 직접 호출 — vercel serverless 의존성 제거.
+// applications INSERT 시 DB 트리거가 Edge Function(notify-new-applicant)을 호출해 Telegram 알림 발송.
+// 친구 매칭은 motivation 끝에 인라인으로 붙어 들어감 (attachFriend 폐기).
 //
-// 환경변수 (.env 또는 Vercel):
-//   VITE_SUPABASE_URL       (예: https://xxxxx.supabase.co)
-//   VITE_SUPABASE_ANON_KEY  (eyJ... JWT)
-//
-// Supabase 테이블 SQL (Supabase SQL Editor에서 실행):
-//   create table public.applications (
-//     id uuid primary key default gen_random_uuid(),
-//     created_at timestamptz default now(),
-//     name text not null,
-//     age int not null,
-//     phone text not null,
-//     phone_country text default 'KR',
-//     job text not null,
-//     region text not null,
-//     running_exp text not null,
-//     motivation text not null,
-//     instagram text,
-//     referrer_name text,
-//     agree_deposit boolean default false,
-//     agree_schedule boolean default false
-//   );
-//   -- 추천인 전형용 referrer_name 컬럼 (이미 테이블이 있다면):
-//   --   alter table public.applications add column if not exists referrer_name text;
-//   alter table public.applications enable row level security;
-//   create policy "Allow anonymous insert" on public.applications
-//     for insert to anon with check (true);
-//
-// Waitlist 테이블 SQL (다음 시즌 사전알림용 — Supabase SQL Editor에서 1회 실행):
-//   create table public.waitlist (
-//     id uuid primary key default gen_random_uuid(),
-//     created_at timestamptz default now(),
-//     name text not null,
-//     contact text not null,
-//     contact_type text not null default 'instagram',
-//     note text
-//   );
-//   alter table public.waitlist enable row level security;
-//   create policy "Allow anonymous insert" on public.waitlist
-//     for insert to anon with check (true);
+// 필요한 env (.env.local):
+//   VITE_SUPABASE_URL
+//   VITE_SUPABASE_ANON_KEY
 
-const SUPABASE_URL = import.meta.env.VITE_SUPABASE_URL;
-const SUPABASE_ANON_KEY = import.meta.env.VITE_SUPABASE_ANON_KEY;
+import { createClient } from '@supabase/supabase-js';
 
-export async function submitApplication(form) {
-  const payload = {
-    name: form.name.trim(),
-    age: parseInt(form.age, 10),
-    gender: form.gender === 'M' || form.gender === 'F' ? form.gender : null,
-    phone: form.phone.trim(),
-    phone_country: form.phoneCountry,
-    job: form.job.trim(),
-    region: form.region.trim(),
-    running_exp: form.runningExp,
-    motivation: form.motivation.trim(),
-    instagram: form.instagram?.trim() || null,
-    kakao_id: form.kakaoId?.trim() || null,
-    referrer_name: form.referrerName?.trim() || null,
-    agree_deposit: !!form.agreeDeposit,
-    agree_schedule: !!form.agreeSchedule,
-  };
+const supabase = createClient(
+  import.meta.env.VITE_SUPABASE_URL,
+  import.meta.env.VITE_SUPABASE_ANON_KEY
+);
 
-  const API_BASE = import.meta.env.DEV ? 'https://challenge.samuraihabits.com' : '';
-  const res = await fetch(`${API_BASE}/api/submit-application`, {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify(payload),
-  });
+export const CURRENT_COHORT_CODE = '260601_team_run';
 
-  if (!res.ok) {
-    const errText = await res.text().catch(() => res.statusText);
-    throw new Error(`제출 실패 (${res.status}): ${errText}`);
-  }
-
-  const data = await res.json().catch(() => ({}));
-  return { id: data?.id || null };
+function combineMotivationWithFriend(motivation, friend) {
+  const base = (motivation || '').trim();
+  const f = (friend || '').trim();
+  if (!f) return base;
+  const tail = `\n\n[같이 지원한 친구] ${f}`;
+  return (base + tail).slice(0, 2000);
 }
 
-export async function attachFriend({ id, friend }) {
-  if (!id) return;
-  const res = await fetch(
-    `${SUPABASE_URL}/rest/v1/applications?id=eq.${encodeURIComponent(id)}`,
-    {
-      method: 'PATCH',
-      headers: {
-        'Content-Type': 'application/json',
-        'apikey': SUPABASE_ANON_KEY,
-        'Authorization': `Bearer ${SUPABASE_ANON_KEY}`,
-      },
-      body: JSON.stringify({ friend_name: friend.trim() }),
-    }
-  );
-  // friend_name 컬럼 없으면 에러 무시 — attachFriend는 optional
-  if (!res.ok) {
-    const errText = await res.text().catch(() => '');
-    if (!errText.includes('friend_name')) {
-      throw new Error(`친구 추가 실패 (${res.status}): ${errText}`);
-    }
+export async function submitApplication(form) {
+  const motivation = combineMotivationWithFriend(form.motivation, form.friend);
+  const payload = {
+    name: form.name.trim().slice(0, 50),
+    age: parseInt(form.age, 10),
+    gender: form.gender === 'M' || form.gender === 'F' ? form.gender : null,
+    phone: form.phone.trim().slice(0, 30),
+    phone_country: (form.phoneCountry || 'KR').slice(0, 4),
+    job: form.job.trim().slice(0, 100),
+    region: form.region.trim().slice(0, 100),
+    running_exp: String(form.runningExp || '').slice(0, 30),
+    motivation,
+    instagram: form.instagram?.trim().slice(0, 100) || null,
+    kakao_id: form.kakaoId?.trim().slice(0, 50) || null,
+    referrer_name: form.referrerName?.trim().slice(0, 50) || null,
+    agree_deposit: !!form.agreeDeposit,
+    agree_schedule: !!form.agreeSchedule,
+    cohort_code: CURRENT_COHORT_CODE,
+  };
+
+  // RETURNING은 anon SELECT 권한이 필요해서 사용 X — INSERT만 수행하고 id는 null 반환.
+  // id는 done 페이지에서 사용되지 않음.
+  const { error } = await supabase.from('applications').insert(payload);
+  if (error) {
+    throw new Error(`제출 실패: ${error.message}`);
   }
+  return { id: null };
 }
 
 export async function submitWaitlist({ name, contact, contactType, note }) {
-  // 서버 엔드포인트 — 텔레그램 캡처가 1차, DB는 best-effort.
-  const res = await fetch('/api/submit-waitlist', {
-    method: 'POST',
-    headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      name: (name || '').trim(),
-      contact: (contact || '').trim(),
-      contact_type: contactType || 'instagram',
-      note: (note || '').trim() || undefined,
-    }),
-  });
-  if (!res.ok) {
-    const errText = await res.text().catch(() => res.statusText);
-    throw new Error(`사전알림 신청 실패 (${res.status}): ${errText}`);
+  const payload = {
+    name: (name || '').trim().slice(0, 50),
+    contact: (contact || '').trim().slice(0, 100),
+    contact_type: (contactType || 'instagram').slice(0, 20),
+    note: (note || '').trim().slice(0, 500) || null,
+  };
+  if (!payload.name) throw new Error('이름을 입력해줘.');
+  if (!payload.contact) throw new Error('연락처를 입력해줘.');
+
+  const { error } = await supabase.from('waitlist').insert(payload);
+  if (error) {
+    throw new Error(`사전알림 신청 실패: ${error.message}`);
   }
 }
 
+export async function listApplicantsPublic(cohortCode = CURRENT_COHORT_CODE) {
+  const [rowsRes, countRes] = await Promise.all([
+    supabase.rpc('list_applicants_public', { p_cohort: cohortCode }),
+    supabase.rpc('count_applicants_public', { p_cohort: cohortCode }),
+  ]);
+  if (rowsRes.error) throw new Error(`지원자 조회 실패: ${rowsRes.error.message}`);
+  if (countRes.error) throw new Error(`지원자 수 조회 실패: ${countRes.error.message}`);
+  return {
+    recent: Array.isArray(rowsRes.data) ? rowsRes.data : [],
+    count: Number(countRes.data) || 0,
+  };
+}
