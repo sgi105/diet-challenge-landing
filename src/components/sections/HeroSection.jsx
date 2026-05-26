@@ -43,10 +43,6 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
   const countdownTarget = isPreopen ? COHORT.applyOpenAt : deadline;
   const countdownLabel = isPreopen ? 'OPENS IN · 신청 오픈까지' : 'DEADLINE · 마감까지';
   const highlightTone = variant === 'referral' ? 'text-accent-orange' : 'text-accent-green';
-  const uspAccent = variant === 'referral' ? 'text-accent-orange' : 'text-accent-green';
-  const uspBoxTone = variant === 'referral'
-    ? 'bg-accent-orange/10 border-accent-orange/40'
-    : 'bg-accent-green/10 border-accent-green/40';
   const firstDayBonusActive = !isClosed && !isPreopen && new Date() < new Date(COHORT.firstDayBonusExpireAt);
 
   return (
@@ -84,11 +80,13 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
             </h1>
           )}
 
-          <div className={`inline-flex items-center gap-2 px-4 py-2 rounded-full border ${uspBoxTone} mb-8 animate-fade-up`} style={{ animationDelay: '0.18s' }}>
-            <span className="text-base">💰</span>
-            <span className="text-text-primary text-sm md:text-base font-bold">
-              보증금 20만원 · 미션 90% 달성 시 <span className={`${uspAccent}`}>100% 환급</span>
-            </span>
+          <div className="text-center my-5 animate-fade-up" style={{ animationDelay: '0.25s' }}>
+            <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed">
+              🏆 우승팀(3명) <span className="text-text-muted">→</span> <span className="text-accent-green">DARIMATI 러닝화 × 3</span>
+            </p>
+            <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed mt-1">
+              🏝️ 챔피언(1명) <span className="text-text-muted">→</span> <span className="text-accent-green">발리 왕복 항공권</span>
+            </p>
           </div>
 
           <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
