@@ -80,12 +80,16 @@ export default function FounderSection() {
       {/* Stats */}
       <AnimateOnScroll className="mt-6">
         <div className="grid grid-cols-4 gap-3">
-          {milestones.map((m, i) => (
-            <div key={i} className="bg-bg-card rounded-2xl p-3 text-center shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
-              <p className="text-bg-primary font-extrabold text-base leading-tight">{m.num}</p>
-              <p className="text-card-ink-faint text-[10px] mt-1 font-semibold">{m.desc}</p>
-            </div>
-          ))}
+          {milestones.map((m, i) => {
+            const koreanCount = (m.num.match(/[가-힯]/g) || []).length;
+            const sizeClass = koreanCount >= 4 ? 'text-sm' : 'text-base';
+            return (
+              <div key={i} className="bg-bg-card rounded-2xl p-3 text-center shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
+                <p className={`text-bg-primary font-extrabold whitespace-nowrap leading-tight ${sizeClass}`}>{m.num}</p>
+                <p className="text-card-ink-faint text-[10px] mt-1 font-semibold">{m.desc}</p>
+              </div>
+            );
+          })}
         </div>
       </AnimateOnScroll>
 
