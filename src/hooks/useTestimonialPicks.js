@@ -38,7 +38,7 @@ async function fetchAll() {
   if (!version) return EMPTY;
   const cardStyle = version.card_style || 'classic';
 
-  const picksUrl = `${SUPABASE_URL}/rest/v1/landing_testimonial_picks?landing_version_id=eq.${version.id}&order=display_order.asc&select=display_order,social_posts:post_id(id,caption,media_url,like_count,created_at,prompt_set_key,program_day,mission_stats,profiles!social_posts_user_id_fkey(full_name,avatar_url))`;
+  const picksUrl = `${SUPABASE_URL}/rest/v1/landing_testimonial_picks?landing_version_id=eq.${version.id}&order=display_order.asc&select=display_order,highlights,social_posts:post_id(id,caption,media_url,like_count,created_at,prompt_set_key,program_day,mission_stats,profiles!social_posts_user_id_fkey(full_name,avatar_url))`;
   const pr = await fetch(picksUrl, { headers });
   if (!pr.ok) return { ...EMPTY, cardStyle };
   const picks = await pr.json();
@@ -79,7 +79,9 @@ async function fetchAll() {
       type: '',
       likes: p.like_count || 0,
       comments: commentMap.get(p.id) || 0,
-      highlight: extractHighlights(p.caption || ''),
+      highlight: (Array.isArray(pk.highlights) && pk.highlights.length > 0)
+        ? pk.highlights
+        : extractHighlights(p.caption || ''),
       prompt: getFeedPrompt(p.program_day, p.prompt_set_key) || '',
       programDay: p.program_day || null,
     });
