@@ -708,7 +708,7 @@ function DepositConsentStep({ checked, onChange }) {
             <span className="text-card-ink text-[15px]">{r.cond}</span>
             <span className="flex items-baseline gap-1.5">
               <span className={`font-extrabold text-[18px] ${r.tone === 'neg' ? 'text-accent-orange' : 'text-bg-primary'}`}>{r.amount}</span>
-              {r.boost && <span className="text-[12px] font-bold text-bg-primary/70">({r.boost})</span>}
+              {r.boost && <span className="text-[12px] font-extrabold text-bg-primary">({r.boost})</span>}
             </span>
           </div>
         ))}
