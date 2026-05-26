@@ -7,6 +7,12 @@ const SUPABASE_ANON = import.meta.env.VITE_SUPABASE_ANON_KEY;
 
 const INITIAL_COUNT = 6;
 
+function getVersionOverride() {
+  if (typeof window === 'undefined') return null;
+  const p = new URLSearchParams(window.location.search);
+  return p.get('version') || null;
+}
+
 export default function TestimonialSection() {
   const [expanded, setExpanded] = useState(false);
   const [rows, setRows] = useState([]);
@@ -17,20 +23,59 @@ export default function TestimonialSection() {
     let alive = true;
     (async () => {
       try {
-        const [r1, r2] = await Promise.all([
-          fetch(`${SUPABASE_URL}/rest/v1/testimonials?is_selected=eq.true&order=display_order.asc&select=*`, {
-            headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
-          }),
-          fetch(`${SUPABASE_URL}/rest/v1/testimonial_settings?id=eq.1&select=*`, {
-            headers: { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` },
-          }),
-        ]);
+        const headers = { apikey: SUPABASE_ANON, Authorization: `Bearer ${SUPABASE_ANON}` };
+
+        const override = getVersionOverride();
+        const versionUrl = override
+          ? `${SUPABASE_URL}/rest/v1/landing_versions?name=eq.${encodeURIComponent(override)}&select=*&limit=1`
+          : `${SUPABASE_URL}/rest/v1/landing_versions?is_current=eq.true&select=*&limit=1`;
+        const vr = await fetch(versionUrl, { headers });
+        if (!vr.ok) return;
+        const versions = await vr.json();
+        const version = versions[0];
+        if (!alive || !version) return;
+        setCardStyle(version.card_style || 'classic');
+
+        const picksUrl = `${SUPABASE_URL}/rest/v1/landing_testimonial_picks?landing_version_id=eq.${version.id}&order=display_order.asc&select=display_order,social_posts:post_id(id,caption,media_url,like_count,created_at,profiles!social_posts_user_id_fkey(full_name))`;
+        const pr = await fetch(picksUrl, { headers });
+        if (!pr.ok) return;
+        const picks = await pr.json();
         if (!alive) return;
-        if (r1.ok) setRows(await r1.json());
-        if (r2.ok) {
-          const arr = await r2.json();
-          if (arr[0]?.card_style) setCardStyle(arr[0].card_style);
+
+        const postIds = picks.map(p => p.social_posts?.id).filter(Boolean);
+        const commentMap = new Map();
+        if (postIds.length > 0) {
+          const inList = postIds.map(id => `"${id}"`).join(',');
+          const cr = await fetch(
+            `${SUPABASE_URL}/rest/v1/post_comments?post_id=in.(${inList})&select=post_id`,
+            { headers }
+          );
+          if (cr.ok) {
+            const comments = await cr.json();
+            for (const c of comments) {
+              commentMap.set(c.post_id, (commentMap.get(c.post_id) || 0) + 1);
+            }
+          }
         }
+
+        const mapped = picks
+          .map(pk => {
+            const p = pk.social_posts;
+            if (!p) return null;
+            return {
+              id: p.id,
+              name: p.profiles?.full_name || '익명',
+              caption: p.caption || '',
+              img: p.media_url || '',
+              type: '',
+              likes: p.like_count || 0,
+              comments: commentMap.get(p.id) || 0,
+              highlight: null,
+            };
+          })
+          .filter(Boolean);
+
+        if (alive) setRows(mapped);
       } catch {
         // silent — section just stays empty
       }
@@ -51,7 +96,7 @@ export default function TestimonialSection() {
             <span className="text-accent-green">매일 움직이고 있어.</span>
           </h2>
           <p className="text-text-secondary mb-10 leading-relaxed">
-            런클럽 시즌0 실제 인증 피드에서.
+            런클럽 실제 인증 피드에서.
           </p>
         </AnimateOnScroll>
 
@@ -78,7 +123,7 @@ export default function TestimonialSection() {
             )}
 
             <p className="text-text-muted text-[11px] text-center leading-relaxed mt-6">
-              사진/캡션은 실제 앱 피드 기준. 이름은 본인 동의 하에 실명 노출.
+              사진/캡션은 실제 앱 피드 기준. 이름은 익명 처리.
             </p>
           </>
         )}
