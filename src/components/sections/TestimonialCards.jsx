@@ -14,7 +14,9 @@ const TYPE_META = {
 // eslint-disable-next-line react-refresh/only-export-components
 export function anonymize(name) {
   if (!name) return '';
-  return name[0] + '★';
+  if (name.length === 1) return name;
+  if (name.length === 2) return name[0] + 'ㅇ';
+  return name[0] + 'ㅇ'.repeat(name.length - 2) + name[name.length - 1];
 }
 
 // eslint-disable-next-line react-refresh/only-export-components
