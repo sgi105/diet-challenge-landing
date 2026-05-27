@@ -52,6 +52,11 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
       {/* Above the Fold — 첫 화면 (pill + h1 + USP + CTA) */}
       <div className="relative min-h-screen flex flex-col justify-center items-center px-6 py-16">
         <div className="relative z-10 text-center max-w-lg mx-auto">
+          <div className="flex justify-center mb-3 animate-fade-up">
+            <span className="text-text-muted text-[11px] font-bold tracking-[0.18em]">
+              run with <span className={`font-black tracking-[0.25em] text-[13px] ${highlightTone}`}>TARZAN</span>
+            </span>
+          </div>
           <div className="flex justify-center mb-5 animate-fade-up">
             <span className={`pill ${v.pillTone}`}>{v.pill}</span>
           </div>
