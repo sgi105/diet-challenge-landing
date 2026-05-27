@@ -1,5 +1,5 @@
-// 5 card style variants for testimonials. Each takes the same props (t = testimonial row).
-// Style key in DB: 'classic' | 'compact' | 'quote' | 'polaroid' | 'minimal'
+// Card style variants for testimonials. Each takes the same props (t = testimonial row).
+// Style key in DB: 'classic' | 'compact' | 'quote' | 'polaroid' | 'minimal' | 'with_prompt' | 'with_prompt_square' | 'prompt_inline'
 
 const TYPE_META = {
   '회의론자→전환': { bg: 'bg-orange-50', text: 'text-orange-600' },
@@ -290,6 +290,40 @@ function WithPromptSquareCard({ t }) {
   );
 }
 
+// ─── 8) PROMPT INLINE ──── 사진 위, 질문은 답변 바로 위에 작은 회색 글씨
+function PromptInlineCard({ t }) {
+  return (
+    <div className="max-w-lg mx-auto w-full bg-bg-card rounded-3xl overflow-hidden shadow-[0_12px_32px_rgba(0,0,0,0.14)]">
+      {t.img && (
+        <div className="relative w-full aspect-square bg-bg-card-hover">
+          <img
+            src={t.img}
+            alt={`${t.name} 인증`}
+            loading="lazy"
+            className="w-full h-full object-cover"
+            onError={(e) => { e.currentTarget.style.opacity = '0.3'; }}
+          />
+        </div>
+      )}
+      <div className="px-5 pt-4 pb-4 flex flex-col gap-2.5">
+        <div className="flex items-center gap-2">
+          <span className="text-card-ink font-extrabold text-sm">{anonymize(t.name)}</span>
+          <span className="text-card-ink-faint text-[11px]">의 답변</span>
+        </div>
+        {t.prompt && (
+          <p className="text-card-ink-faint text-[11px] leading-relaxed">
+            Q. {t.prompt}
+          </p>
+        )}
+        <p className="text-card-ink text-[13px] leading-relaxed">
+          {renderCaption(t.caption, t.highlight)}
+        </p>
+        <Likes t={t} />
+      </div>
+    </div>
+  );
+}
+
 // eslint-disable-next-line react-refresh/only-export-components
 export const CARD_STYLES = {
   classic: { label: 'Classic', desc: '큰 사진 + 강조 본문', Component: ClassicCard },
@@ -299,6 +333,7 @@ export const CARD_STYLES = {
   minimal: { label: 'Minimal', desc: '아바타 원형 + 텍스트',Component: MinimalCard },
   with_prompt: { label: 'WithPrompt', desc: '그날 질문 + 답변', Component: WithPromptCard },
   with_prompt_square: { label: 'WithPrompt 1:1', desc: '그날 질문 + 정사각 사진', Component: WithPromptSquareCard },
+  prompt_inline: { label: 'Prompt Inline', desc: '질문이 답변 바로 위 작은 회색', Component: PromptInlineCard },
 };
 
 export function CardByStyle({ style, t }) {
