@@ -1,7 +1,9 @@
+import { useEffect, useState } from 'react';
 import Button from '../ui/Button';
 import CountdownTimer from '../ui/CountdownTimer';
 import { COHORT } from '../../data/config';
 import { useCohortStatus, COPY, COPY_REFERRAL } from '../../hooks/useCohortStatus';
+import { listApplicantsPublic } from '../../lib/applyApi';
 
 const VARIANT_COPY = {
   main: {
@@ -44,6 +46,22 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
   const countdownLabel = isPreopen ? 'OPENS IN · 신청 오픈까지' : 'DEADLINE · 마감까지';
   const highlightTone = variant === 'referral' ? 'text-accent-orange' : 'text-accent-green';
   const firstDayBonusActive = !isClosed && !isPreopen && new Date() < new Date(COHORT.firstDayBonusExpireAt);
+  const isMainOpen = variant === 'main' && status === 'open';
+
+  const [liveCount, setLiveCount] = useState(null);
+  useEffect(() => {
+    if (!isMainOpen) return;
+    let alive = true;
+    async function load() {
+      try {
+        const json = await listApplicantsPublic();
+        if (alive) setLiveCount(json?.count ?? null);
+      } catch { /* ignore */ }
+    }
+    load();
+    const t = setInterval(load, 60000);
+    return () => { alive = false; clearInterval(t); };
+  }, [isMainOpen]);
 
   return (
     <section id="hero" className="relative overflow-hidden">
@@ -54,11 +72,22 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
         <div className="relative z-10 text-center max-w-lg mx-auto">
           <div className="flex justify-center mb-3 animate-fade-up">
             <span className="text-text-muted text-[11px] font-bold tracking-[0.18em]">
-              run with <span className={`font-black tracking-[0.25em] text-[13px] ${highlightTone}`}>TARZAN</span>
+              run like <span className={`font-black tracking-[0.25em] text-[13px] ${highlightTone}`}>TARZAN</span>
+              <span className="text-white/30 mx-1">·</span>
+              <span className="font-bold tracking-wide">21day challenge</span>
             </span>
           </div>
           <div className="flex justify-center mb-5 animate-fade-up">
-            <span className={`pill ${v.pillTone}`}>{v.pill}</span>
+            {isMainOpen ? (
+              <span className="inline-flex items-center gap-2 border-2 border-accent-green/90 bg-accent-green/10 text-text-primary py-1.5 px-4 rounded-full text-[12px] font-extrabold tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse shadow-[0_0_12px_var(--color-accent-green)]"></span>
+                <span className="text-accent-green font-black tracking-widest">SEASON 1</span>
+                <span className="text-text-muted/70">·</span>
+                <span>{liveCount != null ? `${liveCount}명 지원 중` : '지원 접수 중'}</span>
+              </span>
+            ) : (
+              <span className={`pill ${v.pillTone}`}>{v.pill}</span>
+            )}
           </div>
 
           {variant === 'main' ? (
@@ -85,24 +114,42 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
             </h1>
           )}
 
-          <div className="text-center my-5 animate-fade-up" style={{ animationDelay: '0.25s' }}>
-            <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed">
-              🏆 우승팀(3명) <span className="text-text-muted">→</span> <span className="text-accent-green">DARIMATI 러닝화 × 3</span>
-            </p>
-            <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed mt-1">
-              🏝️ 챔피언(1명) <span className="text-text-muted">→</span> <span className="text-accent-green">발리 왕복 항공권</span>
-            </p>
-          </div>
+          {isMainOpen ? (
+            <div className="my-5 animate-fade-up flex justify-center" style={{ animationDelay: '0.25s' }}>
+              <CountdownTimer targetDate={deadline} format="adaptive" size="md" />
+            </div>
+          ) : (
+            <div className="text-center my-5 animate-fade-up" style={{ animationDelay: '0.25s' }}>
+              <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed">
+                🏆 우승팀(3명) <span className="text-text-muted">→</span> <span className="text-accent-green">DARIMATI 러닝화 × 3</span>
+              </p>
+              <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed mt-1">
+                🏝️ 챔피언(1명) <span className="text-text-muted">→</span> <span className="text-accent-green">발리 왕복 항공권</span>
+              </p>
+            </div>
+          )}
 
           <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
             <Button onClick={onCTA} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
-              <span className="block">{copy.cta.hero}</span>
-              <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
+              <span className="block">{isMainOpen ? '나도 합류하기 →' : copy.cta.hero}</span>
+              <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">
+                {isMainOpen
+                  ? (liveCount ? `${liveCount}명이 이미 지원 · 2분` : '2분 소요')
+                  : copy.ctaSub}
+              </span>
             </Button>
             {!isClosed && !isPreopen && (
-              <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
-                🛡️ 합격 후 OT 전 전액 환불 가능
-              </p>
+              isMainOpen ? (
+                <div className="mt-3 flex justify-center">
+                  <span className="inline-flex items-center gap-1.5 border border-white/25 text-text-muted py-1.5 px-3 rounded-full text-[11px] font-bold">
+                    🛡️ 합격 후 OT 전 전액 환불
+                  </span>
+                </div>
+              ) : (
+                <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
+                  🛡️ 합격 후 OT 전 전액 환불 가능
+                </p>
+              )
             )}
           </div>
         </div>

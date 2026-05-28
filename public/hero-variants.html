@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>V1 수정안</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Pretendard:wght@500;700;800;900&family=Archivo+Black&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg-primary:#1e3cff;
+    --bg-deep:#0e29d6;
+    --accent-green:#c8ff4d;
+    --accent-orange:#ff6b35;
+    --text-primary:#fff;
+    --text-secondary:rgba(255,255,255,.82);
+    --text-muted:rgba(255,255,255,.6);
+    --border:rgba(255,255,255,.18);
+    --card-ink:#0a1f8a;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;-webkit-font-smoothing:antialiased}
+  body{
+    background:#0a0f24;color:#e6e9f5;
+    font-family:"Pretendard","Apple SD Gothic Neo","Malgun Gothic",sans-serif;
+    padding:32px 20px 80px;min-height:100vh;
+    display:flex;flex-direction:column;align-items:center;gap:18px
+  }
+  h1.page-title{font-size:22px;font-weight:900;color:#fff}
+  p.page-sub{font-size:13px;color:#9aa3c7;text-align:center;max-width:600px;line-height:1.55}
+  .label{
+    font-size:13px;font-weight:800;color:#fff;
+    background:linear-gradient(90deg,#26307a,#1c2462);
+    border:1px solid #3c4796;border-radius:10px;padding:10px 16px;margin-top:6px
+  }
+  .phone{
+    width:375px;height:667px;
+    background:var(--bg-primary);
+    background-image:
+      linear-gradient(rgba(255,255,255,.07) 1px,transparent 1px),
+      linear-gradient(90deg,rgba(255,255,255,.07) 1px,transparent 1px);
+    background-size:40px 40px;background-position:-1px -1px;
+    border-radius:28px;overflow:hidden;position:relative;
+    box-shadow:0 12px 40px rgba(0,0,0,.5);
+    color:var(--text-primary);display:flex;flex-direction:column;
+  }
+  .top-banner{
+    background:var(--accent-green);color:var(--card-ink);
+    text-align:center;font-size:11px;font-weight:900;
+    padding:8px 6px;letter-spacing:-.01em;
+    white-space:nowrap;overflow:hidden;text-overflow:ellipsis
+  }
+  .hero-content{
+    flex:1;display:flex;flex-direction:column;
+    justify-content:center;align-items:center;
+    text-align:center;padding:18px 22px;gap:14px
+  }
+  .wordmark{
+    font-size:11px;color:var(--text-muted);font-weight:700;letter-spacing:.18em
+  }
+  .wordmark b{
+    color:var(--accent-green);font-weight:900;
+    letter-spacing:.25em;font-size:13px
+  }
+  .pill-live{
+    display:inline-flex;align-items:center;gap:8px;
+    border:1.5px solid var(--accent-green);
+    background:rgba(200,255,77,.08);
+    color:#fff;
+    padding:7px 16px;border-radius:999px;
+    font-size:12px;font-weight:800;letter-spacing:.04em
+  }
+  .pill-live .dot{
+    width:8px;height:8px;border-radius:50%;
+    background:var(--accent-green);
+    box-shadow:0 0 12px var(--accent-green);
+    animation:pulse 1.6s ease-in-out infinite
+  }
+  .pill-live strong{color:var(--accent-green);font-weight:900;letter-spacing:.14em}
+  @keyframes pulse{
+    0%,100%{opacity:1;transform:scale(1)}
+    50%{opacity:.55;transform:scale(.85)}
+  }
+  .h1-kr{font-weight:900;letter-spacing:-.03em;line-height:1.12}
+  .glow{text-shadow:0 0 28px rgba(200,255,77,.55)}
+  .count-block{display:flex;gap:6px;justify-content:center;align-items:center}
+  .count-cell{
+    background:rgba(0,0,0,.18);
+    border:1px solid var(--border);
+    border-radius:10px;padding:8px 10px;min-width:56px;text-align:center
+  }
+  .count-cell b{
+    font-size:22px;font-weight:900;letter-spacing:-.02em;
+    color:var(--accent-green);display:block;line-height:1
+  }
+  .count-cell span{
+    font-size:9px;color:var(--text-muted);font-weight:700;letter-spacing:.1em
+  }
+  .count-sep{color:var(--accent-green);font-weight:900;font-size:20px;opacity:.4}
+  .btn{
+    display:inline-flex;flex-direction:column;align-items:center;justify-content:center;
+    background:var(--accent-green);color:var(--card-ink);
+    font-weight:900;padding:14px 28px;border-radius:18px;border:0;
+    box-shadow:0 12px 40px rgba(200,255,77,.4);
+    line-height:1.1;font-size:17px;cursor:pointer;width:100%
+  }
+  .btn small{font-size:11px;font-weight:800;opacity:.8;margin-top:4px;letter-spacing:.02em}
+  .trust-chip{
+    display:inline-flex;align-items:center;gap:6px;
+    border:1px solid rgba(255,255,255,.25);
+    color:var(--text-muted);
+    padding:6px 12px;border-radius:999px;
+    font-size:11px;font-weight:700
+  }
+</style>
+</head>
+<body>
+
+<h1 class="page-title">V1 — 가인 수정안</h1>
+<p class="page-sub">
+① pill "21D RUN" 제거 → <strong style="color:#fff">SEASON 1 + 라이브 카운터</strong> 한 뱃지로 통합 (경쟁률 X)<br>
+② 타이머 있으니 CTA에서 "오늘 24:00 마감" 제거 → <strong style="color:#fff">"지원하기 → / 2분 소요"</strong>만<br>
+③ wordmark: "run with TARZAN" → "<strong style="color:#fff">run like <span style="color:#c8ff4d">TARZAN</span> · 21day challenge</strong>"
+</p>
+
+<div class="phone">
+  <div class="top-banner">🟢 시즌 1 신청 마감 5/28(목) 23:59 → 6/1(월) 시작</div>
+  <div class="hero-content">
+    <div class="wordmark">run like <b>TARZAN</b> <span style="color:rgba(255,255,255,.35);margin:0 2px">·</span> 21day challenge</div>
+    <div class="pill-live"><span class="dot"></span><strong>SEASON 1</strong> · 27명 지원 중</div>
+    <h1 class="h1-kr" style="font-size:22px;color:#fff">혼자선 맨날 실패한 러닝</h1>
+    <h2 class="h1-kr glow" style="font-size:36px;color:var(--accent-green)">30명 중 30명<br>전원 성공</h2>
+    <div class="count-block">
+      <div class="count-cell"><b data-hh>00</b><span>HOURS</span></div>
+      <span class="count-sep">:</span>
+      <div class="count-cell"><b data-mm>23</b><span>MIN</span></div>
+      <span class="count-sep">:</span>
+      <div class="count-cell"><b data-ss>41</b><span>SEC</span></div>
+    </div>
+    <button class="btn">지원하기 →<small>2분 소요</small></button>
+    <span class="trust-chip">🛡️ 합격 후 OT 전 전액 환불</span>
+  </div>
+</div>
+
+<div class="label">✅ 이대로 가? 또 수정?</div>
+
+<h1 class="page-title" style="margin-top:50px">CTA 버튼 카피 — 8개 후보</h1>
+<p class="page-sub">countdown이 옆에 있어서 마감 텍스트는 제외. 가치/액션/소셜로만 차별화.</p>
+
+<div style="display:grid;grid-template-columns:repeat(2,minmax(360px,1fr));gap:18px;max-width:820px;width:100%">
+  <!-- A -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">A · 미니멀</div>
+    <button class="btn">지원하기 →<small>2분 소요</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">가장 무난. 단점: 평범</div>
+  </div>
+  <!-- B -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">B · 선발제 강조</div>
+    <button class="btn">선발 지원하기 →<small>2분 소요</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">가치: "아무나 X, 선발". 한국 톤 잘 맞음 ★</div>
+  </div>
+  <!-- C -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">C · Urgency</div>
+    <button class="btn">지금 지원하기 →<small>2분 소요</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">단순 + 즉시성. 마감일 톤과 자연스럽게 어울림</div>
+  </div>
+  <!-- D -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">D · 챌린지 명시</div>
+    <button class="btn">21일 챌린지 지원하기 →<small>2분 소요</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">상품 명시. 길고 무거운 느낌</div>
+  </div>
+  <!-- E -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">E · 사회적 합류</div>
+    <button class="btn">나도 합류하기 →<small>27명이 이미 지원 · 2분</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">FOMO + 사회적 증명. 컨버전 효과 큼 ★</div>
+  </div>
+  <!-- F -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">F · 액션 자극</div>
+    <button class="btn">도전 시작하기 →<small>2분 만에 신청 완료</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">감정·도전 톤. 가인 채널 톤과 잘 맞음</div>
+  </div>
+  <!-- G -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">G · 팀 결속</div>
+    <button class="btn">팀에 합류하기 →<small>3인 1팀 · 2분 신청</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">"3인 1팀" 컨셉 강조. 차별화 신호</div>
+  </div>
+  <!-- H -->
+  <div class="phone" style="height:auto;padding:24px">
+    <div style="font-size:12px;font-weight:800;color:var(--text-muted);letter-spacing:.1em;margin-bottom:12px">H · USP 직결</div>
+    <button class="btn">30/30 팀 합류하기 →<small>2분 소요 · 합격 후 전액 환불</small></button>
+    <div style="font-size:11px;color:var(--text-muted);margin-top:10px">USP("30/30") 직접 연결. 강력하지만 약간 노골적</div>
+  </div>
+</div>
+
+<div class="label" style="margin-top:30px">🎯 추천: B (선발 지원하기) 또는 E (나도 합류하기)</div>
+
+<script>
+  function tick(){
+    const now = new Date();
+    const end = new Date(now);
+    end.setHours(23,59,59,999);
+    let s = Math.max(0, Math.floor((end - now)/1000));
+    document.querySelector('[data-hh]').textContent=String(Math.floor(s/3600)).padStart(2,'0');
+    document.querySelector('[data-mm]').textContent=String(Math.floor((s%3600)/60)).padStart(2,'0');
+    document.querySelector('[data-ss]').textContent=String(s%60).padStart(2,'0');
+  }
+  setInterval(tick,1000); tick();
+</script>
+</body>
+</html>
