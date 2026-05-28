@@ -492,7 +492,7 @@ function IntroStep({ isReferral, totalQuestions }) {
   }
   return (
     <div className="flex-1 flex flex-col justify-center text-center">
-      <span className="pill text-accent-green block w-fit mx-auto mb-4">SEASON [1] · APPLY</span>
+      <span className="pill text-accent-green block w-fit mx-auto mb-4">SEASON 1 · APPLY</span>
       <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
         2분이면<br />지원 끝
       </h1>

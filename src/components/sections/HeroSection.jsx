@@ -5,7 +5,7 @@ import { useCohortStatus, COPY, COPY_REFERRAL } from '../../hooks/useCohortStatu
 
 const VARIANT_COPY = {
   main: {
-    pill: 'SEASON [1] · 21D RUN',
+    pill: 'SEASON 1 · 21D RUN',
     pillTone: 'text-accent-green',
     uspLine1: '혼자선 맨날 실패한 러닝',
     uspLine2Top: '30명 중 30명 전원',
