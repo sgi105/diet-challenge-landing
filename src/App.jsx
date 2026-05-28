@@ -52,17 +52,21 @@ function LandingPage({ variant = 'main' }) {
 
   const scrollToCTA = (e) => {
     e.preventDefault();
+    if (isClosed) {
+      handleCTA();
+      return;
+    }
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  const bannerTone = isReferral
+  const bannerTone = (isReferral || isClosed)
     ? 'bg-accent-orange text-bg-primary'
     : 'bg-accent-green text-bg-primary';
 
   return (
     <div className="min-h-screen">
       <a
-        href={isClosed ? '#waitlist' : '#hero'}
+        href={isClosed ? (isReferral ? REFERRAL_APPLY_PATH : APPLY_PATH) : '#hero'}
         onClick={scrollToCTA}
         className={`fixed top-0 left-0 right-0 z-50 ${bannerTone} text-center text-[11px] sm:text-sm font-extrabold py-2.5 px-3 block hover:brightness-105 transition-all tracking-tight leading-tight font-kr whitespace-nowrap overflow-hidden text-ellipsis`}
       >

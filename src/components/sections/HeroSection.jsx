@@ -47,6 +47,7 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
   const highlightTone = variant === 'referral' ? 'text-accent-orange' : 'text-accent-green';
   const firstDayBonusActive = !isClosed && !isPreopen && new Date() < new Date(COHORT.firstDayBonusExpireAt);
   const isMainOpen = variant === 'main' && status === 'open';
+  const isMainClosed = variant === 'main' && status === 'closed';
 
   const [liveCount, setLiveCount] = useState(null);
   useEffect(() => {
@@ -85,6 +86,15 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
                 <span className="text-text-muted/70">·</span>
                 <span>{liveCount != null ? `${liveCount}명 지원 중` : '지원 접수 중'}</span>
               </span>
+            ) : isMainClosed ? (
+              <div className="inline-block transform -rotate-2 border-[3px] border-dashed border-accent-orange rounded-2xl bg-accent-orange/10 px-6 py-3">
+                <div className="font-display text-[26px] leading-none tracking-[0.08em] text-accent-orange text-center">
+                  SEASON 1<br />CLOSED
+                </div>
+                <div className="text-text-primary text-[11px] font-extrabold text-center mt-1.5 tracking-[0.12em]">
+                  정원 30 / 30 마감
+                </div>
+              </div>
             ) : (
               <span className={`pill ${v.pillTone}`}>{v.pill}</span>
             )}
@@ -118,6 +128,13 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
             <div className="my-5 animate-fade-up flex justify-center" style={{ animationDelay: '0.25s' }}>
               <CountdownTimer targetDate={deadline} format="adaptive" size="md" />
             </div>
+          ) : isMainClosed ? (
+            <div className="text-center my-5 animate-fade-up max-w-xs mx-auto" style={{ animationDelay: '0.25s' }}>
+              <p className="text-text-secondary text-[13px] font-semibold leading-relaxed">
+                결원 발생 시 <span className="text-text-primary font-extrabold">가장 먼저 연락</span> 줄게.<br />
+                5/30 안에 우선 연락 (입금 24h 안 가능 시).
+              </p>
+            </div>
           ) : (
             <div className="text-center my-5 animate-fade-up" style={{ animationDelay: '0.25s' }}>
               <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed">
@@ -138,18 +155,24 @@ export default function HeroSection({ onCTA, variant = 'main' }) {
                   : copy.ctaSub}
               </span>
             </Button>
-            {!isClosed && !isPreopen && (
-              isMainOpen ? (
-                <div className="mt-3 flex justify-center">
-                  <span className="inline-flex items-center gap-1.5 border border-white/25 text-text-muted py-1.5 px-3 rounded-full text-[11px] font-bold">
-                    🛡️ 합격 후 OT 전 전액 환불
-                  </span>
-                </div>
-              ) : (
-                <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
-                  🛡️ 합격 후 OT 전 전액 환불 가능
-                </p>
-              )
+            {isMainOpen && (
+              <div className="mt-3 flex justify-center">
+                <span className="inline-flex items-center gap-1.5 border border-white/25 text-text-muted py-1.5 px-3 rounded-full text-[11px] font-bold">
+                  🛡️ 합격 후 OT 전 전액 환불
+                </span>
+              </div>
+            )}
+            {isMainClosed && (
+              <div className="mt-3 flex justify-center">
+                <span className="inline-flex items-center gap-1.5 border border-white/25 text-text-muted py-1.5 px-3 rounded-full text-[11px] font-bold">
+                  🛡️ 결원 없으면 다음 시즌 우선 안내
+                </span>
+              </div>
+            )}
+            {!isClosed && !isPreopen && !isMainOpen && (
+              <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
+                🛡️ 합격 후 OT 전 전액 환불 가능
+              </p>
             )}
           </div>
         </div>

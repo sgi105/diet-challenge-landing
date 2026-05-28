@@ -153,7 +153,7 @@ export default function MoneyMechanicSection() {
               </div>
               <div className="border-t border-dashed border-card-ink/20 pt-2">
                 <p className="text-yellow-500 text-lg font-black tabular-nums">
-                  1,000,000<span className="text-[10px] font-semibold ml-0.5">원</span>
+                  1,000,000<span className="text-[10px] font-semibold ml-0.5">원 상당</span>
                 </p>
                 <p className="text-card-ink-faint text-[10px] font-semibold mt-0.5">전체 1등 · 1명 한정</p>
               </div>
