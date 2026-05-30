@@ -23,13 +23,13 @@ export default function BenefitsSection({ onCTA }) {
     headline = (
       <>첫날 신청하면<br /><span className="text-accent-orange">+1만 보너스 + 2가지 혜택</span></>
     );
-    subline = '5/25(월) 24:00 첫날 보너스 마감';
+    subline = '5/25(월) 23:59 첫날 보너스 마감';
     pillLabel = 'FIRST-DAY BONUS';
   } else if (firstDayBonusActive) {
     headline = (
       <>첫날 신청하면<br /><span className="text-accent-orange">+1만원 보너스</span></>
     );
-    subline = '5/25(월) 24:00까지 신청자 한정';
+    subline = '5/25(월) 23:59까지 신청자 한정';
     pillLabel = 'FIRST-DAY ONLY';
   } else {
     headline = (
@@ -73,11 +73,11 @@ export default function BenefitsSection({ onCTA }) {
                   </span>
                 </div>
                 <p className="text-text-secondary text-sm leading-relaxed mb-2">
-                  첫날(5/25 오픈 ~ 5/25 24:00) 신청자 한정.<br />
+                  첫날(5/25 오픈 ~ 5/25 23:59) 신청자 한정.<br />
                   개인 성공 시 환급금이 <span className="font-extrabold text-accent-orange">20만 → 21만</span>으로 늘어납니다.
                 </p>
                 <p className="text-text-muted text-[11px] font-semibold tracking-wide">
-                  ⏰ 5/25(월) 24:00 마감 · 이후 영구히 사라짐
+                  ⏰ 5/25(월) 23:59 마감 · 이후 영구히 사라짐
                 </p>
               </div>
             </div>
@@ -112,7 +112,7 @@ export default function BenefitsSection({ onCTA }) {
         <Button onClick={onCTA} className="w-full mt-6 shadow-[0_12px_40px_rgba(200,255,77,0.4)] flex flex-col items-center justify-center leading-tight">
           <span className="block">{firstDayBonusActive ? '첫날 보너스 받고 지원하기' : '오늘 혜택 받고 지원하기'}</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">
-            {firstDayBonusActive ? '5/25(월) 24:00까지 · 2분 소요' : '오늘 23:59까지 · 2분 소요'}
+            {firstDayBonusActive ? '5/25(월) 23:59까지 · 2분 소요' : '오늘 23:59까지 · 2분 소요'}
           </span>
         </Button>
       </AnimateOnScroll>

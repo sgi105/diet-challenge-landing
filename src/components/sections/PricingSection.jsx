@@ -48,7 +48,7 @@ export default function PricingSection({ onCTA, variant = 'main' }) {
         <div className="bg-bg-card rounded-[28px] p-8 text-center shadow-[0_24px_60px_rgba(0,0,0,0.2)] border-4 border-accent-green">
           <p className="text-5xl md:text-6xl font-semibold text-card-ink mb-2 font-display">200,000<span className="text-2xl">원</span></p>
           <p className="text-card-ink-muted text-sm mb-8">
-            성공 시 전액 환급 + <span className="text-bg-primary font-bold">팀 성공 +2만원, 우승팀은 러닝화까지</span>
+            <span className="text-bg-primary font-bold">팀 우승 시 전액 환급 + 고급 러닝화까지</span>
           </p>
 
           <div className="text-left space-y-3 mb-8">

@@ -92,7 +92,7 @@ export default function StartingPointsSection() {
           <p className="text-card-ink-muted text-sm leading-relaxed text-center">
             걱정 마. <span className="text-card-ink font-bold">맞춤 프로그램</span>이 나가.<br />
             <span className="text-card-ink-faint text-xs mt-2 block">
-              직전 시즌0도 1km 못 뛰던 사람 → 5K 완주 100% 성공
+              1km 못 뛰던 사람이 21일 매일 뛰기 성공
             </span>
           </p>
         </div>

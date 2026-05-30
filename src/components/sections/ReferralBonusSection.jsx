@@ -54,7 +54,7 @@ export default function ReferralBonusSection({ onCTA }) {
         >
           <span className="block">초대 전형으로 지원하기</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">
-            5/28(목) 24:00 마감 · 추천인 이름 필수
+            5/28(목) 23:59 마감 · 추천인 이름 필수
           </span>
         </Button>
         <p className="text-text-muted text-xs mt-4 text-center font-semibold">

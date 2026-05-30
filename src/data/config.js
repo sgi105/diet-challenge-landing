@@ -3,14 +3,14 @@
 export const COHORT = {
   applyOpenAt: '2026-05-25T18:00:00+09:00',
   startDate: '2026-06-01',
-  deadline: '2026-05-29T00:00:00+09:00', // 5/28(목) 24:00 KST
+  deadline: '2026-05-29T00:00:00+09:00', // UI 표기 "5/28(목) 23:59" — 실제 마감은 5/29 00:00 KST (사용자 1분 여유)
   referralDeadline: '2026-05-29T00:00:00+09:00',
   otDate: '2026-05-31',
   finalDate: '2026-06-21',
   totalSpots: 30,
   filledSpots: 0,
   dDayBenefitExpireAt: '2026-05-27T23:59:59+09:00',
-  // 첫날 신청 보너스: 오픈(2026-05-25 18:00 KST) ~ 2026-05-26 24:00 KST 한정 + 1만원 환급
+  // 첫날 신청 보너스: 오픈(2026-05-25 18:00 KST) ~ 2026-05-26 23:59 KST 한정 + 1만원 환급
   firstDayBonusExpireAt: '2026-05-26T00:00:00+09:00',
   firstDayBonusAmount: 10000,
 };

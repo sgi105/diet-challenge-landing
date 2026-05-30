@@ -5,17 +5,17 @@ import { COHORT } from '../../data/config';
 const SCHEDULE_BY_VARIANT = {
   main: [
     { label: '지원 오픈', value: '5/25(월) 18:00', highlight: false },
-    { label: '지원 마감', value: '5/28(목) 24:00', highlight: true },
+    { label: '지원 마감', value: '5/28(목) 23:59', highlight: true },
     { label: '합격 발표', value: '5/29(금) 12:00', highlight: false },
-    { label: '입금 마감', value: '5/29(금) 24:00', highlight: false },
+    { label: '입금 마감', value: '5/29(금) 23:59', highlight: false },
     { label: '온라인 OT (줌)', value: '5/31(일) 16:00-16:30', highlight: false },
     { label: '챌린지 시작', value: '6/1(월)', highlight: false },
     { label: '5K 파이널', value: '6/21(일)', highlight: true },
   ],
   referral: [
-    { label: '추천인 전형 마감', value: '5/28(목) 24:00', highlight: true },
+    { label: '추천인 전형 마감', value: '5/28(목) 23:59', highlight: true },
     { label: '합격 발표', value: '5/29(금) 12:00', highlight: false },
-    { label: '입금 마감', value: '5/29(금) 24:00', highlight: false },
+    { label: '입금 마감', value: '5/29(금) 23:59', highlight: false },
     { label: '온라인 OT (줌)', value: '5/31(일) 16:00-16:30', highlight: false },
     { label: '챌린지 시작', value: '6/1(월)', highlight: false },
     { label: '5K 파이널', value: '6/21(일)', highlight: true },
@@ -27,7 +27,7 @@ export default function UrgencySection({ variant = 'main' }) {
   const deadline = isReferral ? COHORT.referralDeadline : COHORT.deadline;
   const schedule = SCHEDULE_BY_VARIANT[variant] ?? SCHEDULE_BY_VARIANT.main;
   const headline = isReferral ? '초대 전형 마감 임박' : '마감 임박';
-  const sub = isReferral ? '추천인 전형 한정 · 5/28(목) 24:00 마감' : '30명 한정 · 5/28(목) 24:00 마감';
+  const sub = isReferral ? '추천인 전형 한정 · 5/28(목) 23:59 마감' : '30명 한정 · 5/28(목) 23:59 마감';
   const pill = isReferral ? 'INVITE ONLY' : 'DEADLINE';
   const firstDayBonusActive = new Date() < new Date(COHORT.firstDayBonusExpireAt);
 
@@ -60,7 +60,7 @@ export default function UrgencySection({ variant = 'main' }) {
               첫날 신청 시 환급 <span className="text-accent-orange">+1만원</span>
             </p>
             <p className="text-center text-text-secondary text-sm mb-5">
-              개인 성공 환급 <span className="font-bold text-accent-orange">20만 → 21만</span> · 5/26(화) 24:00 마감
+              개인 성공 환급 <span className="font-bold text-accent-orange">20만 → 21만</span> · 5/26(화) 23:59 마감
             </p>
             <CountdownTimer targetDate={COHORT.firstDayBonusExpireAt} size="md" />
             <p className="text-center text-text-muted text-[11px] mt-4 font-semibold tracking-wide">
