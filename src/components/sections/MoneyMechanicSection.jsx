@@ -39,7 +39,7 @@ export default function MoneyMechanicSection() {
           총 보너스 풀 <span className="text-accent-green">105만원</span>
         </h2>
         <p className="text-text-secondary text-center mb-8">
-          미션 실패한 사람의 보증금이<br />성공한 팀에게 돌아가.
+          4주 챌린지 성공한 팀에게<br />보상이 돌아가.
         </p>
       </AnimateOnScroll>
 
