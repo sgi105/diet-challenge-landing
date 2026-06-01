@@ -11,6 +11,38 @@ export default function PrivacyPage() {
         </p>
 
         <section>
+          <h2 className="text-text-primary font-bold text-base mb-2">사업자 정보</h2>
+          <div className="rounded-xl border border-border overflow-hidden">
+            <dl className="divide-y divide-border text-xs">
+              <div className="grid grid-cols-[100px_1fr] gap-2 px-3 py-2.5">
+                <dt className="text-text-muted">상호</dt>
+                <dd className="text-text-primary">무사 SAMURAI</dd>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-2 px-3 py-2.5">
+                <dt className="text-text-muted">대표</dt>
+                <dd className="text-text-primary">신가인</dd>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-2 px-3 py-2.5">
+                <dt className="text-text-muted">사업자등록번호</dt>
+                <dd className="text-text-primary">593-03-01517</dd>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-2 px-3 py-2.5">
+                <dt className="text-text-muted">주소</dt>
+                <dd className="text-text-primary">서울특별시 광진구 용마산로1길 11-4, 501호 (중곡동)</dd>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-2 px-3 py-2.5">
+                <dt className="text-text-muted">대표전화</dt>
+                <dd className="text-text-primary">010-4240-3121</dd>
+              </div>
+              <div className="grid grid-cols-[100px_1fr] gap-2 px-3 py-2.5">
+                <dt className="text-text-muted">이메일</dt>
+                <dd><a href="mailto:justinshin3610@gmail.com" className="text-accent-green underline">justinshin3610@gmail.com</a></dd>
+              </div>
+            </dl>
+          </div>
+        </section>
+
+        <section>
           <h2 className="text-text-primary font-bold text-base mb-2">1. 수집하는 개인정보 항목</h2>
           <ul className="list-disc pl-5 space-y-1">
             <li>회원 가입·운영: 이름, 이메일, 생년월일/나이, 프로필 사진</li>
