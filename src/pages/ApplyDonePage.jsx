@@ -6,6 +6,9 @@ export default function ApplyDonePage() {
   const location = useLocation();
   const navState = location.state || {};
   const friendAttached = !!navState.friendAttached;
+  const isReferral = !!navState.isReferral;
+  // 트랙 분리: 사전신청자는 6/22 빠른 합격, 정식 지원자는 6/26.
+  const resultDate = isReferral ? '6/22(월)' : '6/26(금)';
   const [linkCopied, setLinkCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -45,10 +48,10 @@ export default function ApplyDonePage() {
             지원 완료!
           </h2>
           <p className="text-card-ink-muted leading-relaxed mb-3">
-            합격 결과는 <span className="text-bg-primary font-bold">5/29(금) 12:00</span> 인스타로 안내돼.
+            합격 결과는 <span className="text-bg-primary font-bold">{resultDate}</span> 인스타로 안내돼.
           </p>
           <p className="text-card-ink-faint text-sm font-semibold">
-            합격 시 5/29(금) 23:59까지 입금해야 선발 확정돼.
+            합격 시 {resultDate}까지 입금해야 선발 확정돼.
           </p>
         </div>
 

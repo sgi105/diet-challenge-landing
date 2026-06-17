@@ -171,7 +171,7 @@ export default function ApplyPage() {
   };
 
   const handleReset = () => {
-    if (!confirm('지금까지 입력한 내용을 모두 지우고 처음부터 다시 시작할까요?')) return;
+    if (!confirm('지금까지 입력한 내용을 모두 지우고 처음부터 다시 시작할까?')) return;
     clearState(STORAGE_KEY);
     setForm(initialForm);
     setStep(0);
@@ -347,7 +347,7 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           placeholder="당신을 초대해 준 멤버 이름"
           value={form.referrerName}
           onChange={v => update('referrerName', v)}
-          hint="추천인 전형 필수 항목이야. 보너스 4종은 추천인 확인 후 지급돼."
+          hint="추천을 통한 사전신청 필수 항목이야. 정식 모집보다 먼저 지원할 수 있어."
           autoComplete="off"
           autoFocus
         />
@@ -395,7 +395,7 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
     case 'runningExp':
       return (
         <RadioStep
-          label="러닝 경력은 어느 정도인가요?"
+          label="러닝 경력은 어느 정도야?"
           options={runningExpOptions}
           value={form.runningExp}
           onChange={v => update('runningExp', v)}
@@ -403,14 +403,28 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
       );
     case 'motivation':
       return (
-        <TextareaStep
-          label="왜 이번 챌린지에 지원하시나요?"
-          placeholder='예: "올해는 진짜 러닝 습관 만들고 싶어요" / "다음 5K 대회 준비하고 싶어요"'
-          value={form.motivation}
-          onChange={v => update('motivation', v)}
-          minLength={10}
-          autoFocus
-        />
+        <div className="flex-1 flex flex-col justify-center">
+          <label className="block text-text-primary text-2xl font-black font-kr mb-3">왜 이번 챌린지에 지원해?</label>
+          <p className="text-text-secondary text-sm leading-relaxed mb-4">
+            내가 왜 꼭 이 챌린지에 참여해야 하는지 알려줘. 이유가 분명하고 열정 있는 사람들과만 함께할거야. <span className="text-accent-orange font-bold">성의 없는 지원서는 선발되지 않을 수 있어.</span>
+          </p>
+          <div className="bg-bg-card rounded-2xl p-4 mb-4 shadow-[0_4px_16px_rgba(0,0,0,0.10)] border-l-4 border-accent-green">
+            <p className="text-card-ink-faint text-[11px] font-extrabold tracking-widest mb-3">✍️ 이렇게 쓰면 좋아</p>
+            <p className="text-card-ink-muted text-[13px] leading-relaxed mb-3">"올해 인생 최대 몸무게를 찍고 나서, 집에 있던 러닝화 신고 무작정 뛰어봤어요. 첫날은 숨이 턱까지 차서 왜 시작했나 싶었는데, 딱 한 번만 더가 두 번, 세 번이 되더니 어느새 러닝이 좋아졌어요. 근데 사는 데가 외져서 늘 혼자라 한계가 오더라고요. 이번엔 팀이랑 같이 끝까지 가보고 싶어 지원해요. 우선 10K를 완주하고, 거기서 멈추지 않고 계속 달리는 사람이 되는 게 목표예요."</p>
+            <p className="text-card-ink-muted text-[13px] leading-relaxed">"작년엔 퇴근하고 매일 한강을 뛰면서 몸도 마음도 건강했어요. 그런데 올해는 바쁘다는 핑계로 러닝화만 모셔두고 있네요. 그때의 저로 돌아가고 싶어 지원합니다. 혼자선 또 흐지부지될 것 같아서 팀이랑 서로 끌어주며 제대로 해보고 싶어요. 이번에 다시 페이스를 찾아서, 올해 안에 하프 마라톤에 도전하는 걸 목표로 잡았어요. 8월엔 발리에 가는데 거기서도 꼭 뛰어보고 싶고요!"</p>
+          </div>
+          <textarea
+            value={form.motivation}
+            onChange={e => update('motivation', e.target.value)}
+            placeholder="여기에 너의 진짜 이유를 솔직하게 써줘."
+            autoFocus
+            rows={6}
+            className="w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-3 text-base text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors resize-none"
+          />
+          <p className={`text-xs mt-2 text-right font-semibold ${form.motivation.trim().length >= 30 ? 'text-accent-green' : 'text-text-muted'}`}>
+            {form.motivation.length} / 최소 30자{form.motivation.trim().length >= 30 ? ' ✓' : ''}
+          </p>
+        </div>
       );
     case 'goals':
       return (
@@ -479,13 +493,13 @@ function IntroStep({ isReferral, totalQuestions }) {
         </h1>
         <p className="text-text-secondary leading-relaxed">
           추천을 통해 먼저 지원해.<br />
-          정식 모집(6/23)보다 한발 먼저.
+          정식 모집보다 한발 먼저.
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
           <li>🎁 <span className="text-card-ink font-bold">먼저 지원</span>: 정식 모집보다 한발 앞서</li>
           <li>📅 사전신청 마감 <span className="text-accent-orange font-bold">6/21(일) 자정</span></li>
-          <li>📨 합격 발표 <span className="text-card-ink font-bold">6/26(금)</span> 인스타</li>
+          <li>📨 합격 발표 <span className="text-card-ink font-bold">6/22(월)</span> 인스타</li>
         </ul>
       </div>
     );
@@ -709,11 +723,18 @@ function ConsentShell({ label, children, checked, onChange, checkboxLabel }) {
 }
 
 function DepositConsentStep({ checked, onChange }) {
-  // 환급 시나리오 — 조건 / 금액(+ 보너스). boost는 시각 위계상 보조로 작게 처리.
-  const refundRows = [
-    { cond: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
-    { cond: '팀 1등', amount: '전액 환급 + 러닝화', tone: 'pos' },
-    { cond: '중도 포기', amount: '0원', tone: 'neg' },
+  // 보증금 흐름 도식 — 입금 → 챌린지 → 환급. 완주 시나리오별 결과는 STEP 3에 통합.
+  const steps = [
+    { icon: '💳', step: 'STEP 1 · 시작 전', title: '보증금 20만원 입금', desc: '합격하면 챌린지 시작 전에 먼저' },
+    { icon: '🏃', step: 'STEP 2 · 21일', title: '팀과 함께 끝까지', desc: '매일 러닝 인증하며 완주' },
+    {
+      icon: '💰', step: 'STEP 3 · 완주 후', title: '보증금 그대로 돌려받기',
+      outcomes: [
+        { mark: '✓', label: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
+        { mark: '🏆', label: '팀 1등', amount: '+ 러닝화', tone: 'pos' },
+        { mark: '✕', label: '중도 포기', amount: '0원', tone: 'neg' },
+      ],
+    },
   ];
 
   return (
@@ -723,22 +744,39 @@ function DepositConsentStep({ checked, onChange }) {
       onChange={onChange}
       checkboxLabel="20만원 보증금 시스템을 이해했어"
     >
-      <p className="mb-4 text-card-ink text-[15px] leading-relaxed">
-        <span className="font-bold">끝까지 완주할 사람만 선발하기 위해</span> 보증금 20만원을 받아요. <span className="font-extrabold text-bg-primary">직전 시즌0 30명 중 30명 전원 21일 완주 성공</span>.
+      <p className="mb-3 text-card-ink text-[15px] leading-relaxed">
+        끝까지 완주할 사람만 거르려는 게 아니야. <span className="font-bold">네가 끝까지 완주할 수 있게</span> 도와줄 강제성을 만들려고 보증금 20만원을 받아. 돈이 걸려 있으면 쉽게 못 포기하거든. 그 강제성이 너를 <span className="font-extrabold text-bg-primary">완주까지, 러닝 습관까지</span> 끌고 가.
+      </p>
+      <p className="mb-5 text-card-ink-faint text-[13px] leading-relaxed">
+        직전 시즌0 30명 중 30명 전원 21일 완주 — 그게 증거야.
       </p>
 
-      <p className="text-card-ink-faint text-[11px] font-bold tracking-widest mb-2">합격 후 20만원 입금 → 환급</p>
-      <div className="rounded-2xl border border-card-border overflow-hidden">
-        {refundRows.map((r, i) => (
-          <div
-            key={i}
-            className={`flex items-center justify-between flex-wrap gap-x-3 gap-y-1 px-4 py-4 ${i > 0 ? 'border-t border-card-border' : ''} ${r.tone === 'neg' ? 'bg-accent-orange/5' : ''}`}
-          >
-            <span className="text-card-ink text-[15px]">{r.cond}</span>
-            <span className="flex items-baseline gap-1.5 ml-auto">
-              <span className={`font-extrabold text-[18px] ${r.tone === 'neg' ? 'text-accent-orange' : 'text-bg-primary'}`}>{r.amount}</span>
-              {r.boost && <span className="text-[12px] font-extrabold text-bg-primary">({r.boost})</span>}
-            </span>
+      {/* 보증금 흐름 도식: 입금 → 챌린지 → 환급(시나리오별) */}
+      <div>
+        {steps.map((s, i, arr) => (
+          <div key={i}>
+            <div className="flex items-start gap-3">
+              <div className="w-11 h-11 rounded-full bg-bg-primary/10 flex items-center justify-center text-xl shrink-0">{s.icon}</div>
+              <div className="min-w-0 flex-1">
+                <p className="text-bg-primary text-[10px] font-extrabold tracking-widest">{s.step}</p>
+                <p className="text-card-ink font-bold text-[15px] leading-tight">{s.title}</p>
+                {s.desc && <p className="text-card-ink-muted text-[12px] mt-0.5">{s.desc}</p>}
+                {s.outcomes && (
+                  <div className="mt-2.5 space-y-2">
+                    {s.outcomes.map((o, j) => (
+                      <div key={j} className="flex items-baseline gap-2">
+                        <span className={`text-[13px] shrink-0 ${o.tone === 'neg' ? 'text-card-ink-faint' : 'text-card-ink'}`}>{o.mark} {o.label}</span>
+                        <span className="flex-1 border-b border-dashed border-card-border/60 translate-y-[-3px]" />
+                        <span className={`font-extrabold text-[13px] shrink-0 ${o.tone === 'neg' ? 'text-accent-orange' : 'text-bg-primary'}`}>{o.amount}</span>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
+            </div>
+            {i < arr.length - 1 && (
+              <div className="ml-[21px] my-1 h-4 border-l-2 border-dashed border-card-border" />
+            )}
           </div>
         ))}
       </div>
@@ -749,6 +787,8 @@ function DepositConsentStep({ checked, onChange }) {
 }
 
 function ScheduleConsentStep({ checked, onChange, isReferral }) {
+  // 트랙 분리: 사전신청자(referral)는 6/22 빠른 합격, 정식 지원자는 6/26.
+  const resultDate = isReferral ? '6/22(월)' : '6/26(금)';
   return (
     <ConsentShell
       label="합격 · 입금 일정"
@@ -760,8 +800,8 @@ function ScheduleConsentStep({ checked, onChange, isReferral }) {
         {isReferral && (
           <li>🟧 <span className="font-semibold">사전신청 마감:</span> <span className="text-accent-orange font-bold">6/21(일) 자정</span></li>
         )}
-        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">6/26(금)</span> 인스타 단톡방 안내</li>
-        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">6/26(금)</span></li>
+        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">{resultDate}</span> 인스타 단톡방 안내</li>
+        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">{resultDate}</span></li>
         <li>⚠️ 마감까지 <span className="text-accent-orange font-bold">미입금 시 자동으로 다음 순번</span>으로 넘어가</li>
         <li>
           🏃 <span className="font-semibold">온라인 OT:</span> 6/28(일)
@@ -778,9 +818,12 @@ function GoalsStep({ goals, goalsOther, onToggle, onOtherChange }) {
   const maxReached = goals.length >= MAX_GOALS;
   return (
     <div className="flex-1 flex flex-col justify-center">
-      <label className="block text-text-primary text-2xl font-black font-kr mb-2">달성하고 싶은 목표</label>
-      <p className="text-text-muted text-sm mb-5">
-        최대 2개 선택 (필수) · 선발 시 팀 매칭과 코칭 방향에 사용돼.
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">진짜 이루고 싶은 목표</label>
+      <p className="text-text-secondary text-sm leading-relaxed mb-1">
+        21일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
+      </p>
+      <p className="text-text-muted text-xs mb-5">
+        선발할 때 팀 매칭이랑 코칭 방향 잡는 데 써.
       </p>
       <div className="space-y-2">
         {GOAL_OPTIONS.map(opt => {
@@ -866,7 +909,7 @@ function validateStep(stepKey, form) {
       return null;
     case 'motivation':
       if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
-      if (form.motivation.trim().length < 10) return '최소 10자 이상 입력해줘.';
+      if (form.motivation.trim().length < 30) return '최소 30자 이상, 진짜 이유를 써줘.';
       return null;
     case 'goals': {
       const goals = form.goals || [];

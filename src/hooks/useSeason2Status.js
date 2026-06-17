@@ -41,7 +41,7 @@ export function applyPathForStatus(status) {
 export const COPY2 = {
   prereg: {
     banner: '🟢 지인 추천 사전신청 받는 중 · 6/21(일) 자정 마감',
-    ctaSub: '정식 모집(6/23)보다 먼저 · 자정 마감',
+    ctaSub: '정식 모집보다 먼저 · 6/21(일) 자정 마감',
     cta: {
       hero: '지인 추천 사전신청하기',
       pricing: '지인 추천 사전신청하기',

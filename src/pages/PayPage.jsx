@@ -95,7 +95,7 @@ export default function PayPage() {
             <p className="text-card-ink font-extrabold text-sm mb-2">📝 입금 시 확인사항</p>
             <ul className="text-card-ink-muted text-[13px] space-y-1.5 leading-relaxed">
               <li>• <span className="font-bold text-card-ink">입금자명 = 본인 실명</span> (지원서 이름과 동일하게)</li>
-              <li>• 입금 마감: <span className="font-bold text-accent-orange">5/30(토) 23:59</span></li>
+              <li>• 입금 마감: <span className="font-bold text-accent-orange">합격 안내 시 받은 입금 마감일까지</span></li>
               <li>• 마감까지 미입금 시 다음 순번으로 자동 이관</li>
               <li>• 영수증 발행 필요시 DM 으로 요청</li>
             </ul>

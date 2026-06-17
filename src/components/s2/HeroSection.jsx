@@ -110,11 +110,12 @@ export default function HeroSection({ onCTA }) {
                 결원 발생 시 <span className="text-text-primary font-extrabold">가장 먼저 연락</span> 줄게.
               </p>
             </div>
-          ) : !isPrereg ? (
-            <div className="my-5 animate-fade-up flex justify-center" style={{ animationDelay: '0.25s' }}>
+          ) : (
+            <div className="my-5 animate-fade-up flex flex-col items-center gap-2" style={{ animationDelay: '0.25s' }}>
+              {isPrereg && <p className="text-accent-green text-[12px] font-extrabold tracking-wide">사전신청 마감 · 6/21(일) 자정</p>}
               <CountdownTimer targetDate={countdownTarget} format="adaptive" size="md" />
             </div>
-          ) : null}
+          )}
 
           {!isClosed && (
             <div className="text-center my-5 animate-fade-up" style={{ animationDelay: '0.27s' }}>

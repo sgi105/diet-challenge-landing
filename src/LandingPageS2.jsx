@@ -3,7 +3,7 @@ import HeroSection from './components/s2/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
 import Season0ResultsSection from './components/sections/Season0ResultsSection';
 import StartingPointsSection from './components/sections/StartingPointsSection';
-import FounderSection from './components/sections/FounderSection';
+import FounderSection from './components/s2/FounderSection';
 import InstagramSection from './components/s2/InstagramSection';
 import SystemSection from './components/s2/SystemSection';
 import MoneyMechanicSection from './components/s2/MoneyMechanicSection';
