@@ -28,6 +28,7 @@ import ApplyPage from './pages/ApplyPage';
 import ApplyDonePage from './pages/ApplyDonePage';
 import PayPage from './pages/PayPage';
 import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
+import LandingPageS2 from './LandingPageS2';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
@@ -117,7 +118,9 @@ function LandingPage({ variant = 'main' }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPage />} />
+      <Route path="/" element={<LandingPageS2 />} />
+      <Route path="/s1" element={<LandingPage />} />
+      <Route path="/s1/referral" element={<LandingPage variant="referral" />} />
       <Route path="/referral" element={<LandingPage variant="referral" />} />
       <Route path="/apply" element={<ApplyPage />} />
       <Route path="/apply/done" element={<ApplyDonePage />} />

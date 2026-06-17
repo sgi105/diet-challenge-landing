@@ -2,11 +2,11 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { submitApplication } from '../lib/applyApi';
-import { useCohortStatus } from '../hooks/useCohortStatus';
+import { useSeason2Status } from '../hooks/useSeason2Status';
 import { GOAL_OPTIONS, MAX_GOALS } from '../data/applicationGoals';
 
-const STORAGE_KEY_MAIN = 'samurai-season1-apply-v1';
-const STORAGE_KEY_REFERRAL = 'samurai-season1-apply-referral-v1';
+const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
+const STORAGE_KEY_REFERRAL = 'samurai-season2-apply-referral-v1';
 
 const initialForm = {
   name: '',
@@ -71,7 +71,7 @@ export default function ApplyPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isReferral = searchParams.get('type') === 'referral';
-  const status = useCohortStatus(isReferral ? 'referral' : 'main');
+  const status = useSeason2Status();
 
   const STORAGE_KEY = isReferral ? STORAGE_KEY_REFERRAL : STORAGE_KEY_MAIN;
   const STEPS = isReferral ? REFERRAL_STEPS : MAIN_STEPS;
@@ -87,7 +87,7 @@ export default function ApplyPage() {
   useEffect(() => {
     if (!isReferral) return;
     const prev = document.title;
-    document.title = '초대 전용 · 시즌 1 추천인 전형 신청';
+    document.title = '지인 추천 사전신청';
     return () => { document.title = prev; };
   }, [isReferral]);
 
@@ -473,38 +473,38 @@ function IntroStep({ isReferral, totalQuestions }) {
   if (isReferral) {
     return (
       <div className="flex-1 flex flex-col justify-center text-center">
-        <span className="pill text-accent-orange block w-fit mx-auto mb-4">REFERRAL · APPLY</span>
+        <span className="pill text-accent-orange block w-fit mx-auto mb-4">PRE-APPLY · 사전신청</span>
         <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
-          초대 전용<br />2분 신청
+          지인 추천<br />사전신청
         </h1>
         <p className="text-text-secondary leading-relaxed">
-          기존 멤버가 초대한 사람만.<br />
-          추천인 이름 입력 시 보너스 4종 지급.
+          추천을 통해 먼저 지원해.<br />
+          정식 모집(6/23)보다 한발 먼저.
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>🎁 <span className="text-card-ink font-bold">보너스</span>: 러닝 폼 분석 · 우선 선발 · 환급 우선순위</li>
-          <li>📅 마감 <span className="text-accent-orange font-bold">5/28(목) 23:59</span></li>
-          <li>📨 합격 발표 <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타</li>
+          <li>🎁 <span className="text-card-ink font-bold">먼저 지원</span>: 정식 모집보다 한발 앞서</li>
+          <li>📅 사전신청 마감 <span className="text-accent-orange font-bold">6/21(일) 자정</span></li>
+          <li>📨 합격 발표 <span className="text-card-ink font-bold">6/26(금)</span> 인스타</li>
         </ul>
       </div>
     );
   }
   return (
     <div className="flex-1 flex flex-col justify-center text-center">
-      <span className="pill text-accent-green block w-fit mx-auto mb-4">SEASON 1 · APPLY</span>
+      <span className="pill text-accent-green block w-fit mx-auto mb-4">21D RUN · APPLY</span>
       <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
         2분이면<br />지원 끝
       </h1>
       <p className="text-text-secondary leading-relaxed">
-        30명 한정 모집.<br />
+        30명 선발 모집.<br />
         모든 항목은 선발과 팀 매칭에 사용돼.
       </p>
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (새로고침 안전)</li>
         <li>🏆 우승팀 시 <span className="text-bg-primary font-bold">20만 환급 + 러닝화</span></li>
-        <li>📨 합격 발표 <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타</li>
+        <li>📨 합격 발표 <span className="text-card-ink font-bold">6/26(금)</span> 인스타</li>
       </ul>
     </div>
   );
@@ -712,8 +712,7 @@ function DepositConsentStep({ checked, onChange }) {
   // 환급 시나리오 — 조건 / 금액(+ 보너스). boost는 시각 위계상 보조로 작게 처리.
   const refundRows = [
     { cond: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
-    { cond: '팀 전원 성공', amount: '전액 환급 +2만원', tone: 'pos' },
-    { cond: '팀 우승', amount: '전액 환급 +러닝화', boost: '15만원 상당', tone: 'pos' },
+    { cond: '팀 1등', amount: '전액 환급 + 러닝화', tone: 'pos' },
     { cond: '중도 포기', amount: '0원', tone: 'neg' },
   ];
 
@@ -744,7 +743,7 @@ function DepositConsentStep({ checked, onChange }) {
         ))}
       </div>
 
-      <p className="mt-4 text-card-ink-faint text-xs whitespace-nowrap">🛡️ 합격 후 OT(5/31) 전까지 마음 바뀌면 전액 환불</p>
+      <p className="mt-4 text-card-ink-faint text-xs whitespace-nowrap">🛡️ 합격 후 OT(6/28) 전까지 마음 바뀌면 전액 환불</p>
     </ConsentShell>
   );
 }
@@ -759,15 +758,15 @@ function ScheduleConsentStep({ checked, onChange, isReferral }) {
     >
       <ul className="space-y-3 text-sm">
         {isReferral && (
-          <li>🟧 <span className="font-semibold">추천인 전형 마감:</span> <span className="text-accent-orange font-bold">5/28(목) 23:59</span></li>
+          <li>🟧 <span className="font-semibold">사전신청 마감:</span> <span className="text-accent-orange font-bold">6/21(일) 자정</span></li>
         )}
-        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">5/29(금) 12:00</span> 인스타 단톡방 안내</li>
-        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">5/29(금) 23:59</span></li>
+        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">6/26(금)</span> 인스타 단톡방 안내</li>
+        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">6/26(금)</span></li>
         <li>⚠️ 마감까지 <span className="text-accent-orange font-bold">미입금 시 자동으로 다음 순번</span>으로 넘어가</li>
         <li>
-          🏃 <span className="font-semibold">온라인 OT:</span> 5/31(일) <span className="text-card-ink font-bold">16:00-16:30</span>
+          🏃 <span className="font-semibold">온라인 OT:</span> 6/28(일)
           <br />
-          🗓️ <span className="font-semibold">챌린지:</span> 6/1(월) ~ 6/21(일)
+          🗓️ <span className="font-semibold">챌린지 시작:</span> 6/29(월)
         </li>
       </ul>
     </ConsentShell>

@@ -13,7 +13,7 @@ const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-export const CURRENT_COHORT_CODE = '260601_team_run';
+export const CURRENT_COHORT_CODE = '260629_team_run';
 
 function combineMotivationWithFriend(motivation, friend) {
   const base = (motivation || '').trim();
