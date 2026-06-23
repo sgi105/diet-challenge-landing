@@ -4,6 +4,7 @@ import CountdownTimer from '../ui/CountdownTimer';
 import { COHORT2 } from '../../data/config2';
 import { useSeason2Status, COPY2 } from '../../hooks/useSeason2Status';
 import { listApplicantsPublic } from '../../lib/applyApi';
+import { spotsInfo } from '../../lib/spots';
 
 const USP = {
   pill: '21D RUN · TEAM',
@@ -50,6 +51,8 @@ export default function HeroSection({ onCTA }) {
     return () => { alive = false; clearInterval(t); };
   }, [acceptingApps]);
 
+  const spots = acceptingApps ? spotsInfo(liveCount) : null;
+
   return (
     <section id="hero" className="relative overflow-hidden">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none bg-accent-green/10" />
@@ -89,6 +92,18 @@ export default function HeroSection({ onCTA }) {
               <span className="pill text-accent-orange">정식 모집 6/23(화) 오픈</span>
             )}
           </div>
+
+          {spots && (
+            <div className="flex justify-center -mt-1 mb-5 animate-fade-up">
+              <span className={`text-[13px] font-extrabold tracking-wide ${spots.low || spots.full ? 'text-accent-orange' : 'text-text-secondary'}`}>
+                {spots.full ? (
+                  <>🔥 정원 30명 마감</>
+                ) : (
+                  <>{spots.low && '🔥 '}정원 30명 중 <span className={spots.low ? 'text-accent-orange' : 'text-accent-green'}>{spots.remaining}자리</span> 남음</>
+                )}
+              </span>
+            </div>
+          )}
 
           <h1
             className="font-kr text-2xl md:text-4xl font-black leading-tight break-keep mb-2 animate-fade-up text-text-primary"

@@ -3,6 +3,7 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 import ApplicantAvatar from '../ui/ApplicantAvatar';
 import { listApplicantsPublic } from '../../lib/applyApi';
 import { COHORT2 } from '../../data/config2';
+import { spotsInfo } from '../../lib/spots';
 
 const RUN_LABELS = {
   full_marathon: '풀마라톤',
@@ -45,6 +46,8 @@ export default function LiveApplicantsSection() {
 
   if (error || !data || !data.count) return null;
 
+  const spots = spotsInfo(data.count);
+
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
@@ -54,9 +57,20 @@ export default function LiveApplicantsSection() {
         <h2 className="font-kr text-3xl md:text-5xl font-black text-center mt-4 mb-3 text-text-primary leading-tight">
           지금<br />지원하는 사람들
         </h2>
-        <p className="text-text-muted text-center text-xs mb-8">
+        <p className="text-text-muted text-center text-xs mb-3">
           선착순 30명 · 같은 조건이면 일찍 지원한 사람 우선
         </p>
+        {spots && (
+          <div className="flex justify-center mb-8">
+            <span className={`text-sm font-extrabold tracking-wide ${spots.low || spots.full ? 'text-accent-orange' : 'text-text-secondary'}`}>
+              {spots.full ? (
+                <>🔥 정원 30명 마감</>
+              ) : (
+                <>{spots.low && '🔥 '}정원 30명 중 <span className={spots.low ? 'text-accent-orange' : 'text-accent-green'}>{spots.remaining}자리</span> 남음</>
+              )}
+            </span>
+          </div>
+        )}
       </AnimateOnScroll>
 
       <AnimateOnScroll>
