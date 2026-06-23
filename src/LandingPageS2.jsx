@@ -10,6 +10,7 @@ import GameSection from './components/s2/GameSection';
 import MoneyMechanicSection from './components/s2/MoneyMechanicSection';
 import TestimonialSection from './components/sections/TestimonialSection';
 import PricingSection from './components/s2/PricingSection';
+import BenefitsSection from './components/s2/BenefitsSection';
 import LiveApplicantsSection from './components/s2/LiveApplicantsSection';
 import UrgencySection from './components/s2/UrgencySection';
 import FAQSection from './components/s2/FAQSection';
@@ -82,6 +83,7 @@ export default function LandingPageS2() {
           </section>
         )}
         <PricingSection onCTA={handleCTA} />
+        {!isClosed && <BenefitsSection />}
         <InstagramSection />
         {!isClosed && <UrgencySection />}
         <FAQSection />

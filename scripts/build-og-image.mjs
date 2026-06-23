@@ -133,8 +133,8 @@ const html = `<!doctype html>
 
     <div class="center">
       <h1>
-        팀과 함께 21일<br/>
-        <span class="accent">진짜 러너</span>가 된다
+        30명 중 30명 전원<br/>
+        <span class="accent">성공한 미친 결과</span>
       </h1>
       <p class="sub">참가비 무료 · 4인 1팀 · 선착순 30명</p>
     </div>

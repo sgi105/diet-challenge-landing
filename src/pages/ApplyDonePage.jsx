@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { track } from '@vercel/analytics';
+import { COHORT2 } from '../data/config2';
 
 export default function ApplyDonePage() {
   const location = useLocation();
@@ -9,6 +10,8 @@ export default function ApplyDonePage() {
   const isReferral = !!navState.isReferral;
   // 트랙 분리: 사전신청자는 6/22 빠른 합격, 정식 지원자는 6/26.
   const resultDate = isReferral ? '6/22(월)' : '6/26(금)';
+  // 식단 가이드는 오늘 자정까지 신청자만 노출
+  const dietGuideActive = new Date() < new Date(COHORT2.formFeedbackBonusExpireAt);
   const [linkCopied, setLinkCopied] = useState(false);
 
   const handleCopy = async () => {
@@ -54,6 +57,27 @@ export default function ApplyDonePage() {
             합격 시 {resultDate}까지 입금해야 선발 확정돼.
           </p>
         </div>
+
+        {dietGuideActive && (
+          <a
+            href="/diet-guide.html"
+            target="_blank"
+            rel="noopener noreferrer"
+            onClick={() => track('apply_done_diet_guide')}
+            className="bg-accent-green rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)] block hover:brightness-105 transition-all"
+          >
+            <span className="inline-block bg-bg-primary/15 text-bg-primary text-[11px] font-extrabold px-3 py-1 rounded-full mb-3">TODAY ONLY · 오늘 자정까지</span>
+            <h3 className="font-kr text-2xl font-black text-bg-primary mb-2 leading-tight">
+              21일 식단 가이드 받기
+            </h3>
+            <p className="text-bg-primary/80 text-sm leading-relaxed mb-4">
+              오늘 신청한 너에게만 — 1.5끼 전략 식단 가이드 (5만원 가치). 21일 동안 -3kg 목표.
+            </p>
+            <span className="block w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl text-center">
+              식단 가이드 PDF 받기 →
+            </span>
+          </a>
+        )}
 
         {/* 2) Friend Bonus 카드 */}
         <div className="bg-bg-card rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)]">

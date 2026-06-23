@@ -15,6 +15,8 @@ export const COHORT2 = {
   otDate: '2026-06-28',       // 온라인 OT 6/28(일)
   startDate: '2026-06-29',    // 챌린지 시작 6/29(월) — 페이지 미노출
   finalDate: '2026-07-19',    // 파이널 레이스 (일요일) — 내부
+  // 오늘(6/23) 자정까지 신청 시 1:1 러닝 폼 무료 피드백 보너스
+  formFeedbackBonusExpireAt: '2026-06-24T00:00:00+09:00',
   totalSpots: 30,
 };
 
