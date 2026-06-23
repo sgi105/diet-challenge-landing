@@ -128,19 +128,19 @@ const html = `<!doctype html>
   <div class="glow"></div>
   <div class="container">
     <div class="top-row">
-      <span class="pill">SEASON [0] · 4WK RUN</span>
+      <span class="pill">21D RUN · TEAM</span>
     </div>
 
     <div class="center">
       <h1>
-        팀과 함께 4주<br/>
+        팀과 함께 21일<br/>
         <span class="accent">진짜 러너</span>가 된다
       </h1>
-      <p class="sub">3인 1팀 · 30명 한정 · 우승팀 최대 40만원</p>
+      <p class="sub">참가비 무료 · 4인 1팀 · 선착순 30명</p>
     </div>
 
     <div class="bottom-row">
-      <span class="bottom-pill lime">🏃 지원 마감 4/27(일) 23:59</span>
+      <span class="bottom-pill lime">🏃 지금 모집 중</span>
       <span class="bottom-pill">challenge.samuraihabits.com</span>
     </div>
   </div>

@@ -59,7 +59,7 @@ export default function ApplyDonePage() {
         <div className="bg-bg-card rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)]">
           <span className="pill text-bg-primary block w-fit mb-3">FRIEND BONUS</span>
           <h3 className="font-kr text-2xl font-black text-card-ink mb-2 leading-tight">
-            같이 지원할 친구가 있나요?
+            같이 지원할 친구 있어?
           </h3>
           <p className="text-card-ink-muted text-sm leading-relaxed mb-5">
             둘이 <span className="text-bg-primary font-bold">같은 팀 배정 보장</span> ✌️
