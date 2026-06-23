@@ -7,6 +7,7 @@ import { useSeason2Status, COPY2 } from '../../hooks/useSeason2Status';
 export default function FinalCTASection({ onCTA }) {
   const status = useSeason2Status();
   const copy = COPY2[status];
+  const isInterlude = status === 'interlude';
   const showCountdown = status !== 'closed';
   const countdownTarget =
     status === 'prereg' ? COHORT2.preRegEnd
@@ -48,7 +49,7 @@ export default function FinalCTASection({ onCTA }) {
           팀이 있을 때 시작해.
         </p>
 
-        <Button onClick={onCTA} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
+        <Button onClick={onCTA} disabled={isInterlude} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
           <span className="block">{copy.cta.final}</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
         </Button>

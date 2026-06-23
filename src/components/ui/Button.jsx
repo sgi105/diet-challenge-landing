@@ -1,5 +1,5 @@
-export default function Button({ children, variant = 'primary', size = 'lg', onClick, className = '' }) {
-  const base = 'font-semibold rounded-xl transition-all duration-300 cursor-pointer';
+export default function Button({ children, variant = 'primary', size = 'lg', onClick, className = '', disabled = false }) {
+  const base = 'font-semibold rounded-xl transition-all duration-300';
 
   const variants = {
     primary: 'bg-accent-green text-bg-primary hover:brightness-110',
@@ -13,8 +13,9 @@ export default function Button({ children, variant = 'primary', size = 'lg', onC
 
   return (
     <button
-      onClick={onClick}
-      className={`${base} ${variants[variant]} ${sizes[size]} ${className}`}
+      onClick={disabled ? undefined : onClick}
+      disabled={disabled}
+      className={`${base} ${variants[variant]} ${sizes[size]} ${disabled ? 'opacity-50 grayscale cursor-not-allowed' : 'cursor-pointer'} ${className}`}
     >
       {children}
     </button>

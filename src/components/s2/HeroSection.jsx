@@ -111,9 +111,9 @@ export default function HeroSection({ onCTA }) {
               </p>
             </div>
           ) : (
-            <div className="my-5 animate-fade-up flex flex-col items-center gap-2" style={{ animationDelay: '0.25s' }}>
-              {isPrereg && <p className="text-accent-green text-[12px] font-extrabold tracking-wide">사전신청 마감 · 6/21(일) 자정</p>}
-              <CountdownTimer targetDate={countdownTarget} format="adaptive" size="md" />
+            <div className="my-5 animate-fade-up flex flex-col items-center gap-3" style={{ animationDelay: '0.25s' }}>
+              <p className="text-text-secondary text-[11px] font-bold tracking-widest">{countdownLabel}</p>
+              <CountdownTimer targetDate={countdownTarget} size="md" />
             </div>
           )}
 
@@ -126,7 +126,7 @@ export default function HeroSection({ onCTA }) {
           )}
 
           <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
-            <Button onClick={onCTA} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
+            <Button onClick={onCTA} disabled={isInterlude} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
               <span className="block">{copy.cta.hero}</span>
               <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
             </Button>
@@ -157,13 +157,6 @@ export default function HeroSection({ onCTA }) {
             {USP.sub1Top}<br />
             <span className="text-text-primary font-bold">{USP.sub1Bottom}</span>
           </p>
-
-          {!isClosed && !isPrereg && (
-            <div className="mt-4 animate-fade-up" style={{ animationDelay: '0.5s' }}>
-              <p className="text-text-secondary text-xs mb-3 font-bold tracking-widest">{countdownLabel}</p>
-              <CountdownTimer targetDate={countdownTarget} size="md" />
-            </div>
-          )}
         </div>
       </div>
     </section>

@@ -6,6 +6,7 @@ import StartingPointsSection from './components/sections/StartingPointsSection';
 import FounderSection from './components/s2/FounderSection';
 import InstagramSection from './components/s2/InstagramSection';
 import SystemSection from './components/s2/SystemSection';
+import GameSection from './components/s2/GameSection';
 import MoneyMechanicSection from './components/s2/MoneyMechanicSection';
 import TestimonialSection from './components/sections/TestimonialSection';
 import PricingSection from './components/s2/PricingSection';
@@ -59,20 +60,17 @@ export default function LandingPageS2() {
         <HeroSection onCTA={handleCTA} />
         <PainPointSection />
         <StartingPointsSection />
+        <FounderSection />
+        <SystemSection />
+        <GameSection />
         <Season0ResultsSection />
+        <TestimonialSection />
+        {acceptingApps && <LiveApplicantsSection />}
         {!isClosed && (
           <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
-            <p className="text-text-secondary text-sm mb-4">
-              혼자선 맨날 실패한 러닝.<br />
-              <span className="text-accent-green font-bold">30명 중 30명 전원 성공한 미친 결과</span>
-            </p>
-            <Button onClick={handleCTA} className="w-full max-w-xs">{copy.cta.hero} →</Button>
+            <Button onClick={handleCTA} disabled={isInterlude} className="w-full max-w-xs">{copy.cta.hero}{!isInterlude && ' →'}</Button>
           </section>
         )}
-        <TestimonialSection />
-        <FounderSection />
-        {acceptingApps && <LiveApplicantsSection />}
-        <SystemSection />
         <MoneyMechanicSection />
         {!isClosed && (
           <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
@@ -80,7 +78,7 @@ export default function LandingPageS2() {
               다 같이 가는 21일.<br />
               <span className="text-accent-green font-bold">팀이 있을 때 시작해</span>
             </p>
-            <Button onClick={handleCTA} className="w-full max-w-xs">{copy.cta.pricing} →</Button>
+            <Button onClick={handleCTA} disabled={isInterlude} className="w-full max-w-xs">{copy.cta.pricing}{!isInterlude && ' →'}</Button>
           </section>
         )}
         <PricingSection onCTA={handleCTA} />

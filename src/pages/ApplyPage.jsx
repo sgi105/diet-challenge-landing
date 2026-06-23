@@ -748,7 +748,7 @@ function DepositConsentStep({ checked, onChange }) {
         끝까지 완주할 사람만 거르려는 게 아니야. <span className="font-bold">네가 끝까지 완주할 수 있게</span> 도와줄 강제성을 만들려고 보증금 20만원을 받아. 돈이 걸려 있으면 쉽게 못 포기하거든. 그 강제성이 너를 <span className="font-extrabold text-bg-primary">완주까지, 러닝 습관까지</span> 끌고 가.
       </p>
       <p className="mb-5 text-card-ink-faint text-[13px] leading-relaxed">
-        직전 시즌0 30명 중 30명 전원 21일 완주 — 그게 증거야.
+        직전 시즌 30명 중 30명 전원 21일 완주 — 그게 증거야.
       </p>
 
       {/* 보증금 흐름 도식: 입금 → 챌린지 → 환급(시나리오별) */}

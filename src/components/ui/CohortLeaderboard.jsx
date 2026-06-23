@@ -8,7 +8,7 @@ export default function CohortLeaderboard() {
     <div className="bg-bg-card rounded-2xl p-5 shadow-[0_8px_24px_rgba(0,0,0,0.12)]">
       <div className="flex items-baseline justify-between mb-3">
         <p className="text-card-ink-faint text-[11px] font-bold tracking-wider">
-          30명 전원 인증 중 (시즌0 · 21일 러닝)
+          30명 전원 인증 중 (직전 시즌 · 21일 러닝)
         </p>
         <p className="text-card-ink-faint text-[10px] font-semibold">
           누적 -{cohort.stats.totalLossKg}kg

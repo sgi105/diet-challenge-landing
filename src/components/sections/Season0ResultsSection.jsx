@@ -15,7 +15,7 @@ export default function Season0ResultsSection() {
           <span className="text-accent-green">우리는 30명 데이터를 공개한다</span>
         </h2>
         <p className="text-text-secondary text-center mb-8 text-sm break-keep">
-          2026-05-04 ~ 05-24 · 시즌0 21일<br />
+          2026-05-04 ~ 05-24 · 직전 시즌 21일<br />
           30명 · 91% 출석률
         </p>
       </AnimateOnScroll>
