@@ -36,10 +36,11 @@ export default function MoneyMechanicSection() {
       <AnimateOnScroll>
         <span className="pill text-accent-green block w-fit mx-auto">REWARD</span>
         <h2 className="font-kr text-3xl md:text-5xl font-black text-center mt-4 mb-3 text-text-primary leading-tight">
-          성공하면<br /><span className="text-accent-green">다 돌아와</span>
+          성공하면 <span className="text-accent-green">무료</span>
         </h2>
-        <p className="text-text-secondary text-center mb-8">
-          21일 끝까지 간 사람에게<br />보증금도, 우승 상품도 돌아가.
+        <p className="text-center mb-8 leading-tight">
+          <span className="text-text-secondary font-bold text-xl md:text-2xl">성공률? </span>
+          <span className="text-accent-green font-black text-3xl md:text-4xl">95%</span>
         </p>
       </AnimateOnScroll>
 
