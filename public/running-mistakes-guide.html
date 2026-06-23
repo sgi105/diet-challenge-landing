@@ -1,0 +1,230 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>모르면 다치고 손해보는 런닌이 실수 7가지</title>
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#1e3cff; --lime:#c8ff4d; --ink:#0f172a; --muted:#64748b;
+    --card:#f1f5ff; --line:#e2e8f0; --orange:#f97316;
+    --red:#dc2626; --amber:#c2410c;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Pretendard Variable","Pretendard",-apple-system,sans-serif;
+    color:var(--ink); background:#dbe3ff; line-height:1.6;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .toolbar{
+    position:sticky; top:0; z-index:10; background:var(--blue); color:#fff;
+    display:flex; align-items:center; justify-content:space-between;
+    padding:12px 20px; font-weight:700;
+  }
+  .toolbar button{
+    background:var(--lime); color:var(--blue); border:none; border-radius:10px;
+    padding:10px 18px; font-weight:800; font-size:15px; cursor:pointer; font-family:inherit;
+  }
+  .page{
+    width:210mm; min-height:297mm; margin:20px auto; background:#fff;
+    padding:22mm 18mm; box-shadow:0 10px 40px rgba(0,0,0,.15);
+    display:flex; flex-direction:column;
+  }
+  .page + .page{ margin-top:24px; }
+  .page-body{ flex:1; }
+
+  .hero{ background:var(--blue); color:#fff; border-radius:20px; padding:34px 32px; }
+  .hero .pill{ display:inline-block; border:2px solid var(--lime); color:var(--lime); border-radius:999px; padding:6px 16px; font-size:13px; font-weight:800; letter-spacing:.12em; margin-bottom:16px; }
+  .hero h1{ font-size:38px; font-weight:900; line-height:1.15; letter-spacing:-.03em; }
+  .hero h1 .ac{ color:var(--lime); }
+  .hero p{ margin-top:14px; font-size:16px; color:rgba(255,255,255,.85); }
+
+  .intro{ background:var(--card); border-radius:16px; padding:20px 22px; margin-top:18px; font-size:15px; }
+  .intro b{ color:var(--blue); }
+  .legend{ display:flex; gap:14px; margin-top:16px; flex-wrap:wrap; }
+  .legend .lg{ display:inline-flex; align-items:center; gap:7px; font-size:13.5px; font-weight:700; color:var(--muted); }
+  .sev{ display:inline-flex; align-items:center; gap:5px; font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:999px; white-space:nowrap; }
+  .sev.red{ background:#fef2f2; color:var(--red); }
+  .sev.amber{ background:#fff7ed; color:var(--amber); }
+
+  .mistake{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:18px 20px; margin-bottom:13px; box-shadow:0 4px 16px rgba(15,23,42,.05); }
+  .m-head{ display:flex; align-items:center; gap:11px; margin-bottom:13px; }
+  .m-num{ flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:30px; height:30px; background:var(--blue); color:#fff; border-radius:9px; font-size:16px; font-weight:900; }
+  .m-title{ font-size:18px; font-weight:900; letter-spacing:-.02em; }
+  .m-head .sev{ margin-left:auto; }
+  .m-row{ display:flex; gap:9px; font-size:14px; margin-bottom:7px; line-height:1.5; }
+  .m-row:last-child{ margin-bottom:0; }
+  .m-row .ic{ flex-shrink:0; width:18px; text-align:center; }
+  .m-row .tx b{ font-weight:800; }
+  .m-row.no .tx b{ color:var(--red); }
+  .m-row.why .tx b{ color:var(--amber); }
+  .m-row.do .tx b{ color:#16a34a; }
+  .m-row.chk{ color:var(--muted); font-size:13.5px; }
+  .m-link{ display:inline-block; margin-top:3px; background:var(--blue); color:#fff; text-decoration:none; font-size:13px; font-weight:800; padding:6px 13px; border-radius:9px; }
+
+  .src{ margin-top:9px; font-size:12.5px; color:var(--muted); font-weight:700; }
+  .src b{ color:var(--ink); }
+  .selfnote{ background:#eef4ff; border-left:4px solid var(--blue); border-radius:8px; padding:11px 14px; font-size:13.5px; margin-top:11px; color:#334155; }
+
+  .breath{ display:grid; grid-template-columns:auto 1fr; gap:7px 12px; margin:9px 0 4px; }
+  .breath .lv{ font-size:13px; font-weight:800; white-space:nowrap; }
+  .breath .ds{ font-size:13.5px; }
+  .breath .g{ color:#16a34a; } .breath .y{ color:var(--amber); } .breath .r{ color:var(--red); }
+
+  .check{ background:var(--blue); color:#fff; border-radius:18px; padding:26px 28px; }
+  .check h3{ font-size:20px; font-weight:900; margin-bottom:4px; }
+  .check .sub{ font-size:13.5px; color:rgba(255,255,255,.75); margin-bottom:18px; }
+  .check ul{ list-style:none; }
+  .check li{ font-size:15px; font-weight:600; padding:11px 0; border-bottom:1px solid rgba(255,255,255,.13); display:flex; gap:11px; align-items:flex-start; }
+  .check li:last-child{ border-bottom:none; }
+  .check li .bx{ flex-shrink:0; width:20px; height:20px; border:2px solid var(--lime); border-radius:5px; margin-top:1px; }
+
+  .closer{ text-align:center; margin-top:26px; }
+  .closer .big{ font-size:26px; font-weight:900; letter-spacing:-.02em; }
+  .closer .big .ac{ color:var(--blue); }
+  .closer p{ color:var(--muted); margin-top:8px; font-size:14.5px; }
+
+  .footer{ margin-top:24px; padding-top:16px; border-top:2px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; }
+
+  @media print{
+    body{ background:#fff; }
+    .toolbar{ display:none; }
+    .page{ width:auto; min-height:auto; height:auto; margin:0; box-shadow:none; padding:12mm 14mm; page-break-after:always; }
+    .page:last-child{ page-break-after:auto; }
+    .footer{ margin-top:14px; padding-top:10px; }
+    .mistake{ margin-bottom:11px; }
+    .mistake, .intro, .check, .hero, .breath{ break-inside:avoid; page-break-inside:avoid; }
+  }
+  @page{ size:A4; margin:0; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <span>🏃 초보 러너 실수 7가지 가이드</span>
+  <button onclick="window.print()">📄 PDF로 저장 / 인쇄</button>
+</div>
+
+<!-- PAGE 1 — 표지 + 인트로 -->
+<div class="page">
+  <div class="page-body">
+    <div class="hero">
+      <span class="pill">TARZAN RUN CLUB · RUNNING GUIDE</span>
+      <h1>모르면 다치고 손해보는<br/><span class="ac">런닌이 실수 7가지</span></h1>
+      <p>260명 코칭하면서 본, 진짜 자주 하는 실수들.<br/>이것만 피해도 — 부상 없이 · 덜 힘들게 · 더 오래 뛴다.</p>
+    </div>
+
+    <div class="intro">
+      나도 처음엔 이 7가지 다 했고, <b>부상도 5번이나 당해서 계속 뛰고 못 뛰고를 반복했어.</b> 근데 이것들 하나씩 고치고 나서 <b>200일 동안 매일 뛰어도 한 번도 안 다쳤어.</b> 5km도 버거워하고 7분대 페이스로 뛰던 내가, 지금은 <b>100km 울트라 마라톤까지 완주</b>하고 <b>4'30'' 페이스도 어렵지 않게</b> 뛴다. 거창한 게 아니라, 알면 바로 고치는 것들이야. 순서대로 따라 읽어봐 — 신발 신고 나가서 다음 거리 계획까지, 러닝 한 번의 흐름 그대로 정리했어.
+    </div>
+
+    <div class="legend">
+      <span class="lg"><span class="sev red">🔴 부상 직결</span> 안 고치면 다친다</span>
+      <span class="lg"><span class="sev amber">🟡 효율·습관</span> 덜 힘들게 더 오래</span>
+    </div>
+  </div>
+  <div class="footer"><span>런닌이 실수 7가지 · 타잔 런 클럽</span><span>1 / 4</span></div>
+</div>
+
+<!-- PAGE 2 — 실수 1,2,3 -->
+<div class="page">
+  <div class="page-body">
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">1</span><span class="m-title">러닝화 아닌 신발 신고 뛰기</span><span class="sev red">🔴 부상 직결</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — 일반 운동화·헬스화·단화로 그냥 뛴다. 또는 멋있어 보여서 카본화부터 산다.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 쿠셔닝 없는 신발은 충격이 관절로 그대로 간다. 카본화는 반발력이 너무 높아서, 발목 힘 안 길러진 초보가 신으면 부상 직행.</span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — 쿠셔닝 좋은 <b>입문용 러닝화</b>부터. 카본화는 발목 힘 충분히 길러진 뒤에 가도 안 늦어.</span></div>
+      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">밑창 눌러봐서 푹신한 쿠션감 있는지. 얇고 딱딱하면 러닝용 아님.</span></div>
+    </div>
+
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">2</span><span class="m-title">워밍업·스트레칭 안 하기</span><span class="sev red">🔴 부상 직결</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — 나가자마자 바로 질주, 끝나면 바로 멈춤.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 굳은 근육·관절로 뛰면 첫 1km에서 종아리·아킬레스·무릎부터 나간다. 부상은 선택이 아니라 필연이 돼.</span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — 전후로 <b>3분씩</b>만 투자. 뛰기 전 동적 스트레칭, 후엔 정적 스트레칭.</span></div>
+      <a class="m-link" href="https://important-frost-1dc.notion.site/5km-34cd4d6e0e6d80c48f74cd1400b32ed5?pvs=74" target="_blank">▶ 전용 워밍업·스트레칭 루틴 보기</a>
+      <div class="m-row chk" style="margin-top:9px;"><span class="ic">🔍</span><span class="tx">첫 1km는 일부러 더 천천히. 몸 데워진 느낌 들면 그때 페이스 올려.</span></div>
+      <div class="selfnote">💬 나도 이거 무시하다 부상 정말 많이 당했어. 워밍업 습관 들이고 나선 200일 내내 한 번도 안 다쳤다.</div>
+    </div>
+
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">3</span><span class="m-title">너무 빨리 뛰기</span><span class="sev amber">🟡 효율·습관</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — "러닝은 원래 숨차게 뛰는 것"이라 여기고, 처음부터 헐떡이며 뛴다. 전력 질주가 아니어도 대부분 자기 생각보다 훨씬 빠르게 뛰고 있다.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 너무 빠르면 매번 무산소 영역으로 들어가 금방 지치고, "러닝은 역시 힘들다"는 기억만 남아 포기하게 된다. 게다가 무리한 강도가 쌓이면 <b>부상 위험까지 올라간다.</b></span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — <b>네가 생각하는 것보다 훨씬 천천히</b> 뛰어라. 기준은 옆 사람과 <b>문장 전체를 여유롭게 말할 수 있는 페이스</b>(존2). 초보는 8분 페이스보다 느려도 정상. 천천히 쌓이면 7분 → 6분 → 5분대까지 자연히 올라간다.</span></div>
+      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">뛰면서 한 문장 혼잣말 해봐. 헐떡여서 끝까지 못 하면 너무 빠른 거야 — 더 늦춰.</span></div>
+    </div>
+  </div>
+  <div class="footer"><span>런닌이 실수 7가지 · 타잔 런 클럽</span><span>2 / 4</span></div>
+</div>
+
+<!-- PAGE 3 — 실수 4,5,6 -->
+<div class="page">
+  <div class="page-body">
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">4</span><span class="m-title">노이즈 캔슬링 이어폰 끼고 뛰기</span><span class="sev amber">🟡 효율·습관</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — 노캔 켜고 음악에 파묻혀서 뛴다.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 내 발 착지 소리가 안 들려서, 사뿐히 딛는지 쾅쾅 충격 주는지 알 수가 없다. 폼 망가지는 걸 못 잡아.</span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — 발걸음 소리가 들릴 정도로 볼륨 유지(또는 한쪽만). 소리 들으면서 가볍게 굴러가게.</span></div>
+      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">"착착" 가벼운 소리면 굿 / "쿵쿵" 무거운 소리면 다음 5번으로.</span></div>
+    </div>
+
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">5</span><span class="m-title">발을 몸 앞에 쾅 내딛기 (오버스트라이드)</span><span class="sev red">🔴 부상 직결</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — 빨리 가려고 보폭을 크게, 발을 <b>몸보다 한참 앞에</b> 내딛는다.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 발이 몸 앞에 떨어지면 매 걸음 <b>브레이크 충격</b>이 무릎·정강이로 직격. 정강이통(신스플린트)·무릎 통증 부상 1순위 원인.</span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — 발은 <b>몸 바로 아래</b>에 착지. 보폭은 줄이고 발걸음은 빠르고 가볍게(분당 170~180걸음 느낌). 멀리 뻗지 말고 짧게 굴려.</span></div>
+      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">착지 소리가 "쿵"이면 발이 앞에 떨어지는 중. "착"으로 가벼워질 때까지 보폭 줄이기. (4번 노캔이랑 연결돼)</span></div>
+    </div>
+
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">6</span><span class="m-title">입으로 헐떡이며 숨 쉬기</span><span class="sev amber">🟡 효율·습관</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — 입으로만, 그것도 짧고 빠르게 헐떡인다.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 코로만 쉬어도 <b>산소 효율이 10~20% 오른다.</b> 입으로 들이쉬면 콧속에서 나오는 <b>일산화질소(NO)</b>를 통째로 건너뛰는데, 이 NO가 폐 혈관을 넓혀 산소가 혈액으로 넘어가는 효율을 끌어올린다. 숨을 더 많이 마셔서가 아니라, 같은 공기로 몸이 더 잘 굴러가는 원리.</span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — <b>코 호흡을 기본으로.</b> 리듬은 두 걸음 들이쉬고(흡흡) / 두 걸음 내쉬고(후후). 강도가 오르면 자연스럽게 입을 섞는다:</span></div>
+      <div class="breath">
+        <span class="lv g">🟢 ~80% 조깅</span><span class="ds">코로 흡흡 → 코로 후후 <b>(기본)</b></span>
+        <span class="lv y">🟡 80~90%</span><span class="ds">코로 들이쉬고 → 입으로 내쉬기</span>
+        <span class="lv r">🔴 100% 전력</span><span class="ds">입으로 흡흡·후후</span>
+      </div>
+      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">조깅에선 100%까지 갈 일 거의 없어. 뛰는 내내 한 번씩 의식: "지금 코로 쉬고 있나?"</span></div>
+      <div class="src">📚 근거 · <b>《Oxygen Advantage》</b> (Patrick McKeown)</div>
+    </div>
+  </div>
+  <div class="footer"><span>런닌이 실수 7가지 · 타잔 런 클럽</span><span>3 / 4</span></div>
+</div>
+
+<!-- PAGE 4 — 실수 7 + 체크리스트 -->
+<div class="page">
+  <div class="page-body">
+    <div class="mistake">
+      <div class="m-head"><span class="m-num">7</span><span class="m-title">급격하게 거리 늘리기</span><span class="sev red">🔴 부상 직결</span></div>
+      <div class="m-row no"><span class="ic">❌</span><span class="tx"><b>실수</b> — 체력 좀 붙었다고 거리를 확 늘린다.</span></div>
+      <div class="m-row why"><span class="ic">⚠️</span><span class="tx"><b>왜 문제냐</b> — 심장·폐는 버텨도 <b>건·인대·뼈는 적응 속도가 느려서</b> 못 버틴다. 무리한 거리 점프가 부상으로 직결.</span></div>
+      <div class="m-row do"><span class="ic">✅</span><span class="tx"><b>이렇게 해라</b> — <b>한 번에 10%씩만.</b> 지난번 5km였으면 이번 6km, 다음 7km. 이렇게 천천히.</span></div>
+      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">이번 주 총 거리가 지난주보다 10% 넘게 늘었으면 페이스 조절.</span></div>
+    </div>
+
+    <div class="check">
+      <h3>✅ 오늘부터 체크리스트</h3>
+      <div class="sub">캡쳐해서 뛰기 전에 한 번씩 보자</div>
+      <ul>
+        <li><span class="bx"></span><span>쿠셔닝 러닝화인가 (카본화 ✗)</span></li>
+        <li><span class="bx"></span><span>뛰기 전·후 워밍업 / 스트레칭 3분씩 했나</span></li>
+        <li><span class="bx"></span><span>옆 사람과 한 문장 말할 수 있는 페이스인가</span></li>
+        <li><span class="bx"></span><span>내 발 착지 소리가 들리나 (사뿐히 "착")</span></li>
+        <li><span class="bx"></span><span>발이 몸 아래 떨어지나 (짧고 빠른 발걸음)</span></li>
+        <li><span class="bx"></span><span>코 호흡을 기본으로 하고 있나 (흡흡 / 후후)</span></li>
+        <li><span class="bx"></span><span>이번 거리, 지난번보다 10% 이내로만 늘렸나</span></li>
+      </ul>
+    </div>
+
+    <div class="closer">
+      <div class="big">이제 <span class="ac">제대로</span> 뛰자.</div>
+      <p>혼자선 맨날 실패한 러닝, 타잔 런 클럽에선 다르다.</p>
+    </div>
+  </div>
+  <div class="footer"><span>런닌이 실수 7가지 · 타잔 런 클럽</span><span>4 / 4</span></div>
+</div>
+</body>
+</html>

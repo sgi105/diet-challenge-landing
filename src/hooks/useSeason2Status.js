@@ -63,7 +63,7 @@ export const COPY2 = {
   },
   official: {
     banner: '🔴 정식 모집 중 · 6/25(목) 마감 · 선착순 30명',
-    ctaSub: '6/25(목) 23:59 마감 · 2분 소요',
+    ctaSub: '6/25(목) 23:59 마감',
     cta: {
       hero: '지금 신청하기',
       pricing: '지금 신청하기',
