@@ -1,17 +1,17 @@
 import { useEffect, useState } from 'react';
-import { listApplicantsPublic } from '../lib/applyApi';
+import { countApplicantsPublic, getCachedCount } from '../lib/applyApi';
 import { COHORT2 } from '../data/config2';
 
-// 코호트 신청자수 폴링(60초). enabled=false면 호출 안 함. 미정이면 null.
+// 코호트 신청자수 폴링(60초). 캐시값으로 즉시 시작 후 백그라운드 갱신. enabled=false면 호출 안 함.
 export function useApplicantCount(enabled = true) {
-  const [count, setCount] = useState(null);
+  const [count, setCount] = useState(getCachedCount);
   useEffect(() => {
     if (!enabled) return;
     let alive = true;
     async function load() {
       try {
-        const json = await listApplicantsPublic(COHORT2.cohortCode);
-        if (alive) setCount(json?.count ?? null);
+        const n = await countApplicantsPublic(COHORT2.cohortCode);
+        if (alive) setCount(n);
       } catch { /* ignore */ }
     }
     load();

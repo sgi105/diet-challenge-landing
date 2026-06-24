@@ -19,6 +19,8 @@ import StickyCTA from './components/s2/StickyCTA';
 import Footer from './components/layout/Footer';
 import Button from './components/ui/Button';
 import { useSeason2Status, COPY2, applyPathForStatus } from './hooks/useSeason2Status';
+import { useApplicantCount } from './hooks/useApplicantCount';
+import { spotsInfo } from './lib/spots';
 
 // 시즌2 (260629_team_run) 모집 랜딩 — 3단계 시기별 운영.
 // 시기별로 바뀌는 건 상단 배너 / CTA 문구 / 마감 카운트다운뿐. 본문은 그대로.
@@ -29,6 +31,12 @@ export default function LandingPageS2() {
   const isInterlude = status === 'interlude';
   const acceptingApps = status === 'prereg' || status === 'official';
   const copy = COPY2[status];
+  const count = useApplicantCount(status === 'official');
+  const spots = status === 'official' ? spotsInfo(count) : null;
+  // 배너 "선착순 30명" → 동적 "N자리 남음"(임박이면 🔥)
+  const bannerText = (spots && !spots.full)
+    ? copy.banner.replace('선착순 30명', `${spots.low ? '🔥 ' : ''}${spots.remaining}자리 남음`)
+    : copy.banner;
 
   const handleCTA = () => {
     // 막간 단계는 신청을 받지 않음 — 히어로(카운트다운)로 스크롤만.
@@ -55,7 +63,7 @@ export default function LandingPageS2() {
         onClick={scrollToCTA}
         className={`fixed top-0 left-0 right-0 z-50 ${bannerTone} text-center text-[11px] sm:text-sm font-extrabold py-2.5 px-3 block hover:brightness-105 transition-all tracking-tight leading-tight font-kr whitespace-nowrap overflow-hidden text-ellipsis`}
       >
-        {copy.banner}
+        {bannerText}
       </a>
       <div className="pt-12">
         <HeroSection onCTA={handleCTA} />

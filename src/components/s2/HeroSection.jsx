@@ -3,8 +3,8 @@ import Button from '../ui/Button';
 import CountdownTimer from '../ui/CountdownTimer';
 import { COHORT2 } from '../../data/config2';
 import { useSeason2Status, COPY2 } from '../../hooks/useSeason2Status';
-import { listApplicantsPublic } from '../../lib/applyApi';
-import { previewCount, spotsInfo } from '../../lib/spots';
+import { countApplicantsPublic, getCachedCount } from '../../lib/applyApi';
+import { previewCount } from '../../lib/spots';
 import SpotsBadge from './SpotsBadge';
 
 const USP = {
@@ -37,14 +37,14 @@ export default function HeroSection({ onCTA }) {
 
   // 지원을 받는 단계(사전신청/정식)에서만 실시간 지원자수 노출
   const acceptingApps = isPrereg || isOfficial;
-  const [liveCount, setLiveCount] = useState(null);
+  const [liveCount, setLiveCount] = useState(getCachedCount);
   useEffect(() => {
     if (!acceptingApps) return;
     let alive = true;
     async function load() {
       try {
-        const json = await listApplicantsPublic(COHORT2.cohortCode);
-        if (alive) setLiveCount(json?.count ?? null);
+        const n = await countApplicantsPublic(COHORT2.cohortCode);
+        if (alive) setLiveCount(n);
       } catch { /* ignore */ }
     }
     load();
@@ -53,8 +53,6 @@ export default function HeroSection({ onCTA }) {
   }, [acceptingApps]);
 
   const displayCount = previewCount(liveCount); // 배지 "N명 지원 중"도 ?spots 미리보기 반영
-  const spots = isOfficial ? spotsInfo(liveCount) : null;
-  const spotsUrgent = !!spots && (spots.low || spots.full); // 5자리 이하/마감이면 지원중 배지 대신 게이지
 
   return (
     <section id="hero" className="relative overflow-hidden">
@@ -73,14 +71,10 @@ export default function HeroSection({ onCTA }) {
 
           <div className="flex justify-center mb-5 animate-fade-up">
             {isOfficial ? (
-              spotsUrgent ? (
-                <SpotsBadge count={liveCount} />
-              ) : (
-                <span className="inline-flex items-center gap-2 border-2 border-accent-green/90 bg-accent-green/10 text-text-primary py-1.5 px-4 rounded-full text-[12px] font-extrabold tracking-wide">
-                  <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse shadow-[0_0_12px_var(--color-accent-green)]"></span>
-                  <span>{displayCount != null ? `${displayCount}명 지원 중 · 선착순 30명` : '정식 모집 중 · 선착순 30명'}</span>
-                </span>
-              )
+              <span className="inline-flex items-center gap-2 border-2 border-accent-green/90 bg-accent-green/10 text-text-primary py-1.5 px-4 rounded-full text-[12px] font-extrabold tracking-wide">
+                <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse shadow-[0_0_12px_var(--color-accent-green)]"></span>
+                <span>{displayCount != null ? `${displayCount}명 지원 중 · 선착순 30명` : '정식 모집 중 · 선착순 30명'}</span>
+              </span>
             ) : isClosed ? (
               <div className="inline-block transform -rotate-2 border-[3px] border-dashed border-accent-orange rounded-2xl bg-accent-orange/10 px-6 py-3">
                 <div className="font-display text-[26px] leading-none tracking-[0.08em] text-accent-orange text-center">
@@ -136,6 +130,7 @@ export default function HeroSection({ onCTA }) {
           )}
 
           <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
+            {isOfficial && <SpotsBadge count={liveCount} className="mb-4" />}
             <Button onClick={onCTA} disabled={isInterlude} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
               <span className="block">{copy.cta.hero}</span>
               <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>

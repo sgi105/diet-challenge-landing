@@ -18,19 +18,20 @@ export default function SpotsBadge({ count, className = '' }) {
     );
   }
   if (spots.low) {
-    const pct = Math.round((spots.filled / TOTAL_SPOTS) * 100);
     return wrap(
-      <div className="w-[280px]">
-        <div className="flex justify-between items-center mb-2">
-          <span className="text-accent-orange text-[13px] font-extrabold tracking-wide">🔥 마감 임박</span>
-          <span className="text-text-primary text-[13px] font-extrabold">{spots.filled} / {TOTAL_SPOTS}</span>
+      <div className="w-[290px] max-w-full">
+        <div className="flex justify-between items-baseline mb-2.5">
+          <span className="text-accent-orange text-[13px] font-extrabold tracking-wide animate-pulse">🔥 마감 임박</span>
+          <span className="text-text-primary text-[13px] font-extrabold">
+            딱 <span className="text-accent-green text-[19px] font-black">{spots.remaining}자리</span> 남음
+          </span>
         </div>
-        <div className="h-2.5 bg-white/15 rounded-full overflow-hidden">
-          <div className="h-full rounded-full bg-gradient-to-r from-accent-orange/80 to-accent-orange" style={{ width: `${pct}%` }} />
+        <div className="flex gap-[3px]">
+          {Array.from({ length: TOTAL_SPOTS }, (_, i) => (
+            <div key={i} className={`flex-1 h-4 rounded-[3px] ${i < spots.filled ? 'bg-accent-orange' : 'bg-white/15'}`} />
+          ))}
         </div>
-        <p className="text-[12.5px] text-text-secondary mt-2 text-center font-semibold">
-          딱 <b className="text-accent-green">{spots.remaining}자리</b> 남았어
-        </p>
+        <p className="text-white/55 text-[11.5px] font-semibold mt-2.5">30명 중 {spots.filled}명 신청 완료</p>
       </div>
     );
   }

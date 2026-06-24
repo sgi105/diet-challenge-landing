@@ -15,6 +15,24 @@ const supabase = createClient(
 
 export const CURRENT_COHORT_CODE = '260629_team_run';
 
+// 신청자수 캐시 — 재방문/새로고침 시 게이지를 즉시 렌더(stale-while-revalidate). fetch 끝나면 갱신.
+const COUNT_CACHE_KEY = 'ttr_count_260629';
+export function getCachedCount() {
+  try { const v = localStorage.getItem(COUNT_CACHE_KEY); return v != null && v !== '' ? Number(v) : null; } catch { return null; }
+}
+function cacheCount(n) {
+  try { if (n != null) localStorage.setItem(COUNT_CACHE_KEY, String(n)); } catch { /* ignore */ }
+}
+
+// count만 필요한 곳(Hero/Urgency)용 경량 호출 — 목록(list) RPC를 안 기다려서 빠름.
+export async function countApplicantsPublic(cohortCode = CURRENT_COHORT_CODE) {
+  const { data, error } = await supabase.rpc('count_applicants_public', { p_cohort: cohortCode });
+  if (error) throw new Error(`지원자 수 조회 실패: ${error.message}`);
+  const n = Number(data) || 0;
+  cacheCount(n);
+  return n;
+}
+
 function combineMotivationWithFriend(motivation, friend) {
   const base = (motivation || '').trim();
   const f = (friend || '').trim();
@@ -79,8 +97,10 @@ export async function listApplicantsPublic(cohortCode = CURRENT_COHORT_CODE) {
   ]);
   if (rowsRes.error) throw new Error(`지원자 조회 실패: ${rowsRes.error.message}`);
   if (countRes.error) throw new Error(`지원자 수 조회 실패: ${countRes.error.message}`);
+  const count = Number(countRes.data) || 0;
+  cacheCount(count);
   return {
     recent: Array.isArray(rowsRes.data) ? rowsRes.data : [],
-    count: Number(countRes.data) || 0,
+    count,
   };
 }
