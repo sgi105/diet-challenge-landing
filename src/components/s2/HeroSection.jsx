@@ -4,7 +4,8 @@ import CountdownTimer from '../ui/CountdownTimer';
 import { COHORT2 } from '../../data/config2';
 import { useSeason2Status, COPY2 } from '../../hooks/useSeason2Status';
 import { listApplicantsPublic } from '../../lib/applyApi';
-import { spotsInfo } from '../../lib/spots';
+import { previewCount, spotsInfo } from '../../lib/spots';
+import SpotsBadge from './SpotsBadge';
 
 const USP = {
   pill: '21D RUN · TEAM',
@@ -51,7 +52,9 @@ export default function HeroSection({ onCTA }) {
     return () => { alive = false; clearInterval(t); };
   }, [acceptingApps]);
 
-  const spots = acceptingApps ? spotsInfo(liveCount) : null;
+  const displayCount = previewCount(liveCount); // 배지 "N명 지원 중"도 ?spots 미리보기 반영
+  const spots = isOfficial ? spotsInfo(liveCount) : null;
+  const spotsUrgent = !!spots && (spots.low || spots.full); // 5자리 이하/마감이면 지원중 배지 대신 게이지
 
   return (
     <section id="hero" className="relative overflow-hidden">
@@ -70,10 +73,14 @@ export default function HeroSection({ onCTA }) {
 
           <div className="flex justify-center mb-5 animate-fade-up">
             {isOfficial ? (
-              <span className="inline-flex items-center gap-2 border-2 border-accent-green/90 bg-accent-green/10 text-text-primary py-1.5 px-4 rounded-full text-[12px] font-extrabold tracking-wide">
-                <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse shadow-[0_0_12px_var(--color-accent-green)]"></span>
-                <span>{liveCount != null ? `${liveCount}명 지원 중 · 선착순 30명` : '정식 모집 중 · 선착순 30명'}</span>
-              </span>
+              spotsUrgent ? (
+                <SpotsBadge count={liveCount} />
+              ) : (
+                <span className="inline-flex items-center gap-2 border-2 border-accent-green/90 bg-accent-green/10 text-text-primary py-1.5 px-4 rounded-full text-[12px] font-extrabold tracking-wide">
+                  <span className="w-2 h-2 rounded-full bg-accent-green animate-pulse shadow-[0_0_12px_var(--color-accent-green)]"></span>
+                  <span>{displayCount != null ? `${displayCount}명 지원 중 · 선착순 30명` : '정식 모집 중 · 선착순 30명'}</span>
+                </span>
+              )
             ) : isClosed ? (
               <div className="inline-block transform -rotate-2 border-[3px] border-dashed border-accent-orange rounded-2xl bg-accent-orange/10 px-6 py-3">
                 <div className="font-display text-[26px] leading-none tracking-[0.08em] text-accent-orange text-center">
@@ -93,18 +100,6 @@ export default function HeroSection({ onCTA }) {
             )}
           </div>
 
-          {spots && (
-            <div className="flex justify-center -mt-1 mb-5 animate-fade-up">
-              <span className={`text-[13px] font-extrabold tracking-wide ${spots.low || spots.full ? 'text-accent-orange' : 'text-text-secondary'}`}>
-                {spots.full ? (
-                  <>🔥 정원 30명 마감</>
-                ) : (
-                  <>{spots.low && '🔥 '}정원 30명 중 <span className={spots.low ? 'text-accent-orange' : 'text-accent-green'}>{spots.remaining}자리</span> 남음</>
-                )}
-              </span>
-            </div>
-          )}
-
           <h1
             className="font-kr text-2xl md:text-4xl font-black leading-tight break-keep mb-2 animate-fade-up text-text-primary"
             style={{ animationDelay: '0.1s' }}
@@ -122,7 +117,7 @@ export default function HeroSection({ onCTA }) {
           {isClosed ? (
             <div className="text-center my-5 animate-fade-up max-w-xs mx-auto" style={{ animationDelay: '0.25s' }}>
               <p className="text-text-secondary text-[13px] font-semibold leading-relaxed">
-                결원 발생 시 <span className="text-text-primary font-extrabold">가장 먼저 연락</span> 줄게.
+                결원 발생 시 <span className="text-text-primary font-extrabold">대기 순서대로</span> 연락 줄게.
               </p>
             </div>
           ) : (

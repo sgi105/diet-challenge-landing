@@ -3,7 +3,7 @@ import CountdownTimer from '../ui/CountdownTimer';
 import { COHORT2 } from '../../data/config2';
 import { useSeason2Status } from '../../hooks/useSeason2Status';
 import { useApplicantCount } from '../../hooks/useApplicantCount';
-import { spotsInfo } from '../../lib/spots';
+import SpotsBadge from './SpotsBadge';
 
 const SCHEDULE = [
   { label: '정식 모집 마감', value: '6/25(목) 23:59', highlight: true },
@@ -27,7 +27,6 @@ export default function UrgencySection() {
   const pill = isInterlude ? 'OPENS SOON' : 'DEADLINE';
 
   const count = useApplicantCount(!isInterlude); // 지원 받는 단계(prereg/official)에서만
-  const spots = isInterlude ? null : spotsInfo(count);
 
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
@@ -44,17 +43,7 @@ export default function UrgencySection() {
       <AnimateOnScroll>
         <div className="mb-8">
           <CountdownTimer targetDate={target} size="md" />
-          {spots && (
-            <div className="flex justify-center mt-5">
-              <span className={`text-sm font-extrabold tracking-wide ${spots.low || spots.full ? 'text-accent-orange' : 'text-text-secondary'}`}>
-                {spots.full ? (
-                  <>🔥 정원 30명 마감</>
-                ) : (
-                  <>{spots.low && '🔥 '}정원 30명 중 <span className={spots.low ? 'text-accent-orange' : 'text-accent-green'}>{spots.remaining}자리</span> 남음</>
-                )}
-              </span>
-            </div>
-          )}
+          {!isInterlude && <SpotsBadge count={count} className="mt-5" />}
         </div>
       </AnimateOnScroll>
 

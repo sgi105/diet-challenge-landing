@@ -4,7 +4,6 @@ export const GOAL_OPTIONS = [
   { value: 'full_marathon', label: '풀 마라톤(42K) 완주' },
   { value: 'pr_pace', label: '더 빠르게 (기록 단축)' },
   { value: 'lean_body', label: '탄탄한 몸 만들기' },
-  { value: 'running_habit', label: '꾸준한 러닝 습관' },
   { value: 'other', label: '기타 (직접 입력)' },
 ]
 

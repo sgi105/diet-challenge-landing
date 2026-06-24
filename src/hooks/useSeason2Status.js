@@ -1,5 +1,7 @@
 import { useEffect, useState } from 'react';
 import { COHORT2 } from '../data/config2';
+import { useApplicantCount } from './useApplicantCount';
+import { spotsInfo } from '../lib/spots';
 
 // 시즌2 3단계 상태머신.
 //   prereg    — 지인 추천 사전신청 (지금 ~ 6/21 자정)
@@ -26,6 +28,11 @@ export function useSeason2Status() {
     }, 1000);
     return () => clearInterval(t);
   }, [status]);
+
+  // 정원 마감 시 자동 closed — 날짜 마감과 별개로 30명 다 차면 결원 대기 모드로 전환.
+  // (?spots=30 미리보기도 동일하게 closed가 되어 마감 동작 확인 가능)
+  const count = useApplicantCount(status === 'official');
+  if (spotsInfo(count)?.full) return 'closed';
 
   return status;
 }
@@ -73,14 +80,14 @@ export const COPY2 = {
     stickySub: '6/25(목) 23:59 마감',
   },
   closed: {
-    banner: '⏰ 정식 모집 마감 · 결원 대기 명단 →',
-    ctaSub: '대기 명단 · 결원 시 우선 검토',
+    banner: '⏰ 모집 마감 · 결원 대기 명단 받는 중 →',
+    ctaSub: '결원 발생 시 대기 순서대로 연락',
     cta: {
-      hero: '결원 대기 명단에 이름 올리기',
-      pricing: '결원 대기 명단에 이름 올리기',
-      final: '결원 대기 명단에 이름 올리기',
-      sticky: '결원 대기 명단 등록',
+      hero: '결원 대기 명단 신청',
+      pricing: '결원 대기 명단 신청',
+      final: '결원 대기 명단 신청',
+      sticky: '결원 대기 명단 신청',
     },
-    stickySub: '결원 발생 시 우선 검토',
+    stickySub: '결원 발생 시 대기 순서대로 연락',
   },
 };
