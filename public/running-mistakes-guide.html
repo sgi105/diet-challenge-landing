@@ -90,8 +90,11 @@
   @media print{
     body{ background:#fff; }
     .toolbar{ display:none; }
-    .page{ width:auto; min-height:auto; height:auto; margin:0; box-shadow:none; padding:12mm 14mm; page-break-after:always; }
-    .page:last-child{ page-break-after:auto; }
+    .page{ width:auto; min-height:auto; height:auto; margin:0; box-shadow:none; padding:12mm 14mm; }
+    /* 나눔을 '앞'에 건다 — 첫 장 빼고 각 장 앞에서 끊음. 마지막 장 뒤엔 나눔이 안 생겨 빈 페이지 방지 */
+    .page{ break-before:page; page-break-before:always; }
+    .page:first-child{ break-before:auto; page-break-before:auto; }
+    .page + .page{ margin-top:0; }
     .footer{ margin-top:14px; padding-top:10px; }
     .mistake{ margin-bottom:11px; }
     .mistake, .intro, .check, .hero, .breath{ break-inside:avoid; page-break-inside:avoid; }
@@ -187,7 +190,8 @@
         <span class="lv y">🟡 80~90%</span><span class="ds">코로 들이쉬고 → 입으로 내쉬기</span>
         <span class="lv r">🔴 100% 전력</span><span class="ds">입으로 흡흡·후후</span>
       </div>
-      <div class="m-row chk"><span class="ic">🔍</span><span class="tx">조깅에선 100%까지 갈 일 거의 없어. 뛰는 내내 한 번씩 의식: "지금 코로 쉬고 있나?"</span></div>
+      <a class="m-link" href="https://www.instagram.com/p/DZrAmOWTF84/" target="_blank">▶ 코 호흡 영상 가이드 보기</a>
+      <div class="m-row chk" style="margin-top:9px;"><span class="ic">🔍</span><span class="tx">조깅에선 100%까지 갈 일 거의 없어. 뛰는 내내 한 번씩 의식: "지금 코로 쉬고 있나?"</span></div>
       <div class="src">📚 근거 · <b>《Oxygen Advantage》</b> (Patrick McKeown)</div>
     </div>
   </div>
