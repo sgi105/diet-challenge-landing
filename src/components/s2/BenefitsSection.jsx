@@ -35,10 +35,10 @@ export default function BenefitsSection() {
             <div className="text-5xl shrink-0 leading-none">🏃</div>
             <div className="flex-1">
               <p className="text-card-ink font-black text-xl leading-tight">
-                모르면 다치고 손해보는<br />런닌이 실수 7가지
+                모르면 다치고 손해보는<br />런린이 실수 7가지
               </p>
               <p className="text-card-ink-muted text-sm mt-2 leading-relaxed">
-                260명 코칭 + 200일 무부상으로 정리한 7가지. 신발·워밍업·페이스·착지·호흡까지, 이것만 알아도 안 다치고 오래 뛴다.
+                260명 코칭 + 240일 무부상으로 정리한 7가지. 신발·워밍업·페이스·착지·호흡까지, 이것만 알아도 안 다치고 오래 뛴다.
               </p>
             </div>
           </div>
