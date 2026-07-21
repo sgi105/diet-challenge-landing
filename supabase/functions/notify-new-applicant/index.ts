@@ -100,9 +100,9 @@ async function sendApplicantSms(r: any): Promise<Record<string, unknown>> {
     const f = failedList[0] || {}
     const reason = f.statusCode ? `${f.statusCode} ${f.statusMessage || ''}`.trim() : `registeredFailed=${regFailed}`
     console.error('solapi delivery failed', reason, txt.slice(0, 300))
-    return { sms: 'delivery_failed', reason, raw: txt.slice(0, 400) }
+    return { sms: 'delivery_failed', reason }
   }
-  return { sms: 'sent', raw: txt.slice(0, 400) }
+  return { sms: 'sent' }
 }
 
 // deno-lint-ignore no-explicit-any
