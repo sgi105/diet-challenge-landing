@@ -1,15 +1,34 @@
+import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Button from './components/ui/Button';
 import AnimateOnScroll from './components/ui/AnimateOnScroll';
 import CountdownTimer from './components/ui/CountdownTimer';
 import AccordionItem from './components/ui/AccordionItem';
+import SpotsBadge from './components/s2/SpotsBadge';
 import PainPointSection from './components/sections/PainPointSection';
 import TestimonialSection from './components/sections/TestimonialSection';
 import FounderSection from './components/s2/FounderSection';
 import Footer from './components/layout/Footer';
 import { PRESEASON } from './data/configPre';
 import { faqItems } from './data/faqPre';
+import { spotsInfo } from './lib/spots';
+import { countApplicantsPublic } from './lib/applyApi';
 import { useSeasonPreStatus } from './hooks/useSeasonPreStatus';
+
+// 프리시즌 신청자수 폴링(60초) — 남은 자리(30명 한정) 표시용. 코호트 row 없어도 count=0 방어.
+function usePreseasonCount() {
+  const [count, setCount] = useState(null);
+  useEffect(() => {
+    let alive = true;
+    const load = () => countApplicantsPublic(PRESEASON.cohortCode)
+      .then((n) => { if (alive) setCount(n); })
+      .catch(() => { /* DB row 없음 등 — 무시, 배지 숨김 */ });
+    load();
+    const t = setInterval(load, 60000);
+    return () => { alive = false; clearInterval(t); };
+  }, []);
+  return count;
+}
 
 // 시즌3 프리시즌 랜딩 — "작심삼일: 3일 만에 뿌시기 챌린지" (무료).
 // 결제·보증금·팀대항 없음. 3일 미션 + 5인 1팀 전원 완주 시 전원 스타벅스.
@@ -18,10 +37,22 @@ export default function LandingPagePreseason() {
   const { isOpen } = useSeasonPreStatus();
   const goApply = () => navigate('/apply');
 
+  const count = usePreseasonCount();
+  const spots = spotsInfo(count);
+
   const scrollToHero = (e) => {
     e.preventDefault();
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
   };
+
+  // 배너 우측 상태 문구 — 남은 자리(30명 한정) 반영.
+  const bannerStatus = !isOpen
+    ? '마감'
+    : spots?.full
+      ? '정원 30명 마감'
+      : spots?.remaining != null
+        ? `${spots.low ? '🔥 ' : ''}${spots.remaining}자리 남음`
+        : '지금 신청받는 중';
 
   return (
     <div className="min-h-screen">
@@ -31,11 +62,11 @@ export default function LandingPagePreseason() {
         onClick={scrollToHero}
         className="fixed top-0 left-0 right-0 z-50 bg-accent-green text-bg-primary text-center text-[11px] sm:text-sm font-extrabold py-2.5 px-3 block hover:brightness-105 transition-all tracking-tight leading-tight font-kr whitespace-nowrap overflow-hidden text-ellipsis"
       >
-        🟢 무료 프리시즌 · 신청 마감 {PRESEASON.deadlineLabel} · {isOpen ? '지금 신청받는 중' : '마감'}
+        🟢 무료 프리시즌 · 신청 마감 {PRESEASON.deadlineLabel} · {bannerStatus}
       </a>
 
       <div className="pt-12">
-        <HeroSection onCTA={goApply} />
+        <HeroSection onCTA={goApply} count={count} />
         <PainPointSection />
         <MissionSection onCTA={goApply} />
         <WhyTogetherSection />
@@ -52,7 +83,7 @@ export default function LandingPagePreseason() {
   );
 }
 
-function HeroSection({ onCTA }) {
+function HeroSection({ onCTA, count }) {
   return (
     <section id="hero" className="relative overflow-hidden">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none bg-accent-green/10" />
@@ -107,6 +138,7 @@ function HeroSection({ onCTA }) {
           </ul>
 
           <div className="animate-fade-up" style={{ animationDelay: '0.32s' }}>
+            <SpotsBadge count={count} className="mb-4" />
             <Button onClick={onCTA} className="w-full max-w-xs shadow-[0_12px_40px_rgba(200,255,77,0.4)]">
               무료로 신청하기 →
             </Button>
