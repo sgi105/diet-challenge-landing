@@ -817,7 +817,7 @@ function GoalsStep({ goals, goalsOther, onToggle, onOtherChange }) {
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">진짜 이루고 싶은 목표</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-1">
-        21일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
+        3일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
       </p>
       <p className="text-text-muted text-xs mb-5">
         선발할 때 팀 매칭이랑 코칭 방향 잡는 데 써.

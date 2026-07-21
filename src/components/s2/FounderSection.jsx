@@ -83,7 +83,7 @@ export default function FounderSection() {
               ))}
             </div>
             <p className="text-card-ink font-bold">
-              그 경험을 21일짜리로 압축한 게 바로 런클럽 챌린지야.
+              그 경험을 압축한 게 바로 런클럽 챌린지야.
             </p>
           </div>
         </div>
