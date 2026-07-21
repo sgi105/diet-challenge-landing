@@ -71,6 +71,9 @@ export default function ApplyDonePage() {
           <span className="block w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl text-center">
             💬 톡방 입장하기 →
           </span>
+          <p className="text-bg-primary/80 text-[12px] font-semibold leading-relaxed mt-3 text-center">
+            💻 컴퓨터로 보고 있다면, 휴대폰으로 전송된 <span className="font-extrabold">문자의 링크</span>를 눌러 입장해줘.
+          </p>
         </a>
 
         {/* 3) 지인 초대 카드 — 같은 팀 */}
