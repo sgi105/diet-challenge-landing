@@ -84,11 +84,25 @@ async function sendApplicantSms(r: any): Promise<Record<string, unknown>> {
     }),
   })
   const txt = await res.text().catch(() => '')
+  // deno-lint-ignore no-explicit-any
+  let body: any = null
+  try { body = JSON.parse(txt) } catch { /* non-json */ }
   if (!res.ok) {
-    console.error('solapi error', res.status, txt)
-    return { sms: 'error', status: res.status, detail: txt.slice(0, 300) }
+    console.error('solapi http error', res.status, txt)
+    return { sms: 'http_error', status: res.status, detail: txt.slice(0, 400) }
   }
-  return { sms: 'sent' }
+  // send-many/detail: 실제 실패는 HTTP 200 + body에 담긴다(잔액부족/발신번호 미등록 등).
+  // res.ok만 보고 'sent' 처리하면 조용한 실패에 당함 → 반드시 body의 실패 카운트를 검사.
+  const cnt = body?.groupInfo?.count || body?.count
+  const regFailed = Number(cnt?.registeredFailed ?? 0)
+  const failedList = Array.isArray(body?.failedMessageList) ? body.failedMessageList : []
+  if (regFailed > 0 || failedList.length > 0) {
+    const f = failedList[0] || {}
+    const reason = f.statusCode ? `${f.statusCode} ${f.statusMessage || ''}`.trim() : `registeredFailed=${regFailed}`
+    console.error('solapi delivery failed', reason, txt.slice(0, 300))
+    return { sms: 'delivery_failed', reason, raw: txt.slice(0, 400) }
+  }
+  return { sms: 'sent', raw: txt.slice(0, 400) }
 }
 
 // deno-lint-ignore no-explicit-any
