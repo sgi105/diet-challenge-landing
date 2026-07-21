@@ -501,6 +501,9 @@ function IntroStep({ isReferral, totalQuestions }) {
           <li>🤝 <span className="text-card-ink font-bold">친구랑 같은 팀</span> 배정</li>
           <li>📅 <span className="text-bg-primary font-bold">{PRESEASON.startLabel}</span> · 딱 3일</li>
         </ul>
+        <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
+          📖 챌린지 설명 먼저 보기 →
+        </Link>
       </div>
     );
   }
@@ -520,6 +523,9 @@ function IntroStep({ isReferral, totalQuestions }) {
         <li>☕ <span className="text-bg-primary font-bold">팀 전원 완주 시 전원 스타벅스</span></li>
         <li>📅 <span className="text-card-ink font-bold">{PRESEASON.startLabel}</span> · 딱 3일</li>
       </ul>
+      <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
+        📖 챌린지 설명 먼저 보기 →
+      </Link>
     </div>
   );
 }

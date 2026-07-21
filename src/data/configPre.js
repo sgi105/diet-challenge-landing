@@ -25,6 +25,16 @@ export const PRESEASON = {
 
   startLabel: '7/23(목) 시작',
 
+  // 신청 마감 — 7/22(수) 20:00 KST. +09:00 명시(viewer 타임존 무관 동일 순간).
+  deadline: '2026-07-22T20:00:00+09:00',
+  deadlineLabel: '7/22(수) 저녁 8시',
+
+  // "왜 함께 뛰면 좋은지" 완주율 카드 출처 라벨.
+  dataSampleLabel: '가장 최근 70명 실제 데이터',
+
+  // 팀 보상 스타벅스 기프티콘 스크린샷 (public/에 파일 배치 시 자동 노출, 없으면 숨김).
+  rewardImage: '/reward-starbucks.png',
+
   // 보상: 팀 5명 전원 3일 완주 시 → 전원 스타벅스 기프티콘 (개인 아님, 팀 전원 조건).
   rewardHeadline: '팀 전원 완주하면, 전원 스타벅스',
   rewardText: '5인 1팀 — 팀원 5명이 모두 3일을 완주하면 팀 전원에게 스타벅스 기프티콘을 쏜다.',

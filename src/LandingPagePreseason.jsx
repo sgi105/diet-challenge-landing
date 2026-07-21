@@ -1,9 +1,14 @@
 import { useNavigate } from 'react-router-dom';
 import Button from './components/ui/Button';
 import AnimateOnScroll from './components/ui/AnimateOnScroll';
+import CountdownTimer from './components/ui/CountdownTimer';
+import AccordionItem from './components/ui/AccordionItem';
+import PainPointSection from './components/sections/PainPointSection';
+import TestimonialSection from './components/sections/TestimonialSection';
 import FounderSection from './components/s2/FounderSection';
 import Footer from './components/layout/Footer';
 import { PRESEASON } from './data/configPre';
+import { faqItems } from './data/faqPre';
 import { useSeasonPreStatus } from './hooks/useSeasonPreStatus';
 
 // 시즌3 프리시즌 랜딩 — "작심삼일: 3일 만에 뿌시기 챌린지" (무료).
@@ -26,15 +31,18 @@ export default function LandingPagePreseason() {
         onClick={scrollToHero}
         className="fixed top-0 left-0 right-0 z-50 bg-accent-green text-bg-primary text-center text-[11px] sm:text-sm font-extrabold py-2.5 px-3 block hover:brightness-105 transition-all tracking-tight leading-tight font-kr whitespace-nowrap overflow-hidden text-ellipsis"
       >
-        🟢 무료 프리시즌 · {PRESEASON.startLabel} · {isOpen ? '지금 신청받는 중' : '곧 오픈'}
+        🟢 무료 프리시즌 · 신청 마감 {PRESEASON.deadlineLabel} · {isOpen ? '지금 신청받는 중' : '마감'}
       </a>
 
       <div className="pt-12">
         <HeroSection onCTA={goApply} />
+        <PainPointSection />
         <MissionSection onCTA={goApply} />
         <WhyTogetherSection />
-        <TeamRewardSection onCTA={goApply} />
         <FounderSection />
+        <TestimonialSection />
+        <TeamRewardSection onCTA={goApply} />
+        <FAQSection />
         <FinalCTASection onCTA={goApply} />
         <Footer />
       </div>
@@ -72,22 +80,33 @@ function HeroSection({ onCTA }) {
             </span>
           </h1>
           <p
-            className="text-text-secondary text-base leading-relaxed mb-8 animate-fade-up"
+            className="text-text-secondary text-base leading-relaxed mb-7 animate-fade-up"
             style={{ animationDelay: '0.18s' }}
           >
             10 - 11 - 12분.<br />
             <span className="text-text-primary font-bold">매일 조금씩 뛰면 성공.</span>
           </p>
 
+          {/* 큰 카운트다운 — 신청 마감까지 */}
+          <div className="my-7 animate-fade-up flex flex-col items-center gap-3" style={{ animationDelay: '0.22s' }}>
+            <p className="text-text-secondary text-[11px] font-bold tracking-widest">
+              DEADLINE · 신청 마감까지
+            </p>
+            <CountdownTimer targetDate={PRESEASON.deadline} size="lg" expiredText="신청이 마감되었어" />
+            <p className="text-text-muted text-[12px] font-semibold">
+              {PRESEASON.deadlineLabel} 마감
+            </p>
+          </div>
+
           {/* 한눈에 요약 */}
-          <ul className="text-left space-y-2.5 text-sm bg-bg-card rounded-3xl p-6 mb-8 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)] animate-fade-up" style={{ animationDelay: '0.24s' }}>
+          <ul className="text-left space-y-2.5 text-sm bg-bg-card rounded-3xl p-6 mb-8 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)] animate-fade-up" style={{ animationDelay: '0.28s' }}>
             <li>💸 <span className="text-card-ink font-bold">완전 무료</span> · 보증금·참가비 없음</li>
             <li>📅 <span className="text-card-ink font-bold">7/23(목) ~ 7/25(토)</span>, 딱 3일</li>
             <li>🏃 하루 <span className="text-card-ink font-bold">10 · 11 · 12분</span> 러닝 (페이스·거리 자유)</li>
             <li>☕ <span className="text-bg-primary font-bold">팀 전원 완주 시 전원 스타벅스</span></li>
           </ul>
 
-          <div className="animate-fade-up" style={{ animationDelay: '0.3s' }}>
+          <div className="animate-fade-up" style={{ animationDelay: '0.32s' }}>
             <Button onClick={onCTA} className="w-full max-w-xs shadow-[0_12px_40px_rgba(200,255,77,0.4)]">
               무료로 신청하기 →
             </Button>
@@ -171,6 +190,9 @@ function WhyTogetherSection() {
 
       <AnimateOnScroll>
         <div className="bg-bg-card rounded-3xl p-7 shadow-[0_20px_60px_rgba(0,0,0,0.15)]">
+          <span className="inline-block bg-bg-primary/10 text-bg-primary text-[11px] font-extrabold px-3 py-1 rounded-full mb-5">
+            📊 {PRESEASON.dataSampleLabel}
+          </span>
           <div className="flex items-end gap-4">
             <div className="flex-1 text-center">
               <div className="h-28 rounded-2xl bg-white/10 flex items-end justify-center overflow-hidden">
@@ -189,7 +211,7 @@ function WhyTogetherSection() {
           </div>
           <p className="text-card-ink-muted text-[13px] leading-relaxed mt-6 text-center">
             같은 목표를 향해 <span className="text-card-ink font-bold">서로 끌어주면</span> 완주율이 3배로 뛴다.<br />
-            <span className="text-bg-primary font-bold">직전 시즌 30명 중 30명 전원 완주</span> — 그게 증거야.
+            <span className="text-bg-primary font-bold">가장 최근 70명 중 95.7%가 끝까지 완주</span> — 그게 증거야.
           </p>
         </div>
       </AnimateOnScroll>
@@ -210,6 +232,16 @@ function TeamRewardSection({ onCTA }) {
           <p className="text-card-ink-muted text-sm leading-relaxed mb-6">
             {PRESEASON.rewardText}
           </p>
+
+          {/* 스타벅스 기프티콘 스크린샷 — public/에 파일 있으면 노출, 없으면 자동 숨김 */}
+          <img
+            src={PRESEASON.rewardImage}
+            alt="스타벅스 기프티콘"
+            loading="lazy"
+            onError={(e) => { e.currentTarget.style.display = 'none'; }}
+            className="w-full max-w-[240px] mx-auto rounded-2xl mb-6 shadow-[0_12px_30px_rgba(0,0,0,0.18)]"
+          />
+
           <div className="rounded-2xl bg-bg-primary/5 border border-bg-primary/15 p-4 text-left space-y-2 text-[13px]">
             <p className="text-card-ink"><span className="text-bg-primary font-extrabold">5인 1팀</span> 으로 배정돼.</p>
             <p className="text-card-ink">팀원 <span className="text-bg-primary font-extrabold">5명 전원</span> 이 3일 완주하면</p>
@@ -228,6 +260,26 @@ function TeamRewardSection({ onCTA }) {
   );
 }
 
+function FAQSection() {
+  return (
+    <section className="px-6 py-14 max-w-lg mx-auto">
+      <AnimateOnScroll>
+        <span className="pill text-accent-green block w-fit mx-auto">FAQ</span>
+        <h2 className="font-kr text-3xl md:text-5xl font-black text-center mt-4 mb-8 text-text-primary leading-tight">
+          자주 묻는 질문
+        </h2>
+      </AnimateOnScroll>
+      <AnimateOnScroll>
+        <div className="bg-bg-card rounded-3xl px-6 shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
+          {faqItems.map((item, i) => (
+            <AccordionItem key={i} question={item.question} answer={item.answer} />
+          ))}
+        </div>
+      </AnimateOnScroll>
+    </section>
+  );
+}
+
 function FinalCTASection({ onCTA }) {
   return (
     <section className="px-6 py-16 max-w-lg mx-auto text-center">
@@ -236,10 +288,13 @@ function FinalCTASection({ onCTA }) {
           딱 3일.<br />
           <span className="text-accent-green">이번엔 진짜 뿌셔보자.</span>
         </h2>
-        <p className="text-text-secondary text-sm leading-relaxed mb-8">
+        <p className="text-text-secondary text-sm leading-relaxed mb-6">
           무료야. 잃을 게 없어.<br />
-          {PRESEASON.startLabel} — 지금 자리 잡아둬.
+          신청 마감 {PRESEASON.deadlineLabel} — 지금 자리 잡아둬.
         </p>
+        <div className="flex flex-col items-center gap-3 mb-7">
+          <CountdownTimer targetDate={PRESEASON.deadline} size="md" expiredText="신청이 마감되었어" />
+        </div>
         <Button onClick={onCTA} className="w-full max-w-xs">무료로 신청하기 →</Button>
       </AnimateOnScroll>
     </section>
@@ -254,7 +309,7 @@ function StickyCTA({ onCTA }) {
           onClick={onCTA}
           className="w-full bg-accent-green text-bg-primary font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all shadow-[0_8px_24px_rgba(200,255,77,0.35)]"
         >
-          무료로 신청하기 · {PRESEASON.startLabel} →
+          무료로 신청하기 · 마감 {PRESEASON.deadlineLabel} →
         </button>
       </div>
     </div>

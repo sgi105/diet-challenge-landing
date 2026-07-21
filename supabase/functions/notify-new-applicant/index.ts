@@ -70,16 +70,17 @@ async function sendApplicantSms(r: any): Promise<Record<string, unknown>> {
   const to = String(r.phone || '').replace(/\D/g, '')
   if (!/^01\d{8,9}$/.test(to)) return { sms: 'skipped_bad_phone' }
 
+  // 서명/엔드포인트는 저장소 내 검증된 패턴(send-otp, booking-reminder)과 동일하게 맞춤.
   const date = new Date().toISOString()
-  const salt = crypto.randomUUID().replace(/-/g, '')
+  const salt = crypto.randomUUID()
   const signature = await hmacSha256Hex(apiSecret, date + salt)
   const auth = `HMAC-SHA256 apiKey=${apiKey}, date=${date}, salt=${salt}, signature=${signature}`
 
-  const res = await fetch('https://api.solapi.com/messages/v4/send', {
+  const res = await fetch('https://api.solapi.com/messages/v4/send-many/detail', {
     method: 'POST',
     headers: { Authorization: auth, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      message: { to, from: String(from).replace(/\D/g, ''), text: preseasonSmsText() },
+      messages: [{ to, from: String(from).replace(/\D/g, ''), text: preseasonSmsText() }],
     }),
   })
   const txt = await res.text().catch(() => '')
