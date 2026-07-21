@@ -7,13 +7,15 @@
 //   VITE_SUPABASE_ANON_KEY
 
 import { createClient } from '@supabase/supabase-js';
+import { PRESEASON } from '../data/configPre';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-export const CURRENT_COHORT_CODE = '260629_team_run';
+// 현재 액티브 코호트 = 시즌3 프리시즌(무료 3일). 신규 신청은 이 코호트로 태깅된다.
+export const CURRENT_COHORT_CODE = PRESEASON.cohortCode;
 
 // 신청자수 캐시 — 재방문/새로고침 시 게이지를 즉시 렌더(stale-while-revalidate). fetch 끝나면 갱신.
 const COUNT_CACHE_KEY = 'ttr_count_260629';

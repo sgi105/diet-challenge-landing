@@ -1,24 +1,19 @@
 import { useState } from 'react';
-import { Link, useLocation } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { COHORT2 } from '../data/config2';
+import { PRESEASON } from '../data/configPre';
 
+// 프리시즌(무료 3일) 신청 완료 페이지.
+// 결제·합격 개념 없음 → 인스타 톡방 입장 + 지인 초대(같은 팀) 유도.
 export default function ApplyDonePage() {
-  const location = useLocation();
-  const navState = location.state || {};
-  const friendAttached = !!navState.friendAttached;
-  const isReferral = !!navState.isReferral;
-  // 트랙 분리: 사전신청자는 6/22 빠른 합격, 정식 지원자는 6/26.
-  const resultDate = isReferral ? '6/22(월)' : '6/26(금)';
-  // 식단 가이드는 오늘 자정까지 신청자만 노출
-  const dietGuideActive = new Date() < new Date(COHORT2.formFeedbackBonusExpireAt);
   const [linkCopied, setLinkCopied] = useState(false);
 
+  const inviteUrl = `${window.location.origin}/apply?type=referral`;
+
   const handleCopy = async () => {
-    track('apply_done_copy_link');
-    const url = `${window.location.origin}/`;
+    track('apply_done_copy_invite');
     try {
-      await navigator.clipboard.writeText(url);
+      await navigator.clipboard.writeText(inviteUrl);
       setLinkCopied(true);
       setTimeout(() => setLinkCopied(false), 2000);
       return;
@@ -27,7 +22,7 @@ export default function ApplyDonePage() {
     }
     try {
       const ta = document.createElement('textarea');
-      ta.value = url;
+      ta.value = inviteUrl;
       ta.style.position = 'fixed';
       ta.style.opacity = '0';
       document.body.appendChild(ta);
@@ -44,50 +39,49 @@ export default function ApplyDonePage() {
   return (
     <div className="min-h-screen px-6 py-10 flex flex-col items-center justify-center">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
-        {/* 1) 지원 완료 카드 */}
+        {/* 1) 신청 완료 카드 */}
         <div className="bg-bg-card rounded-[28px] p-8 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)] text-center">
           <div className="text-5xl mb-6">✅</div>
           <h2 className="font-kr text-3xl font-black text-card-ink mb-4 leading-tight">
-            지원 완료!
+            신청 완료!
           </h2>
           <p className="text-card-ink-muted leading-relaxed mb-3">
-            합격 결과는 <span className="text-bg-primary font-bold">{resultDate}</span> 인스타로 안내돼.
+            <span className="text-bg-primary font-bold">{PRESEASON.startLabel}</span> — 딱 3일, 작심삼일 뿌시기.
           </p>
           <p className="text-card-ink-faint text-sm font-semibold">
-            합격 시 {resultDate}까지 입금해야 선발 확정돼.
+            아래 인스타 톡방으로 들어와야 시작 안내를 받을 수 있어.
           </p>
         </div>
 
-        {dietGuideActive && (
-          <a
-            href="/diet-guide.html"
-            target="_blank"
-            rel="noopener noreferrer"
-            onClick={() => track('apply_done_diet_guide')}
-            className="bg-accent-green rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)] block hover:brightness-105 transition-all"
-          >
-            <span className="inline-block bg-bg-primary/15 text-bg-primary text-[11px] font-extrabold px-3 py-1 rounded-full mb-3">TODAY ONLY · 오늘 자정까지</span>
-            <h3 className="font-kr text-2xl font-black text-bg-primary mb-2 leading-tight">
-              21일 식단 가이드 받기
-            </h3>
-            <p className="text-bg-primary/80 text-sm leading-relaxed mb-4">
-              오늘 신청한 너에게만 — 1.5끼 전략 식단 가이드 (5만원 가치). 21일 동안 -3kg 목표.
-            </p>
-            <span className="block w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl text-center">
-              식단 가이드 PDF 받기 →
-            </span>
-          </a>
-        )}
+        {/* 2) 톡방 입장 CTA (메인 동선) */}
+        <a
+          href={PRESEASON.TALK_LINK}
+          target="_blank"
+          rel="noopener noreferrer"
+          onClick={() => track('apply_done_open_chat')}
+          className="bg-accent-green rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)] block hover:brightness-105 transition-all"
+        >
+          <span className="inline-block bg-bg-primary/15 text-bg-primary text-[11px] font-extrabold px-3 py-1 rounded-full mb-3">STEP 1 · 지금 바로</span>
+          <h3 className="font-kr text-2xl font-black text-bg-primary mb-2 leading-tight">
+            인스타 톡방 입장하기
+          </h3>
+          <p className="text-bg-primary/80 text-sm leading-relaxed mb-4">
+            여기서 팀 배정·시작 안내·매일 인증을 진행해. 꼭 들어와야 참여 완료야.
+          </p>
+          <span className="block w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl text-center">
+            💬 톡방 입장하기 →
+          </span>
+        </a>
 
-        {/* 2) Friend Bonus 카드 */}
+        {/* 3) 지인 초대 카드 — 같은 팀 */}
         <div className="bg-bg-card rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)]">
-          <span className="pill text-bg-primary block w-fit mb-3">FRIEND BONUS</span>
+          <span className="pill text-bg-primary block w-fit mb-3">STEP 2 · 같이 뿌시기</span>
           <h3 className="font-kr text-2xl font-black text-card-ink mb-2 leading-tight">
-            같이 지원할 친구 있어?
+            친구 초대하면 같은 팀
           </h3>
           <p className="text-card-ink-muted text-sm leading-relaxed mb-5">
-            둘이 <span className="text-bg-primary font-bold">같은 팀 배정 보장</span> ✌️
-            <br />친구도 폼을 작성해야 매칭돼.
+            친구도 이 링크로 신청하면 <span className="text-bg-primary font-bold">같은 팀 배정</span> ✌️<br />
+            <span className="text-bg-primary font-bold">팀 5명 전원 완주하면 전원 스타벅스</span> ☕ — 같이 뛸수록 유리해.
           </p>
 
           <button
@@ -95,18 +89,11 @@ export default function ApplyDonePage() {
             onClick={handleCopy}
             className="w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
           >
-            {linkCopied ? '✓ 링크가 복사되었어요' : '🔗 챌린지 페이지 링크 복사하기'}
+            {linkCopied ? '✓ 초대 링크가 복사되었어' : '🔗 친구 초대 링크 복사하기'}
           </button>
           <p className="text-card-ink-faint text-xs mt-3 text-center">
             친구에게 카톡·DM으로 보내줘
           </p>
-
-          {friendAttached && (
-            <div className="mt-6 pt-6 border-t border-card-ink-faint/20 text-center">
-              <p className="text-bg-primary font-bold">✓ 친구 정보가 함께 등록됐어</p>
-              <p className="text-card-ink-faint text-xs mt-2">친구도 폼을 제출해야 매칭돼.</p>
-            </div>
-          )}
         </div>
 
         <Link

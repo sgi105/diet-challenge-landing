@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { submitApplication } from '../lib/applyApi';
-import { useSeason2Status } from '../hooks/useSeason2Status';
+import { PRESEASON } from '../data/configPre';
 import { GOAL_OPTIONS, MAX_GOALS } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
@@ -71,10 +71,10 @@ export default function ApplyPage() {
   const navigate = useNavigate();
   const [searchParams] = useSearchParams();
   const isReferral = searchParams.get('type') === 'referral';
-  const status = useSeason2Status();
 
   const STORAGE_KEY = isReferral ? STORAGE_KEY_REFERRAL : STORAGE_KEY_MAIN;
-  const STEPS = isReferral ? REFERRAL_STEPS : MAIN_STEPS;
+  // 프리시즌은 무료 → 보증금(deposit) step 제거.
+  const STEPS = (isReferral ? REFERRAL_STEPS : MAIN_STEPS).filter(s => s !== 'deposit');
   const TOTAL_QUESTIONS = STEPS.length - 1;
 
   const persisted = useMemo(() => loadState(STORAGE_KEY), [STORAGE_KEY]);
@@ -96,8 +96,8 @@ export default function ApplyPage() {
   }, [STORAGE_KEY, step, form]);
 
   useEffect(() => {
-    track('apply_step_view', { step, stepKey, isReferral, isClosed: status === 'closed' });
-  }, [step, stepKey, isReferral, status]);
+    track('apply_step_view', { step, stepKey, isReferral });
+  }, [step, stepKey, isReferral]);
 
   useEffect(() => {
     // 동의 step(보증금/일정)은 본문이 길어 top으로 가면 체크박스가 viewport 밖.
@@ -113,8 +113,8 @@ export default function ApplyPage() {
     return () => cancelAnimationFrame(id);
   }, [step]);
 
-  // 마감 후에도 후순위 지원 받음 — 폼은 그대로 보여주고 상단에 작은 배너로 표시.
-  const isClosed = status === 'closed';
+  // 무료 프리시즌 — 마감/후순위/선착순 개념 없음. 항상 접수 상태.
+  const isClosed = false;
 
   const update = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -487,38 +487,38 @@ function IntroStep({ isReferral, totalQuestions }) {
   if (isReferral) {
     return (
       <div className="flex-1 flex flex-col justify-center text-center">
-        <span className="pill text-accent-orange block w-fit mx-auto mb-4">PRE-APPLY · 사전신청</span>
+        <span className="pill text-accent-orange block w-fit mx-auto mb-4">FREE · 친구랑 같이</span>
         <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
-          지인 추천<br />사전신청
+          친구랑 같이<br />무료 신청
         </h1>
         <p className="text-text-secondary leading-relaxed">
-          추천을 통해 먼저 지원해.<br />
-          정식 모집보다 한발 먼저.
+          둘 다 신청하면 <span className="text-text-primary font-bold">같은 팀</span> 으로 묶여.<br />
+          작심삼일, 같이 뿌시자.
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>🎁 <span className="text-card-ink font-bold">먼저 지원</span>: 정식 모집보다 한발 앞서</li>
-          <li>📅 사전신청 마감 <span className="text-accent-orange font-bold">6/21(일) 자정</span></li>
-          <li>📨 합격 발표 <span className="text-card-ink font-bold">6/22(월)</span> 인스타</li>
+          <li>💸 <span className="text-card-ink font-bold">완전 무료</span> · 보증금·참가비 없음</li>
+          <li>🤝 <span className="text-card-ink font-bold">친구랑 같은 팀</span> 배정</li>
+          <li>📅 <span className="text-bg-primary font-bold">{PRESEASON.startLabel}</span> · 딱 3일</li>
         </ul>
       </div>
     );
   }
   return (
     <div className="flex-1 flex flex-col justify-center text-center">
-      <span className="pill text-accent-green block w-fit mx-auto mb-4">21D RUN · APPLY</span>
+      <span className="pill text-accent-green block w-fit mx-auto mb-4">FREE PRE-SEASON · APPLY</span>
       <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
-        2분이면<br />지원 끝
+        2분이면<br />신청 끝
       </h1>
       <p className="text-text-secondary leading-relaxed">
-        30명 선발 모집.<br />
-        모든 항목은 선발과 팀 매칭에 사용돼.
+        무료 3일 뿌시기 챌린지.<br />
+        모든 항목은 팀 매칭에 사용돼.
       </p>
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (새로고침 안전)</li>
-        <li>🏆 우승팀 시 <span className="text-bg-primary font-bold">20만 환급 + 러닝화</span></li>
-        <li>📨 합격 발표 <span className="text-card-ink font-bold">6/26(금)</span> 인스타</li>
+        <li>☕ <span className="text-bg-primary font-bold">팀 전원 완주 시 전원 스타벅스</span></li>
+        <li>📅 <span className="text-card-ink font-bold">{PRESEASON.startLabel}</span> · 딱 3일</li>
       </ul>
     </div>
   );
@@ -786,28 +786,25 @@ function DepositConsentStep({ checked, onChange }) {
   );
 }
 
-function ScheduleConsentStep({ checked, onChange, isReferral }) {
-  // 트랙 분리: 사전신청자(referral)는 6/22 빠른 합격, 정식 지원자는 6/26.
-  const resultDate = isReferral ? '6/22(월)' : '6/26(금)';
+function ScheduleConsentStep({ checked, onChange }) {
+  const [d1, d2, d3] = PRESEASON.missions;
   return (
     <ConsentShell
-      label="합격 · 입금 일정"
+      label="3일 일정"
       checked={checked}
       onChange={onChange}
-      checkboxLabel="합격 발표·입금 마감 일정을 확인했어"
+      checkboxLabel="3일 일정을 확인했어"
     >
+      <p className="mb-4 text-card-ink text-[15px] leading-relaxed">
+        <span className="font-bold">무료</span> 3일 챌린지야. 보증금도, 참가비도 없어.
+        시간만 채우면 성공(페이스·거리 자유).
+      </p>
       <ul className="space-y-3 text-sm">
-        {isReferral && (
-          <li>🟧 <span className="font-semibold">사전신청 마감:</span> <span className="text-accent-orange font-bold">6/21(일) 자정</span></li>
-        )}
-        <li>📨 <span className="font-semibold">합격 발표:</span> <span className="text-card-ink font-bold">{resultDate}</span> 인스타 단톡방 안내</li>
-        <li>💰 <span className="font-semibold">입금 마감:</span> <span className="text-accent-orange font-bold">{resultDate}</span></li>
-        <li>⚠️ 마감까지 <span className="text-accent-orange font-bold">미입금 시 자동으로 다음 순번</span>으로 넘어가</li>
-        <li>
-          🏃 <span className="font-semibold">온라인 OT:</span> 6/28(일)
-          <br />
-          🗓️ <span className="font-semibold">챌린지 시작:</span> 6/29(월)
-        </li>
+        <li>🏃 <span className="font-semibold">Day 1</span> · {d1.date}({d1.weekday}) — <span className="text-card-ink font-bold">{d1.minutes}분 러닝</span></li>
+        <li>🏃 <span className="font-semibold">Day 2</span> · {d2.date}({d2.weekday}) — <span className="text-card-ink font-bold">{d2.minutes}분 러닝</span></li>
+        <li>🏃 <span className="font-semibold">Day 3</span> · {d3.date}({d3.weekday}) — <span className="text-card-ink font-bold">{d3.minutes}분 러닝</span></li>
+        <li>🎉 <span className="font-semibold">{PRESEASON.finale.label}:</span> <span className="text-accent-orange font-bold">{PRESEASON.finale.date}({PRESEASON.finale.weekday}) {PRESEASON.finale.time}</span></li>
+        <li>☕ <span className="font-semibold">보상:</span> <span className="text-bg-primary font-bold">팀 5명 전원 완주 시 전원 스타벅스</span></li>
       </ul>
     </ConsentShell>
   );
