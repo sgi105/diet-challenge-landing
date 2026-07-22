@@ -85,7 +85,7 @@ export default function LandingPagePreseason() {
   );
 }
 
-function HeroSection({ onCTA, count, ctaLabel }) {
+function HeroSection({ onCTA, count, ctaLabel, isClosed }) {
   return (
     <section id="hero" className="relative overflow-hidden">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none bg-accent-green/10" />
@@ -100,7 +100,14 @@ function HeroSection({ onCTA, count, ctaLabel }) {
           </div>
 
           <div className="flex justify-center mb-5 animate-fade-up">
-            <span className="pill text-accent-green">무료 · 보증금 없음</span>
+            {isClosed ? (
+              <div className="inline-block transform -rotate-2 border-[3px] border-dashed border-accent-orange rounded-2xl bg-accent-orange/10 px-6 py-3">
+                <div className="font-display text-[26px] leading-none tracking-[0.08em] text-accent-orange text-center">CLOSED</div>
+                <div className="text-text-primary text-[11px] font-extrabold text-center mt-1.5 tracking-[0.12em]">신청 마감 · 정원 30명</div>
+              </div>
+            ) : (
+              <span className="pill text-accent-green">무료 · 보증금 없음</span>
+            )}
           </div>
 
           <h1
@@ -116,20 +123,25 @@ function HeroSection({ onCTA, count, ctaLabel }) {
             className="text-text-secondary text-base leading-relaxed mb-7 animate-fade-up"
             style={{ animationDelay: '0.18s' }}
           >
-            10 - 11 - 12분.<br />
-            <span className="text-text-primary font-bold">매일 조금씩 뛰면 성공.</span>
+            {isClosed ? (
+              <>7/23(목) ~ 7/25(토) · 딱 3일<br /><span className="text-text-primary font-bold">이번 기수 신청은 마감됐어.</span></>
+            ) : (
+              <>10 - 11 - 12분.<br /><span className="text-text-primary font-bold">매일 조금씩 뛰면 성공.</span></>
+            )}
           </p>
 
-          {/* 큰 카운트다운 — 신청 마감까지 */}
-          <div className="my-7 animate-fade-up flex flex-col items-center gap-3" style={{ animationDelay: '0.22s' }}>
-            <p className="text-text-secondary text-[11px] font-bold tracking-widest">
-              DEADLINE · 신청 마감까지
-            </p>
-            <CountdownTimer targetDate={PRESEASON.deadline} size="lg" expiredText="신청이 마감되었어" />
-            <p className="text-text-muted text-[12px] font-semibold">
-              {PRESEASON.deadlineLabel} 마감
-            </p>
-          </div>
+          {/* 큰 카운트다운 — 신청 마감까지 (모집 중에만) */}
+          {!isClosed && (
+            <div className="my-7 animate-fade-up flex flex-col items-center gap-3" style={{ animationDelay: '0.22s' }}>
+              <p className="text-text-secondary text-[11px] font-bold tracking-widest">
+                DEADLINE · 신청 마감까지
+              </p>
+              <CountdownTimer targetDate={PRESEASON.deadline} size="lg" expiredText="신청이 마감되었어" />
+              <p className="text-text-muted text-[12px] font-semibold">
+                {PRESEASON.deadlineLabel} 마감
+              </p>
+            </div>
+          )}
 
           {/* 한눈에 요약 */}
           <ul className="text-left space-y-2.5 text-sm bg-bg-card rounded-3xl p-6 mb-8 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)] animate-fade-up" style={{ animationDelay: '0.28s' }}>
@@ -140,13 +152,29 @@ function HeroSection({ onCTA, count, ctaLabel }) {
           </ul>
 
           <div className="animate-fade-up" style={{ animationDelay: '0.32s' }}>
-            <SpotsBadge count={count} className="mb-4" />
-            <Button onClick={onCTA} className="w-full max-w-xs shadow-[0_12px_40px_rgba(200,255,77,0.4)]">
-              {ctaLabel}
-            </Button>
-            <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
-              누구나 · 지금 바로 · 2분이면 끝
-            </p>
+            {isClosed ? (
+              <>
+                <button
+                  onClick={onCTA}
+                  className="w-full max-w-xs mx-auto block border-2 border-white/30 text-text-primary font-extrabold py-4 rounded-2xl hover:border-accent-green/60 transition-colors"
+                >
+                  {ctaLabel}
+                </button>
+                <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
+                  결원 발생 시 신청 순서대로 연락 줄게
+                </p>
+              </>
+            ) : (
+              <>
+                <SpotsBadge count={count} className="mb-4" />
+                <Button onClick={onCTA} className="w-full max-w-xs shadow-[0_12px_40px_rgba(200,255,77,0.4)]">
+                  {ctaLabel}
+                </Button>
+                <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
+                  누구나 · 지금 바로 · 2분이면 끝
+                </p>
+              </>
+            )}
           </div>
         </div>
       </div>
