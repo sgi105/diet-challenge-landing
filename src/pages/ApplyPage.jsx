@@ -163,7 +163,7 @@ export default function ApplyPage() {
         const friendAttached = !!(form.friend || '').trim();
         if (friendAttached) track('apply_submit_friend_attached');
         clearState(STORAGE_KEY);
-        navigate('/apply/done', { state: { id, phone: form.phone.trim(), friendAttached, isReferral } });
+        navigate('/apply/done', { state: { id, phone: form.phone.trim(), friendAttached, isReferral, waitlist: isClosed } });
         return;
       } catch (e) {
         attempt++;

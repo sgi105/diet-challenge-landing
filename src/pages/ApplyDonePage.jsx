@@ -1,13 +1,19 @@
 import { useState } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useLocation } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { PRESEASON } from '../data/configPre';
+import { useCountdown } from '../hooks/useCountdown';
 
 // 프리시즌(무료 3일) 신청 완료 페이지.
-// 결제·합격 개념 없음 → 인스타 톡방 입장 + 지인 초대(같은 팀) 유도.
+// 모집 중: 인스타 톡방 입장 + 자기소개 유도 + 지인 초대.
+// 마감(대기명단): 톡방 링크 노출 X (확정자만 입장). "결원 시 연락" 안내만.
 export default function ApplyDonePage() {
-  const [linkCopied, setLinkCopied] = useState(false);
+  const location = useLocation();
+  const { isExpired: deadlinePassed } = useCountdown(PRESEASON.deadline);
+  // 마감 후 접수 = 대기명단. 제출 시 넘겨받은 flag 우선, 없으면 데드라인으로 판단.
+  const waitlist = location.state?.waitlist ?? deadlinePassed;
 
+  const [linkCopied, setLinkCopied] = useState(false);
   const inviteUrl = `${window.location.origin}/apply?type=referral`;
 
   const handleCopy = async () => {
@@ -36,6 +42,37 @@ export default function ApplyDonePage() {
     }
   };
 
+  // ── 마감 · 대기명단 (톡방/초대 링크 노출 X) ──────────────────────
+  if (waitlist) {
+    return (
+      <div className="min-h-screen px-6 py-10 flex flex-col items-center justify-center">
+        <div className="w-full max-w-md flex flex-col items-center gap-6">
+          <div className="bg-bg-card rounded-[28px] p-8 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)] text-center">
+            <div className="text-5xl mb-6">📝</div>
+            <h2 className="font-kr text-3xl font-black text-card-ink mb-4 leading-tight">
+              대기 명단 등록 완료!
+            </h2>
+            <p className="text-card-ink-muted leading-relaxed mb-3">
+              아쉽게도 <span className="text-bg-primary font-bold">정원 {PRESEASON.totalSpots}명이 마감</span>돼서<br />
+              대기 명단으로 접수됐어.
+            </p>
+            <p className="text-card-ink-faint text-sm font-semibold leading-relaxed">
+              결원이 생기면 <span className="text-bg-primary">신청 순서대로</span> 연락 줄게.<br />
+              조금만 기다려줘 🙏
+            </p>
+          </div>
+          <Link
+            to="/"
+            className="text-text-muted text-sm font-semibold hover:text-accent-green transition-colors"
+          >
+            ← 메인으로 돌아가기
+          </Link>
+        </div>
+      </div>
+    );
+  }
+
+  // ── 모집 중 · 확정 ────────────────────────────────────────────
   return (
     <div className="min-h-screen px-6 py-10 flex flex-col items-center justify-center">
       <div className="w-full max-w-md flex flex-col items-center gap-6">
