@@ -49,7 +49,7 @@ export default function ApplyDonePage() {
             <span className="text-bg-primary font-bold">{PRESEASON.startLabel}</span> — 딱 3일, 작심삼일 뿌시기.
           </p>
           <p className="text-card-ink-faint text-sm font-semibold">
-            아래 인스타 톡방으로 들어와야 시작 안내를 받을 수 있어.
+            아래 인스타 톡방에 들어와서 <span className="text-bg-primary">자기소개부터</span> 올려줘. 그래야 시작돼!
           </p>
         </div>
 
@@ -61,13 +61,16 @@ export default function ApplyDonePage() {
           onClick={() => track('apply_done_open_chat')}
           className="bg-accent-green rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)] block hover:brightness-105 transition-all"
         >
-          <span className="inline-block bg-bg-primary/15 text-bg-primary text-[11px] font-extrabold px-3 py-1 rounded-full mb-3">STEP 1 · 지금 바로</span>
+          <span className="inline-block bg-bg-primary/15 text-bg-primary text-[11px] font-extrabold px-3 py-1 rounded-full mb-3">STEP 1 · 제일 중요!</span>
           <h3 className="font-kr text-2xl font-black text-bg-primary mb-2 leading-tight">
-            인스타 톡방 입장하기
+            톡방 입장 → 자기소개
           </h3>
-          <p className="text-bg-primary/80 text-sm leading-relaxed mb-4">
-            여기서 팀 배정·시작 안내·매일 인증을 진행해. 꼭 들어와야 참여 완료야.
+          <p className="text-bg-primary/80 text-sm leading-relaxed mb-3">
+            톡방에 들어오면 <span className="font-extrabold">제일 먼저 자기소개부터 올려줘!</span> 그래야 팀 배정이 시작돼. 시작 안내도 여기서 받아.
           </p>
+          <div className="bg-bg-primary/10 rounded-2xl px-4 py-2.5 mb-4">
+            <p className="text-bg-primary font-extrabold text-[13px] text-center">🙋 입장하자마자 → 자기소개 올리기</p>
+          </div>
           <span className="block w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl text-center">
             💬 톡방 입장하기 →
           </span>
@@ -76,27 +79,20 @@ export default function ApplyDonePage() {
           </p>
         </a>
 
-        {/* 3) 지인 초대 카드 — 같은 팀 */}
-        <div className="bg-bg-card rounded-[28px] p-7 w-full shadow-[0_24px_60px_rgba(0,0,0,0.2)]">
-          <span className="pill text-bg-primary block w-fit mb-3">STEP 2 · 같이 뿌시기</span>
-          <h3 className="font-kr text-2xl font-black text-card-ink mb-2 leading-tight">
-            친구 초대하면 같은 팀
-          </h3>
-          <p className="text-card-ink-muted text-sm leading-relaxed mb-5">
-            친구도 이 링크로 신청하면 <span className="text-bg-primary font-bold">같은 팀 배정</span> ✌️<br />
-            <span className="text-bg-primary font-bold">팀 5명 전원 완주하면 전원 스타벅스</span> ☕ — 같이 뛸수록 유리해.
-          </p>
-
-          <button
-            type="button"
-            onClick={handleCopy}
-            className="w-full bg-bg-primary text-white font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all shadow-[0_8px_24px_rgba(0,0,0,0.15)]"
-          >
-            {linkCopied ? '✓ 초대 링크가 복사되었어' : '🔗 친구 초대 링크 복사하기'}
-          </button>
-          <p className="text-card-ink-faint text-xs mt-3 text-center">
-            친구에게 카톡·DM으로 보내줘
-          </p>
+        {/* 3) 친구 초대 — 저강조(메인 동선 방해 X). 구분선 뒤 작은 한 줄 + 복사 버튼 */}
+        <div className="w-full pt-1">
+          <div className="border-t border-white/10 pt-6 flex flex-col items-center gap-3">
+            <p className="text-text-muted text-xs text-center leading-relaxed">
+              친구랑 같이 하면 <span className="text-text-secondary font-semibold">같은 팀</span> 배정 · 팀 전원 완주 시 전원 스타벅스 ☕
+            </p>
+            <button
+              type="button"
+              onClick={handleCopy}
+              className="text-accent-green text-sm font-bold hover:brightness-110 border border-accent-green/40 rounded-full px-5 py-2 transition-all"
+            >
+              {linkCopied ? '✓ 초대 링크 복사됨' : '🔗 친구 초대 링크 복사'}
+            </button>
+          </div>
         </div>
 
         <Link

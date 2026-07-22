@@ -13,7 +13,7 @@ import { PRESEASON } from './data/configPre';
 import { faqItems } from './data/faqPre';
 import { spotsInfo } from './lib/spots';
 import { countApplicantsPublic } from './lib/applyApi';
-import { useSeasonPreStatus } from './hooks/useSeasonPreStatus';
+import { useCountdown } from './hooks/useCountdown';
 
 // 프리시즌 신청자수 폴링(60초) — 남은 자리(30명 한정) 표시용. 코호트 row 없어도 count=0 방어.
 function usePreseasonCount() {
@@ -34,25 +34,27 @@ function usePreseasonCount() {
 // 결제·보증금·팀대항 없음. 3일 미션 + 5인 1팀 전원 완주 시 전원 스타벅스.
 export default function LandingPagePreseason() {
   const navigate = useNavigate();
-  const { isOpen } = useSeasonPreStatus();
   const goApply = () => navigate('/apply');
 
   const count = usePreseasonCount();
   const spots = spotsInfo(count);
+  // 마감 = 데드라인(7/22 20시) 지남 OR 정원 30명 참. 마감 후엔 대기명단 접수.
+  const { isExpired: deadlinePassed } = useCountdown(PRESEASON.deadline);
+  const isClosed = deadlinePassed || (spots?.full ?? false);
+  const ctaLabel = isClosed ? '대기 명단 신청 →' : '무료로 신청하기 →';
+  const stickyLabel = isClosed ? '대기 명단 신청 →' : `무료로 신청하기 · 마감 ${PRESEASON.deadlineLabel} →`;
 
   const scrollToHero = (e) => {
     e.preventDefault();
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
   };
 
-  // 배너 우측 상태 문구 — 남은 자리(30명 한정) 반영.
-  const bannerStatus = !isOpen
-    ? '마감'
-    : spots?.full
-      ? '정원 30명 마감'
-      : spots?.remaining != null
-        ? `${spots.low ? '🔥 ' : ''}${spots.remaining}자리 남음`
-        : '지금 신청받는 중';
+  // 배너 우측 상태 문구 — 정원(30명)/마감 반영.
+  const bannerStatus = isClosed
+    ? '⏰ 마감 · 대기 명단 받는 중'
+    : spots?.remaining != null
+      ? `${spots.low ? '🔥 ' : ''}${spots.remaining}자리 남음`
+      : '지금 신청받는 중';
 
   return (
     <div className="min-h-screen">
@@ -66,24 +68,24 @@ export default function LandingPagePreseason() {
       </a>
 
       <div className="pt-12">
-        <HeroSection onCTA={goApply} count={count} />
+        <HeroSection onCTA={goApply} count={count} ctaLabel={ctaLabel} isClosed={isClosed} />
         <PainPointSection />
-        <MissionSection onCTA={goApply} />
+        <MissionSection onCTA={goApply} ctaLabel={ctaLabel} />
         <WhyTogetherSection />
         <FounderSection />
         <TestimonialSection />
-        <TeamRewardSection onCTA={goApply} />
+        <TeamRewardSection onCTA={goApply} ctaLabel={ctaLabel} />
         <FAQSection />
-        <FinalCTASection onCTA={goApply} />
+        <FinalCTASection onCTA={goApply} ctaLabel={ctaLabel} />
         <Footer />
       </div>
 
-      <StickyCTA onCTA={goApply} />
+      <StickyCTA onCTA={goApply} label={stickyLabel} />
     </div>
   );
 }
 
-function HeroSection({ onCTA, count }) {
+function HeroSection({ onCTA, count, ctaLabel }) {
   return (
     <section id="hero" className="relative overflow-hidden">
       <div className="absolute top-1/4 left-1/2 -translate-x-1/2 w-[600px] h-[600px] rounded-full blur-[120px] pointer-events-none bg-accent-green/10" />
@@ -140,7 +142,7 @@ function HeroSection({ onCTA, count }) {
           <div className="animate-fade-up" style={{ animationDelay: '0.32s' }}>
             <SpotsBadge count={count} className="mb-4" />
             <Button onClick={onCTA} className="w-full max-w-xs shadow-[0_12px_40px_rgba(200,255,77,0.4)]">
-              무료로 신청하기 →
+              {ctaLabel}
             </Button>
             <p className="text-text-muted text-[11px] mt-3 font-semibold tracking-wide">
               누구나 · 지금 바로 · 2분이면 끝
@@ -152,7 +154,7 @@ function HeroSection({ onCTA, count }) {
   );
 }
 
-function MissionSection({ onCTA }) {
+function MissionSection({ onCTA, ctaLabel }) {
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
@@ -204,7 +206,7 @@ function MissionSection({ onCTA }) {
       </AnimateOnScroll>
 
       <AnimateOnScroll className="mt-8">
-        <Button onClick={onCTA} className="w-full">무료로 신청하기 →</Button>
+        <Button onClick={onCTA} className="w-full">{ctaLabel}</Button>
       </AnimateOnScroll>
     </section>
   );
@@ -251,7 +253,7 @@ function WhyTogetherSection() {
   );
 }
 
-function TeamRewardSection({ onCTA }) {
+function TeamRewardSection({ onCTA, ctaLabel }) {
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
@@ -286,7 +288,7 @@ function TeamRewardSection({ onCTA }) {
       </AnimateOnScroll>
 
       <AnimateOnScroll className="mt-8">
-        <Button onClick={onCTA} className="w-full">무료로 신청하기 →</Button>
+        <Button onClick={onCTA} className="w-full">{ctaLabel}</Button>
       </AnimateOnScroll>
     </section>
   );
@@ -312,7 +314,7 @@ function FAQSection() {
   );
 }
 
-function FinalCTASection({ onCTA }) {
+function FinalCTASection({ onCTA, ctaLabel }) {
   return (
     <section className="px-6 py-16 max-w-lg mx-auto text-center">
       <AnimateOnScroll>
@@ -327,13 +329,13 @@ function FinalCTASection({ onCTA }) {
         <div className="flex flex-col items-center gap-3 mb-7">
           <CountdownTimer targetDate={PRESEASON.deadline} size="md" expiredText="신청이 마감되었어" />
         </div>
-        <Button onClick={onCTA} className="w-full max-w-xs">무료로 신청하기 →</Button>
+        <Button onClick={onCTA} className="w-full max-w-xs">{ctaLabel}</Button>
       </AnimateOnScroll>
     </section>
   );
 }
 
-function StickyCTA({ onCTA }) {
+function StickyCTA({ onCTA, label }) {
   return (
     <div className="fixed bottom-0 left-0 right-0 z-40 px-4 pb-4 pt-3 bg-gradient-to-t from-bg-deep via-bg-deep/95 to-transparent">
       <div className="max-w-lg mx-auto">
@@ -341,7 +343,7 @@ function StickyCTA({ onCTA }) {
           onClick={onCTA}
           className="w-full bg-accent-green text-bg-primary font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all shadow-[0_8px_24px_rgba(200,255,77,0.35)]"
         >
-          무료로 신청하기 · 마감 {PRESEASON.deadlineLabel} →
+          {label}
         </button>
       </div>
     </div>

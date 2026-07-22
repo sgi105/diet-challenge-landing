@@ -5,6 +5,7 @@ export const PRESEASON = {
   cohortCode: '260723_pre_run_3d',
   isFree: true,          // 결제·보증금 없음
   teamSize: 5,           // 5인 1팀
+  totalSpots: 30,        // 정원 30명 (초과·마감 후는 대기명단)
 
   title: '작심삼일: 3일 만에 뿌시기 챌린지',
   subs: [

@@ -1,8 +1,10 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { submitApplication } from '../lib/applyApi';
+import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { PRESEASON } from '../data/configPre';
+import { previewCount } from '../lib/spots';
+import { useCountdown } from '../hooks/useCountdown';
 import { GOAL_OPTIONS, MAX_GOALS } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
@@ -113,8 +115,14 @@ export default function ApplyPage() {
     return () => cancelAnimationFrame(id);
   }, [step]);
 
-  // 무료 프리시즌 — 마감/후순위/선착순 개념 없음. 항상 접수 상태.
-  const isClosed = false;
+  // 마감(데드라인 7/22 20시 또는 정원 30명) 후 = 대기명단 접수 모드.
+  const { isExpired: deadlinePassed } = useCountdown(PRESEASON.deadline);
+  const [applicantCount, setApplicantCount] = useState(null);
+  useEffect(() => {
+    countApplicantsPublic(PRESEASON.cohortCode).then(setApplicantCount).catch(() => { /* row 없음 등 무시 */ });
+  }, []);
+  const previewedCount = previewCount(applicantCount); // URL ?spots=N 프리뷰 지원(마감 화면 확인용)
+  const isClosed = deadlinePassed || (previewedCount != null && previewedCount >= (PRESEASON.totalSpots || 30));
 
   const update = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -150,7 +158,7 @@ export default function ApplyPage() {
     let attempt = 0;
     while (attempt < 2) {
       try {
-        const { id } = await submitApplication(form);
+        const { id } = await submitApplication(form, { waitlist: isClosed });
         track('apply_submit_success', { isReferral });
         const friendAttached = !!(form.friend || '').trim();
         if (friendAttached) track('apply_submit_friend_attached');
@@ -221,8 +229,8 @@ export default function ApplyPage() {
       {isClosed && (
         <div className="bg-accent-orange/15 border-b border-accent-orange/30 px-6 py-3">
           <p className="max-w-md mx-auto text-accent-orange text-[13px] font-bold leading-tight text-center">
-            ⏰ 정식 마감됨 · <span className="font-extrabold">후순위 신청 접수 중</span>
-            <span className="block text-text-muted text-[11px] font-semibold mt-0.5">결원 발생 시 우선 검토 / 합격 발표는 별도 안내</span>
+            ⏰ 정원 마감 · <span className="font-extrabold">대기 명단으로 접수 중</span>
+            <span className="block text-text-muted text-[11px] font-semibold mt-0.5">자리 나면 신청 순서대로 합류 안내</span>
           </p>
         </div>
       )}
@@ -268,7 +276,7 @@ export default function ApplyPage() {
                 disabled={submitting}
                 className="flex-1 bg-accent-green text-bg-primary font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all disabled:opacity-50 cursor-pointer shadow-[0_8px_24px_rgba(200,255,77,0.3)]"
               >
-                {submitting ? '제출 중...' : '지원서 제출하기 →'}
+                {submitting ? '제출 중...' : (isClosed ? '대기 명단 신청하기 →' : '지원서 제출하기 →')}
               </button>
             </>
           )}

@@ -43,8 +43,10 @@ function combineMotivationWithFriend(motivation, friend) {
   return (base + tail).slice(0, 2000);
 }
 
-export async function submitApplication(form) {
-  const motivation = combineMotivationWithFriend(form.motivation, form.friend);
+export async function submitApplication(form, { waitlist = false } = {}) {
+  let motivation = combineMotivationWithFriend(form.motivation, form.friend);
+  // 마감(데드라인/정원) 후 접수분은 대기명단으로 태깅 — 코치 신청서 탭 동기 필드에 그대로 노출.
+  if (waitlist) motivation = `[대기명단] ${motivation}`.slice(0, 2000);
   const goals = Array.isArray(form.goals) ? form.goals.slice(0, 5) : [];
   const goalsOther = form.goalsOther?.trim().slice(0, 500) || null;
   const payload = {
