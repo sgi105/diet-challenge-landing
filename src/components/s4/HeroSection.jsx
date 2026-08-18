@@ -97,7 +97,10 @@ export default function HeroSection({ onCTA }) {
                 하루 <span className="text-accent-green">{PROGRAM4.startMinutes}분</span>부터 시작 <span className="text-text-muted">→</span> 21일 뒤 <span className="text-accent-green">5K 완주</span>
               </p>
               <p className="text-text-muted text-[11px] font-semibold mt-1.5">
-                8/24(월) 시작 · 9/13(일) 파이널 레이스
+                8/24(월) 시작 · 21일 뒤 파이널 레이스
+              </p>
+              <p className="text-text-secondary text-xs sm:text-sm font-bold leading-relaxed mt-2.5 break-keep">
+                🏆 1등 팀 전원 <span className="text-text-muted">→</span> <span className="text-accent-green">{PROGRAM4.prizeTeam1st}</span>
               </p>
             </div>
           )}

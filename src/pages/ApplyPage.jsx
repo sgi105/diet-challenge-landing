@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
-import { PRESEASON } from '../data/configPre';
+import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
 import { useCountdown } from '../hooks/useCountdown';
 import { GOAL_OPTIONS, MAX_GOALS } from '../data/applicationGoals';
@@ -75,8 +75,9 @@ export default function ApplyPage() {
   const isReferral = searchParams.get('type') === 'referral';
 
   const STORAGE_KEY = isReferral ? STORAGE_KEY_REFERRAL : STORAGE_KEY_MAIN;
-  // 프리시즌은 무료 → 보증금(deposit) step 제거.
-  const STEPS = (isReferral ? REFERRAL_STEPS : MAIN_STEPS).filter(s => s !== 'deposit');
+  // 무료 기수면 보증금(deposit) step 제거. 시즌4는 보증금 20만이라 살아난다.
+  const baseSteps = isReferral ? REFERRAL_STEPS : MAIN_STEPS;
+  const STEPS = ACTIVE.isFree ? baseSteps.filter(s => s !== 'deposit') : baseSteps;
   const TOTAL_QUESTIONS = STEPS.length - 1;
 
   const persisted = useMemo(() => loadState(STORAGE_KEY), [STORAGE_KEY]);
@@ -115,14 +116,14 @@ export default function ApplyPage() {
     return () => cancelAnimationFrame(id);
   }, [step]);
 
-  // 마감(데드라인 7/22 20시 또는 정원 30명) 후 = 대기명단 접수 모드.
-  const { isExpired: deadlinePassed } = useCountdown(PRESEASON.deadline);
+  // 마감(데드라인 8/21 14시 또는 정원 30명) 후 = 대기명단 접수 모드.
+  const { isExpired: deadlinePassed } = useCountdown(ACTIVE.deadline);
   const [applicantCount, setApplicantCount] = useState(null);
   useEffect(() => {
-    countApplicantsPublic(PRESEASON.cohortCode).then(setApplicantCount).catch(() => { /* row 없음 등 무시 */ });
+    countApplicantsPublic(ACTIVE.cohortCode).then(setApplicantCount).catch(() => { /* row 없음 등 무시 */ });
   }, []);
   const previewedCount = previewCount(applicantCount); // URL ?spots=N 프리뷰 지원(마감 화면 확인용)
-  const isClosed = deadlinePassed || (previewedCount != null && previewedCount >= (PRESEASON.totalSpots || 30));
+  const isClosed = deadlinePassed || (previewedCount != null && previewedCount >= (ACTIVE.totalSpots || 30));
 
   const update = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));
@@ -495,19 +496,19 @@ function IntroStep({ isReferral, totalQuestions }) {
   if (isReferral) {
     return (
       <div className="flex-1 flex flex-col justify-center text-center">
-        <span className="pill text-accent-orange block w-fit mx-auto mb-4">FREE · 친구랑 같이</span>
+        <span className="pill text-accent-orange block w-fit mx-auto mb-4">친구랑 같이 지원</span>
         <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
-          친구랑 같이<br />무료 신청
+          친구랑 같이<br />지원하기
         </h1>
         <p className="text-text-secondary leading-relaxed">
-          둘 다 신청하면 <span className="text-text-primary font-bold">같은 팀</span> 으로 묶여.<br />
-          작심삼일, 같이 뿌시자.
+          둘 다 지원하면 <span className="text-text-primary font-bold">같은 팀</span> 으로 묶여.<br />
+          21일, 같이 뿌시자.
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>💸 <span className="text-card-ink font-bold">완전 무료</span> · 보증금·참가비 없음</li>
+          <li>💸 <span className="text-card-ink font-bold">참가비 무료</span> · 보증금 20만원은 완주하면 전액 환급</li>
           <li>🤝 <span className="text-card-ink font-bold">친구랑 같은 팀</span> 배정</li>
-          <li>📅 <span className="text-bg-primary font-bold">{PRESEASON.startLabel}</span> · 딱 3일</li>
+          <li>📅 <span className="text-bg-primary font-bold">{ACTIVE.startLabel}</span> · 21일</li>
         </ul>
         <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
           📖 챌린지 설명 먼저 보기 →
@@ -517,19 +518,19 @@ function IntroStep({ isReferral, totalQuestions }) {
   }
   return (
     <div className="flex-1 flex flex-col justify-center text-center">
-      <span className="pill text-accent-green block w-fit mx-auto mb-4">FREE PRE-SEASON · APPLY</span>
+      <span className="pill text-accent-green block w-fit mx-auto mb-4">21DAY RUN · APPLY</span>
       <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
-        2분이면<br />신청 끝
+        2분이면<br />지원 끝
       </h1>
       <p className="text-text-secondary leading-relaxed">
-        무료 3일 뿌시기 챌린지.<br />
-        모든 항목은 팀 매칭에 사용돼.
+        21일 팀 러닝 챌린지.<br />
+        모든 항목은 선발이랑 팀 매칭에 쓰여.
       </p>
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (새로고침 안전)</li>
-        <li>☕ <span className="text-bg-primary font-bold">팀 전원 완주 시 전원 스타벅스</span></li>
-        <li>📅 <span className="text-card-ink font-bold">{PRESEASON.startLabel}</span> · 딱 3일</li>
+        <li>💸 <span className="text-bg-primary font-bold">참가비 무료</span> · 보증금 20만원은 완주하면 전액 환급</li>
+        <li>📅 <span className="text-card-ink font-bold">{ACTIVE.startLabel}</span> · 21일</li>
       </ul>
       <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
         📖 챌린지 설명 먼저 보기 →
@@ -745,7 +746,7 @@ function DepositConsentStep({ checked, onChange }) {
       icon: '💰', step: 'STEP 3 · 완주 후', title: '보증금 그대로 돌려받기',
       outcomes: [
         { mark: '✓', label: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
-        { mark: '🏆', label: '팀 1등', amount: '+ 러닝화', tone: 'pos' },
+        { mark: '🏆', label: '팀 1등', amount: `+ ${ACTIVE.prizeTeam1st}`, tone: 'pos' },
         { mark: '✕', label: '중도 포기', amount: '0원', tone: 'neg' },
       ],
     },
@@ -795,31 +796,34 @@ function DepositConsentStep({ checked, onChange }) {
         ))}
       </div>
 
-      <p className="mt-4 text-card-ink-faint text-xs whitespace-nowrap">🛡️ 합격 후 OT(6/28) 전까지 마음 바뀌면 전액 환불</p>
+      <p className="mt-4 text-card-ink-faint text-xs whitespace-nowrap">🛡️ 합격 후 OT {ACTIVE.otLabel} 전까지 마음 바뀌면 전액 환불</p>
     </ConsentShell>
   );
 }
 
 function ScheduleConsentStep({ checked, onChange }) {
-  const [d1, d2, d3] = PRESEASON.missions;
   return (
     <ConsentShell
-      label="3일 일정"
+      label="21일 일정"
       checked={checked}
       onChange={onChange}
-      checkboxLabel="3일 일정을 확인했어"
+      checkboxLabel="21일 일정을 확인했어"
     >
       <p className="mb-4 text-card-ink text-[15px] leading-relaxed">
-        <span className="font-bold">무료</span> 3일 챌린지야. 보증금도, 참가비도 없어.
+        <span className="font-bold">{ACTIVE.durationDays}일 동안 매일</span> 뛰는 챌린지야.
         시간만 채우면 성공(페이스·거리 자유).
       </p>
       <ul className="space-y-3 text-sm">
-        <li>🏃 <span className="font-semibold">Day 1</span> · {d1.date}({d1.weekday}) — <span className="text-card-ink font-bold">{d1.minutes}분 러닝</span></li>
-        <li>🏃 <span className="font-semibold">Day 2</span> · {d2.date}({d2.weekday}) — <span className="text-card-ink font-bold">{d2.minutes}분 러닝</span></li>
-        <li>🏃 <span className="font-semibold">Day 3</span> · {d3.date}({d3.weekday}) — <span className="text-card-ink font-bold">{d3.minutes}분 러닝</span></li>
-        <li>🎉 <span className="font-semibold">{PRESEASON.finale.label}:</span> <span className="text-accent-orange font-bold">{PRESEASON.finale.date}({PRESEASON.finale.weekday}) {PRESEASON.finale.time}</span></li>
-        <li>☕ <span className="font-semibold">보상:</span> <span className="text-bg-primary font-bold">팀 5명 전원 완주 시 전원 스타벅스</span></li>
+        <li>🏃 <span className="font-semibold">Day 1</span> · <span className="text-card-ink font-bold">{ACTIVE.minutesStart}분 러닝</span>부터 시작</li>
+        <li>📈 <span className="font-semibold">하루 1분씩</span> 늘어서 <span className="text-card-ink font-bold">Day {ACTIVE.peakDay}에 {ACTIVE.minutesPeak}분</span></li>
+        <li>🔁 <span className="font-semibold">Day {ACTIVE.peakDay} 이후</span> — 마지막 날까지 <span className="text-card-ink font-bold">{ACTIVE.minutesPeak}분 유지</span></li>
+        <li>🎉 <span className="font-semibold">마지막 날:</span> <span className="text-accent-orange font-bold">파이널 5K 레이스</span></li>
+        <li>✅ <span className="font-semibold">환급 조건:</span> <span className="text-bg-primary font-bold">미션 {ACTIVE.successRate}% 이상 + 파이널 완주</span> ({ACTIVE.passCount}회까지 미완료 패스)</li>
+        <li>👥 <span className="font-semibold">팀:</span> <span className="text-bg-primary font-bold">{ACTIVE.teamSize}인 1팀</span> · 1등 팀 전원 {ACTIVE.prizeTeam1st}</li>
       </ul>
+      <p className="mt-4 text-card-ink-faint text-[13px] leading-relaxed">
+        {ACTIVE.startLabel} · OT {ACTIVE.otLabel} 온라인 줌
+      </p>
     </ConsentShell>
   );
 }
@@ -831,7 +835,7 @@ function GoalsStep({ goals, goalsOther, onToggle, onOtherChange }) {
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">진짜 이루고 싶은 목표</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-1">
-        3일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
+        21일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
       </p>
       <p className="text-text-muted text-xs mb-5">
         선발할 때 팀 매칭이랑 코칭 방향 잡는 데 써.

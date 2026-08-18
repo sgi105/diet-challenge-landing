@@ -1,11 +1,10 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 
 // 러닝을 게임으로: 팀·경쟁·보상 + 증거 + 후기 3축.
-// TODO 시즌4 1등 팀 상품 미확정 — 확정되면 '보상' pillar의 title/desc를 실제 상품으로 교체
 const pillars = [
   { icon: '👥', tag: '팀', title: '5인 1팀', desc: '매일 서로의 인증을 보고 댓글·응원. 혼자가 아니라 같이 뛴다.' },
   { icon: '📊', tag: '경쟁', title: '6팀 실시간 대항전', desc: '러닝할 때마다 팀 점수가 쌓이고, 6팀이 실시간으로 순위 경쟁.' },
-  { icon: '🏆', tag: '보상', title: '1등 팀 특전', desc: '21일 경쟁 끝, 최종 1등 팀에게 주는 특전은 모집 중에 공개할게.' },
+  { icon: '🏆', tag: '보상', title: '1등 팀 10만원 혜택', desc: '21일 경쟁 끝, 최종 1등 팀은 전원 10만원 상당 혜택까지 챙겨간다.' },
 ];
 
 const voices = [

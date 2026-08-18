@@ -7,9 +7,10 @@ const included = [
   '21일 매일 러닝 인증 (앱)',
   'OT 줌 세션 (러닝 가이드)',
   '5인 1팀 카톡방 + 팀 점검 콜',
-  '9/13(일) 파이널 5K 레이스 운영',
+  '마지막 날 파이널 5K 레이스 운영',
   `개인 미션 ${PROGRAM4.successRate}% 완료 시 20만원 전액 환급`,
   '6팀 실시간 순위 대항전',
+  '1등 팀 전원 → 10만원 상당 혜택',
 ];
 
 export default function PricingSection({ onCTA }) {

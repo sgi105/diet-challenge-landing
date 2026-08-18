@@ -27,7 +27,6 @@ function CardLabel({ children, className = '' }) {
   return <p className={`text-[10px] font-extrabold tracking-widest mb-2 ${className}`}>{children}</p>;
 }
 
-// TODO 시즌4 1등 팀 상품 미확정 — 확정되면 아래 "1등 팀" 카드에 실물 상품 추가 (시즌2는 DARIMATI 러닝화였음)
 export default function MoneyMechanicSection() {
   const { ref, isVisible } = useScrollReveal();
 
@@ -85,6 +84,18 @@ export default function MoneyMechanicSection() {
             <p className="text-bg-primary/75 text-[13px] font-extrabold mt-3 break-keep">
               살다 보면 못 뛰는 날 있잖아. {PROGRAM4.passCount}번까지는 봐줄게.
             </p>
+          </div>
+        </AnimateOnScroll>
+
+        {/* Row 3: 1등 팀 보너스 */}
+        <AnimateOnScroll animation="animate-scale-in" delay={0.2}>
+          <div className="bg-bg-card rounded-2xl p-5 flex items-center gap-4 shadow-[0_4px_16px_rgba(0,0,0,0.10)]">
+            <span className="text-4xl shrink-0 leading-none">🏆</span>
+            <div className="min-w-0">
+              <CardLabel className="text-card-ink-faint">1등 팀</CardLabel>
+              <p className="text-card-ink text-xl font-black leading-tight">{PROGRAM4.prizeTeam1st}</p>
+              <p className="text-card-ink-muted text-xs mt-1.5 leading-relaxed">6팀 중 1등 팀은 전원 다 같이</p>
+            </div>
           </div>
         </AnimateOnScroll>
 

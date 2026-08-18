@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { PRESEASON } from '../data/configPre';
+import { ACTIVE } from '../data/activeCohort';
 
 const BANK = '토스뱅크';
 const ACCOUNT_RAW = '1000264186993'; // 검증용 — UI에는 1000-2641-8699 표시. 실제 계좌번호는 사용자 확인.
@@ -16,14 +16,14 @@ export default function PayPage() {
   const navigate = useNavigate();
   const [copiedKey, setCopiedKey] = useState('');
 
-  // 프리시즌은 무료 → 결제 페이지 접근 시 완료 페이지로 자동 리다이렉트.
+  // 무료 기수면 결제 페이지 접근 시 완료 페이지로 자동 리다이렉트. 시즌4는 보증금 20만이라 이 페이지가 열린다.
   useEffect(() => {
-    if (PRESEASON.isFree) {
+    if (ACTIVE.isFree) {
       navigate('/apply/done', { replace: true });
     }
   }, [navigate]);
 
-  if (PRESEASON.isFree) {
+  if (ACTIVE.isFree) {
     return (
       <div className="min-h-screen flex flex-col items-center justify-center px-6 text-center">
         <p className="text-text-secondary text-sm">이 챌린지는 무료야. 결제가 필요 없어.</p>

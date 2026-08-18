@@ -5,8 +5,8 @@ import { spotsInfo } from '../lib/spots';
 
 // 시즌4 3단계 상태머신.
 //   upcoming — 오픈 대기 (지금 ~ 8/19 08:00) · 카운트다운만, 신청 버튼 잠김
-//   official — 모집 중 (8/19 08:00 ~ 8/22 14:00) · 선착순 30명 + 지원서 심사
-//   closed   — 마감 (8/22 14:00~) · 결원 대기 명단
+//   official — 모집 중 (8/19 08:00 ~ 8/21 14:00) · 선착순 30명 + 지원서 심사
+//   closed   — 마감 (8/21 14:00~) · 결원 대기 명단
 function compute() {
   const now = Date.now();
   if (now < new Date(COHORT4.officialOpen).getTime()) return 'upcoming';
@@ -56,15 +56,15 @@ export const COPY4 = {
     stickySub: '선착순 30명 모집',
   },
   official: {
-    banner: '🔴 모집 중 · 8/22(토) 오후 2시 마감 · 선착순 30명',
-    ctaSub: '8/22(토) 오후 2시 마감',
+    banner: '🔴 모집 중 · 8/21(금) 오후 2시 마감 · 선착순 30명',
+    ctaSub: '8/21(금) 오후 2시 마감',
     cta: {
       hero: '지원하기',
       pricing: '지원하기',
       final: '지원하기',
       sticky: '지원하기',
     },
-    stickySub: '8/22(토) 오후 2시 마감',
+    stickySub: '8/21(금) 오후 2시 마감',
   },
   closed: {
     banner: '⏰ 모집 마감 · 결원 대기 명단 받는 중 →',

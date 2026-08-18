@@ -33,7 +33,7 @@ export default function BenefitsSection() {
           <span className="pill text-accent-green">AFTER 21 DAYS</span>
         </div>
         <h2 className="font-kr text-3xl md:text-5xl font-black text-center mb-3 text-text-primary leading-tight">
-          9월 13일,<br /><span className="text-accent-green">뭐가 남을까</span>
+          21일 뒤,<br /><span className="text-accent-green">뭐가 남을까</span>
         </h2>
         <p className="text-text-secondary text-center text-sm mb-8 font-semibold break-keep">
           21일 뒤에 네가 들고 가는 것 4가지

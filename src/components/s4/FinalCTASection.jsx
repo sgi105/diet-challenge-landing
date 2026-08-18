@@ -29,7 +29,7 @@ export default function FinalCTASection({ onCTA }) {
       <AnimateOnScroll>
         <div className="space-y-3 mb-8">
           <p className="text-accent-green font-extrabold text-xl break-keep">
-            9월 13일에 5K를 뛰고 있는 사람
+            21일 뒤에 5K를 뛰고 있는 사람
           </p>
           <p className="text-text-muted font-bold tracking-widest text-xs">OR</p>
           <p className="text-accent-orange font-extrabold text-xl break-keep">
