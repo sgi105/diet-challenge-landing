@@ -946,7 +946,8 @@ function OtStep({ value, onChange }) {
           {ACTIVE.otLabel} {ACTIVE.otTimeLabel}
         </p>
         <p className="text-card-ink-muted text-[13px] mt-2 leading-relaxed">
-          이때 <span className="text-card-ink font-bold">팀 배정</span>이 이뤄져. 러닝 가이드(호흡·페이스)도 여기서 같이 잡아줄게.
+          이때 <span className="text-card-ink font-bold">팀 배정</span>이 이뤄져. 챌린지를 어떻게 해야 잘 끝낼 수 있는지 알려주고,
+          앞으로 21일 같이 갈 <span className="text-card-ink font-bold">팀원들이랑 처음 인사하는 자리</span>야.
         </p>
       </div>
 
@@ -980,9 +981,6 @@ function OtStep({ value, onChange }) {
         })}
       </div>
 
-      <p className="text-text-muted text-xs mt-4 leading-relaxed">
-        못 와도 지원엔 불이익 없어. 다만 팀은 <span className="text-text-secondary font-semibold">남은 자리에 랜덤 배정</span>돼.
-      </p>
     </div>
   );
 }
