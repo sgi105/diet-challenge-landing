@@ -5,7 +5,7 @@ import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
 import { useCountdown } from '../hooks/useCountdown';
-import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, PACE_GOAL_VALUE, partsToSec } from '../data/applicationGoals';
+import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, TARGET_MILESTONES, PACE_GOAL_VALUE, partsToSec, secToParts } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
 const STORAGE_KEY_REFERRAL = 'samurai-season2-apply-referral-v1';
@@ -32,16 +32,18 @@ const initialForm = {
   current5k: { h: '', m: '', s: '' },
   targetDistance: '',
   targetTime: { h: '', m: '', s: '' },
+  targetTimeMode: 'preset', // 'preset' = 마일스톤 객관식 | 'custom' = 기타(휠로 직접)
   otAttend: '',
 };
 
+// 초보 → 상급 순. 지원자 대부분이 초심자라 위에서 바로 자기 자리를 찾게 한다.
 const runningExpOptions = [
-  { value: 'full_marathon', label: '풀마라톤(42km) 완주 경험' },
-  { value: 'half_marathon', label: '하프(21km) 완주 경험' },
-  { value: 'run_10km', label: '10km 뛸 수 있다' },
-  { value: 'run_5km', label: '5km 뛸 수 있다' },
-  { value: 'run_1km', label: '1km 정도 뛸 수 있다' },
   { value: 'almost_none', label: '거의 안 뛰어봤다' },
+  { value: 'run_1km', label: '1km 정도 뛸 수 있다' },
+  { value: 'run_5km', label: '5km 뛸 수 있다' },
+  { value: 'run_10km', label: '10km 뛸 수 있다' },
+  { value: 'half_marathon', label: '하프(21km) 완주 경험' },
+  { value: 'full_marathon', label: '풀마라톤(42km) 완주 경험' },
 ];
 
 const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'friend', 'deposit', 'ot'];
@@ -95,7 +97,7 @@ export default function ApplyPage() {
   useEffect(() => {
     if (!isReferral) return;
     const prev = document.title;
-    document.title = '지인 추천 사전신청';
+    document.title = '친구랑 같이 지원 · 21일 팀 러닝 챌린지';
     return () => { document.title = prev; };
   }, [isReferral]);
 
@@ -302,35 +304,50 @@ export default function ApplyPage() {
 const AGES = Array.from({ length: 67 }, (_, i) => i + 14);
 const ITEM_H = 56;
 
-function AgeScrollPicker({ value, onChange }) {
+// 공용 휠 픽커 — 나이·목표 기록(시/분/초)이 같이 쓴다.
+// 터치/휠은 브라우저 기본 스크롤로 되고, PC 마우스 드래그는 pointer 이벤트로 직접 처리한다.
+//   tone 'page' : 파란 페이지 위에 흰 카드로 올라감 (나이)
+//   tone 'card' : 이미 흰 카드 안에 들어감 (목표 기록)
+function WheelPicker({ values, value, onChange, itemH = ITEM_H, render, tone = 'page' }) {
   const ref = useRef(null);
   const drag = useRef(null);
   const [dragging, setDragging] = useState(false);
 
+  const idxOf = (v) => {
+    const i = values.indexOf(v);
+    return i < 0 ? 0 : i;
+  };
+
   useEffect(() => {
-    if (!ref.current) return;
-    const idx = AGES.indexOf(parseInt(value) || 30);
-    ref.current.scrollTop = (idx < 0 ? AGES.indexOf(30) : idx) * ITEM_H;
+    if (ref.current) ref.current.scrollTop = idxOf(value) * itemH;
+    // 최초 1회만 위치 잡는다.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-  // 가장 가까운 항목으로 붙이고 값 확정.
+  // 바깥에서 값이 리셋되면(거리 변경 등) 휠 위치도 따라간다. 드래그 중엔 건드리지 않는다.
+  useEffect(() => {
+    const el = ref.current;
+    if (!el || drag.current) return;
+    const want = idxOf(value) * itemH;
+    if (Math.abs(el.scrollTop - want) > 1) el.scrollTop = want;
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [value]);
+
   const settle = () => {
     const el = ref.current;
     if (!el) return;
-    const idx = Math.round(el.scrollTop / ITEM_H);
-    const clamped = Math.max(0, Math.min(idx, AGES.length - 1));
-    el.scrollTop = clamped * ITEM_H;
-    onChange(String(AGES[clamped]));
+    const idx = Math.round(el.scrollTop / itemH);
+    const clamped = Math.max(0, Math.min(idx, values.length - 1));
+    el.scrollTop = clamped * itemH;
+    onChange(values[clamped]);
   };
 
   const onScroll = () => {
-    // 드래그 중에는 스냅 타이머를 걸지 않는다 — 손가락/마우스가 아직 잡고 있는데 튕겨버림.
     if (!ref.current || drag.current) return;
     clearTimeout(ref.current._t);
     ref.current._t = setTimeout(settle, 80);
   };
 
-  // PC 마우스 드래그 — 터치는 네이티브 스크롤이 이미 처리하므로 제외.
   const onPointerDown = (e) => {
     if (e.pointerType === 'touch') return;
     const el = ref.current;
@@ -356,10 +373,17 @@ function AgeScrollPicker({ value, onChange }) {
     settle();
   };
 
-  const selected = parseInt(value);
+  const shell = tone === 'card'
+    ? 'bg-bg-primary/5 border-2 border-card-border'
+    : 'bg-bg-card border-2 border-white/20';
+
   return (
-    <div className="relative h-[168px] overflow-hidden rounded-2xl bg-bg-card border-2 border-white/20">
-      <div className="absolute inset-x-0 top-[56px] h-14 bg-accent-green/15 border-y border-accent-green/40 pointer-events-none z-10" />
+    <div className={`relative overflow-hidden rounded-2xl ${shell}`} style={{ height: itemH * 3 }}>
+      {/* 선택 밴드. 흰 배경이라 연두 글자는 안 보인다 → 밴드를 진하게 깔고 글자는 진한 남색으로. */}
+      <div
+        className="absolute inset-x-0 bg-accent-green/45 border-y-2 border-accent-green pointer-events-none z-10"
+        style={{ top: itemH, height: itemH }}
+      />
       <div
         ref={ref}
         onScroll={onScroll}
@@ -368,22 +392,36 @@ function AgeScrollPicker({ value, onChange }) {
         onPointerUp={endDrag}
         onPointerCancel={endDrag}
         className={`h-full overflow-y-scroll select-none ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
-        // 드래그 중엔 스냅을 끈다 — 켜둔 채로 scrollTop을 직접 만지면 스냅이 되받아쳐서 뚝뚝 끊긴다.
+        // 드래그 중엔 스냅을 끈다 — 켜둔 채 scrollTop을 직접 만지면 스냅이 되받아쳐 끊긴다.
         style={{ scrollSnapType: dragging ? 'none' : 'y mandatory', scrollbarWidth: 'none' }}
       >
-        <div style={{ height: ITEM_H }} />
-        {AGES.map(age => (
+        <div style={{ height: itemH }} />
+        {values.map((v) => (
           <div
-            key={age}
-            style={{ scrollSnapAlign: 'center', height: ITEM_H }}
-            className={`flex items-center justify-center text-2xl font-bold transition-colors ${selected === age ? 'text-accent-green font-extrabold' : 'text-card-ink font-semibold'}`}
+            key={v}
+            style={{ scrollSnapAlign: 'center', height: itemH }}
+            className={`relative z-20 flex items-center justify-center tabular-nums transition-colors ${
+              v === value ? 'text-bg-primary font-black' : 'text-card-ink/45 font-semibold'
+            }`}
           >
-            {age}세
+            {render ? render(v) : v}
           </div>
         ))}
-        <div style={{ height: ITEM_H }} />
+        <div style={{ height: itemH }} />
       </div>
     </div>
+  );
+}
+
+function AgeScrollPicker({ value, onChange }) {
+  const selected = parseInt(value, 10);
+  return (
+    <WheelPicker
+      values={AGES}
+      value={AGES.includes(selected) ? selected : 30}
+      onChange={(v) => onChange(String(v))}
+      render={(v) => <span className="text-2xl">{v}세</span>}
+    />
   );
 }
 
@@ -499,7 +537,25 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           goalsOther={form.goalsOther || ''}
           targetDistance={form.targetDistance || ''}
           targetTime={form.targetTime || { h: '', m: '', s: '' }}
-          onDistance={(v) => update('targetDistance', v)}
+          targetTimeMode={form.targetTimeMode || 'preset'}
+          onMilestone={(sec) => {
+            update('targetTimeMode', 'preset');
+            update('targetTime', secToParts(sec));
+          }}
+          onCustom={() => {
+            update('targetTimeMode', 'custom');
+            update('targetTime', { h: '', m: '', s: '' });
+          }}
+          onDistance={(v) => {
+            update('targetDistance', v);
+            // 거리를 바꾸면 안 보이는 칸(시간/초)의 잔값을 비운다 — 안 그러면 합계에 몰래 섞인다.
+            const opt = TARGET_DISTANCE_OPTIONS.find(d => d.value === v);
+            const cur = form.targetTime || { h: '', m: '', s: '' };
+            // 거리가 바뀌면 마일스톤 목록 자체가 달라지므로 목표 기록은 처음부터 다시 고른다.
+            update('targetTimeMode', 'preset');
+            update('targetTime', { h: '', m: '', s: '' });
+            void opt; void cur;
+          }}
           onTime={(v) => update('targetTime', v)}
           onToggle={(v) => {
             const cur = form.goals || [];
@@ -509,6 +565,7 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
               if (v === PACE_GOAL_VALUE) {
                 update('targetDistance', '');
                 update('targetTime', { h: '', m: '', s: '' });
+                update('targetTimeMode', 'preset');
               }
             } else if (cur.length < MAX_GOALS) {
               update('goals', [...cur, v]);
@@ -930,32 +987,36 @@ function OtStep({ value, onChange }) {
   );
 }
 
-// 시간 입력 — 시(옵션)/분/초 세 칸. 값은 초 단위로 올려보낸다.
-// 항상 흰 카드(bg-card) 안에 들어가므로 어두운 배경용 색(text-muted/border-white)을 쓰면 안 보인다.
-function TimeInput({ parts, onChange, showHours, autoFocus }) {
-  const box = 'w-full bg-bg-primary/5 border-2 border-card-border rounded-xl px-3 py-3 text-center text-xl font-extrabold tabular-nums text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors';
-  const set = (k) => (e) => {
-    const digits = e.target.value.replace(/\D/g, '').slice(0, 2);
-    onChange({ ...parts, [k]: digits });
+// 시간 입력 — 시/분/초 휠 픽커. 값은 초 단위로 올려보낸다.
+// 타이핑보다 휠·드래그가 빨라서 숫자 입력 대신 WheelPicker를 쓴다.
+const HOUR_VALUES = Array.from({ length: 10 }, (_, i) => i);        // 0-9시간 (풀 마라톤 커버)
+const MIN_VALUES = Array.from({ length: 60 }, (_, i) => i);
+const SEC_VALUES = Array.from({ length: 60 }, (_, i) => i);
+const pad2 = (n) => String(n).padStart(2, '0');
+
+function TimeInput({ parts, onChange, showHours, showSeconds = true }) {
+  const num = (v) => {
+    const n = parseInt(v, 10);
+    return Number.isFinite(n) ? n : 0;
   };
+  const set = (k) => (v) => onChange({ ...parts, [k]: String(v) });
   const fields = [
-    ...(showHours ? [{ k: 'h', label: '시간', ph: '0' }] : []),
-    { k: 'm', label: '분', ph: '00' },
-    { k: 's', label: '초', ph: '00' },
+    ...(showHours ? [{ k: 'h', label: '시간', values: HOUR_VALUES, render: (v) => <span className="text-2xl">{v}</span> }] : []),
+    { k: 'm', label: '분', values: MIN_VALUES, render: (v) => <span className="text-2xl">{pad2(v)}</span> },
+    ...(showSeconds ? [{ k: 's', label: '초', values: SEC_VALUES, render: (v) => <span className="text-2xl">{pad2(v)}</span> }] : []),
   ];
   return (
     <div className="flex items-end gap-2">
-      {fields.map((f, i) => (
-        <div key={f.k} className="flex-1">
+      {fields.map((f) => (
+        <div key={f.k} className="flex-1 min-w-0">
           <label className="block text-card-ink-muted text-[11px] font-bold mb-1 text-center">{f.label}</label>
-          <input
-            type="text"
-            inputMode="numeric"
-            value={parts[f.k] ?? ''}
+          <WheelPicker
+            values={f.values}
+            value={num(parts[f.k])}
             onChange={set(f.k)}
-            placeholder={f.ph}
-            autoFocus={autoFocus && i === 0}
-            className={box}
+            itemH={44}
+            render={f.render}
+            tone="card"
           />
         </div>
       ))}
@@ -1007,14 +1068,14 @@ function ShortGoalStep({ shortGoal, current5k, onGoal, onRecord }) {
           <p className="text-card-ink-muted text-[13px] mb-4 leading-relaxed">
             대충이어도 괜찮아. 페이스 그룹 나눌 때 참고할게.
           </p>
-          <TimeInput parts={current5k} onChange={onRecord} showHours={false} autoFocus />
+          <TimeInput parts={current5k} onChange={onRecord} showHours={false} />
         </div>
       )}
     </div>
   );
 }
 
-function GoalsStep({ goals, goalsOther, targetDistance, targetTime, onToggle, onOtherChange, onDistance, onTime }) {
+function GoalsStep({ goals, goalsOther, targetDistance, targetTime, targetTimeMode, onToggle, onOtherChange, onDistance, onTime, onMilestone, onCustom }) {
   const isOtherSelected = goals.includes('other');
   const isPaceSelected = goals.includes(PACE_GOAL_VALUE);
   const maxReached = goals.length >= MAX_GOALS;
@@ -1077,9 +1138,43 @@ function GoalsStep({ goals, goalsOther, targetDistance, targetTime, onToggle, on
             <div className="mt-4">
               <p className="text-card-ink font-bold text-[15px] mb-1">{distOpt.label} 목표 기록</p>
               <p className="text-card-ink-muted text-[13px] mb-3 leading-relaxed">
-                언젠가 찍고 싶은 기록을 적어줘.
+                언젠가 찍고 싶은 기록을 골라줘.
               </p>
-              <TimeInput parts={targetTime} onChange={onTime} showHours={distOpt.hasHours} />
+              <div className="grid grid-cols-2 gap-2">
+                {(TARGET_MILESTONES[distOpt.value] || []).map(ms => {
+                  const on = targetTimeMode === 'preset' && partsToSec(targetTime) === ms.sec;
+                  return (
+                    <button
+                      key={ms.sec}
+                      type="button"
+                      onClick={() => onMilestone(ms.sec)}
+                      className={`py-3 rounded-xl text-[14px] font-extrabold border-2 transition-colors ${
+                        on
+                          ? 'border-accent-green bg-accent-green text-bg-primary'
+                          : 'border-card-border bg-bg-primary/5 text-card-ink hover:border-accent-green/60'
+                      }`}
+                    >
+                      {ms.label}
+                    </button>
+                  );
+                })}
+                <button
+                  type="button"
+                  onClick={onCustom}
+                  className={`py-3 rounded-xl text-[14px] font-extrabold border-2 transition-colors ${
+                    targetTimeMode === 'custom'
+                      ? 'border-accent-green bg-accent-green text-bg-primary'
+                      : 'border-card-border bg-bg-primary/5 text-card-ink hover:border-accent-green/60'
+                  }`}
+                >
+                  기타 (직접 선택)
+                </button>
+              </div>
+              {targetTimeMode === 'custom' && (
+                <div className="mt-4">
+                  <TimeInput parts={targetTime} onChange={onTime} showHours={distOpt.hasHours} showSeconds={distOpt.hasSeconds} />
+                </div>
+              )}
             </div>
           )}
         </div>

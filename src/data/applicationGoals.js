@@ -21,18 +21,52 @@ export const SHORT_GOAL_OPTIONS = [
 export const SHORT_GOAL_LABEL = Object.fromEntries(SHORT_GOAL_OPTIONS.map(o => [o.value, o.label]))
 
 // ── 최종 목표가 '더 빠르게(기록 단축)'일 때 고르는 거리 ──────────
-// hasHours: 목표 시간 입력에 '시간' 칸을 띄울지 (하프·풀은 1시간 넘음).
+// hasHours   : '시간' 칸을 띄울지 (10K 이상은 1시간을 넘김)
+// hasSeconds : '초' 칸을 띄울지 — 긴 거리 목표를 초 단위로 잡는 사람은 없어서 5K만 받는다.
 export const TARGET_DISTANCE_OPTIONS = [
-  { value: '5k', label: '5K', hasHours: false },
-  { value: '10k', label: '10K', hasHours: true },
-  { value: 'half', label: '하프(21K)', hasHours: true },
-  { value: 'full', label: '풀(42K)', hasHours: true },
+  { value: '5k', label: '5K', hasHours: false, hasSeconds: true },
+  { value: '10k', label: '10K', hasHours: true, hasSeconds: false },
+  { value: 'half', label: '하프(21K)', hasHours: true, hasSeconds: false },
+  { value: 'full', label: '풀(42K)', hasHours: true, hasSeconds: false },
 ]
 
 export const TARGET_DISTANCE_LABEL = Object.fromEntries(TARGET_DISTANCE_OPTIONS.map(o => [o.value, o.label]))
 
 // 기록 단축 목표를 붙일 수 있는 최종 목표 값.
 export const PACE_GOAL_VALUE = 'pr_pace'
+
+// 거리별 대표 목표 기록 — 러너들이 실제로 입에 올리는 벽들.
+// 이걸 객관식으로 먼저 고르게 하고, 여기 없으면 '기타'로 직접 고른다.
+export const TARGET_MILESTONES = {
+  '5k': [
+    { sec: 1800, label: '30분' },
+    { sec: 1620, label: '27분' },
+    { sec: 1500, label: '25분' },
+    { sec: 1320, label: '22분' },
+    { sec: 1200, label: '20분 깨기' },
+  ],
+  '10k': [
+    { sec: 3600, label: '60분' },
+    { sec: 3300, label: '55분' },
+    { sec: 3000, label: '50분' },
+    { sec: 2700, label: '45분' },
+    { sec: 2400, label: '40분 깨기' },
+  ],
+  half: [
+    { sec: 9000, label: '2시간 30분' },
+    { sec: 7200, label: '2시간 깨기' },
+    { sec: 6600, label: '1시간 50분' },
+    { sec: 6000, label: '1시간 40분' },
+    { sec: 5400, label: '1시간 30분' },
+  ],
+  full: [
+    { sec: 18000, label: '5시간' },
+    { sec: 16200, label: '4시간 30분' },
+    { sec: 14400, label: '4시간 깨기' },
+    { sec: 12600, label: '3시간 30분' },
+    { sec: 10800, label: '3시간 깨기' },
+  ],
+}
 
 // 초 ↔ {h,m,s} 변환 — 폼 입력과 DB 저장(정수 초) 사이 다리.
 export function secToParts(sec) {

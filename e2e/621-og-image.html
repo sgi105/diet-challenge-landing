@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet" />
+<link href="https://fonts.googleapis.com/css2?family=Archivo+Black&display=swap" rel="stylesheet" />
+<style>
+  /* 시즌4 OG 이미지 소스 — 시즌2 og-image.png 디자인을 그대로 따르고 숫자만 교체.
+     2400x1260으로 렌더해서 public/og-image.png 로 저장한다. (e2e/621-og-shot.mjs) */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body {
+    width: 2400px; height: 1260px;
+    background: #1e3cff;
+    font-family: 'Pretendard Variable', Pretendard, -apple-system, sans-serif;
+    position: relative; overflow: hidden;
+  }
+  /* 배경 격자 — 랜딩과 동일한 결 */
+  body::before {
+    content: ''; position: absolute; inset: 0;
+    background-image:
+      linear-gradient(rgba(255,255,255,0.045) 1px, transparent 1px),
+      linear-gradient(90deg, rgba(255,255,255,0.045) 1px, transparent 1px);
+    background-size: 150px 150px;
+  }
+  .wrap { position: relative; z-index: 1; padding: 130px 170px; height: 100%; display: flex; flex-direction: column; }
+  .pill {
+    align-self: flex-start;
+    border: 4px solid #c8ff4d; color: #c8ff4d;
+    border-radius: 999px; padding: 22px 52px;
+    font-family: 'Archivo Black', sans-serif;
+    font-size: 40px; letter-spacing: 0.18em;
+  }
+  h1 { margin-top: 74px; font-size: 168px; font-weight: 900; line-height: 1.06; letter-spacing: -0.02em; color: #fff; }
+  h1 .green { color: #c8ff4d; }
+  .sub { margin-top: 62px; font-size: 60px; font-weight: 700; color: rgba(255,255,255,0.92); letter-spacing: -0.01em; }
+  .foot { margin-top: auto; display: flex; align-items: center; gap: 34px; }
+  .chip-green { background: #c8ff4d; color: #1e3cff; border-radius: 999px; padding: 26px 52px; font-size: 44px; font-weight: 800; }
+  .chip-white { background: #fff; color: #1e3cff; border-radius: 999px; padding: 26px 60px; font-size: 44px; font-weight: 800; }
+</style>
+</head>
+<body>
+  <div class="wrap">
+    <span class="pill">21D RUN · TEAM</span>
+    <h1>30명 중 30명 전원<br /><span class="green">성공한 미친 결과</span></h1>
+    <p class="sub">참가비 무료 · 5인 1팀 · 선착순 30명</p>
+    <div class="foot">
+      <span class="chip-green">🏃 지금 모집 중</span>
+      <span class="chip-white">challenge.samuraihabits.com</span>
+    </div>
+  </div>
+</body>
+</html>
