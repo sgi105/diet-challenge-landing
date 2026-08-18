@@ -100,9 +100,9 @@ export default function ApplyDonePage() {
           <ul className="space-y-2.5 text-bg-primary/85 text-sm leading-relaxed">
             <li><span className="font-extrabold text-bg-primary">1. 합격 발표</span> · {ACTIVE.resultLabel} — 문자로 안내</li>
             <li><span className="font-extrabold text-bg-primary">2. 보증금 입금</span> · {ACTIVE.depositDeadlineLabel}까지 20만원</li>
-            <li><span className="font-extrabold text-bg-primary">3. 톡방 입장 + 팀 배정</span> · 입금 확인되면 초대 보내줄게</li>
-            <li><span className="font-extrabold text-bg-primary">4. 온라인 OT</span> · {ACTIVE.otLabel} 줌</li>
-            <li><span className="font-extrabold text-bg-primary">5. 시작</span> · {ACTIVE.startLabel}</li>
+            <li><span className="font-extrabold text-bg-primary">3. 합격자 톡방 초대</span> · 입금 확인되면 초대 보내줄게</li>
+            <li><span className="font-extrabold text-bg-primary">4. 온라인 OT · 팀 배정</span> · {ACTIVE.otLabel} {ACTIVE.otTimeLabel} 줌</li>
+            <li><span className="font-extrabold text-bg-primary">5. 시작</span> · {ACTIVE.startDateLabel}</li>
           </ul>
           <div className="bg-bg-primary/10 rounded-2xl px-4 py-2.5 mt-4">
             <p className="text-bg-primary font-extrabold text-[13px] text-center">📱 문자 놓치지 않게 알림 켜둬</p>

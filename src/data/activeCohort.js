@@ -21,6 +21,7 @@ export const ACTIVE = {
   deadlineLabel: '8/21(금) 오후 2시',
 
   startLabel: `${COHORT4.startDate} 시작`,
+  startDateLabel: COHORT4.startDate,   // "시작"이라는 말이 앞에 이미 있는 자리용
   resultLabel: COHORT4.resultDate,        // 합격 발표
   depositDeadlineLabel: COHORT4.depositDeadline,
   otLabel: COHORT4.otDate,
