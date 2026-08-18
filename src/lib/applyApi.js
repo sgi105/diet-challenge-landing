@@ -8,6 +8,7 @@
 
 import { createClient } from '@supabase/supabase-js';
 import { ACTIVE } from '../data/activeCohort';
+import { PACE_GOAL_VALUE, partsToSec } from '../data/applicationGoals';
 
 const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -68,6 +69,14 @@ export async function submitApplication(form, { waitlist = false } = {}) {
     agree_deposit: !!form.agreeDeposit,
     agree_schedule: !!form.agreeSchedule,
     cohort_code: CURRENT_COHORT_CODE,
+    // 단기(21일) 목표 — 'pr_5k'면 현재 5K 기록도 함께. 시간은 전부 정수 초로 저장.
+    short_goal: form.shortGoal || null,
+    current_5k_sec: form.shortGoal === 'pr_5k' ? partsToSec(form.current5k || {}) : null,
+    // 최종 목표가 기록 단축일 때만 거리·목표기록이 붙는다.
+    target_distance: goals.includes(PACE_GOAL_VALUE) ? (form.targetDistance || null) : null,
+    target_time_sec: goals.includes(PACE_GOAL_VALUE) ? partsToSec(form.targetTime || {}) : null,
+    // OT 참석 가능 여부 — 불참이면 팀 랜덤 배정 대상.
+    ot_attend: form.otAttend || null,
   };
 
   // RETURNING은 anon SELECT 권한이 필요해서 사용 X — INSERT만 수행하고 id는 null 반환.

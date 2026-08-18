@@ -5,7 +5,7 @@ import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
 import { useCountdown } from '../hooks/useCountdown';
-import { GOAL_OPTIONS, MAX_GOALS } from '../data/applicationGoals';
+import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, PACE_GOAL_VALUE, partsToSec } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
 const STORAGE_KEY_REFERRAL = 'samurai-season2-apply-referral-v1';
@@ -28,6 +28,11 @@ const initialForm = {
   referrerName: '',
   agreeDeposit: false,
   agreeSchedule: false,
+  shortGoal: '',
+  current5k: { h: '', m: '', s: '' },
+  targetDistance: '',
+  targetTime: { h: '', m: '', s: '' },
+  otAttend: '',
 };
 
 const runningExpOptions = [
@@ -39,8 +44,8 @@ const runningExpOptions = [
   { value: 'almost_none', label: '거의 안 뛰어봤다' },
 ];
 
-const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'goals', 'instagram', 'friend', 'deposit', 'schedule'];
-const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'motivation', 'goals', 'instagram', 'deposit', 'schedule'];
+const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'friend', 'deposit', 'ot'];
+const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'deposit', 'ot'];
 
 function loadState(storageKey) {
   try {
@@ -474,15 +479,37 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           </p>
         </div>
       );
+    case 'shortGoal':
+      return (
+        <ShortGoalStep
+          shortGoal={form.shortGoal || ''}
+          current5k={form.current5k || { h: '', m: '', s: '' }}
+          onGoal={(v) => {
+            update('shortGoal', v);
+            // 첫 5K 완주로 바꾸면 기록 입력값은 버린다.
+            if (v !== 'pr_5k') update('current5k', { h: '', m: '', s: '' });
+          }}
+          onRecord={(v) => update('current5k', v)}
+        />
+      );
     case 'goals':
       return (
         <GoalsStep
           goals={form.goals || []}
           goalsOther={form.goalsOther || ''}
+          targetDistance={form.targetDistance || ''}
+          targetTime={form.targetTime || { h: '', m: '', s: '' }}
+          onDistance={(v) => update('targetDistance', v)}
+          onTime={(v) => update('targetTime', v)}
           onToggle={(v) => {
             const cur = form.goals || [];
             if (cur.includes(v)) {
               update('goals', cur.filter(g => g !== v));
+              // 기록 단축을 빼면 딸려 있던 거리·목표시간도 같이 비운다.
+              if (v === PACE_GOAL_VALUE) {
+                update('targetDistance', '');
+                update('targetTime', { h: '', m: '', s: '' });
+              }
             } else if (cur.length < MAX_GOALS) {
               update('goals', [...cur, v]);
             }
@@ -518,12 +545,15 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           onChange={v => update('agreeDeposit', v)}
         />
       );
-    case 'schedule':
+    case 'ot':
       return (
-        <ScheduleConsentStep
-          checked={form.agreeSchedule}
-          onChange={v => update('agreeSchedule', v)}
-          isReferral={isReferral}
+        <OtStep
+          value={form.otAttend || ''}
+          onChange={(v) => {
+            update('otAttend', v);
+            // OT 안내를 읽고 고른 시점 = 일정 확인 완료.
+            update('agreeSchedule', true);
+          }}
         />
       );
     default:
@@ -840,39 +870,158 @@ function DepositConsentStep({ checked, onChange }) {
   );
 }
 
-function ScheduleConsentStep({ checked, onChange }) {
+// OT 참석 가능 여부 — 이 자리에서 팀 배정이 이뤄지므로 미리 받아둔다.
+function OtStep({ value, onChange }) {
+  const options = [
+    { value: 'yes', label: '참석할 수 있어', desc: '팀 배정 자리에 직접 참여할게' },
+    { value: 'no', label: '못 갈 것 같아', desc: '남은 팀에 랜덤으로 배정돼도 괜찮아' },
+  ];
   return (
-    <ConsentShell
-      label="21일 일정"
-      checked={checked}
-      onChange={onChange}
-      checkboxLabel="21일 일정을 확인했어"
-    >
-      <p className="mb-4 text-card-ink text-[15px] leading-relaxed">
-        <span className="font-bold">{ACTIVE.durationDays}일 동안 매일</span> 뛰는 챌린지야.
-        시간만 채우면 성공(페이스·거리 자유).
+    <div className="flex-1 flex flex-col justify-center">
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">OT 참석할 수 있어?</label>
+      <p className="text-text-secondary text-sm leading-relaxed mb-5">
+        온라인 줌으로 진행해. 오래 안 걸려.
       </p>
-      <ul className="space-y-3 text-sm">
-        <li>🏃 <span className="font-semibold">Day 1</span> · <span className="text-card-ink font-bold">{ACTIVE.minutesStart}분 러닝</span>부터 시작</li>
-        <li>📈 <span className="font-semibold">하루 1분씩</span> 늘어서 <span className="text-card-ink font-bold">Day {ACTIVE.peakDay}에 {ACTIVE.minutesPeak}분</span></li>
-        <li>🔁 <span className="font-semibold">Day {ACTIVE.peakDay} 이후</span> — 마지막 날까지 <span className="text-card-ink font-bold">{ACTIVE.minutesPeak}분 유지</span></li>
-        <li>🎉 <span className="font-semibold">마지막 날:</span> <span className="text-accent-orange font-bold">파이널 5K 레이스</span></li>
-        <li>✅ <span className="font-semibold">환급 조건:</span> <span className="text-bg-primary font-bold">미션 {ACTIVE.successRate}% 이상 + 파이널 완주</span> ({ACTIVE.passCount}회까지 미완료 패스)</li>
-        <li>👥 <span className="font-semibold">팀:</span> <span className="text-bg-primary font-bold">{ACTIVE.teamSize}인 1팀</span> · 1등 팀 전원 {ACTIVE.prizeTeam1st}</li>
-      </ul>
-      <p className="mt-4 text-card-ink-faint text-[13px] leading-relaxed">
-        {ACTIVE.startLabel} · OT {ACTIVE.otLabel} 온라인 줌
+
+      <div className="bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green mb-5">
+        <p className="text-card-ink-faint text-[10px] font-extrabold tracking-widest mb-2">ORIENTATION</p>
+        <p className="text-card-ink font-black text-xl leading-tight">
+          {ACTIVE.otLabel} {ACTIVE.otTimeLabel}
+        </p>
+        <p className="text-card-ink-muted text-[13px] mt-2 leading-relaxed">
+          이때 <span className="text-card-ink font-bold">팀 배정</span>이 이뤄져. 러닝 가이드(호흡·페이스)도 여기서 같이 잡아줄게.
+        </p>
+      </div>
+
+      <div className="space-y-2">
+        {options.map(opt => {
+          const selected = value === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onChange(opt.value)}
+              className={`w-full text-left flex items-start gap-3 px-4 py-4 rounded-2xl border-2 transition-colors cursor-pointer ${
+                selected
+                  ? 'border-accent-green bg-accent-green text-bg-primary'
+                  : 'border-white/20 bg-bg-card text-card-ink hover:border-accent-green/60'
+              }`}
+            >
+              <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5 ${
+                selected ? 'border-bg-primary bg-bg-primary text-accent-green' : 'border-card-ink-faint text-transparent'
+              }`}>
+                ✓
+              </span>
+              <span className="min-w-0">
+                <span className="block font-bold text-[15px]">{opt.label}</span>
+                <span className={`block text-[13px] mt-0.5 leading-relaxed ${selected ? 'text-bg-primary/75' : 'text-card-ink-muted'}`}>
+                  {opt.desc}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      <p className="text-text-muted text-xs mt-4 leading-relaxed">
+        못 와도 지원엔 불이익 없어. 다만 팀은 <span className="text-text-secondary font-semibold">남은 자리에 랜덤 배정</span>돼.
       </p>
-    </ConsentShell>
+    </div>
   );
 }
 
-function GoalsStep({ goals, goalsOther, onToggle, onOtherChange }) {
-  const isOtherSelected = goals.includes('other');
-  const maxReached = goals.length >= MAX_GOALS;
+// 시간 입력 — 시(옵션)/분/초 세 칸. 값은 초 단위로 올려보낸다.
+// 항상 흰 카드(bg-card) 안에 들어가므로 어두운 배경용 색(text-muted/border-white)을 쓰면 안 보인다.
+function TimeInput({ parts, onChange, showHours, autoFocus }) {
+  const box = 'w-full bg-bg-primary/5 border-2 border-card-border rounded-xl px-3 py-3 text-center text-xl font-extrabold tabular-nums text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors';
+  const set = (k) => (e) => {
+    const digits = e.target.value.replace(/\D/g, '').slice(0, 2);
+    onChange({ ...parts, [k]: digits });
+  };
+  const fields = [
+    ...(showHours ? [{ k: 'h', label: '시간', ph: '0' }] : []),
+    { k: 'm', label: '분', ph: '00' },
+    { k: 's', label: '초', ph: '00' },
+  ];
+  return (
+    <div className="flex items-end gap-2">
+      {fields.map((f, i) => (
+        <div key={f.k} className="flex-1">
+          <label className="block text-card-ink-muted text-[11px] font-bold mb-1 text-center">{f.label}</label>
+          <input
+            type="text"
+            inputMode="numeric"
+            value={parts[f.k] ?? ''}
+            onChange={set(f.k)}
+            placeholder={f.ph}
+            autoFocus={autoFocus && i === 0}
+            className={box}
+          />
+        </div>
+      ))}
+    </div>
+  );
+}
+
+// 21일 챌린지 동안의 단기 목표. '5K 기록 향상'을 고르면 현재 기록을 이어서 받는다.
+function ShortGoalStep({ shortGoal, current5k, onGoal, onRecord }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
-      <label className="block text-text-primary text-2xl font-black font-kr mb-2">진짜 이루고 싶은 목표</label>
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">21일 동안 달성하고 싶은 목표</label>
+      <p className="text-text-secondary text-sm leading-relaxed mb-5">
+        지금 어디쯤인지 알아야 21일을 제대로 짜줄 수 있어.
+      </p>
+      <div className="space-y-2">
+        {SHORT_GOAL_OPTIONS.map(opt => {
+          const selected = shortGoal === opt.value;
+          return (
+            <button
+              key={opt.value}
+              type="button"
+              onClick={() => onGoal(opt.value)}
+              className={`w-full text-left flex items-start gap-3 px-4 py-4 rounded-2xl border-2 transition-colors cursor-pointer ${
+                selected
+                  ? 'border-accent-green bg-accent-green text-bg-primary'
+                  : 'border-white/20 bg-bg-card text-card-ink hover:border-accent-green/60'
+              }`}
+            >
+              <span className={`w-5 h-5 rounded-full border-2 flex items-center justify-center text-xs font-extrabold shrink-0 mt-0.5 ${
+                selected ? 'border-bg-primary bg-bg-primary text-accent-green' : 'border-card-ink-faint text-transparent'
+              }`}>
+                ✓
+              </span>
+              <span className="min-w-0">
+                <span className="block font-bold text-[15px]">{opt.label}</span>
+                <span className={`block text-[13px] mt-0.5 leading-relaxed ${selected ? 'text-bg-primary/75' : 'text-card-ink-muted'}`}>
+                  {opt.desc}
+                </span>
+              </span>
+            </button>
+          );
+        })}
+      </div>
+
+      {shortGoal === 'pr_5k' && (
+        <div className="mt-5 bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green">
+          <p className="text-card-ink font-bold text-[15px] mb-1">지금 5K 기록이 어떻게 돼?</p>
+          <p className="text-card-ink-muted text-[13px] mb-4 leading-relaxed">
+            대충이어도 괜찮아. 페이스 그룹 나눌 때 참고할게.
+          </p>
+          <TimeInput parts={current5k} onChange={onRecord} showHours={false} autoFocus />
+        </div>
+      )}
+    </div>
+  );
+}
+
+function GoalsStep({ goals, goalsOther, targetDistance, targetTime, onToggle, onOtherChange, onDistance, onTime }) {
+  const isOtherSelected = goals.includes('other');
+  const isPaceSelected = goals.includes(PACE_GOAL_VALUE);
+  const maxReached = goals.length >= MAX_GOALS;
+  const distOpt = TARGET_DISTANCE_OPTIONS.find(d => d.value === targetDistance);
+  return (
+    <div className="flex-1 flex flex-col justify-center">
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">최종적으로 이루고 싶은 목표</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-1">
         21일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
       </p>
@@ -905,13 +1054,42 @@ function GoalsStep({ goals, goalsOther, onToggle, onOtherChange }) {
           );
         })}
       </div>
+      {isPaceSelected && (
+        <div className="mt-4 bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green">
+          <p className="text-card-ink font-bold text-[15px] mb-3">어느 거리를 단축하고 싶어?</p>
+          <div className="grid grid-cols-4 gap-2">
+            {TARGET_DISTANCE_OPTIONS.map(d => (
+              <button
+                key={d.value}
+                type="button"
+                onClick={() => onDistance(d.value)}
+                className={`py-2.5 rounded-xl text-[13px] font-extrabold border-2 transition-colors ${
+                  targetDistance === d.value
+                    ? 'border-accent-green bg-accent-green text-bg-primary'
+                    : 'border-card-border bg-bg-primary/5 text-card-ink hover:border-accent-green/60'
+                }`}
+              >
+                {d.label}
+              </button>
+            ))}
+          </div>
+          {distOpt && (
+            <div className="mt-4">
+              <p className="text-card-ink font-bold text-[15px] mb-1">{distOpt.label} 목표 기록</p>
+              <p className="text-card-ink-muted text-[13px] mb-3 leading-relaxed">
+                언젠가 찍고 싶은 기록을 적어줘.
+              </p>
+              <TimeInput parts={targetTime} onChange={onTime} showHours={distOpt.hasHours} />
+            </div>
+          )}
+        </div>
+      )}
       {isOtherSelected && (
         <textarea
           value={goalsOther}
           onChange={e => onOtherChange(e.target.value)}
           placeholder="구체적인 목표를 적어줘"
           rows={3}
-          autoFocus
           className="mt-4 w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-3 text-base text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors resize-none"
         />
       )}
@@ -965,10 +1143,21 @@ function validateStep(stepKey, form) {
       if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
       if (form.motivation.trim().length < 30) return '최소 30자 이상, 진짜 이유를 써줘.';
       return null;
+    case 'shortGoal': {
+      if (!form.shortGoal) return '21일 목표를 선택해줘.';
+      if (form.shortGoal === 'pr_5k' && !partsToSec(form.current5k || {})) {
+        return '지금 5K 기록을 입력해줘. (대충이어도 괜찮아)';
+      }
+      return null;
+    }
     case 'goals': {
       const goals = form.goals || [];
       if (goals.length === 0) return '목표를 1개 이상 선택해줘.';
       if (goals.includes('other') && !(form.goalsOther || '').trim()) return '"기타" 선택 시 구체적인 목표를 적어줘.';
+      if (goals.includes(PACE_GOAL_VALUE)) {
+        if (!form.targetDistance) return '기록 단축 목표 거리를 골라줘.';
+        if (!partsToSec(form.targetTime || {})) return '목표 기록을 입력해줘.';
+      }
       return null;
     }
     case 'instagram':
@@ -981,8 +1170,8 @@ function validateStep(stepKey, form) {
     case 'deposit':
       if (!form.agreeDeposit) return '보증금 안내에 동의해줘.';
       return null;
-    case 'schedule':
-      if (!form.agreeSchedule) return '합격·입금 일정에 동의해줘.';
+    case 'ot':
+      if (!form.otAttend) return 'OT 참석 가능 여부를 선택해줘.';
       return null;
     default:
       return null;

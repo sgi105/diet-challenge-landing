@@ -24,6 +24,7 @@ export const ACTIVE = {
   resultLabel: COHORT4.resultDate,        // 합격 발표
   depositDeadlineLabel: COHORT4.depositDeadline,
   otLabel: COHORT4.otDate,
+  otTimeLabel: COHORT4.otTime,
   finalLabel: COHORT4.finalDate,
 
   // 러닝 시간표 요약 — 신청서 일정 동의 step에서 사용.

@@ -17,6 +17,7 @@ export const COHORT4 = {
   resultDate: '8/21(금) 저녁',   // 합격 발표 — 마감 당일
   depositDeadline: '8/22(토)',   // 입금 마감
   otDate: '8/23(일)',            // 온라인 OT (줌)
+  otTime: '오전 7시',             // OT 시각 (KST) — 이 자리에서 팀 배정까지 진행
   startDate: '8/24(월)',         // 챌린지 Day 1
   finalDate: '9/13(일)',         // 파이널 5K 레이스 (Day 21)
 
