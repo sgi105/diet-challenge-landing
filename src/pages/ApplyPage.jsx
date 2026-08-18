@@ -299,6 +299,8 @@ const ITEM_H = 56;
 
 function AgeScrollPicker({ value, onChange }) {
   const ref = useRef(null);
+  const drag = useRef(null);
+  const [dragging, setDragging] = useState(false);
 
   useEffect(() => {
     if (!ref.current) return;
@@ -306,15 +308,47 @@ function AgeScrollPicker({ value, onChange }) {
     ref.current.scrollTop = (idx < 0 ? AGES.indexOf(30) : idx) * ITEM_H;
   }, []);
 
+  // 가장 가까운 항목으로 붙이고 값 확정.
+  const settle = () => {
+    const el = ref.current;
+    if (!el) return;
+    const idx = Math.round(el.scrollTop / ITEM_H);
+    const clamped = Math.max(0, Math.min(idx, AGES.length - 1));
+    el.scrollTop = clamped * ITEM_H;
+    onChange(String(AGES[clamped]));
+  };
+
   const onScroll = () => {
-    if (!ref.current) return;
+    // 드래그 중에는 스냅 타이머를 걸지 않는다 — 손가락/마우스가 아직 잡고 있는데 튕겨버림.
+    if (!ref.current || drag.current) return;
     clearTimeout(ref.current._t);
-    ref.current._t = setTimeout(() => {
-      const idx = Math.round(ref.current.scrollTop / ITEM_H);
-      const clamped = Math.max(0, Math.min(idx, AGES.length - 1));
-      ref.current.scrollTop = clamped * ITEM_H;
-      onChange(String(AGES[clamped]));
-    }, 80);
+    ref.current._t = setTimeout(settle, 80);
+  };
+
+  // PC 마우스 드래그 — 터치는 네이티브 스크롤이 이미 처리하므로 제외.
+  const onPointerDown = (e) => {
+    if (e.pointerType === 'touch') return;
+    const el = ref.current;
+    if (!el) return;
+    drag.current = { y: e.clientY, top: el.scrollTop };
+    setDragging(true);
+    el.setPointerCapture?.(e.pointerId);
+  };
+
+  const onPointerMove = (e) => {
+    const el = ref.current;
+    if (!el || !drag.current) return;
+    e.preventDefault();
+    el.scrollTop = drag.current.top - (e.clientY - drag.current.y);
+  };
+
+  const endDrag = (e) => {
+    const el = ref.current;
+    if (!el || !drag.current) return;
+    drag.current = null;
+    setDragging(false);
+    el.releasePointerCapture?.(e.pointerId);
+    settle();
   };
 
   const selected = parseInt(value);
@@ -324,8 +358,13 @@ function AgeScrollPicker({ value, onChange }) {
       <div
         ref={ref}
         onScroll={onScroll}
-        className="h-full overflow-y-scroll"
-        style={{ scrollSnapType: 'y mandatory', scrollbarWidth: 'none' }}
+        onPointerDown={onPointerDown}
+        onPointerMove={onPointerMove}
+        onPointerUp={endDrag}
+        onPointerCancel={endDrag}
+        className={`h-full overflow-y-scroll select-none ${dragging ? 'cursor-grabbing' : 'cursor-grab'}`}
+        // 드래그 중엔 스냅을 끈다 — 켜둔 채로 scrollTop을 직접 만지면 스냅이 되받아쳐서 뚝뚝 끊긴다.
+        style={{ scrollSnapType: dragging ? 'none' : 'y mandatory', scrollbarWidth: 'none' }}
       >
         <div style={{ height: ITEM_H }} />
         {AGES.map(age => (
