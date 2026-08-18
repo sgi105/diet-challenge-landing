@@ -29,6 +29,8 @@ import ApplyDonePage from './pages/ApplyDonePage';
 import PayPage from './pages/PayPage';
 import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
 import LandingPagePreseason from './LandingPagePreseason';
+import LandingPageS2 from './LandingPageS2';
+import LandingPageS4 from './LandingPageS4';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
@@ -118,7 +120,11 @@ function LandingPage({ variant = 'main' }) {
 export default function App() {
   return (
     <Routes>
-      <Route path="/" element={<LandingPagePreseason />} />
+      {/* 메인 = 시즌4 모집 랜딩. 지난 시즌 랜딩은 아카이브 URL로만 남겨둠. */}
+      <Route path="/" element={<LandingPageS4 />} />
+      <Route path="/s4" element={<LandingPageS4 />} />
+      <Route path="/preseason" element={<LandingPagePreseason />} />
+      <Route path="/s2" element={<LandingPageS2 />} />
       <Route path="/s1" element={<LandingPage />} />
       <Route path="/s1/referral" element={<LandingPage variant="referral" />} />
       <Route path="/referral" element={<LandingPage variant="referral" />} />
