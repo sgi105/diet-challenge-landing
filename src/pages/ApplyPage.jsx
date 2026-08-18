@@ -5,7 +5,7 @@ import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
 import { useCountdown } from '../hooks/useCountdown';
-import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, TARGET_MILESTONES, PACE_GOAL_VALUE, partsToSec, secToParts } from '../data/applicationGoals';
+import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, TARGET_MILESTONES, PACE_GOAL_VALUE, partsToSec, secToParts, paceLabel } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
 const STORAGE_KEY_REFERRAL = 'samurai-season2-apply-referral-v1';
@@ -1148,26 +1148,32 @@ function GoalsStep({ goals, goalsOther, targetDistance, targetTime, targetTimeMo
                       key={ms.sec}
                       type="button"
                       onClick={() => onMilestone(ms.sec)}
-                      className={`py-3 rounded-xl text-[14px] font-extrabold border-2 transition-colors ${
+                      className={`py-2.5 rounded-xl border-2 transition-colors leading-tight ${
                         on
                           ? 'border-accent-green bg-accent-green text-bg-primary'
                           : 'border-card-border bg-bg-primary/5 text-card-ink hover:border-accent-green/60'
                       }`}
                     >
-                      {ms.label}
+                      <span className="block text-[14px] font-extrabold">{ms.label}</span>
+                      <span className={`block text-[11px] font-bold tabular-nums mt-0.5 ${on ? 'text-bg-primary/70' : 'text-card-ink-faint'}`}>
+                        {paceLabel(ms.sec, distOpt.km)}
+                      </span>
                     </button>
                   );
                 })}
                 <button
                   type="button"
                   onClick={onCustom}
-                  className={`py-3 rounded-xl text-[14px] font-extrabold border-2 transition-colors ${
+                  className={`py-2.5 rounded-xl border-2 transition-colors leading-tight ${
                     targetTimeMode === 'custom'
                       ? 'border-accent-green bg-accent-green text-bg-primary'
                       : 'border-card-border bg-bg-primary/5 text-card-ink hover:border-accent-green/60'
                   }`}
                 >
-                  기타 (직접 선택)
+                  <span className="block text-[14px] font-extrabold">기타</span>
+                  <span className={`block text-[11px] font-bold mt-0.5 ${targetTimeMode === 'custom' ? 'text-bg-primary/70' : 'text-card-ink-faint'}`}>
+                    직접 선택
+                  </span>
                 </button>
               </div>
               {targetTimeMode === 'custom' && (

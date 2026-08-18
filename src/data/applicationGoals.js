@@ -24,11 +24,19 @@ export const SHORT_GOAL_LABEL = Object.fromEntries(SHORT_GOAL_OPTIONS.map(o => [
 // hasHours   : '시간' 칸을 띄울지 (10K 이상은 1시간을 넘김)
 // hasSeconds : '초' 칸을 띄울지 — 긴 거리 목표를 초 단위로 잡는 사람은 없어서 5K만 받는다.
 export const TARGET_DISTANCE_OPTIONS = [
-  { value: '5k', label: '5K', hasHours: false, hasSeconds: true },
-  { value: '10k', label: '10K', hasHours: true, hasSeconds: false },
-  { value: 'half', label: '하프(21K)', hasHours: true, hasSeconds: false },
-  { value: 'full', label: '풀(42K)', hasHours: true, hasSeconds: false },
+  { value: '5k', label: '5K', km: 5, hasHours: false, hasSeconds: true },
+  { value: '10k', label: '10K', km: 10, hasHours: true, hasSeconds: false },
+  { value: 'half', label: '하프(21K)', km: 21.0975, hasHours: true, hasSeconds: false },
+  { value: 'full', label: '풀(42K)', km: 42.195, hasHours: true, hasSeconds: false },
 ]
+
+// 목표 기록 → 필요한 페이스. "이 기록이 얼마나 빠른 건지" 감이 오게 버튼에 같이 보여준다.
+// 하프·풀은 21.0975 / 42.195km 정식 거리 기준.
+export function paceLabel(sec, km) {
+  if (!sec || !km) return ''
+  const perKm = Math.round(sec / km)
+  return `${Math.floor(perKm / 60)}'${String(perKm % 60).padStart(2, '0')}"/km`
+}
 
 export const TARGET_DISTANCE_LABEL = Object.fromEntries(TARGET_DISTANCE_OPTIONS.map(o => [o.value, o.label]))
 
@@ -43,18 +51,18 @@ export const TARGET_MILESTONES = {
     { sec: 1620, label: '27분' },
     { sec: 1500, label: '25분' },
     { sec: 1320, label: '22분' },
-    { sec: 1200, label: '20분 깨기' },
+    { sec: 1200, label: '20분' },
   ],
   '10k': [
     { sec: 3600, label: '60분' },
     { sec: 3300, label: '55분' },
     { sec: 3000, label: '50분' },
     { sec: 2700, label: '45분' },
-    { sec: 2400, label: '40분 깨기' },
+    { sec: 2400, label: '40분' },
   ],
   half: [
     { sec: 9000, label: '2시간 30분' },
-    { sec: 7200, label: '2시간 깨기' },
+    { sec: 7200, label: '2시간' },
     { sec: 6600, label: '1시간 50분' },
     { sec: 6000, label: '1시간 40분' },
     { sec: 5400, label: '1시간 30분' },
@@ -62,9 +70,9 @@ export const TARGET_MILESTONES = {
   full: [
     { sec: 18000, label: '5시간' },
     { sec: 16200, label: '4시간 30분' },
-    { sec: 14400, label: '4시간 깨기' },
+    { sec: 14400, label: '4시간' },
     { sec: 12600, label: '3시간 30분' },
-    { sec: 10800, label: '3시간 깨기' },
+    { sec: 10800, label: '3시간' },
   ],
 }
 
