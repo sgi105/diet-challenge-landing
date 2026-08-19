@@ -989,6 +989,8 @@ function OtStep({ value, onChange }) {
 // 타이핑보다 휠·드래그가 빨라서 숫자 입력 대신 WheelPicker를 쓴다.
 const HOUR_VALUES = Array.from({ length: 10 }, (_, i) => i);        // 0-9시간 (풀 마라톤 커버)
 const MIN_VALUES = Array.from({ length: 60 }, (_, i) => i);
+// 5K 세계기록 12:35. 이보다 빠른 입력은 1km 페이스를 잘못 넣은 것으로 본다.
+const MIN_5K_SEC = 12 * 60;
 const SEC_VALUES = Array.from({ length: 60 }, (_, i) => i);
 const pad2 = (n) => String(n).padStart(2, '0');
 
@@ -1062,9 +1064,13 @@ function ShortGoalStep({ shortGoal, current5k, onGoal, onRecord }) {
 
       {shortGoal === 'pr_5k' && (
         <div className="mt-5 bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green">
-          <p className="text-card-ink font-bold text-[15px] mb-1">지금 5K 기록이 어떻게 돼?</p>
-          <p className="text-card-ink-muted text-[13px] mb-4 leading-relaxed">
-            대충이어도 괜찮아. 페이스 그룹 나눌 때 참고할게.
+          <p className="text-card-ink font-bold text-[15px] mb-1">5km 완주 기록이 어떻게 돼?</p>
+          <p className="text-card-ink-muted text-[13px] mb-1.5 leading-relaxed">
+            <span className="font-bold text-card-ink">5km를 다 뛰는 데 걸리는 시간</span>이야.
+            1km 페이스 아니야. 대충이어도 괜찮아.
+          </p>
+          <p className="text-card-ink-muted text-[12px] mb-4 leading-relaxed">
+            예를 들어 1km에 5분 30초 페이스면 5km 기록은 <span className="font-bold text-card-ink">27분 30초</span>야.
           </p>
           <TimeInput parts={current5k} onChange={onRecord} showHours={false} />
         </div>
@@ -1244,8 +1250,13 @@ function validateStep(stepKey, form) {
       return null;
     case 'shortGoal': {
       if (!form.shortGoal) return '21일 목표를 선택해줘.';
-      if (form.shortGoal === 'pr_5k' && !partsToSec(form.current5k || {})) {
-        return '지금 5K 기록을 입력해줘. (대충이어도 괜찮아)';
+      if (form.shortGoal === 'pr_5k') {
+        const sec = partsToSec(form.current5k || {});
+        if (!sec) return '지금 5km 완주 기록을 입력해줘. (대충이어도 괜찮아)';
+        // 5K 세계기록이 12분 35초. 그보다 빠른 값 = 1km 페이스를 잘못 넣은 것.
+        if (sec < MIN_5K_SEC) {
+          return '그건 1km 페이스 같아. 5km 전체를 뛰는 데 걸리는 시간을 넣어줘. (예: 27분 30초)';
+        }
       }
       return null;
     }
