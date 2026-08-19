@@ -33,6 +33,7 @@ export const ACTIVE = {
   minutesPeak: PROGRAM4.peakMinutes,
   peakDay: PROGRAM4.peakDay,
   passCount: PROGRAM4.passCount,
+  finalDistanceKm: PROGRAM4.finalDistanceKm,
   successRate: PROGRAM4.successRate,
   prizeTeam1st: PROGRAM4.prizeTeam1st,
 };
