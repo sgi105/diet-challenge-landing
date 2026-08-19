@@ -45,8 +45,15 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">1. 수집하는 개인정보 항목</h2>
           <ul className="list-disc pl-5 space-y-1">
-            <li>회원 가입·운영: 이름, 이메일, 생년월일/나이, 프로필 사진</li>
-            <li>챌린지 운영: 체중 및 건강 정보(키, 운동 이력 등), 인스타그램 ID</li>
+            <li>
+              챌린지 지원서: 이름, 나이, 성별, 휴대폰 번호, 직업, 거주 지역, 러닝 경력,
+              지원 동기, 목표(단기·최종 목표 및 목표 기록), 현재 러닝 기록,
+              오리엔테이션 참석 가능 여부, 인스타그램 ID, 카카오톡 ID,
+              추천인 및 함께 지원하는 지인의 이름
+            </li>
+            <li>회원 가입·운영: 이름, 이메일, 나이, 프로필 사진</li>
+            <li>챌린지 운영: 키·체중 등 건강 정보, 운동 인증 기록 및 사진</li>
+            <li>보증금 입금·환급 시: 입금자명, 환급 계좌 정보</li>
             <li>경품 발송 시 별도 수집: 이름, 주소, 연락처</li>
             <li>자동 수집: 접속 로그, 쿠키, IP 주소, 기기 정보</li>
           </ul>
@@ -55,8 +62,11 @@ export default function PrivacyPage() {
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">2. 개인정보의 이용 목적</h2>
           <ul className="list-disc pl-5 space-y-1">
+            <li>지원서 심사를 통한 참가자 선발 및 팀 배정</li>
+            <li>합격 발표·입금 안내 등 문자 및 메시지 발송</li>
             <li>챌린지 운영 및 미션·점수 결산</li>
             <li>코치 매칭 및 피드백 제공</li>
+            <li>보증금 환급 처리</li>
             <li>경품 발송 및 본인 확인</li>
             <li>서비스 개선 및 통계 분석</li>
           </ul>
@@ -79,7 +89,9 @@ export default function PrivacyPage() {
           <ul className="list-disc pl-5 space-y-1 mt-2">
             <li>Supabase — 데이터베이스 저장·관리</li>
             <li>Vercel — 앱 호스팅·배포</li>
-            <li>다리마티 외 경품 협찬사 — 경품 발송 시 이름·주소·연락처 전달</li>
+            <li>솔라피(Solapi) — 합격·안내 문자 발송 시 이름·휴대폰 번호 전달</li>
+            <li>텔레그램 — 신규 지원 발생 시 운영자 알림 전달</li>
+            <li>경품 협찬사 — 경품 발송 시 이름·주소·연락처 전달</li>
           </ul>
         </section>
 
@@ -106,7 +118,7 @@ export default function PrivacyPage() {
           <p>보유 기간이 경과하거나 처리 목적이 달성된 경우, 해당 개인정보는 복구할 수 없는 방법으로 지체 없이 파기합니다.</p>
         </section>
 
-        <p className="text-text-muted pt-4">시행일: 2026년 6월 1일</p>
+        <p className="text-text-muted pt-4">시행일: 2026년 8월 20일</p>
       </div>
     </div>
   );
