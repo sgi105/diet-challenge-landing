@@ -4,6 +4,7 @@ import { track } from '@vercel/analytics';
 import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
+import { logEvent, once } from '../lib/eventLog';
 import { useCountdown } from '../hooks/useCountdown';
 import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, TARGET_MILESTONES, PACE_GOAL_VALUE, partsToSec, secToParts, paceLabel } from '../data/applicationGoals';
 
@@ -108,13 +109,15 @@ export default function ApplyPage() {
   // 지원서 페이지 진입 — "CTA는 눌렀는데 폼까지 안 온" 이탈을 구분하려면 이 지점이 필요하다.
   // 새로고침·중간 복귀도 있으므로 세션당 1회만 찍는다.
   useEffect(() => {
-    if (sessionStorage.getItem('apply_open_tracked')) return;
-    sessionStorage.setItem('apply_open_tracked', '1');
+    if (!once('apply_open')) return;
     track('apply_page_open', { isReferral, resumed: (persisted?.step ?? 0) > 0 });
+    logEvent('apply_open', { is_referral: isReferral });
   }, [isReferral, persisted]);
 
   useEffect(() => {
     track('apply_step_view', { step, stepKey, isReferral });
+    // 단계별 도달 — 어디서 이탈했는지는 "도달한 마지막 단계"로 읽는다.
+    logEvent('apply_step', { step_key: stepKey, step_index: step, is_referral: isReferral });
   }, [step, stepKey, isReferral]);
 
   useEffect(() => {
@@ -176,6 +179,7 @@ export default function ApplyPage() {
       try {
         const { id } = await submitApplication(form, { waitlist: isClosed });
         track('apply_submit_success', { isReferral });
+        logEvent('apply_submit', { is_referral: isReferral });
         const friendAttached = !!(form.friend || '').trim();
         if (friendAttached) track('apply_submit_friend_attached');
         clearState(STORAGE_KEY);

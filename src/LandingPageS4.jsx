@@ -1,5 +1,7 @@
 import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
 import { track } from '@vercel/analytics';
+import { logEvent, once } from './lib/eventLog';
 import HeroSection from './components/s4/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
 import Season0ResultsSection from './components/sections/Season0ResultsSection';
@@ -38,6 +40,11 @@ export default function LandingPageS4() {
   const acceptingApps = status === 'official';
   const copy = COPY4[status];
   const count = useApplicantCount(acceptingApps, COHORT4.cohortCode);
+
+  // 방문 기록 — 세션당 1회. 퍼널의 맨 윗칸.
+  useEffect(() => {
+    if (once('page_view')) logEvent('page_view');
+  }, []);
   const spots = acceptingApps ? spotsInfo(count) : null;
   // 배너 "선착순 30명" → 동적 "N자리 남음"(임박이면 🔥)
   const bannerText = (spots && !spots.full)
@@ -48,6 +55,7 @@ export default function LandingPageS4() {
   // placement로 어느 버튼이 실제로 눌리는지 구분한다(히어로/가격/최종/하단고정/중간).
   const handleCTA = (placement = 'unknown') => {
     track('landing_cta_click', { placement, status });
+    logEvent('cta_click', { placement });
     // 오픈 전에는 신청을 받지 않음 — 히어로(카운트다운)로 스크롤만.
     if (isUpcoming) {
       document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
@@ -59,6 +67,7 @@ export default function LandingPageS4() {
   const scrollToCTA = (e) => {
     e.preventDefault();
     track('landing_banner_click', { status });
+    logEvent('cta_click', { placement: 'banner' });
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
   };
 

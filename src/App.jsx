@@ -31,6 +31,7 @@ import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
 import LandingPagePreseason from './LandingPagePreseason';
 import LandingPageS2 from './LandingPageS2';
 import LandingPageS4 from './LandingPageS4';
+import StatsPage from './pages/StatsPage';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
@@ -125,6 +126,8 @@ export default function App() {
       <Route path="/s4" element={<LandingPageS4 />} />
       <Route path="/preseason" element={<LandingPagePreseason />} />
       <Route path="/s2" element={<LandingPageS2 />} />
+      {/* 운영용 퍼널 대시보드 — 푸터에 링크하지 않는 비공개 주소 */}
+      <Route path="/stats" element={<StatsPage />} />
       <Route path="/s1" element={<LandingPage />} />
       <Route path="/s1/referral" element={<LandingPage variant="referral" />} />
       <Route path="/referral" element={<LandingPage variant="referral" />} />
