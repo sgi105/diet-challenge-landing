@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom';
+import { track } from '@vercel/analytics';
 import HeroSection from './components/s4/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
 import Season0ResultsSection from './components/sections/Season0ResultsSection';
@@ -43,7 +44,10 @@ export default function LandingPageS4() {
     ? copy.banner.replace('선착순 30명', `${spots.low ? '🔥 ' : ''}${spots.remaining}자리 남음`)
     : copy.banner;
 
-  const handleCTA = () => {
+  // CTA 클릭 추적 — 방문 → 신청하기 클릭 → 폼 완료 퍼널을 보려면 이 지점이 필요하다.
+  // placement로 어느 버튼이 실제로 눌리는지 구분한다(히어로/가격/최종/하단고정/중간).
+  const handleCTA = (placement = 'unknown') => {
+    track('landing_cta_click', { placement, status });
     // 오픈 전에는 신청을 받지 않음 — 히어로(카운트다운)로 스크롤만.
     if (isUpcoming) {
       document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
@@ -54,6 +58,7 @@ export default function LandingPageS4() {
 
   const scrollToCTA = (e) => {
     e.preventDefault();
+    track('landing_banner_click', { status });
     document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
   };
 
@@ -71,7 +76,7 @@ export default function LandingPageS4() {
         {bannerText}
       </a>
       <div className="pt-12">
-        <HeroSection onCTA={handleCTA} />
+        <HeroSection onCTA={() => handleCTA('hero')} />
         <PainPointSection />
         <StartingPointsSection />
         <FounderSection />
@@ -82,7 +87,7 @@ export default function LandingPageS4() {
         {acceptingApps && <LiveApplicantsSection />}
         {!isClosed && (
           <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
-            <Button onClick={handleCTA} disabled={isUpcoming} className="w-full max-w-xs">{copy.cta.hero}{!isUpcoming && ' →'}</Button>
+            <Button onClick={() => handleCTA('mid_testimonial')} disabled={isUpcoming} className="w-full max-w-xs">{copy.cta.hero}{!isUpcoming && ' →'}</Button>
           </section>
         )}
         <MoneyMechanicSection />
@@ -92,17 +97,17 @@ export default function LandingPageS4() {
               다 같이 가는 21일.<br />
               <span className="text-accent-green font-bold">팀이 있을 때 시작해</span>
             </p>
-            <Button onClick={handleCTA} disabled={isUpcoming} className="w-full max-w-xs">{copy.cta.pricing}{!isUpcoming && ' →'}</Button>
+            <Button onClick={() => handleCTA('mid_reward')} disabled={isUpcoming} className="w-full max-w-xs">{copy.cta.pricing}{!isUpcoming && ' →'}</Button>
           </section>
         )}
-        <PricingSection onCTA={handleCTA} />
+        <PricingSection onCTA={() => handleCTA('pricing')} />
         {!isClosed && <BenefitsSection />}
         <InstagramSection />
         {!isClosed && <UrgencySection />}
         <FAQSection />
-        <FinalCTASection onCTA={handleCTA} />
+        <FinalCTASection onCTA={() => handleCTA('final')} />
         <Footer />
-        <StickyCTA onCTA={handleCTA} />
+        <StickyCTA onCTA={() => handleCTA('sticky')} />
       </div>
     </div>
   );

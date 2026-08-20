@@ -105,6 +105,14 @@ export default function ApplyPage() {
     saveState(STORAGE_KEY, { step, form });
   }, [STORAGE_KEY, step, form]);
 
+  // 지원서 페이지 진입 — "CTA는 눌렀는데 폼까지 안 온" 이탈을 구분하려면 이 지점이 필요하다.
+  // 새로고침·중간 복귀도 있으므로 세션당 1회만 찍는다.
+  useEffect(() => {
+    if (sessionStorage.getItem('apply_open_tracked')) return;
+    sessionStorage.setItem('apply_open_tracked', '1');
+    track('apply_page_open', { isReferral, resumed: (persisted?.step ?? 0) > 0 });
+  }, [isReferral, persisted]);
+
   useEffect(() => {
     track('apply_step_view', { step, stepKey, isReferral });
   }, [step, stepKey, isReferral]);
