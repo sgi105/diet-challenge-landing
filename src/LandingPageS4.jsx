@@ -10,6 +10,7 @@ import FounderSection from './components/s2/FounderSection';
 import InstagramSection from './components/s4/InstagramSection';
 import SystemSection from './components/s4/SystemSection';
 import GameSection from './components/s4/GameSection';
+import PaceResultSection from './components/s4/PaceResultSection';
 import MoneyMechanicSection from './components/s4/MoneyMechanicSection';
 import TestimonialSection from './components/sections/TestimonialSection';
 import PricingSection from './components/s4/PricingSection';
@@ -91,6 +92,7 @@ export default function LandingPageS4() {
         <FounderSection />
         <SystemSection />
         <GameSection />
+        <PaceResultSection />
         <Season0ResultsSection />
         <TestimonialSection />
         {acceptingApps && <LiveApplicantsSection />}
