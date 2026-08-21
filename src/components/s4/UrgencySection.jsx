@@ -12,7 +12,7 @@ export default function UrgencySection() {
   const headline = isUpcoming ? '모집 곧 오픈' : '마감 임박';
   const sub = isUpcoming
     ? '8/19(수) 아침 8시 오픈 · 선착순 30명'
-    : '선착순 30명 · 8/21(금) 오후 2시 30분 마감';
+    : '선착순 30명 · 8/21(금) 오후 2시 마감';
   const pill = isUpcoming ? 'OPENS SOON' : 'DEADLINE';
 
   const count = useApplicantCount(!isUpcoming, COHORT4.cohortCode);

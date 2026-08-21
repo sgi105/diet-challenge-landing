@@ -8,13 +8,13 @@ export const COHORT4 = {
   cohortCode: '260824_team_run',
 
   // 1단계 오픈 대기: 지금 ~ 8/19(수) 08:00
-  // 2단계 모집: 8/19(수) 08:00 ~ 8/21(금) 14:30
-  // 3단계 마감: 8/21(금) 14:30 ~ · 결원 대기 명단
+  // 2단계 모집: 8/19(수) 08:00 ~ 8/21(금) 14:00
+  // 3단계 마감: 8/21(금) 14:00 ~ · 결원 대기 명단
   officialOpen: '2026-08-19T08:00:00+09:00',
-  officialDeadline: '2026-08-21T14:30:00+09:00',
+  officialDeadline: '2026-08-21T14:00:00+09:00',
 
   // 합격/입금/OT/시작 — 일정표·FAQ용
-  resultDate: '8/21(금) 오후 3시',   // 합격 발표 — 마감(14:30) 직후
+  resultDate: '8/21(금) 오후 3시',   // 합격 발표 — 마감(14:00) 1시간 뒤
   depositDeadline: '8/21(금) 자정',  // 입금 마감 — 발표 당일 자정까지
   otDate: '8/23(일)',            // 온라인 OT (줌)
   otTime: '오전 7시',             // OT 시각 (KST) — 이 자리에서 팀 배정까지 진행
@@ -51,7 +51,7 @@ export const DAY_MINUTES = Array.from({ length: COHORT4.durationDays }, (_, i) =
 
 // 랜딩 SCHEDULE 카드에 그대로 뿌리는 일정표.
 export const SCHEDULE4 = [
-  { label: '모집 마감', value: '8/21(금) 14:30', highlight: true },
+  { label: '모집 마감', value: '8/21(금) 14:00', highlight: true },
   { label: '합격 발표', value: COHORT4.resultDate, highlight: false },
   { label: '입금 마감', value: COHORT4.depositDeadline, highlight: false },
   { label: '온라인 OT (줌) · 팀 배정', value: `${COHORT4.otDate} ${COHORT4.otTime}`, highlight: false },

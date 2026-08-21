@@ -18,7 +18,7 @@ export const ACTIVE = {
 
   // 신청 마감 — 이 시각 이후 접수분은 대기명단으로 태깅된다.
   deadline: COHORT4.officialDeadline,
-  deadlineLabel: '8/21(금) 오후 2시 30분',
+  deadlineLabel: '8/21(금) 오후 2시',
 
   startLabel: `${COHORT4.startDate} 시작`,
   startDateLabel: COHORT4.startDate,   // "시작"이라는 말이 앞에 이미 있는 자리용
