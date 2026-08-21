@@ -31,3 +31,8 @@ raw-videos/
 _testimonial_originals/
 .env*.local
 scripts/.curate-photos-debug.json
+
+# 로컬 전용 (대용량 원본 · 일회성 스크립트 · CLI 캐시)
+public/baliruns.mov
+.243-*.mjs
+supabase/.temp/
