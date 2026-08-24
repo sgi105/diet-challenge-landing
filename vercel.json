@@ -1,6 +1,11 @@
 {
   "devCommand": "npm run dev",
+  "redirects": [
+    { "source": "/running-mistakes-guide.html", "destination": "/guide/run-mistakes", "permanent": true },
+    { "source": "/diet-guide.html", "destination": "/guide/diet", "permanent": true }
+  ],
   "rewrites": [
-    { "source": "/(.*)", "destination": "/" }
+    { "source": "/guide/:slug", "destination": "/guide/:slug.html" },
+    { "source": "/((?!guide/|ot/|r/).*)", "destination": "/" }
   ]
 }
