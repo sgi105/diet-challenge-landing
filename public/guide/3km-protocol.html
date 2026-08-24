@@ -1,0 +1,478 @@
+<!doctype html>
+<html lang="ko">
+<head>
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+<title>3km 15:00 → 12:30 · 25주 특급전사 프로토콜</title>
+<meta name="description" content="3km 15:00에서 12:30까지. 25주 4주 주기 6블록 러닝 훈련 프로토콜 전체 스케줄." />
+<link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet" />
+<style>
+  :root{
+    --blue:#1e3cff; --lime:#c8ff4d; --ink:#0f172a; --muted:#64748b;
+    --card:#f1f5ff; --line:#e2e8f0; --orange:#f97316;
+    --red:#dc2626; --amber:#c2410c; --green:#16a34a;
+    --deload:#fff7ed; --deload-line:#fdba74;
+  }
+  *{margin:0;padding:0;box-sizing:border-box;}
+  body{
+    font-family:"Pretendard Variable","Pretendard",-apple-system,sans-serif;
+    color:var(--ink); background:#dbe3ff; line-height:1.6;
+    -webkit-print-color-adjust:exact; print-color-adjust:exact;
+  }
+  .toolbar{
+    position:sticky; top:0; z-index:10; background:var(--blue); color:#fff;
+    display:flex; align-items:center; justify-content:space-between; gap:12px;
+    padding:calc(12px + env(safe-area-inset-top)) 20px 12px; font-weight:700;
+  }
+  .toolbar span{ font-size:15px; }
+  .toolbar button{
+    background:var(--lime); color:var(--blue); border:none; border-radius:10px;
+    padding:10px 18px; font-weight:800; font-size:15px; cursor:pointer;
+    font-family:inherit; white-space:nowrap;
+  }
+  .page{
+    width:210mm; min-height:297mm; margin:20px auto; background:#fff;
+    padding:22mm 18mm; box-shadow:0 10px 40px rgba(0,0,0,.15);
+    display:flex; flex-direction:column;
+  }
+  .page + .page{ margin-top:24px; }
+  .page-body{ flex:1; }
+
+  /* ── 히어로 ───────────────────────────── */
+  .hero{ background:var(--blue); color:#fff; border-radius:20px; padding:34px 32px; }
+  .hero .pill{ display:inline-block; border:2px solid var(--lime); color:var(--lime); border-radius:999px; padding:6px 16px; font-size:13px; font-weight:800; letter-spacing:.12em; margin-bottom:18px; }
+  .hero h1{ font-size:38px; font-weight:900; line-height:1.15; letter-spacing:-.03em; }
+  .hero h1 .ac{ color:var(--lime); }
+  .hero p{ margin-top:14px; font-size:16px; color:rgba(255,255,255,.85); }
+  .timeboard{ display:flex; align-items:center; gap:18px; margin:22px 0 4px; flex-wrap:wrap; }
+  .tb{ text-align:center; }
+  .tb .t{ font-size:40px; font-weight:900; letter-spacing:-.04em; line-height:1; font-variant-numeric:tabular-nums; }
+  .tb .l{ font-size:12px; font-weight:800; letter-spacing:.1em; color:rgba(255,255,255,.6); margin-top:7px; }
+  .tb.goal .t{ color:var(--lime); }
+  .tb-arrow{ font-size:28px; color:rgba(255,255,255,.45); font-weight:900; }
+  .tb-meta{ margin-left:auto; text-align:right; font-size:13px; font-weight:700; color:rgba(255,255,255,.75); line-height:1.7; }
+  .tb-meta b{ color:#fff; font-size:15px; }
+
+  /* ── 공통 ─────────────────────────────── */
+  h2{ font-size:23px; font-weight:900; letter-spacing:-.025em; margin:30px 0 6px; display:flex; align-items:center; gap:11px; }
+  h2 .num{ flex-shrink:0; display:inline-flex; align-items:center; justify-content:center; width:31px; height:31px; background:var(--blue); color:#fff; border-radius:9px; font-size:16px; font-weight:900; }
+  .lead{ color:var(--muted); font-size:14.5px; margin-bottom:16px; padding-left:42px; }
+  .lead b{ color:var(--ink); font-weight:800; }
+
+  .why{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .why .w{ background:var(--card); border-radius:14px; padding:17px 18px; }
+  .why .w .k{ font-size:12px; font-weight:900; letter-spacing:.1em; color:var(--blue); margin-bottom:8px; }
+  .why .w .v{ font-size:14.5px; font-weight:600; line-height:1.55; }
+  .why .w .v b{ font-weight:800; }
+
+  .sess{ background:#fff; border:1px solid var(--line); border-radius:16px; padding:19px 21px; margin-bottom:13px; box-shadow:0 4px 16px rgba(15,23,42,.05); }
+  .sess.warm{ background:var(--deload); border-color:var(--deload-line); }
+  .s-head{ display:flex; align-items:center; gap:11px; margin-bottom:6px; flex-wrap:wrap; }
+  .s-title{ font-size:18px; font-weight:900; letter-spacing:-.02em; }
+  .s-day{ font-size:11.5px; font-weight:800; padding:4px 10px; border-radius:999px; background:var(--card); color:var(--blue); white-space:nowrap; }
+  .s-day.rpe{ background:#fef2f2; color:var(--red); margin-left:auto; }
+  .purpose{ background:#eef4ff; border-left:4px solid var(--blue); border-radius:8px; padding:11px 14px; font-size:14px; margin:11px 0; }
+  .purpose .k{ font-size:11.5px; font-weight:900; letter-spacing:.08em; color:var(--blue); display:block; margin-bottom:3px; }
+  .purpose b{ font-weight:800; }
+  .sess.warm .purpose{ background:#fff; border-left-color:var(--orange); }
+  .sess.warm .purpose .k{ color:var(--amber); }
+  .row{ display:flex; gap:9px; font-size:14px; margin-bottom:6px; line-height:1.55; }
+  .row:last-child{ margin-bottom:0; }
+  .row .ic{ flex-shrink:0; width:17px; text-align:center; }
+  .row .tx b{ font-weight:800; }
+  .row .tx code{ font-family:inherit; background:var(--card); color:var(--blue); font-weight:800; padding:1px 7px; border-radius:6px; }
+
+  .lrgrid{ display:grid; grid-template-columns:repeat(3,1fr); gap:12px; }
+  .lr{ background:#fff; border:1px solid var(--line); border-radius:14px; padding:16px 17px; box-shadow:0 4px 16px rgba(15,23,42,.05); }
+  .lr .tag{ display:inline-block; font-size:11.5px; font-weight:900; letter-spacing:.06em; color:#fff; background:var(--blue); padding:3px 9px; border-radius:6px; margin-bottom:9px; }
+  .lr h4{ font-size:16px; font-weight:900; letter-spacing:-.02em; margin-bottom:8px; }
+  .lr .p{ font-size:13.5px; color:#334155; line-height:1.55; margin-bottom:9px; }
+  .lr .p b{ color:var(--amber); font-weight:800; }
+  .lr .pace{ font-size:13px; font-weight:700; color:var(--blue); background:var(--card); border-radius:8px; padding:8px 10px; line-height:1.5; }
+
+  /* ── 토글 ─────────────────────────────── */
+  .picker{ background:var(--blue); border-radius:16px; padding:20px 22px; margin-bottom:16px; }
+  .picker .q{ color:rgba(255,255,255,.8); font-size:13.5px; font-weight:700; margin-bottom:12px; }
+  .tabs{ display:flex; gap:10px; }
+  .tab{
+    flex:1; background:rgba(255,255,255,.1); color:rgba(255,255,255,.8);
+    border:2px solid rgba(255,255,255,.25); border-radius:12px; padding:13px 10px;
+    font-family:inherit; font-size:16px; font-weight:900; cursor:pointer; text-align:center;
+    transition:none;
+  }
+  .tab .sub{ display:block; font-size:11.5px; font-weight:700; margin-top:5px; opacity:.75; }
+  .tab[aria-selected="true"]{ background:var(--lime); color:var(--blue); border-color:var(--lime); }
+  .tab[aria-selected="true"] .sub{ opacity:.85; }
+
+  /* ── 표 ───────────────────────────────── */
+  .scrollhint{ display:none; font-size:12.5px; font-weight:700; color:var(--muted); margin-bottom:8px; }
+  .tw{ overflow-x:auto; -webkit-overflow-scrolling:touch; border:1px solid var(--line); border-radius:14px; }
+  table{ border-collapse:collapse; width:100%; min-width:640px; font-size:13px; }
+  thead th{
+    background:var(--blue); color:#fff; font-size:11.5px; font-weight:900; letter-spacing:.04em;
+    padding:11px 10px; text-align:left; white-space:nowrap; position:sticky; top:0;
+  }
+  tbody td{ padding:9px 10px; border-top:1px solid var(--line); vertical-align:middle; }
+  tbody tr.dl{ background:var(--deload); }
+  tbody tr.fin{ background:#0f172a; color:#fff; }
+  tbody tr.fin td{ border-top-color:#334155; }
+  tbody tr.fin .wk{ color:var(--lime); }
+  .wk{ font-weight:900; font-size:14px; white-space:nowrap; font-variant-numeric:tabular-nums;
+       position:sticky; left:0; z-index:1; background:#fff; box-shadow:1px 0 0 var(--line); }
+  tbody tr.dl .wk{ background:var(--deload); }
+  tbody tr.fin .wk{ background:#0f172a; box-shadow:1px 0 0 #334155; }
+  thead th:first-child{ position:sticky; left:0; z-index:2; }
+  .mi{ font-weight:800; font-variant-numeric:tabular-nums; white-space:nowrap; }
+  .iv{ font-weight:600; white-space:nowrap; font-variant-numeric:tabular-nums; }
+  .ez{ font-weight:800; color:var(--blue); font-variant-numeric:tabular-nums; white-space:nowrap; }
+  tbody tr.fin .ez{ color:var(--lime); }
+  .nt{ font-size:12px; color:var(--muted); font-weight:700; white-space:nowrap; }
+  tbody tr.dl .nt{ color:var(--amber); }
+  tbody tr.fin .nt{ color:var(--lime); }
+  .bstart td{ border-top:3px solid var(--blue); }
+  .foot{ font-size:12.5px; color:var(--muted); margin-top:10px; line-height:1.7; }
+  .foot b{ color:var(--ink); }
+
+  /* ── 규칙 ─────────────────────────────── */
+  .rules{ background:var(--blue); color:#fff; border-radius:18px; padding:26px 28px; }
+  .rules h3{ font-size:20px; font-weight:900; margin-bottom:18px; }
+  .rules .r{ padding:14px 0; border-bottom:1px solid rgba(255,255,255,.14); }
+  .rules .r:last-child{ border-bottom:none; padding-bottom:0; }
+  .rules .r .t{ font-size:16px; font-weight:900; color:var(--lime); margin-bottom:5px; }
+  .rules .r .d{ font-size:14px; color:rgba(255,255,255,.85); line-height:1.6; }
+
+  /* ── CTA ──────────────────────────────── */
+  .cta{ margin-top:26px; text-align:center; background:var(--card); border-radius:18px; padding:32px 28px; }
+  .cta .big{ font-size:27px; font-weight:900; letter-spacing:-.03em; line-height:1.3; }
+  .cta .big .ac{ color:var(--blue); }
+  .cta p{ color:#334155; margin-top:14px; font-size:15px; line-height:1.7; }
+  .cta a{
+    display:inline-block; margin-top:22px; background:var(--blue); color:#fff;
+    text-decoration:none; font-size:17px; font-weight:900; padding:16px 32px; border-radius:13px;
+  }
+  .cta .handle{ margin-top:12px; font-size:13px; font-weight:700; color:var(--muted); }
+
+  .footer{ margin-top:24px; padding-top:16px; border-top:2px solid var(--line); color:var(--muted); font-size:13px; display:flex; justify-content:space-between; gap:12px; }
+
+  /* ── 모바일 ───────────────────────────── */
+  @media screen and (max-width:840px){
+    .page{ width:auto; min-height:0; margin:12px; padding:22px 18px; border-radius:16px; }
+    .hero{ padding:26px 22px; border-radius:16px; }
+    .hero h1{ font-size:29px; }
+    .hero p{ font-size:15px; }
+    .timeboard{ gap:12px; }
+    .tb .t{ font-size:33px; }
+    .tb-meta{ margin-left:0; text-align:left; width:100%; padding-top:6px; border-top:1px solid rgba(255,255,255,.18); }
+    h2{ font-size:20px; margin-top:26px; }
+    .lead{ padding-left:0; }
+    .why{ grid-template-columns:1fr; }
+    .lrgrid{ grid-template-columns:1fr; }
+    .tabs{ flex-direction:column; }
+    .scrollhint{ display:block; }
+    .rules{ padding:22px 20px; }
+    .cta{ padding:26px 20px; }
+    .cta .big{ font-size:22px; }
+    .cta a{ display:block; }
+    .footer{ flex-direction:column; gap:5px; }
+  }
+
+  @media print{
+    body{ background:#fff; }
+    .toolbar, .scrollhint{ display:none; }
+    .page{ width:auto; min-height:auto; height:auto; margin:0; box-shadow:none; padding:12mm 14mm; }
+    .page{ break-before:page; page-break-before:always; }
+    .page:first-child{ break-before:auto; page-break-before:auto; }
+    .page + .page{ margin-top:0; }
+    .tw{ overflow:visible; }
+    table{ min-width:0; }
+    thead{ display:table-header-group; }
+    tbody tr{ break-inside:avoid; page-break-inside:avoid; }
+    .sess, .lr, .rules, .hero, .cta, .why{ break-inside:avoid; page-break-inside:avoid; }
+    .footer{ margin-top:14px; padding-top:10px; }
+  }
+  @page{ size:A4; margin:0; }
+</style>
+</head>
+<body>
+<div class="toolbar">
+  <span>🏃 25주 특급전사 프로토콜</span>
+  <button onclick="window.print()">📄 PDF로 저장 / 인쇄</button>
+</div>
+
+<!-- ══ PAGE 1 — 표지 + 원리 + 인터벌 ══ -->
+<div class="page">
+  <div class="page-body">
+    <div class="hero">
+      <span class="pill">TARZAN RUN CLUB · TRAINING PROTOCOL</span>
+      <h1>3km 15:00에서<br/><span class="ac">12:30</span>까지, 25주.</h1>
+      <p>감으로 뛰는 걸 멈추는 순간부터 기록이 움직인다.<br/>1주차부터 25주차까지, 뭘 얼마나 뛸지 전부 적어놨어.</p>
+      <div class="timeboard">
+        <div class="tb"><div class="t">15:00</div><div class="l">NOW · 5:00/km</div></div>
+        <div class="tb-arrow">→</div>
+        <div class="tb goal"><div class="t">12:30</div><div class="l">GOAL · 4:10/km</div></div>
+        <div class="tb-meta">
+          <b>25주</b> · 4주 주기 6블록 + 테이퍼링 1주<br/>
+          주 1회 인터벌 · 주 1회 롱런 · 나머지 이지런
+        </div>
+      </div>
+    </div>
+
+    <h2><span class="num">1</span>왜 이렇게 하면 되는가</h2>
+    <p class="lead">복잡한 이론 없어. <b>이 세 가지가 전부</b>야.</p>
+    <div class="why">
+      <div class="w">
+        <div class="k">점진적 과부하</div>
+        <div class="v">3주 올리고 <b>1주 덜어낸다.</b> 이 리듬이 4주마다 반복돼. 계속 올리기만 하면 부상으로 끝나.</div>
+      </div>
+      <div class="w">
+        <div class="k">10초의 원칙</div>
+        <div class="v">강도는 블록마다 <b>딱 10초씩만</b> 당긴다. 5:00에서 4:10까지 여섯 칸. 한 번에 20초 당기고 싶은 유혹이 제일 위험해.</div>
+      </div>
+      <div class="w">
+        <div class="k">하드-이지 분리</div>
+        <div class="v">힘든 날은 확실히 힘들게, <b>쉬운 날은 진짜 쉽게.</b> 애매하게 중간 강도로 매일 뛰는 게 제일 안 는다.</div>
+      </div>
+    </div>
+
+    <h2><span class="num">2</span>인터벌 — 수요일</h2>
+    <p class="lead">일주일에 딱 하루. <b>여기서 기록이 만들어져.</b></p>
+
+    <div class="sess">
+      <div class="s-head">
+        <span class="s-title">A. 1000m × 3-5회</span>
+        <span class="s-day">휴식 90초</span>
+        <span class="s-day rpe">RPE 8</span>
+      </div>
+      <div class="purpose">
+        <span class="k">훈련 목적</span>
+        <b>고속 지속 능력 향상.</b> 3km 페이스를 끝까지 유지하는 힘과 VO2Max 파워를 동시에 끌어올린다.
+      </div>
+      <div class="row"><span class="ic">🎯</span><span class="tx"><b>페이스</b> — 지금 내 3km 목표 페이스로. 1주차라면 <code>5:00/km</code></span></div>
+      <div class="row"><span class="ic">📈</span><span class="tx"><b>과부하 룰</b> — <code>3회 → 4회 → 5회</code>. 5회를 성공하면 다음 블록에서 페이스를 <b>10초 당기고 다시 3회부터.</b></span></div>
+      <div class="row"><span class="ic">🔥</span><span class="tx"><b>강도</b> — 마지막 세트를 끝내고 <b>한 번 더 뛸 여유가 남는</b> 수준. 토할 것 같으면 너무 빠른 거야.</span></div>
+      <div class="row"><span class="ic">🏁</span><span class="tx"><b>완성 조건</b> — <code>4:10</code>으로 5회를 해내면 이 프로토콜은 끝난 거야.</span></div>
+    </div>
+
+    <div class="sess">
+      <div class="s-head">
+        <span class="s-title">B. 200m × 5회</span>
+        <span class="s-day">휴식 60초</span>
+        <span class="s-day rpe">RPE 8-9</span>
+      </div>
+      <div class="purpose">
+        <span class="k">훈련 목적</span>
+        <b>빠른 속도를 편하게 만들기.</b> 최고 속력의 천장을 올리고, 다리가 지친 상태에서도 자세가 안 무너지게 만든다.
+      </div>
+      <div class="row"><span class="ic">🎯</span><span class="tx"><b>페이스</b> — 3km 페이스보다 빠르게. 단 <b>자세를 통제할 수 있는 선까지만.</b></span></div>
+      <div class="row"><span class="ic">🔥</span><span class="tx"><b>강도</b> — 완벽한 자세가 유지되는 한계 지점. 폼이 무너지면 그 세트는 실패야.</span></div>
+      <div class="row"><span class="ic">💤</span><span class="tx"><b>디로딩 주차에는 생략</b>한다.</span></div>
+    </div>
+  </div>
+  <div class="footer"><span>TARZAN RUN CLUB · 25주 특급전사 프로토콜</span><span>1 / 4</span></div>
+</div>
+
+<!-- ══ PAGE 2 — 롱런 + 이지런 + 디로딩 ══ -->
+<div class="page">
+  <div class="page-body">
+    <h2><span class="num">3</span>롱런 — 일요일</h2>
+    <p class="lead">거리는 <b>그 주 총 마일리지의 30%.</b> 세 종류를 A → B → C로 돌린다.</p>
+    <div class="lrgrid">
+      <div class="lr">
+        <span class="tag">A · 존2 롱런</span>
+        <h4>유산소 베이스</h4>
+        <div class="p">모세혈관을 늘리고 <b>심장이 한 번에 뿜는 피의 양</b>을 키운다. 느려 보여도 이게 엔진 자체를 키우는 훈련이야.</div>
+        <div class="pace">대화가 가능한 강도<br/>3km 페이스 + 35-40%</div>
+      </div>
+      <div class="lr">
+        <span class="tag">B · 템포 롱런</span>
+        <h4>지속 능력</h4>
+        <div class="p">젖산이 쌓이는 속도를 늦춘다. <b>역치 페이스에 몸을 적응</b>시키는 구간.</div>
+        <div class="pace">3등분 구조<br/>이지런 → 템포(+10-15%) → 이지런</div>
+      </div>
+      <div class="lr">
+        <span class="tag">C · 빌드업 롱런</span>
+        <h4>후반부 유지력</h4>
+        <div class="p">피로가 쌓인 상태에서 <b>오히려 속도를 올리는</b> 훈련. 실전 후반에 페이스가 무너지지 않게 만든다.</div>
+        <div class="pace">3등분 구조<br/>+30% → +20% → +10%</div>
+      </div>
+    </div>
+
+    <h2><span class="num">4</span>이지런 — 나머지 날</h2>
+    <p class="lead">가장 많이 뛰는데 <b>가장 많이 망치는</b> 훈련.</p>
+    <div class="sess">
+      <div class="purpose">
+        <span class="k">훈련 목적</span>
+        <b>심폐 유산소 유지 + 능동적 회복.</b> 인터벌과 롱런에서 쌓인 피로를 풀면서 주간 마일리지를 채운다.
+      </div>
+      <div class="row"><span class="ic">🎯</span><span class="tx"><b>페이스 — 3km 페이스 + 40%</b></span></div>
+      <div class="row"><span class="ic">📌</span><span class="tx">고정된 숫자로 외우지 마. <b>내가 빨라지면 이지런도 같이 빨라져.</b><br/>1주차 기준 <code>7:00/km</code> → 25주차 기준 <code>5:50/km</code></span></div>
+      <div class="row"><span class="ic">⚠️</span><span class="tx">여기서 욕심내서 페이스를 당기는 순간, <b>수요일 인터벌이 망가진다.</b> 느리게 뛰는 것도 훈련이야.</span></div>
+    </div>
+
+    <h2><span class="num">5</span>디로딩 — 4주마다</h2>
+    <p class="lead"><b>4 · 8 · 12 · 16 · 20 · 24주차.</b> 건너뛰고 싶은 주가 바로 제일 중요한 주야.</p>
+    <div class="sess warm">
+      <div class="purpose">
+        <span class="k">훈련 목적</span>
+        <b>근육 · 힘줄 · 신경계 회복과 부상 방지.</b> 누적된 피로를 비워내야 다음 블록의 과부하를 견딜 수 있다.
+      </div>
+      <div class="row"><span class="ic">📉</span><span class="tx"><b>전체 마일리지 25% 감량</b></span></div>
+      <div class="row"><span class="ic">⏱</span><span class="tx"><b>1000m 인터벌은 페이스를 그대로 유지</b>하되 세트 수만 줄인다 (2-3회)</span></div>
+      <div class="row"><span class="ic">✂️</span><span class="tx"><b>200m 세션은 생략</b></span></div>
+      <div class="row"><span class="ic">🧠</span><span class="tx">몸은 훈련할 때가 아니라 <b>회복할 때 강해진다.</b> 이 주에 쉬는 게 다음 블록의 실력이야.</span></div>
+    </div>
+  </div>
+  <div class="footer"><span>TARZAN RUN CLUB · 25주 특급전사 프로토콜</span><span>2 / 4</span></div>
+</div>
+
+<!-- ══ PAGE 3 — 플랜 선택 + 25주 표 ══ -->
+<div class="page">
+  <div class="page-body">
+    <h2><span class="num">6</span>25주 전체 스케줄</h2>
+    <p class="lead">인터벌은 <b>수요일</b>, 롱런은 <b>일요일</b> 고정. 나머지를 어떻게 채울지만 고르면 돼.</p>
+
+    <div class="picker">
+      <div class="q">나는 일주일에 며칠 뛸 수 있지?</div>
+      <div class="tabs" role="tablist">
+        <button class="tab" id="tab-a" role="tab" aria-selected="true" onclick="setPlan('a')">
+          주 5일
+          <span class="sub">월 · 목 휴식 · 이지런 3회</span>
+        </button>
+        <button class="tab" id="tab-b" role="tab" aria-selected="false" onclick="setPlan('b')">
+          주 7일
+          <span class="sub">매일 러닝 · 이지런 5회</span>
+        </button>
+      </div>
+    </div>
+
+    <p class="lead" id="plandesc" style="padding-left:0;margin-top:-6px;"></p>
+
+    <div class="scrollhint">← 표를 좌우로 밀어봐 →</div>
+    <div class="tw">
+      <table>
+        <thead>
+          <tr>
+            <th>주차</th>
+            <th>마일리지</th>
+            <th>인터벌 (수)</th>
+            <th>롱런 (일)</th>
+            <th id="ezhead">이지런 1회</th>
+            <th>비고</th>
+          </tr>
+        </thead>
+        <tbody id="tbody"></tbody>
+      </table>
+    </div>
+    <div class="foot" id="tfoot"></div>
+  </div>
+  <div class="footer"><span>TARZAN RUN CLUB · 25주 특급전사 프로토콜</span><span>3 / 4</span></div>
+</div>
+
+<!-- ══ PAGE 4 — 규칙 + CTA ══ -->
+<div class="page">
+  <div class="page-body">
+    <h2><span class="num">7</span>절대 안 깨는 규칙 3개</h2>
+    <p class="lead">표대로 뛰어도 <b>이걸 어기면 25주를 못 채운다.</b></p>
+    <div class="rules">
+      <h3>⛔ 이것만은 지켜</h3>
+      <div class="r">
+        <div class="t">1. 인터벌과 롱런 사이 최소 72시간</div>
+        <div class="d">힘든 세션 두 개가 붙으면 회복이 안 된다. 수요일 인터벌과 일요일 롱런이 고정인 이유가 이거야.<br/>이지런은 이 간격 안에 들어가도 된다 — 그래서 매일 뛰는 플랜도 가능한 거야.</div>
+      </div>
+      <div class="r">
+        <div class="t">2. 디로딩은 무조건 한다</div>
+        <div class="d">마일리지가 계속 오르는 중이라도 4주차마다 25%를 덜어낸다. 컨디션이 좋을수록 건너뛰고 싶어지는데, 그 주에 참는 사람만 25주를 완주해.</div>
+      </div>
+      <div class="r">
+        <div class="t">3. 페이스는 블록마다 10초씩만</div>
+        <div class="d">5회를 성공했을 때만 다음 블록에서 10초를 당긴다. 성공 못 했으면 같은 페이스로 한 블록 더. 조급함이 부상으로 바뀌는 데는 2주면 충분해.</div>
+      </div>
+    </div>
+
+    <div class="cta">
+      <div class="big">방법은 이제 <span class="ac">다 알아.</span><br/>문제는 25주를 혼자 버티냐는 거야.</div>
+      <p>
+        나도 혼자선 못 했어.<br/>
+        빠지는 날이 하루 생기면 그 다음은 너무 쉬워지더라고.<br/>
+        그래서 같이 뛰는 방을 만들었어.
+      </p>
+      <a href="https://www.instagram.com/bali_tarzan/" target="_blank" rel="noopener noreferrer">👇 프로필 링크에서 대기방 들어와</a>
+      <div class="handle">@bali_tarzan</div>
+    </div>
+  </div>
+  <div class="footer"><span>혼자선 맨날 실패한 러닝, 타잔 런 클럽에선 다르다.</span><span>4 / 4</span></div>
+</div>
+
+<script>
+/* 주차 데이터 — [주, 마일리지, 인터벌, 롱런, 이지런(주5일), 이지런(주7일), 비고, 타입] */
+var WEEKS = [
+  [1,  20, "1000m×3 (5:00) + 200m×5", "[A] 존2 6km",        "3.3", "2.0", "5:00 구간 시작",    "b"],
+  [2,  22, "1000m×4 (5:00) + 200m×5", "[B] 템포 6.5km",     "3.5", "2.1", "세트 증량",         ""],
+  [3,  24, "1000m×5 (5:00) + 200m×5", "[C] 빌드업 7km",     "3.7", "2.2", "5:00 구간 완성",    ""],
+  [4,  18, "1000m×2 (5:00)",          "[A] 존2 5km",        "3.7", "2.2", "디로딩",            "d"],
+  [5,  26, "1000m×3 (4:50) + 200m×5", "[B] 템포 8km",       "4.7", "2.8", "10초 단축",         "b"],
+  [6,  29, "1000m×4 (4:50) + 200m×5", "[C] 빌드업 8.5km",   "5.2", "3.1", "볼륨 빌드업",       ""],
+  [7,  32, "1000m×5 (4:50) + 200m×5", "[A] 존2 9.5km",      "5.5", "3.3", "4:50 구간 완성",    ""],
+  [8,  24, "1000m×2 (4:50)",          "[A] 존2 7km",        "5.0", "3.0", "디로딩",            "d"],
+  [9,  35, "1000m×3 (4:40) + 200m×5", "[B] 템포 10.5km",    "6.8", "4.1", "10초 단축",         "b"],
+  [10, 38, "1000m×4 (4:40) + 200m×5", "[C] 빌드업 11.5km",  "7.2", "4.3", "볼륨 빌드업",       ""],
+  [11, 42, "1000m×5 (4:40) + 200m×5", "[A] 존2 12.5km",     "7.8", "4.7", "4:40 구간 완성",    ""],
+  [12, 31, "1000m×3 (4:40)",          "[A] 존2 9.5km",      "6.2", "3.7", "디로딩",            "d"],
+  [13, 44, "1000m×3 (4:30) + 200m×5", "[B] 템포 13km",      "9.0", "5.4", "10초 단축",         "b"],
+  [14, 47, "1000m×4 (4:30) + 200m×5", "[C] 빌드업 14km",    "9.3", "5.6", "역치 자극",         ""],
+  [15, 50, "1000m×5 (4:30) + 200m×5", "[A] 존2 15km",       "9.7", "5.8", "최대 마일리지 도달",""],
+  [16, 37, "1000m×3 (4:30)",          "[A] 존2 11km",       "7.7", "4.6", "디로딩",            "d"],
+  [17, 45, "1000m×3 (4:20) + 200m×5", "[B] 템포 13.5km",    "9.2", "5.5", "10초 단축",         "b"],
+  [18, 48, "1000m×4 (4:20) + 200m×5", "[C] 빌드업 14km",    "9.7", "5.8", "강도 구간",         ""],
+  [19, 50, "1000m×5 (4:20) + 200m×5", "[A] 존2 15km",       "9.7", "5.8", "4:20 구간 완성",    ""],
+  [20, 37, "1000m×3 (4:20)",          "[A] 존2 11km",       "7.7", "4.6", "디로딩",            "d"],
+  [21, 45, "1000m×3 (4:10) + 200m×5", "[B] 템포 13.5km",    "9.2", "5.5", "특급 페이스 진입",  "b"],
+  [22, 48, "1000m×4 (4:10) + 200m×5", "[C] 빌드업 14km",    "9.7", "5.8", "완성 단계",         ""],
+  [23, 50, "1000m×5 (4:10) + 200m×5", "[A] 존2 15km",       "9.7", "5.8", "특급 1000m 완성",   ""],
+  [24, 37, "1000m×3 (4:10)",          "[A] 존2 11km",       "7.7", "4.6", "실전 대비 회복",    "d"],
+  [25, 20, "400m×3 (4:10)",           "3km 타임트라이얼",   "5.3", "3.2*","12:30 측정",        "f"]
+];
+
+var PLAN = {
+  a: {
+    head: "이지런 1회 (화·금·토)",
+    desc: "주 5일 — 화 · 수 · 금 · 토 · 일. 월요일과 목요일은 완전 휴식. 충분한 휴식으로 세션 집중도와 부상 방지를 극대화하는 구조야.",
+    foot: "이지런은 <b>화 · 금 · 토 3회</b>, 표의 숫자는 <b>1회당 거리</b>야. 각 주차의 (롱런 + 인터벌 + 이지런×3)이 총 마일리지가 돼."
+  },
+  b: {
+    head: "이지런 1회 (월·화·목·금·토)",
+    desc: "주 7일 — 매일 뛴다. 1회당 거리가 짧아지는 대신 쉬는 날이 없어. 데일리 러닝 습관을 만들고 한 번에 뛰는 부담을 줄이는 구조야.",
+    foot: "이지런은 <b>월 · 화 · 목 · 금 · 토 5회</b>, 표의 숫자는 <b>1회당 거리</b>야.<br/><b>*</b> 25주차만 토요일 3.0km (테이퍼링 조정)."
+  }
+};
+
+function setPlan(p){
+  var idx = (p === "b") ? 5 : 4;
+  var rows = "";
+  for (var i = 0; i < WEEKS.length; i++){
+    var w = WEEKS[i];
+    var cls = [];
+    if (w[7] === "d") cls.push("dl");
+    if (w[7] === "f") cls.push("fin");
+    if (w[7] === "b") cls.push("bstart");
+    rows += '<tr class="' + cls.join(" ") + '">'
+      + '<td class="wk">' + w[0] + '주</td>'
+      + '<td class="mi">' + w[1] + 'km</td>'
+      + '<td class="iv">' + w[2] + '</td>'
+      + '<td>' + w[3] + '</td>'
+      + '<td class="ez">' + w[idx] + 'km</td>'
+      + '<td class="nt">' + w[6] + '</td>'
+      + '</tr>';
+  }
+  document.getElementById("tbody").innerHTML = rows;
+  document.getElementById("ezhead").textContent = PLAN[p].head;
+  document.getElementById("plandesc").innerHTML = PLAN[p].desc;
+  document.getElementById("tfoot").innerHTML = PLAN[p].foot;
+  document.getElementById("tab-a").setAttribute("aria-selected", p === "a" ? "true" : "false");
+  document.getElementById("tab-b").setAttribute("aria-selected", p === "b" ? "true" : "false");
+}
+
+setPlan("a");
+</script>
+</body>
+</html>

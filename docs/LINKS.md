@@ -24,6 +24,7 @@
 |---|---|---|---|
 | 런린이 실수 7가지 | https://challenge.samuraihabits.com/guide/run-mistakes | `public/guide/run-mistakes.html` | 러닝 초보 대상 리드마그넷. DM·댓글 배포 |
 | 식단 가이드 (1.5끼 전략) | https://challenge.samuraihabits.com/guide/diet | `public/guide/diet.html` | 다이어트 식단 리드마그넷. DM·댓글 배포 |
+| 25주 특급전사 프로토콜 | https://challenge.samuraihabits.com/guide/3km-protocol | `public/guide/3km-protocol.html` | 3km 15:00→12:30 훈련 프로토콜. 팔로우 리드마그넷 · 대기방 유입 |
 
 `/ot/`, `/r/` 는 자리만 확보된 상태 (2026-08-24 기준 파일 없음).
 
