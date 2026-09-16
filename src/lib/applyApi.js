@@ -15,7 +15,7 @@ export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_ANON_KEY
 );
 
-// 현재 액티브 코호트 = 시즌4(260824_team_run). 신규 신청은 이 코호트로 태깅된다.
+// 현재 액티브 코호트 = activeCohort.js의 ACTIVE.cohortCode. 신규 신청은 이 코호트로 태깅된다.
 export const CURRENT_COHORT_CODE = ACTIVE.cohortCode;
 
 // 신청자수 캐시 — 재방문/새로고침 시 게이지를 즉시 렌더(stale-while-revalidate). fetch 끝나면 갱신.

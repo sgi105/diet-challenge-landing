@@ -14,7 +14,7 @@ export default function PhotoGrid() {
         </div>
 
         <div className="grid grid-cols-2 sm:grid-cols-3 gap-2 sm:gap-2.5">
-          {photoRows.map((p) => (
+          {photoRows.slice(0, 6).map((p) => (
             <PhotoCard key={p.id} photo={p} />
           ))}
         </div>

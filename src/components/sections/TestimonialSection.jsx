@@ -3,7 +3,9 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 import { CardByStyle } from './TestimonialCards';
 import { useTestimonialPicks } from '../../hooks/useTestimonialPicks';
 
-const INITIAL_COUNT = 6;
+// 처음엔 3개만. 이 섹션이 페이지에서 제일 길어서(3,800px+) 스크롤 이탈 지점이었다.
+// 더 보고 싶은 사람은 "더보기"로 전체를 편다.
+const INITIAL_COUNT = 3;
 
 export default function TestimonialSection() {
   const [expanded, setExpanded] = useState(false);
@@ -17,12 +19,12 @@ export default function TestimonialSection() {
       <div className="px-6 max-w-lg mx-auto">
         <AnimateOnScroll>
           <span className="pill text-accent-green">REAL VOICES · 참가자 후기</span>
-          <h2 className="font-kr text-3xl md:text-5xl mt-4 mb-4 text-text-primary">
-            한 명도 빠지지 않고<br />
-            <span className="text-accent-green">매일 움직이고 있어.</span>
+          <h2 className="font-kr text-3xl md:text-5xl mt-4 mb-4 text-text-primary break-keep">
+            한 글자도 안 바꾼<br />
+            <span className="text-accent-green">리얼 후기</span>
           </h2>
           <p className="text-text-secondary mb-10 leading-relaxed">
-            런클럽 실제 인증 피드에서.
+            런클럽 실제 인증 피드에서 그대로 가져왔어.
           </p>
         </AnimateOnScroll>
 

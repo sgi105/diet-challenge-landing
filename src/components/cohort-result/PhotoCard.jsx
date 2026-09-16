@@ -70,21 +70,20 @@ export default function PhotoCard({ photo }) {
 
       {/* 하단 그라데이션 + 오버레이 텍스트 */}
       <div className="absolute inset-x-0 bottom-0 pt-12 pb-2.5 px-3 bg-gradient-to-t from-black/85 via-black/55 to-transparent">
+        {/* 좁은 카드에서 한 줄에 다 넣으면 잘린다 → 거리만 크게, 나머지는 아랫줄에 작게. */}
         {dist || dur ? (
-          <p className="text-white font-black tabular-nums text-base sm:text-lg leading-tight drop-shadow-sm">
-            {dist && <span>{dist}</span>}
-            {dist && dur && <span className="text-white/70 mx-1.5">·</span>}
-            {dur && <span>{dur}</span>}
+          <p className="text-white font-black tabular-nums text-[15px] sm:text-base leading-tight drop-shadow-sm truncate">
+            {dist ?? dur}
           </p>
         ) : (
           <p className="text-white/80 font-extrabold text-xs leading-tight">
             {photo.log_type === 'weight' ? '체중 인증' : '운동 인증'}
           </p>
         )}
-        <p className="text-white/85 text-[10px] sm:text-[11px] font-bold tabular-nums leading-tight mt-0.5">
-          {pace && <span>{pace}</span>}
-          {pace && dateStr && <span className="text-white/55 mx-1.5">·</span>}
-          {dateStr && <span className="text-white/70">{dateStr}</span>}
+        <p className="text-white/85 text-[10px] sm:text-[11px] font-bold tabular-nums leading-tight mt-0.5 flex flex-wrap items-center gap-x-1.5">
+          {dist && dur && <span>{dur}</span>}
+          {pace && <span className="text-white/70">{pace}</span>}
+          {dateStr && <span className="text-white/55">{dateStr}</span>}
         </p>
       </div>
     </div>

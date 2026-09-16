@@ -47,8 +47,10 @@ const runningExpOptions = [
   { value: 'full_marathon', label: '풀마라톤(42km) 완주 경험' },
 ];
 
-const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'friend', 'deposit', 'ot'];
-const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'job', 'region', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'deposit', 'ot'];
+// friction 최소화 — 선발에 실제로 쓰는 것만 질문으로 남긴다.
+// 뺀 것: 'job'(선발·팀배정에 안 씀), 'friend'(선택 항목 → instagram 화면 하단으로 합침), 'region'(100% 온라인이라 불필요).
+const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'deposit', 'ot'];
+const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'deposit', 'ot'];
 
 function loadState(storageKey) {
   try {
@@ -83,7 +85,7 @@ export default function ApplyPage() {
   const isReferral = searchParams.get('type') === 'referral';
 
   const STORAGE_KEY = isReferral ? STORAGE_KEY_REFERRAL : STORAGE_KEY_MAIN;
-  // 무료 기수면 보증금(deposit) step 제거. 시즌4는 보증금 20만이라 살아난다.
+  // 무료 기수면 보증금(deposit) step 제거. 보증금 기수면 살아난다.
   const baseSteps = isReferral ? REFERRAL_STEPS : MAIN_STEPS;
   const STEPS = ACTIVE.isFree ? baseSteps.filter(s => s !== 'deposit') : baseSteps;
   const TOTAL_QUESTIONS = STEPS.length - 1;
@@ -134,7 +136,7 @@ export default function ApplyPage() {
     return () => cancelAnimationFrame(id);
   }, [step]);
 
-  // 마감(데드라인 8/21 14시 또는 정원 30명) 후 = 대기명단 접수 모드.
+  // 마감(ACTIVE.deadline 또는 정원 30명) 후 = 대기명단 접수 모드.
   const { isExpired: deadlinePassed } = useCountdown(ACTIVE.deadline);
   const [applicantCount, setApplicantCount] = useState(null);
   useEffect(() => {
@@ -511,11 +513,6 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           <p className="text-text-secondary text-sm leading-relaxed mb-4">
             내가 왜 꼭 이 챌린지에 참여해야 하는지 알려줘. 이유가 분명하고 열정 있는 사람들과만 함께할거야. <span className="text-accent-orange font-bold">성의 없는 지원서는 선발되지 않을 수 있어.</span>
           </p>
-          <div className="bg-bg-card rounded-2xl p-4 mb-4 shadow-[0_4px_16px_rgba(0,0,0,0.10)] border-l-4 border-accent-green">
-            <p className="text-card-ink-faint text-[11px] font-extrabold tracking-widest mb-3">✍️ 이렇게 쓰면 좋아</p>
-            <p className="text-card-ink-muted text-[13px] leading-relaxed mb-3">"올해 인생 최대 몸무게를 찍고 나서, 집에 있던 러닝화 신고 무작정 뛰어봤어요. 첫날은 숨이 턱까지 차서 왜 시작했나 싶었는데, 딱 한 번만 더가 두 번, 세 번이 되더니 어느새 러닝이 좋아졌어요. 근데 사는 데가 외져서 늘 혼자라 한계가 오더라고요. 이번엔 팀이랑 같이 끝까지 가보고 싶어 지원해요. 우선 10K를 완주하고, 거기서 멈추지 않고 계속 달리는 사람이 되는 게 목표예요."</p>
-            <p className="text-card-ink-muted text-[13px] leading-relaxed">"작년엔 퇴근하고 매일 한강을 뛰면서 몸도 마음도 건강했어요. 그런데 올해는 바쁘다는 핑계로 러닝화만 모셔두고 있네요. 그때의 저로 돌아가고 싶어 지원합니다. 혼자선 또 흐지부지될 것 같아서 팀이랑 서로 끌어주며 제대로 해보고 싶어요. 이번에 다시 페이스를 찾아서, 올해 안에 하프 마라톤에 도전하는 걸 목표로 잡았어요. 8월엔 발리에 가는데 거기서도 꼭 뛰어보고 싶고요!"</p>
-          </div>
           <textarea
             value={form.motivation}
             onChange={e => update('motivation', e.target.value)}
@@ -524,8 +521,8 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
             rows={6}
             className="w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-3 text-base text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors resize-none"
           />
-          <p className={`text-xs mt-2 text-right font-semibold ${form.motivation.trim().length >= 30 ? 'text-accent-green' : 'text-text-muted'}`}>
-            {form.motivation.length} / 최소 30자{form.motivation.trim().length >= 30 ? ' ✓' : ''}
+          <p className="text-xs mt-2 text-right font-semibold text-text-muted">
+            {form.motivation.length}자
           </p>
         </div>
       );
@@ -593,6 +590,9 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
           kakaoId={form.kakaoId}
           onInstagram={v => update('instagram', v)}
           onKakao={v => update('kakaoId', v)}
+          friend={form.friend}
+          onFriend={v => update('friend', v)}
+          friendLabel={isReferral ? '같이 지원할 친구 (선택)' : '추천인 (선택)'}
         />
       );
     case 'friend':
@@ -644,7 +644,7 @@ function IntroStep({ isReferral, totalQuestions }) {
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>💸 <span className="text-card-ink font-bold">참가비 무료</span> · 보증금 20만원은 완주하면 전액 환급</li>
+          <li>💸 <span className="text-card-ink font-bold">참가비 무료</span> · 보증금 {ACTIVE.depositLabel}은 완주하면 전액 환급</li>
           <li>🤝 <span className="text-card-ink font-bold">친구랑 같은 팀</span> 배정</li>
           <li>📅 <span className="text-bg-primary font-bold">{ACTIVE.startLabel}</span> · 21일</li>
         </ul>
@@ -667,7 +667,7 @@ function IntroStep({ isReferral, totalQuestions }) {
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (새로고침 안전)</li>
-        <li>💸 <span className="text-bg-primary font-bold">참가비 무료</span> · 보증금 20만원은 완주하면 전액 환급</li>
+        <li>💸 <span className="text-bg-primary font-bold">참가비 무료</span> · 보증금 {ACTIVE.depositLabel}은 완주하면 전액 환급</li>
         <li>📅 <span className="text-card-ink font-bold">{ACTIVE.startLabel}</span> · 21일</li>
       </ul>
       <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
@@ -702,8 +702,24 @@ function TextStep({ label, placeholder, value, onChange, inputMode, autoComplete
 }
 
 // 인스타 ↔ 카톡 토글 입력. 합격 후 단톡방 초대를 어디로 받을지 한 곳만 받음.
-function ContactStep({ instagram, kakaoId, onInstagram, onKakao }) {
+function ContactStep({ instagram, kakaoId, onInstagram, onKakao, friend, onFriend, friendLabel }) {
   const [mode, setMode] = useState(() => (kakaoId && !instagram ? 'kakao' : 'instagram'));
+
+  // 추천인은 화면 하나를 통째로 먹을 만큼 중요하지 않다 → 연락처 화면 아래에 붙인다.
+  const friendField = onFriend ? (
+    <div className="mt-8 pt-6 border-t border-white/15">
+      <label className="block text-text-primary text-base font-black font-kr mb-1">{friendLabel}</label>
+      <p className="text-text-muted text-xs mb-3 leading-relaxed">둘 다 지원하면 같은 팀으로 배정돼. 없으면 비워두고 넘어가.</p>
+      <input
+        type="text"
+        value={friend || ''}
+        onChange={e => onFriend(e.target.value)}
+        placeholder="친구 이름 또는 @인스타 아이디"
+        autoComplete="off"
+        className="w-full bg-bg-card border-2 border-white/20 rounded-2xl px-4 py-3 text-base text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors"
+      />
+    </div>
+  ) : null;
 
   if (mode === 'kakao') {
     return (
@@ -727,6 +743,7 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao }) {
         >
           ← 인스타 ID로 입력하기
         </button>
+        {friendField}
       </div>
     );
   }
@@ -747,6 +764,7 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao }) {
           className="w-full bg-bg-card border-2 border-white/20 rounded-2xl pl-8 pr-4 py-4 text-lg text-card-ink placeholder:text-card-ink-faint focus:outline-none focus:border-accent-green transition-colors"
         />
       </div>
+      {friendField}
     </div>
   );
 }
@@ -878,7 +896,7 @@ function ConsentShell({ label, children, checked, onChange, checkboxLabel }) {
 function DepositConsentStep({ checked, onChange }) {
   // 보증금 흐름 도식 — 입금 → 챌린지 → 환급. 완주 시나리오별 결과는 STEP 3에 통합.
   const steps = [
-    { icon: '💳', step: 'STEP 1 · 시작 전', title: '보증금 20만원 입금', desc: '합격하면 챌린지 시작 전에 먼저' },
+    { icon: '💳', step: 'STEP 1 · 시작 전', title: `보증금 ${ACTIVE.depositLabel} 입금`, desc: '합격하면 챌린지 시작 전에 먼저' },
     { icon: '🏃', step: 'STEP 2 · 21일', title: '팀과 함께 끝까지', desc: '매일 러닝 인증하며 완주' },
     {
       icon: '💰', step: 'STEP 3 · 완주 후', title: '보증금 그대로 돌려받기',
@@ -895,13 +913,13 @@ function DepositConsentStep({ checked, onChange }) {
       label="보증금 안내"
       checked={checked}
       onChange={onChange}
-      checkboxLabel="20만원 보증금 시스템을 이해했어"
+      checkboxLabel={`${ACTIVE.depositLabel} 보증금 시스템을 이해했어`}
     >
       <p className="mb-3 text-card-ink text-[15px] leading-relaxed">
-<span className="font-bold">네가 끝까지 완주할 수 있게</span> 도와줄 강제성을 만들려고 보증금 20만원을 받아. 돈이 걸려 있으면 쉽게 못 포기하거든. 그 강제성이 너를 <span className="font-extrabold text-bg-primary">완주까지, 러닝 습관까지</span> 끌고 가.
+<span className="font-bold">네가 끝까지 완주할 수 있게</span> 도와줄 강제성을 만들려고 보증금 {ACTIVE.depositLabel}을 받아. 돈이 걸려 있으면 쉽게 못 포기하거든. 그 강제성이 너를 <span className="font-extrabold text-bg-primary">완주까지, 러닝 습관까지</span> 끌고 가.
       </p>
       <p className="mb-5 text-card-ink-faint text-[13px] leading-relaxed">
-        직전 시즌 30명 중 30명 전원 21일 완주 — 그게 증거야.
+        첫 기수 30명 중 30명 전원 21일 완주 — 그게 증거야.
       </p>
 
       {/* 보증금 흐름 도식: 입금 → 챌린지 → 환급(시나리오별) */}
@@ -942,20 +960,23 @@ function DepositConsentStep({ checked, onChange }) {
 // OT 참석 가능 여부 — 이 자리에서 팀 배정이 이뤄지므로 미리 받아둔다.
 function OtStep({ value, onChange }) {
   const options = [
-    { value: 'yes', label: '참석할 수 있어', desc: '팀 배정 자리에 직접 참여할게' },
-    { value: 'no', label: '못 갈 것 같아', desc: '남은 팀에 랜덤으로 배정돼도 괜찮아' },
+    { value: 'yes', label: '참석할게', desc: '팀 배정 자리에 직접 참여할게' },
+    { value: 'no', label: '못 갈 것 같아', desc: '필참이라 선발에서 빠질 수 있어' },
   ];
   return (
     <div className="flex-1 flex flex-col justify-center">
-      <label className="block text-text-primary text-2xl font-black font-kr mb-2">OT 참석할 수 있어?</label>
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">OT는 필참이야</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-5">
-        온라인 줌으로 진행해. 오래 안 걸려.
+        온라인 줌으로 1시간. <span className="text-accent-orange font-bold">여기서 팀이 정해져서 빠지면 안 돼.</span>
       </p>
 
-      <div className="bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green mb-5">
-        <p className="text-card-ink-faint text-[10px] font-extrabold tracking-widest mb-2">ORIENTATION</p>
+      <div className="bg-bg-card rounded-2xl p-5 border-l-4 border-accent-orange mb-5">
+        <div className="flex items-center gap-2 mb-2">
+          <p className="text-card-ink-faint text-[10px] font-extrabold tracking-widest">ORIENTATION</p>
+          <span className="bg-accent-orange text-bg-primary text-[10px] font-extrabold rounded-full px-2 py-0.5">필참</span>
+        </div>
         <p className="text-card-ink font-black text-xl leading-tight">
-          {ACTIVE.otLabel} {ACTIVE.otTimeLabel}
+          {ACTIVE.otLabel} {ACTIVE.otTimeLabel} <span className="text-card-ink-muted text-base font-bold">· 1시간</span>
         </p>
         <p className="text-card-ink-muted text-[13px] mt-2 leading-relaxed">
           이때 <span className="text-card-ink font-bold">팀 배정</span>이 이뤄져. 챌린지를 어떻게 해야 잘 끝낼 수 있는지 알려주고,
@@ -1258,7 +1279,6 @@ function validateStep(stepKey, form) {
       return null;
     case 'motivation':
       if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
-      if (form.motivation.trim().length < 30) return '최소 30자 이상, 진짜 이유를 써줘.';
       return null;
     case 'shortGoal': {
       if (!form.shortGoal) return '21일 목표를 선택해줘.';

@@ -8,7 +8,7 @@ const ACCOUNT_DISPLAY = '1000 2641 8699';
 const ACCOUNT_FOR_COPY = '1000-2641-8699';
 const ACCOUNT_NO_DASH = '100026418699';
 const HOLDER = '신가인'; // 예금주 — 사용자 확인 필요
-const AMOUNT = 200000;
+const AMOUNT = ACTIVE.deposit;
 // 토스뱅크 코드 092
 const TOSS_DEEPLINK = `supertoss://send?bank=092&accountNo=${ACCOUNT_NO_DASH}&amount=${AMOUNT}`;
 
@@ -16,7 +16,7 @@ export default function PayPage() {
   const navigate = useNavigate();
   const [copiedKey, setCopiedKey] = useState('');
 
-  // 무료 기수면 결제 페이지 접근 시 완료 페이지로 자동 리다이렉트. 시즌4는 보증금 20만이라 이 페이지가 열린다.
+  // 무료 기수면 결제 페이지 접근 시 완료 페이지로 자동 리다이렉트. 보증금 기수면 이 페이지가 열린다.
   useEffect(() => {
     if (ACTIVE.isFree) {
       navigate('/apply/done', { replace: true });

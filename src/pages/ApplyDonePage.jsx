@@ -4,7 +4,7 @@ import { track } from '@vercel/analytics';
 import { ACTIVE } from '../data/activeCohort';
 import { useCountdown } from '../hooks/useCountdown';
 
-// 지원 완료 페이지 — 현재 액티브 기수(시즌4) 기준.
+// 지원 완료 페이지 — 현재 액티브 기수(activeCohort.js) 기준.
 // 모집 중: 심사 있는 기수라 톡방 즉시 입장 X — 합격 발표 · 입금 · OT 흐름 안내 + 지인 초대.
 // 마감(대기명단): 톡방 링크 노출 X (확정자만 입장). "결원 시 연락" 안내만.
 export default function ApplyDonePage() {
@@ -99,7 +99,7 @@ export default function ApplyDonePage() {
           </h3>
           <ul className="space-y-2.5 text-bg-primary/85 text-sm leading-relaxed">
             <li><span className="font-extrabold text-bg-primary">1. 합격 발표</span> · {ACTIVE.resultLabel} — 문자로 안내</li>
-            <li><span className="font-extrabold text-bg-primary">2. 보증금 입금</span> · {ACTIVE.depositDeadlineLabel}까지 20만원</li>
+            <li><span className="font-extrabold text-bg-primary">2. 보증금 입금</span> · {ACTIVE.depositDeadlineLabel}까지 {ACTIVE.depositLabel}</li>
             <li><span className="font-extrabold text-bg-primary">3. 합격자 톡방 초대</span> · 입금 확인되면 초대 보내줄게</li>
             <li><span className="font-extrabold text-bg-primary">4. 온라인 OT · 팀 배정</span> · {ACTIVE.otLabel} {ACTIVE.otTimeLabel} 줌</li>
             <li><span className="font-extrabold text-bg-primary">5. 시작</span> · {ACTIVE.startDateLabel}</li>
