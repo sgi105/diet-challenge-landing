@@ -106,7 +106,28 @@ async function sendApplicantSms(r: any): Promise<Record<string, unknown>> {
 }
 
 // deno-lint-ignore no-explicit-any
-Deno.serve(async (req: Request) => {
+// [690] 내부 호출 인증 — 이 함수는 cron / DB 트리거만 부른다 (브라우저 호출 없음).
+//   verify_jwt=false 로 배포하므로 이 확인이 유일한 관문이다.
+//   통과: 새 비밀 키(apikey 헤더) · 전환 기간 한정 옛 service_role(Authorization: Bearer)
+//   옛 키를 끄면(legacy 비활성화) 두 번째 경로는 자연히 사라진다.
+function __internalAuth(req: Request): Response | null {
+  if (req.method === 'OPTIONS') return null
+  let secretKeys: string[] = []
+  try { secretKeys = Object.values(JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}')) as string[] } catch { /* 비어 있음 */ }
+  // 런타임의 SUPABASE_SERVICE_ROLE_KEY 는 cron 에 박힌 옛 JWT 와 값이 다르다(2026-09-17 확인).
+  //   cron·트리거가 실제로 보내는 값을 LEGACY_SERVICE_ROLE_JWT 시크릿으로 따로 넣어 비교한다.
+  const legacy = Deno.env.get('LEGACY_SERVICE_ROLE_JWT') ?? ''
+  const apikey = req.headers.get('apikey') ?? ''
+  const bearer = (req.headers.get('Authorization') ?? '').replace(/^Bearer\s+/i, '')
+  const ok = (apikey !== '' && secretKeys.includes(apikey)) || (legacy !== '' && bearer === legacy)
+  return ok ? null : new Response(JSON.stringify({ error: 'unauthorized' }), { status: 401, headers: { 'Content-Type': 'application/json' } })
+}
+
+Deno.serve(async (__req: Request) => {
+  const __deny = __internalAuth(__req)
+  if (__deny) return __deny
+  const req = __req
+
   try {
     const body = await req.json()
     const r = body?.record || body
