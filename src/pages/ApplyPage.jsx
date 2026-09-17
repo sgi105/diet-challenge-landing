@@ -267,6 +267,16 @@ export default function ApplyPage() {
       </main>
 
       <footer className="px-6 pb-6 pt-4 border-t border-white/10 sticky bottom-0 bg-bg-deep/80 backdrop-blur">
+        {/* 퍼널: 마지막 화면 11명 → 제출 5명. 다 온 사람이 "제출하면 뭐가 되지?"에서 멈춘다.
+            제출 버튼 바로 위에서 불안을 지운다 — 돈 안 나감 · 발표 시각 · 연락 경로. */}
+        {step === TOTAL_QUESTIONS && !isClosed && (
+          <div className="max-w-md mx-auto mb-3 text-center">
+            <p className="text-text-primary text-sm font-extrabold">🎉 여기까지 왔으면 제출만 누르면 끝</p>
+            <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
+              지원은 0원이야 · {ACTIVE.resultLabel}에 합격 여부를 연락해줄게
+            </p>
+          </div>
+        )}
         <div className="max-w-md mx-auto flex gap-3">
           {step > 0 && step < TOTAL_QUESTIONS && (
             <button
@@ -664,15 +674,18 @@ function IntroStep({ isReferral, totalQuestions }) {
         21일 팀 러닝 챌린지.<br />
         모든 항목은 선발이랑 팀 매칭에 쓰여.
       </p>
+      {/* 퍼널: 시작 화면 42명 → 이름 29명(-31%). 원인 추정 2가지를 막는다.
+          ① 보증금이 여기서 처음 눈에 띄는데 "지금 내는 돈"으로 오해 → 지원은 0원임을 먼저 말한다.
+          ② "챌린지 설명 먼저 보기" 링크가 지원서 밖으로 내보냈다 → 제거. 뒤로가기는 상단 "메인"으로 충분. */}
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
-        <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-        <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (새로고침 안전)</li>
-        <li>💸 <span className="text-bg-primary font-bold">참가비 무료</span> · 보증금 {ACTIVE.depositLabel}은 완주하면 전액 환급</li>
+        <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 탭 한 번)</li>
+        <li>🆓 <span className="text-bg-primary font-bold">지원은 0원</span> · 보증금은 합격한 뒤에만 입금</li>
+        <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (나갔다 와도 이어서)</li>
         <li>📅 <span className="text-card-ink font-bold">{ACTIVE.startLabel}</span> · 21일</li>
       </ul>
-      <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
-        📖 챌린지 설명 먼저 보기 →
-      </Link>
+      <p className="mt-5 text-accent-green text-sm font-extrabold">
+        🎁 지금 지원하면 선착순 보너스까지
+      </p>
     </div>
   );
 }
@@ -961,20 +974,17 @@ function DepositConsentStep({ checked, onChange }) {
 function OtStep({ value, onChange }) {
   const options = [
     { value: 'yes', label: '참석할게', desc: '팀 배정 자리에 직접 참여할게' },
-    { value: 'no', label: '못 갈 것 같아', desc: '필참이라 선발에서 빠질 수 있어' },
+    { value: 'no', label: '못 갈 것 같아', desc: '남은 팀에 랜덤으로 배정돼도 괜찮아' },
   ];
   return (
     <div className="flex-1 flex flex-col justify-center">
-      <label className="block text-text-primary text-2xl font-black font-kr mb-2">OT는 필참이야</label>
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">OT 참석할 수 있어?</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-5">
-        온라인 줌으로 1시간. <span className="text-accent-orange font-bold">여기서 팀이 정해져서 빠지면 안 돼.</span>
+        온라인 줌으로 1시간. 여기서 팀이 정해져.
       </p>
 
-      <div className="bg-bg-card rounded-2xl p-5 border-l-4 border-accent-orange mb-5">
-        <div className="flex items-center gap-2 mb-2">
-          <p className="text-card-ink-faint text-[10px] font-extrabold tracking-widest">ORIENTATION</p>
-          <span className="bg-accent-orange text-bg-primary text-[10px] font-extrabold rounded-full px-2 py-0.5">필참</span>
-        </div>
+      <div className="bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green mb-5">
+        <p className="text-card-ink-faint text-[10px] font-extrabold tracking-widest mb-2">ORIENTATION</p>
         <p className="text-card-ink font-black text-xl leading-tight">
           {ACTIVE.otLabel} {ACTIVE.otTimeLabel} <span className="text-card-ink-muted text-base font-bold">· 1시간</span>
         </p>
