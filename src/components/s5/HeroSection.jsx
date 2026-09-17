@@ -6,6 +6,7 @@ import { useApplicantCount } from '../../hooks/useApplicantCount';
 import { previewCount } from '../../lib/spots';
 import SpotsBadge from '../s2/SpotsBadge';
 import BonusSection from './BonusSection';
+import { useSectionViews } from '../../hooks/useSectionViews';
 
 // 단톡방 런칭 메시지(D-3 성공 관성 · D-2 빠질 수 없는 환경 · D-1 멘탈)와 같은 언어로 맞춘 카피.
 // 기존 USP "30명 중 30명 전원 성공"은 버리지 않고 증거 줄(proof)로 내렸다.
@@ -19,6 +20,8 @@ const USP = {
 };
 
 export default function HeroSection({ onCTA }) {
+  // 페이지 전체 섹션 도달 추적 — 히어로는 랜딩에 항상 한 번 뜨므로 여기서 건다.
+  useSectionViews();
   const status = useSeason5Status();
   const copy = COPY5[status];
   const isClosed = status === 'closed';

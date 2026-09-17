@@ -23,6 +23,47 @@ function sessionId() {
   }
 }
 
+// 유입 꼬리표(utm) — 첫 진입 URL에서 한 번 읽어 세션 동안 유지한다.
+// 랜딩 → /apply 로 이동하면 URL에서 utm이 사라지므로 저장해둬야 지원서 이벤트에도 붙는다.
+const UTM_KEY = 'ttr_utm';
+function utm() {
+  try {
+    const saved = sessionStorage.getItem(UTM_KEY);
+    if (saved) return JSON.parse(saved);
+    const q = new URLSearchParams(location.search);
+    const v = {
+      utm_source: q.get('utm_source'),
+      utm_medium: q.get('utm_medium'),
+      utm_campaign: q.get('utm_campaign'),
+    };
+    sessionStorage.setItem(UTM_KEY, JSON.stringify(v));
+    return v;
+  } catch {
+    return {};
+  }
+}
+
+// 인앱 브라우저 — 카톡 단톡방 링크는 referrer가 비어서 "직접 유입"과 구분이 안 된다.
+// user agent로 어느 앱 안에서 열었는지 판별한다.
+function inApp() {
+  const ua = typeof navigator !== 'undefined' ? navigator.userAgent : '';
+  if (/KAKAOTALK/i.test(ua)) return 'kakaotalk';
+  if (/Instagram/i.test(ua)) return 'instagram';
+  if (/FBAN|FBAV/i.test(ua)) return 'facebook';
+  if (/NAVER/i.test(ua)) return 'naver';
+  if (/Threads/i.test(ua)) return 'threads';
+  return null;
+}
+
+// 로컬 개발·자동 스샷이 운영 통계에 섞이지 않게 한다.
+function isDevHost() {
+  try {
+    return /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(location.hostname);
+  } catch {
+    return false;
+  }
+}
+
 // 같은 세션에서 중복으로 찍히면 안 되는 이벤트(방문·지원서 진입)를 한 번만 보내기 위한 표식.
 export function once(key) {
   try {
@@ -39,12 +80,15 @@ export function once(key) {
 // insert에 .select()를 붙이면 RLS(읽기 차단)에 걸리므로 절대 붙이지 말 것.
 export function logEvent(event, extra = {}) {
   try {
+    if (isDevHost()) return;
     const payload = {
       session_id: sessionId(),
       event,
       cohort_code: ACTIVE.cohortCode,
       path: typeof location !== 'undefined' ? location.pathname : null,
       referrer: typeof document !== 'undefined' ? (document.referrer || null) : null,
+      in_app: inApp(),
+      ...utm(),
       ...extra,
     };
     supabase.from('landing_events').insert(payload).then(
