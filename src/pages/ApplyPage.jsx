@@ -5,6 +5,7 @@ import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
 import { logEvent, once } from '../lib/eventLog';
+import { metaTrack, metaTrackApplication } from '../lib/metaPixel';
 import { useCountdown } from '../hooks/useCountdown';
 import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, TARGET_MILESTONES, PACE_GOAL_VALUE, partsToSec, secToParts, paceLabel } from '../data/applicationGoals';
 
@@ -114,6 +115,7 @@ export default function ApplyPage() {
     if (!once('apply_open')) return;
     track('apply_page_open', { isReferral, resumed: (persisted?.step ?? 0) > 0 });
     logEvent('apply_open', { is_referral: isReferral });
+    metaTrack('InitiateCheckout', { content_name: isReferral ? 'apply_referral' : 'apply' });
   }, [isReferral, persisted]);
 
   useEffect(() => {
@@ -182,6 +184,7 @@ export default function ApplyPage() {
         const { id } = await submitApplication(form, { waitlist: isClosed });
         track('apply_submit_success', { isReferral });
         logEvent('apply_submit', { is_referral: isReferral });
+        metaTrackApplication({ phone: form.phone.trim(), phoneCountry: form.phoneCountry, waitlist: isClosed, isReferral });
         const friendAttached = !!(form.friend || '').trim();
         if (friendAttached) track('apply_submit_friend_attached');
         clearState(STORAGE_KEY);

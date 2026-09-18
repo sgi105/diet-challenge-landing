@@ -91,6 +91,7 @@ export default function PrivacyPage() {
             <li>Vercel — 앱 호스팅·배포</li>
             <li>솔라피(Solapi) — 합격·안내 문자 발송 시 이름·휴대폰 번호 전달</li>
             <li>텔레그램 — 신규 지원 발생 시 운영자 알림 전달</li>
+            <li>Meta Platforms — 광고 성과 측정을 위해 쿠키·접속 정보와 암호화(해시)된 휴대폰 번호 전달</li>
             <li>경품 협찬사 — 경품 발송 시 이름·주소·연락처 전달</li>
           </ul>
         </section>

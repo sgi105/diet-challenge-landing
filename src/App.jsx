@@ -1,5 +1,6 @@
 import { useEffect } from 'react';
-import { Routes, Route, useNavigate } from 'react-router-dom';
+import { Routes, Route, useNavigate, useLocation } from 'react-router-dom';
+import { metaTrack } from './lib/metaPixel';
 import HeroSection from './components/sections/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
 import Season0ResultsSection from './components/sections/Season0ResultsSection';
@@ -119,8 +120,19 @@ function LandingPage({ variant = 'main' }) {
   );
 }
 
+// 메타 픽셀 PageView — SPA라 라우트 바뀔 때마다 직접 보낸다.
+function MetaPageView() {
+  const { pathname } = useLocation();
+  useEffect(() => {
+    metaTrack('PageView');
+  }, [pathname]);
+  return null;
+}
+
 export default function App() {
   return (
+    <>
+    <MetaPageView />
     <Routes>
       {/* 메인 = 260921_team_run_season5 모집 랜딩. 지난 기수 랜딩은 아카이브 URL로만 남겨둠. */}
       <Route path="/" element={<LandingPageS5 />} />
@@ -142,5 +154,6 @@ export default function App() {
       <Route path="/refund" element={<RefundPage />} />
       <Route path="/pay" element={<PayPage />} />
     </Routes>
+    </>
   );
 }

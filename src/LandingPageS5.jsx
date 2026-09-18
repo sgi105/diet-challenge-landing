@@ -2,6 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect } from 'react';
 import { track } from '@vercel/analytics';
 import { logEvent, once } from './lib/eventLog';
+import { metaTrack } from './lib/metaPixel';
 import HeroSection from './components/s5/HeroSection';
 import PainPointSection from './components/sections/PainPointSection';
 import StartingPointsSection from './components/sections/StartingPointsSection';
@@ -30,7 +31,7 @@ import { COHORT5 } from './data/season5';
 // 섹션 구성은 260824_team_run 그대로. 바뀐 건 일정/보증금/상금/누적 성과 숫자.
 //   21일 · 30명 5인 1팀(6팀) · 참가비 무료 + 보증금 10만 · 미션 90% + 5K 완주 시 전액 환급 · 우승팀 현금 10만(팀 합산)
 //   하루 10분 시작 → 하루 1분씩 → Day 11부터 20분 유지 → 10/11(일) 파이널 5K
-//   9/16(수) 20:00 모집 오픈 · 9/18(금) 20:00 마감 · 9/21(월) 시작 · 9/22(화) OT·팀 배정
+//   9/16(수) 20:00 모집 오픈 · 9/19(토) 24:00 마감(1회 연장) · 9/21(월) 시작 · 9/22(화) OT·팀 배정
 // 시기별로 바뀌는 건 상단 배너 / CTA 문구 / 카운트다운뿐. 본문은 그대로.
 export default function LandingPageS5() {
   const navigate = useNavigate();
@@ -56,6 +57,7 @@ export default function LandingPageS5() {
   const handleCTA = (placement = 'unknown') => {
     track('landing_cta_click', { placement, status });
     logEvent('cta_click', { placement });
+    metaTrack('ViewContent', { content_name: `cta_${placement}` });
     // 오픈 전에는 신청을 받지 않음 — 히어로(카운트다운)로 스크롤만.
     if (isUpcoming) {
       document.getElementById('hero')?.scrollIntoView({ behavior: 'smooth' });
