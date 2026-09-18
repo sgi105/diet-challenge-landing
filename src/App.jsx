@@ -33,6 +33,7 @@ import LandingPagePreseason from './LandingPagePreseason';
 import LandingPageS2 from './LandingPageS2';
 import LandingPageS4 from './LandingPageS4';
 import LandingPageS5 from './LandingPageS5';
+import LandingPageS5v2 from './LandingPageS5v2';
 import StatsPage from './pages/StatsPage';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
@@ -134,9 +135,12 @@ export default function App() {
     <>
     <MetaPageView />
     <Routes>
-      {/* 메인 = 260921_team_run_season5 모집 랜딩. 지난 기수 랜딩은 아카이브 URL로만 남겨둠. */}
-      <Route path="/" element={<LandingPageS5 />} />
+      {/* 메인 = 260921_team_run_season5 모집 랜딩 v2(하프마라톤 목적지 프레임, 2026-09-19 교체).
+          v1은 /s5 에 비교용으로 남겨둠. 지난 기수 랜딩은 아카이브 URL로만. */}
+      <Route path="/" element={<LandingPageS5v2 />} />
       <Route path="/s5" element={<LandingPageS5 />} />
+      {/* v2 직접 주소 — / 와 같은 페이지 */}
+      <Route path="/s5v2" element={<LandingPageS5v2 />} />
       <Route path="/s4" element={<LandingPageS4 />} />
       <Route path="/preseason" element={<LandingPagePreseason />} />
       <Route path="/s2" element={<LandingPageS2 />} />

@@ -1,7 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useSeason5Status, COPY5 } from '../../hooks/useSeason5Status';
 
-export default function StickyCTA({ onCTA }) {
+// label: 버튼 문구 덮어쓰기(선택). 안 넘기면 COPY5 기본 문구.
+export default function StickyCTA({ onCTA, label }) {
   const [show, setShow] = useState(false);
   const status = useSeason5Status();
   const copy = COPY5[status];
@@ -27,7 +28,7 @@ export default function StickyCTA({ onCTA }) {
           disabled={isUpcoming}
           className={`block w-full font-extrabold py-3 rounded-2xl text-center transition-all duration-300 leading-tight ${isUpcoming ? 'bg-accent-green/40 text-bg-primary/50 cursor-not-allowed' : 'bg-accent-green text-bg-primary hover:brightness-110 cursor-pointer shadow-[0_8px_24px_rgba(200,255,77,0.35)]'}`}
         >
-          <span className="block text-base">{copy.cta.sticky}</span>
+          <span className="block text-base">{label ?? copy.cta.sticky}</span>
           <span className="block text-[10px] font-bold opacity-80 mt-0.5 tracking-wide">{copy.stickySub}</span>
         </button>
       </div>

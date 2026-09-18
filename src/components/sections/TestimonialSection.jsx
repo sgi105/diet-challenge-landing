@@ -16,9 +16,9 @@ const SIGNALS = [
   { score: 1, re: /매일|꾸준|습관|아침|미라클/ },
 ];
 
-function score(t) {
+function score(t, signals = SIGNALS) {
   const text = t.caption || '';
-  let s = SIGNALS.reduce((acc, sig) => acc + (sig.re.test(text) ? sig.score : 0), 0);
+  let s = signals.reduce((acc, sig) => acc + (sig.re.test(text) ? sig.score : 0), 0);
   s += Math.min((t.likes || 0) * 0.25, 2);
   s += Math.min((t.comments || 0) * 0.2, 1);
   if (text.length < 25) s -= 2;          // 한 줄짜리는 증거로 약하다
@@ -27,12 +27,13 @@ function score(t) {
   return s;
 }
 
-export default function TestimonialSection() {
+// signals: 정렬 점수 규칙 덮어쓰기(선택). 안 넘기면 위 SIGNALS(반론 해소 우선).
+export default function TestimonialSection({ signals } = {}) {
   const { rows, cardStyle } = useTestimonialPicks();
   const trackRef = useRef(null);
   const [idx, setIdx] = useState(0);
 
-  const cards = [...rows].sort((a, b) => score(b) - score(a)).slice(0, MAX_CARDS);
+  const cards = [...rows].sort((a, b) => score(b, signals) - score(a, signals)).slice(0, MAX_CARDS);
 
   // 점(인디케이터) 위치 — 스크롤 위치를 카드 폭으로 나눠 현재 장을 구한다.
   useEffect(() => {

@@ -1,8 +1,8 @@
 import { spotsInfo, TOTAL_SPOTS } from '../../lib/spots';
 
 // 모집 정원(30명) 남은자리 표시 — Hero/Live/Urgency 공유.
-//   여유(6자리+)   → 차분한 텍스트
-//   마감 임박(5↓)  → 게이지 바 (filled/30) + "마감 임박"
+//   여유(10자리+)  → 표시 안 함 (넉넉할 때 숫자를 보이면 급할 이유가 없다는 신호가 된다)
+//   마감 임박(9↓)  → 게이지 바 (filled/30) + "마감 임박"  (기준: lib/spots LOW_THRESHOLD)
 //   마감(0)        → 회색 비활성 배지
 export default function SpotsBadge({ count, className = '' }) {
   const spots = spotsInfo(count);
@@ -35,9 +35,5 @@ export default function SpotsBadge({ count, className = '' }) {
       </div>
     );
   }
-  return wrap(
-    <span className="text-[13px] font-extrabold tracking-wide text-text-secondary">
-      정원 30명 중 <span className="text-accent-green">{spots.remaining}자리</span> 남음
-    </span>
-  );
+  return null;
 }

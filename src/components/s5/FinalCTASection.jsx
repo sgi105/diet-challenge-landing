@@ -6,7 +6,8 @@ import { useSeason5Status, COPY5 } from '../../hooks/useSeason5Status';
 import { useApplicantCount } from '../../hooks/useApplicantCount';
 import SpotsBadge from '../s2/SpotsBadge';
 
-export default function FinalCTASection({ onCTA }) {
+// label: 버튼 문구 덮어쓰기(선택). 안 넘기면 COPY5 기본 문구.
+export default function FinalCTASection({ onCTA, label }) {
   const status = useSeason5Status();
   const copy = COPY5[status];
   const isUpcoming = status === 'upcoming';
@@ -52,7 +53,7 @@ export default function FinalCTASection({ onCTA }) {
 
         {status === 'official' && <SpotsBadge count={count} className="mb-5" />}
         <Button onClick={onCTA} disabled={isUpcoming} className="animate-pulse-glow shadow-[0_12px_40px_rgba(200,255,77,0.4)] inline-flex flex-col items-center justify-center leading-tight">
-          <span className="block">{copy.cta.final}</span>
+          <span className="block">{label ?? copy.cta.final}</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
         </Button>
 

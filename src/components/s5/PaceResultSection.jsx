@@ -40,13 +40,14 @@ const MEMBERS = [
   },
 ];
 
-export default function PaceResultSection() {
+// heading: 제목 덮어쓰기(선택). 안 넘기면 기존 제목.
+export default function PaceResultSection({ heading } = {}) {
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
         <span className="pill text-accent-green block w-fit mx-auto">21 DAYS</span>
         <h2 className="font-kr text-3xl md:text-5xl font-black text-center mt-4 mb-3 text-text-primary leading-tight">
-          21일 뒤,<br /><span className="text-accent-green">5km가 이만큼 빨라져</span>
+          {heading ?? <>21일 뒤,<br /><span className="text-accent-green">5km가 이만큼 빨라져</span></>}
         </h2>
         <p className="text-text-secondary text-center text-sm mb-6 leading-relaxed break-keep">
           Day 1에 재고, Day 21에 다시 쟀어. 둘 다 전력으로.

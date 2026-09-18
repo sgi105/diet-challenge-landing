@@ -115,6 +115,11 @@ body {
   font-weight: 700;
 }
 
+/* v2 랜딩(/s5v2)만 알약 머리표를 숨긴다 — 공용 섹션 파일은 그대로 두고 라이브에 영향 없게.
+   머리표 바로 다음 제목에 붙어 있던 위 여백(mt-4)도 같이 없앤다. */
+.v2-no-pill .pill { display: none !important; }
+.v2-no-pill .pill + * { margin-top: 0 !important; }
+
 ::-webkit-scrollbar {
   width: 4px;
 }
