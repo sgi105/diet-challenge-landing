@@ -5,8 +5,8 @@ import { spotsInfo } from '../lib/spots';
 
 // 260921_team_run_season5 3단계 상태머신.
 //   upcoming — 오픈 대기 (지금 - 9/16 20:00) · 카운트다운만, 신청 버튼 잠김
-//   official — 모집 중 (9/16 20:00 - 9/18 20:00) · 선착순 30명 + 지원서 심사
-//   closed   — 마감 (9/18 20:00 이후) · 결원 대기 명단
+//   official — 모집 중 (9/16 20:00 - 9/19 24:00) · 선착순 30명 + 지원서 심사
+//   closed   — 마감 (9/19 24:00 이후) · 결원 대기 명단
 function compute() {
   const now = Date.now();
   if (now < new Date(COHORT5.officialOpen).getTime()) return 'upcoming';
@@ -56,15 +56,15 @@ export const COPY5 = {
     stickySub: '선착순 30명 모집',
   },
   official: {
-    banner: '🔴 모집 중 · 9/18(금) 저녁 8시 마감 · 선착순 30명',
-    ctaSub: '9/18(금) 저녁 8시 마감',
+    banner: '🔴 모집 중 · 9/19(토) 자정 마감 · 선착순 30명',
+    ctaSub: '9/19(토) 자정 마감',
     cta: {
       hero: '지원하기',
       pricing: '지원하기',
       final: '지원하기',
       sticky: '지원하기',
     },
-    stickySub: '9/18(금) 저녁 8시 마감',
+    stickySub: '9/19(토) 자정 마감',
   },
   closed: {
     banner: '⏰ 모집 마감 · 결원 대기 명단 받는 중 →',

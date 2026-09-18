@@ -55,13 +55,44 @@ function inApp() {
   return null;
 }
 
-// 로컬 개발·자동 스샷이 운영 통계에 섞이지 않게 한다.
+// 우리(운영자·자동화)가 들어간 방문은 아예 기록하지 않는다.
+// 통계에 테스트 방문이 섞이면 전환율·이탈률이 전부 틀어지기 때문.
+//   ① 로컬 개발 서버          ② Vercel 미리보기 주소(운영 도메인만 집계)
+//   ③ 자동화 브라우저(스샷·점검)  ④ 내 기기에서 켜둔 제외 스위치
+// 스위치: 주소 끝에 ?notrack=1 을 붙여 한 번 열면 그 브라우저는 계속 제외된다(?notrack=0 으로 해제).
+const NOTRACK_KEY = 'ttr_notrack';
+
 function isDevHost() {
   try {
-    return /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(location.hostname);
+    const h = location.hostname;
+    return /^(localhost|127\.0\.0\.1|0\.0\.0\.0)$/.test(h) || h.endsWith('.vercel.app');
   } catch {
     return false;
   }
+}
+
+function isBot() {
+  try {
+    if (navigator.webdriver) return true; // playwright·puppeteer 등 자동화 브라우저
+    return /HeadlessChrome|Playwright|puppeteer|bot|crawler|spider|lighthouse/i.test(navigator.userAgent);
+  } catch {
+    return false;
+  }
+}
+
+function isOptedOut() {
+  try {
+    const q = new URLSearchParams(location.search).get('notrack');
+    if (q === '0') localStorage.removeItem(NOTRACK_KEY);
+    else if (q != null) localStorage.setItem(NOTRACK_KEY, '1');
+    return localStorage.getItem(NOTRACK_KEY) === '1';
+  } catch {
+    return false;
+  }
+}
+
+export function skipTracking() {
+  return isDevHost() || isBot() || isOptedOut();
 }
 
 // 같은 세션에서 중복으로 찍히면 안 되는 이벤트(방문·지원서 진입)를 한 번만 보내기 위한 표식.
@@ -80,7 +111,7 @@ export function once(key) {
 // insert에 .select()를 붙이면 RLS(읽기 차단)에 걸리므로 절대 붙이지 말 것.
 export function logEvent(event, extra = {}) {
   try {
-    if (isDevHost()) return;
+    if (skipTracking()) return;
     const payload = {
       session_id: sessionId(),
       event,

@@ -8,16 +8,16 @@ export const COHORT5 = {
   cohortCode: '260921_team_run_season5',
 
   // 1단계 오픈 대기: 지금 - 9/16(수) 20:00
-  // 2단계 모집: 9/16(수) 20:00 - 9/18(금) 20:00
-  // 3단계 마감: 9/18(금) 20:00 - · 결원 대기 명단
+  // 2단계 모집: 9/16(수) 20:00 - 9/19(토) 24:00 (1차 20:00 마감 → 마감 전 1회 연장 공지, 시작일은 9/21 유지)
+  // 3단계 마감: 9/19(토) 24:00 - · 결원 대기 명단
   officialOpen: '2026-09-16T20:00:00+09:00',
-  officialDeadline: '2026-09-18T20:00:00+09:00',
+  officialDeadline: '2026-09-20T00:00:00+09:00',
 
   // 합격/입금/시작/OT — 일정표·FAQ용
   openLabel: '9/16(수) 저녁 8시',
-  deadlineLabel: '9/18(금) 저녁 8시',
-  resultDate: '9/18(금) 밤 9시',       // 합격 발표 — 마감 1시간 뒤
-  depositDeadline: '9/19(토) 저녁 8시', // 입금 마감
+  deadlineLabel: '9/19(토) 자정',
+  resultDate: '9/20(일) 오전 10시',     // 합격 발표 — 마감 다음 날 오전
+  depositDeadline: '9/20(일) 밤 10시',  // 입금 마감 — 시작(9/21) 전날 밤
   startDate: '9/21(월)',               // 챌린지 Day 1
   otDate: '9/22(화)',                  // 온라인 OT (줌) — 시작 다음 날
   otTime: '저녁 7시 30분',              // OT 시각 (KST) — 이 자리에서 팀 배정
@@ -69,7 +69,7 @@ export const DAY_MINUTES = Array.from({ length: COHORT5.durationDays }, (_, i) =
 
 // 랜딩 SCHEDULE 카드에 그대로 뿌리는 일정표. 시간 순서대로 — 이번엔 시작(월)이 OT(화)보다 먼저.
 export const SCHEDULE5 = [
-  { label: '모집 마감', value: '9/18(금) 20:00', highlight: true },
+  { label: '모집 마감', value: '9/19(토) 24:00', highlight: true },
   { label: '합격 발표', value: COHORT5.resultDate, highlight: false },
   { label: '입금 마감', value: COHORT5.depositDeadline, highlight: false },
   { label: '챌린지 시작', value: COHORT5.startDate, highlight: false },
