@@ -16,7 +16,7 @@ export default function NextStepSection() {
       <AnimateOnScroll>
         <h2 className="font-kr text-3xl md:text-5xl font-black text-center mb-8 text-text-primary leading-tight break-keep">
           21일 다음은 본격적인<br />
-          <span className="text-accent-orange">하프마라톤 훈련</span>
+          <span className="text-accent-green">하프마라톤 훈련</span>
         </h2>
       </AnimateOnScroll>
 

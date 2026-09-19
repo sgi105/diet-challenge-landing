@@ -55,7 +55,7 @@ function CompareChart() {
 function ShakeClip() {
   if (!PAIN_MEDIA.src) {
     return (
-      <div className="w-3/5 aspect-[4/5] mt-4 rounded-2xl border-2 border-dashed border-white/25 bg-white/5 flex items-center justify-center">
+      <div className="w-3/5 aspect-[4/5] mt-4 mx-auto rounded-2xl border-2 border-dashed border-white/25 bg-white/5 flex items-center justify-center">
         <span className="text-text-muted text-[11px] font-bold">절레절레 영상</span>
       </div>
     );
@@ -69,20 +69,20 @@ function ShakeClip() {
       loop
       playsInline
       preload="metadata"
-      className="w-3/5 aspect-[4/5] mt-4 rounded-2xl object-cover bg-bg-deep shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
+      className="w-3/5 aspect-[4/5] mt-4 mx-auto block rounded-2xl object-cover bg-bg-deep shadow-[0_12px_32px_rgba(0,0,0,0.25)]"
     />
   );
 }
 
 export default function PainPointSection() {
   return (
-    <section className="px-6 py-14 max-w-lg mx-auto">
+    <section className="px-6 py-14 max-w-lg mx-auto text-center">
       <AnimateOnScroll>
         <p className="text-text-secondary text-base font-bold break-keep">
           새해마다 "이번엔 진짜 운동 꾸준히 해야지" 하고
         </p>
         <h2 className="font-kr text-3xl md:text-5xl font-black mt-2 text-text-primary leading-tight break-keep">
-          작심삼일 몇 번째야?
+          작심삼일<br /><span className="text-accent-green">몇 번째야?</span>
         </h2>
         <p className="text-text-secondary mt-4">나도 똑같았어.</p>
         <ShakeClip />

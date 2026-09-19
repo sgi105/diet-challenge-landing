@@ -79,7 +79,7 @@ export const HERO_STAIRS = {
 // 21일 흐름 카드 — v1(season5.js WEEKS5)과 문구만 다르다. 라이브에 영향 안 가게 v2 전용으로 둔다.
 export const WEEKS_V2 = [
   { label: 'Week 1', title: '몸 깨우기', desc: '10분에서 시작 · 1분씩 증가' },
-  { label: 'Week 2', title: '20분 도달', desc: 'Day 11부터 매일 20분' },
+  { label: 'Week 2', title: '권장 20분', desc: '성공 기준은 그대로 10분' },
   { label: 'Week 3', title: '5K 파이널', desc: '마지막 날 5km 완주', highlight: true },
 ];
 

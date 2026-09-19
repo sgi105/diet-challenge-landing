@@ -5,7 +5,8 @@ import { useSeason5Status } from '../../hooks/useSeason5Status';
 import { useApplicantCount } from '../../hooks/useApplicantCount';
 import SpotsBadge from '../s2/SpotsBadge';
 
-export default function UrgencySection() {
+// hideCountdown: 카운트다운 숨김(선택). 페이지에 다른 카운트다운이 이미 있을 때.
+export default function UrgencySection({ hideCountdown = false } = {}) {
   const status = useSeason5Status();
   const isUpcoming = status === 'upcoming';
   const target = isUpcoming ? COHORT5.officialOpen : COHORT5.officialDeadline;
@@ -31,7 +32,7 @@ export default function UrgencySection() {
 
       <AnimateOnScroll>
         <div className="mb-8">
-          <CountdownTimer targetDate={target} size="md" />
+          {!hideCountdown && <CountdownTimer targetDate={target} size="md" />}
           {!isUpcoming && <SpotsBadge count={count} className="mt-5" />}
         </div>
       </AnimateOnScroll>

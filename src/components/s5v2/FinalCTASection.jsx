@@ -24,9 +24,9 @@ export default function FinalCTASection({ onCTA }) {
   return (
     <section className="px-6 py-16 max-w-lg mx-auto text-center">
       <AnimateOnScroll>
-        <h2 className="break-keep">
+        <h2 className="v2-keep break-keep">
           <span className="block font-kr text-[19px] font-black text-text-secondary leading-snug">
-            90일 안에 <span className="text-accent-green">하프마라톤</span> 완주하고
+            <span className="text-accent-green">하프마라톤</span> 완주하고
           </span>
           <span className="block font-sans font-normal text-[31px] text-text-primary leading-[1.2] mt-2">
             결국 해내는 사람이라는 걸

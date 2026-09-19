@@ -22,7 +22,8 @@ import { useSectionViews } from '../../hooks/useSectionViews';
 // 대신 버튼 바로 위에 계단을 둔다: 헤드라인이 90일·하프를 말하니, 지금 지원하는 게
 // 하프 훈련의 첫 21일(습관 구간)이라는 걸 여기서 못 박지 않으면 90일짜리에 지원하는 줄 안다.
 const USP = {
-  line1Pre: '90일 안에 ',
+  // "90일 안에"는 뺐다(2026-09-19) — 바로 밑 계단이 21일 → 90일을 보여줘서 기간이 안 맞아 보였다.
+  line1Pre: '',
   line1Accent: '하프마라톤',
   line1Post: ' 완주하고',
   line2: '결국 해내는 사람이라는 걸',
@@ -149,7 +150,7 @@ export default function HeroSection({ onCTA }) {
           </div>
 
           {/* 하프마라톤 훈련의 첫 21일 = 습관 구간 (지원하는 건 첫 계단) */}
-          <div className="text-left mt-6 mb-6">
+          <div className="text-left mt-6 mb-3">
             <p className="text-text-muted text-xs font-extrabold">{HERO_STAIRS.lead}</p>
             <p className="text-text-primary text-[17px] font-black mt-0.5 break-keep">{HERO_STAIRS.leadMark}</p>
           </div>

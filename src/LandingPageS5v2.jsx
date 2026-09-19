@@ -11,7 +11,6 @@ import PricingSection from './components/s5v2/PricingSection';
 import NextStepSection from './components/s5v2/NextStepSection';
 import PaceResultSection from './components/s5/PaceResultSection';
 import FounderSection from './components/s5/FounderSection';
-import BenefitsSection from './components/s5/BenefitsSection';
 import BonusSection from './components/s5/BonusSection';
 import UrgencySection from './components/s5/UrgencySection';
 import FAQSection from './components/s5/FAQSection';
@@ -34,6 +33,7 @@ import { CTA_LABEL_V2, TESTIMONIAL_SIGNALS_V2 } from './data/season5v2';
 //   v2: 하프마라톤 완주가 목적지, 21일은 거기로 가는 1단계
 // 파는 상품(21일 · 보증금 10만 · 정원 30)은 v1과 동일하다. 일정/숫자 SOT도 season5.js 그대로.
 //
+// 뺀 섹션(2026-09-19 점검): 3가지 결과 · 게임 · "21일 뒤 뭐가 남을까"(성장·같이 하면과 중복) · "다 같이 가는 21일" 중간 버튼 · 마감 임박 카운트다운(최종 섹션과 중복)
 // 흐름: 목적지 → 공감·원인·증거(혼자 vs 함께) → 후기 → 같이 하면(이유 4개) → 21일 프로그램 → 기록 → 오퍼 → 다음 단계 → 신뢰 → 마감
 export default function LandingPageS5v2() {
   const navigate = useNavigate();
@@ -79,7 +79,7 @@ export default function LandingPageS5v2() {
     : 'bg-accent-green text-bg-primary';
 
   return (
-    <div className="min-h-screen v2-no-pill">
+    <div className="min-h-screen v2-no-pill v2-heads">
       <a
         href="#hero"
         onClick={scrollToCTA}
@@ -119,20 +119,10 @@ export default function LandingPageS5v2() {
         {/* 다음 단계 — 21일이 어디로 이어지는지 (가격 없음) */}
         <NextStepSection />
 
-        {!isClosed && (
-          <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
-            <p className="text-text-secondary text-sm mb-4">
-              다 같이 가는 21일.<br />
-              <span className="text-accent-green font-bold">팀이 있을 때 시작해</span>
-            </p>
-            <Button onClick={() => handleCTA('mid_reward')} disabled={isUpcoming} className="w-full max-w-xs">{ctaLabel ?? copy.cta.pricing}{!isUpcoming && ' →'}</Button>
-          </section>
-        )}
 
         {!isClosed && <BonusSection />}
-        {!isClosed && <BenefitsSection />}
         <FounderSection />
-        {!isClosed && <UrgencySection />}
+        {!isClosed && <UrgencySection hideCountdown />}
         <FAQSection />
         <FinalCTASection onCTA={() => handleCTA('final')} />
         <Footer />

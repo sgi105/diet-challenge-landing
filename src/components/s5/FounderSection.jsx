@@ -13,8 +13,9 @@ export default function FounderSection() {
     { num: '풀마라톤', desc: '완주' },
     { num: '100km', desc: '울트라' },
     { num: `${runningDays}일`, desc: '연속 러닝' },
-    // 런클럽(team_run) 기수 5개 · 중복 제외 고유 참가자 92명 (DB 집계 2026-09-16)
-    { num: '5기수', desc: '누적 92명' },
+    // 런클럽(team_run) 기수 5개 · 신규 참가자 90명 (중도 이탈 1·탈퇴 계정 1 제외, 가인 확인 2026-09-19)
+    // 공감 섹션 그래프(누적 90명 · 96%)와 같은 숫자로 맞춘다.
+    { num: '5기수', desc: '누적 90명' },
   ];
 
   return (

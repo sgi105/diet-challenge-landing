@@ -5,16 +5,20 @@ import { WEEKS_V2 } from '../../data/season5v2';
 // v2 — 21일 프로그램 자체를 보여주는 자리. (2026-09-18 반복 정리)
 // 팀 배정·응원·책임감·팀 우승 상금은 공감 섹션 "같이 하면" 항목이 담당하므로 여기서 빼고
 // "처음엔 쉽게 → 매일 조금씩 → 파이널 5K"라는 21일 흐름만 남긴다.
+// 핵심 메시지(가인 2026-09-19): 권장 시간은 20분까지 늘어나지만, 성공 기준은 끝까지 10분 이상.
+//   그래프에 10분 "성공 기준선"을 그어 "권장은 올라가도 넘을 선은 안 올라간다"를 그림으로 보여준다.
+//   (앱은 러닝 시간을 판정하지 않는다 — 마감 전 피드 인증이면 성공. 10분은 운영 규칙이라 앱보다 엄격한 쪽이다.)
 export default function SystemSection() {
   return (
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
         <h2 className="font-kr text-3xl md:text-5xl font-black mb-4 text-text-primary leading-tight break-keep">
-          하루 10분 시작으로<br />
-          <span className="text-accent-green">부담 없이</span>
+          {COHORT5.durationDays}일간 하루 {PROGRAM5.startMinutes}분<br />
+          <span className="text-accent-green">누구나 할 수 있어</span>
         </h2>
-        <p className="text-text-secondary mb-8 leading-relaxed break-keep">
-          졸라 쉽게 시작해. 성공을 매일 쌓다 보면 관성이 붙어서 점점 쉬워져.
+        <p className="text-text-secondary text-center mb-8 leading-relaxed break-keep">
+          졸라 쉽게 시작해. 성공을 쌓다 보면 관성이 붙어서 점점 쉬워져.<br />
+          솔직히 하루 {PROGRAM5.startMinutes}분도 없다는 건 스스로를 속이는 거지?
         </p>
       </AnimateOnScroll>
 
@@ -50,28 +54,42 @@ export default function SystemSection() {
         </div>
       </AnimateOnScroll>
 
-      {/* 러닝 시간표 — 10분에서 20분까지 어떻게 올라가는지 한눈에 */}
+      {/* 권장 러닝 시간 + 성공 기준선(10분) — 막대가 올라가도 기준선은 그대로 */}
       <AnimateOnScroll className="mt-8">
         <div className="bg-bg-card rounded-3xl p-6 shadow-[0_12px_40px_rgba(0,0,0,0.15)]">
-          <p className="text-card-ink-faint text-[10px] font-extrabold tracking-widest mb-4">DAILY MINUTES</p>
-          <div className="flex items-end gap-[3px] h-24 mb-3">
-            {Array.from({ length: COHORT5.durationDays }, (_, i) => {
-              const min = Math.min(PROGRAM5.startMinutes + i, PROGRAM5.peakMinutes);
-              const isFinal = i === COHORT5.durationDays - 1;
-              return (
-                <div
-                  key={i}
-                  className={`flex-1 rounded-[3px] ${isFinal ? 'bg-accent-orange' : 'bg-accent-green'}`}
-                  style={{ height: `${(min / PROGRAM5.peakMinutes) * 100}%` }}
-                />
-              );
-            })}
+          <p className="text-card-ink-faint text-[11px] font-extrabold mb-4">권장 러닝 시간</p>
+          <div className="relative h-24 mb-3">
+            <div className="absolute inset-0 flex items-end gap-[3px]">
+              {Array.from({ length: COHORT5.durationDays }, (_, i) => {
+                const min = Math.min(PROGRAM5.startMinutes + i, PROGRAM5.peakMinutes);
+                const isFinal = i === COHORT5.durationDays - 1;
+                return (
+                  <div
+                    key={i}
+                    className={`flex-1 rounded-[3px] ${isFinal ? 'bg-accent-orange' : 'bg-bg-primary/25'}`}
+                    style={{ height: `${(min / PROGRAM5.peakMinutes) * 100}%` }}
+                  />
+                );
+              })}
+            </div>
+            {/* 성공 기준선 — 10분 높이 */}
+            <div
+              className="absolute inset-x-0 border-t-2 border-bg-primary"
+              style={{ bottom: `${(PROGRAM5.startMinutes / PROGRAM5.peakMinutes) * 100}%` }}
+            >
+              <span className="absolute right-0 -top-[22px] bg-bg-primary text-white text-[10.5px] font-black px-2 py-0.5 rounded-full whitespace-nowrap">
+                {PROGRAM5.startMinutes}분만 넘으면 성공
+              </span>
+            </div>
           </div>
           <div className="flex justify-between text-card-ink-muted text-[11px] font-bold">
             <span>Day 1 · {PROGRAM5.startMinutes}분</span>
             <span>Day {PROGRAM5.peakDay} · {PROGRAM5.peakMinutes}분</span>
             <span className="text-accent-orange">Day {COHORT5.durationDays} · {PROGRAM5.finalDistanceKm}K</span>
           </div>
+          <p className="text-card-ink text-sm font-bold leading-relaxed mt-4 break-keep">
+            매일 1분씩 늘리는 건 권장일 뿐. <span className="text-bg-primary">{PROGRAM5.startMinutes}분만 뛰면 오늘 미션 성공이야.</span>
+          </p>
         </div>
       </AnimateOnScroll>
     </section>

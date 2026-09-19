@@ -120,6 +120,18 @@ body {
 .v2-no-pill .pill { display: none !important; }
 .v2-no-pill .pill + * { margin-top: 0 !important; }
 
+/* v2 섹션 제목 통일 — 시안 SOT: design-references/s5v2-heading-unify.html A (가인 2026-09-19)
+   굵은 제목 글꼴(Black Han Sans, 히어로 "증명해봐"와 같은 글꼴) · 가운데 · 34px · 윗줄 흰 / 아랫줄 라임.
+   공용 섹션 파일은 그대로 두고 v2 페이지 안에서만 덮는다. 최종 섹션처럼 자체 제목 스타일이 있는 곳은 .v2-keep. */
+.v2-heads section h2:not(.v2-keep) {
+  font-family: var(--font-sans) !important;
+  font-weight: 400 !important;
+  font-size: 34px !important;
+  line-height: 1.2 !important;
+  letter-spacing: -0.005em;
+  text-align: center !important;
+}
+
 ::-webkit-scrollbar {
   width: 4px;
 }
