@@ -922,7 +922,7 @@ function DepositConsentStep({ checked, onChange }) {
     {
       icon: '💰', step: 'STEP 3 · 완주 후', title: '보증금 그대로 돌려받기',
       outcomes: [
-        { mark: '✓', label: '21일 미션 90% 완수', amount: '전액 환급', tone: 'pos' },
+        { mark: '✓', label: `21일 중 ${21 - ACTIVE.passCount}일 이상 인증`, amount: '전액 환급', tone: 'pos' },
         { mark: '🏆', label: '팀 1등', amount: `+ ${ACTIVE.prizeTeam1st}`, tone: 'pos' },
         { mark: '✕', label: '중도 포기', amount: '0원', tone: 'neg' },
       ],

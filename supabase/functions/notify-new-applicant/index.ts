@@ -142,6 +142,29 @@ Deno.serve(async (__req: Request) => {
       return new Response(JSON.stringify({ error: 'telegram not configured' }), { status: 500 })
     }
 
+    // 다음 기수 오픈 알림 신청 (cohort_alerts INSERT 트리거, kind='cohort_alert') — 전화번호만 있다. 문자 발송 없음.
+    if (body?.kind === 'cohort_alert') {
+      const utm = [r.utm_source, r.utm_medium, r.utm_campaign].filter(Boolean).join(' / ')
+      const alertLines = [
+        '🔔 *다음 기수 알림 신청*',
+        `📞 ${escapeMd(r.phone)} (${r.phone_country || 'KR'})`,
+        utm ? `📍 ${escapeMd(utm)}` : null,
+        r.source_cohort ? `🏷 마감 기수: ${escapeMd(r.source_cohort)}` : null,
+        r.created_at ? `🕒 ${new Date(r.created_at).toLocaleString('ko-KR', { timeZone: 'Asia/Seoul' })}` : null,
+      ].filter(Boolean)
+      const tgAlert = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text: alertLines.join('\n'), parse_mode: 'Markdown', disable_web_page_preview: true }),
+      })
+      if (!tgAlert.ok) {
+        const txt = await tgAlert.text().catch(() => '')
+        console.error('telegram error', tgAlert.status, txt)
+        return new Response(JSON.stringify({ error: `telegram ${tgAlert.status}`, detail: txt }), { status: 502 })
+      }
+      return new Response(JSON.stringify({ ok: true, kind: 'cohort_alert' }), { headers: { 'Content-Type': 'application/json' } })
+    }
+
     const runLabel = RUN_LABELS[r.running_exp] || r.running_exp
     const lines = [
       r.referrer_name ? '🟧 *새 지원자 (추천인 전형)*' : '🔥 *새 지원자*',

@@ -3,7 +3,7 @@ import { PROGRAM5, COHORT5 } from '../../data/season5';
 
 const man = (won) => `${Math.round(won / 10000)}만`;
 
-// 완주 기준 인증 일수 — 21일 중 (수행률 90% / 최대 2회 패스) 둘 중 더 엄격한 쪽
+// 완주 기준 인증 일수 — 21일 중 (수행률 85% / 최대 3회 패스) 둘 중 더 엄격한 쪽
 const requiredDays = Math.max(
   Math.ceil((COHORT5.durationDays * PROGRAM5.successRate) / 100),
   COHORT5.durationDays - PROGRAM5.passCount

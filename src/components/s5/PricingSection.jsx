@@ -36,7 +36,7 @@ export default function PricingSection({ onCTA }) {
             완주하면 <span className="text-bg-primary">전액 환급</span>.
           </p>
           <p className="text-card-ink-muted text-sm mb-8 font-bold break-keep">
-            21일 미션 {PROGRAM5.successRate}% 이상 + 파이널 {PROGRAM5.finalDistanceKm}K 완주 → {PROGRAM5.depositLabel} 그대로 돌려받아
+            21일 중 {21 - PROGRAM5.passCount}일 이상 인증 + 파이널 {PROGRAM5.finalDistanceKm}K 완주 → {PROGRAM5.depositLabel} 그대로 돌려받아
           </p>
 
           <div className="text-left space-y-3 mb-8">
