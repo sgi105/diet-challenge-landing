@@ -61,7 +61,7 @@ export default function HeroSection({ onCTA }) {
                   CLOSED
                 </div>
                 <div className="text-text-primary text-[11px] font-extrabold text-center mt-1.5 tracking-[0.12em]">
-                  모집 마감 · 결원 대기
+                  이번 기수 마감
                 </div>
               </div>
             ) : (
@@ -90,7 +90,7 @@ export default function HeroSection({ onCTA }) {
           {isClosed ? (
             <div className="text-center my-5 animate-fade-up max-w-xs mx-auto" style={{ animationDelay: '0.25s' }}>
               <p className="text-text-secondary text-[13px] font-semibold leading-relaxed">
-                결원 생기면 <span className="text-text-primary font-extrabold">대기 순서대로</span> 연락 줄게.
+                다음 기수 열리면 <span className="text-text-primary font-extrabold">제일 먼저 문자</span>로 알려줄게.
               </p>
             </div>
           ) : (

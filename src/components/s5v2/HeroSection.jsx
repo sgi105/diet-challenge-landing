@@ -119,7 +119,7 @@ export default function HeroSection({ onCTA }) {
             <div className="flex justify-center mb-5">
               <div className="inline-block transform -rotate-2 border-[3px] border-dashed border-accent-orange rounded-2xl bg-accent-orange/10 px-6 py-3">
                 <div className="font-display text-[26px] leading-none tracking-[0.08em] text-accent-orange text-center">CLOSED</div>
-                <div className="text-text-primary text-[11px] font-extrabold text-center mt-1.5 tracking-[0.12em]">모집 마감 · 결원 대기</div>
+                <div className="text-text-primary text-[11px] font-extrabold text-center mt-1.5 tracking-[0.12em]">이번 기수 마감</div>
               </div>
             </div>
           )}
@@ -158,7 +158,7 @@ export default function HeroSection({ onCTA }) {
 
           {isClosed && (
             <p className="text-text-secondary text-[13px] font-semibold leading-relaxed mt-4">
-              결원 생기면 <span className="text-text-primary font-extrabold">대기 순서대로</span> 연락 줄게.
+              다음 기수 열리면 <span className="text-text-primary font-extrabold">제일 먼저 문자</span>로 알려줄게.
             </p>
           )}
 

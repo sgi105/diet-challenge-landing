@@ -146,6 +146,11 @@ export default function ApplyPage() {
   }, []);
   const previewedCount = previewCount(applicantCount); // URL ?spots=N 프리뷰 지원(마감 화면 확인용)
   const isClosed = deadlinePassed || (previewedCount != null && previewedCount >= (ACTIVE.totalSpots || 30));
+  // 마감 뒤엔 지원서 대신 다음 기수 오픈 알림(/notify)으로 — 결원 대기는 없앴다(2026-09-19).
+  // 광고·예전 링크로 /apply 에 바로 들어온 사람도 여기서 넘긴다.
+  useEffect(() => {
+    if (isClosed) navigate('/notify', { replace: true });
+  }, [isClosed, navigate]);
 
   const update = (field, value) => {
     setForm(prev => ({ ...prev, [field]: value }));

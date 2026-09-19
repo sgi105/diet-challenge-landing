@@ -148,21 +148,24 @@ export default function StatsPage() {
   const [data, setData] = useState(null);
   const [insights, setInsights] = useState(null);
   const [applicants, setApplicants] = useState(null);
+  const [alerts, setAlerts] = useState(null); // 다음 기수 오픈 알림 신청 수(번호는 코치 페이지에서만)
   const [error, setError] = useState('');
   const [loading, setLoading] = useState(true);
 
   const load = async () => {
     try {
-      const [funnelRes, countRes, insightRes] = await Promise.all([
+      const [funnelRes, countRes, insightRes, alertRes] = await Promise.all([
         supabase.rpc('landing_funnel', { p_cohort: ACTIVE.cohortCode }),
         supabase.rpc('count_applicants_public', { p_cohort: ACTIVE.cohortCode }),
         supabase.rpc('landing_insights', { p_cohort: ACTIVE.cohortCode, p_cutoff: DEPLOY_CUTOFF }),
+        supabase.rpc('count_cohort_alerts_public', { p_cohort: ACTIVE.cohortCode }),
       ]);
       if (funnelRes.error) throw new Error(funnelRes.error.message);
       setData(funnelRes.data);
       // 인사이트는 부가 정보 — 실패해도 기본 퍼널은 보여준다.
       setInsights(insightRes.error ? null : insightRes.data);
       setApplicants(Number(countRes.data) || 0);
+      setAlerts(alertRes.error ? null : Number(alertRes.data) || 0);
       setError('');
     } catch (e) {
       setError(e.message || String(e));
@@ -243,6 +246,9 @@ export default function StatsPage() {
           sub="방문 → 지원 완료"
           tone="accent"
         />
+        {alerts != null && (
+          <Card label="🔔 다음 기수 알림" value={alerts} sub="마감 뒤 알림 신청 · 번호는 코치 페이지" />
+        )}
       </div>
 
       {/* 퍼널 */}

@@ -35,6 +35,7 @@ import LandingPageS4 from './LandingPageS4';
 import LandingPageS5 from './LandingPageS5';
 import LandingPageS5v2 from './LandingPageS5v2';
 import StatsPage from './pages/StatsPage';
+import NotifyPage from './pages/NotifyPage';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
@@ -151,6 +152,8 @@ export default function App() {
       <Route path="/referral" element={<LandingPage variant="referral" />} />
       <Route path="/apply" element={<ApplyPage />} />
       <Route path="/apply/done" element={<ApplyDonePage />} />
+      {/* 마감 뒤 — 다음 기수 오픈 알림 신청(전화번호 하나) */}
+      <Route path="/notify" element={<NotifyPage />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/fail" element={<FailPage />} />
       <Route path="/terms" element={<TermsPage />} />
