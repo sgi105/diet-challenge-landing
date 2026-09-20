@@ -18,6 +18,9 @@ const MEMBERS = {
   나: 'bg-pink-500',
 };
 
+// 목업 4개 공통 규격 — 폭·모서리·테두리·그림자를 하나로(가인 2026-09-21). 안쪽 여백만 내용에 맞게 다르다.
+const CARD = 'bg-slate-900 border border-white/[0.09] rounded-2xl text-left shadow-[0_14px_34px_rgba(0,0,0,0.35)]';
+
 function Avatar({ name, size = 28 }) {
   return (
     <span
@@ -35,8 +38,8 @@ function KakaoBubble({ name, text, lead }) {
     <div className="flex gap-1.5 items-start mt-2">
       <Avatar name={name} />
       <div>
-        <p className="text-[10.5px] text-[#444] mb-0.5">{name}{lead && ' (팀장)'}</p>
-        <p className="bg-white rounded-[4px_12px_12px_12px] px-2.5 py-1.5 text-xs">{text}</p>
+        <p className="text-[10.5px] text-slate-500 mb-0.5">{name}{lead && ' (팀장)'}</p>
+        <p className="bg-slate-800 text-slate-200 rounded-[4px_12px_12px_12px] px-2.5 py-1.5 text-xs">{text}</p>
       </div>
     </div>
   );
@@ -44,12 +47,12 @@ function KakaoBubble({ name, text, lead }) {
 
 function KakaoMock() {
   return (
-    <div className="bg-[#b2c7d9] rounded-2xl p-2.5 text-[#111] text-left shadow-[0_14px_34px_rgba(0,0,0,0.3)]">
-      <p className="text-xs font-extrabold text-center pb-2">3팀 🔥 21일 러닝 · 5</p>
+    <div className={`${CARD} p-3`}>
+      <p className="text-xs font-extrabold text-center text-slate-300 pb-2">3팀 🔥 21일 러닝 · 5</p>
       <KakaoBubble name="하늘" lead text="3팀 안녕! 21일 끝까지 같이 가자 🔥" />
       <KakaoBubble name="지은" text="잘 부탁해 🙌 매일 인증 간다" />
       <div className="flex justify-end mt-2">
-        <p className="bg-[#fee500] rounded-[12px_4px_12px_12px] px-2.5 py-1.5 text-xs">나도! 한 명도 안 빠지고 끝까지 가자</p>
+        <p className="bg-accent-green text-bg-primary font-semibold rounded-[12px_4px_12px_12px] px-2.5 py-1.5 text-xs">나도! 한 명도 안 빠지고 끝까지 가자</p>
       </div>
     </div>
   );
@@ -76,7 +79,7 @@ function FeedComment({ name, text }) {
 
 function FeedMock() {
   return (
-    <div className="bg-slate-900 rounded-2xl overflow-hidden text-left shadow-[0_14px_34px_rgba(0,0,0,0.35)]">
+    <div className={`${CARD} overflow-hidden`}>
       <div className="relative h-[170px] overflow-hidden bg-black">
         <img src="/s5v2/feed.jpg" alt="" loading="lazy" className="w-full h-full object-cover" style={{ objectPosition: 'center 34%' }} />
         <span className="absolute top-3 inset-x-0 text-center text-[26px] leading-none italic text-white" style={{ ...STAT_FONT, letterSpacing: 2, textShadow: '0 2px 6px rgba(0,0,0,0.5)' }}>DAY 12</span>
@@ -117,7 +120,7 @@ const CELL = { d: 'bg-green-500', f: 'bg-red-500', w: 'border-[1.5px] border-das
 
 function DutyMock() {
   return (
-    <div className="bg-slate-900 border border-white/[0.09] rounded-2xl px-3.5 py-3 text-left text-slate-200 shadow-[0_14px_34px_rgba(0,0,0,0.35)]">
+    <div className={`${CARD} px-3 py-3 text-slate-200`}>
       <div className="flex justify-between items-baseline">
         <p className="text-sm font-bold">3팀 <span className="text-[11px] text-slate-500 font-medium">5명 · 이번 주</span></p>
         <p><span className="text-lg font-extrabold text-orange-400">33.0</span> <span className="text-[10px] text-slate-500 font-semibold">팀 점수</span></p>
@@ -152,13 +155,13 @@ const FINAL_RANK = [
 
 function WinMock() {
   return (
-    <div className="bg-[#b2c7d9] rounded-2xl p-2.5 text-[#111] text-left shadow-[0_14px_34px_rgba(0,0,0,0.3)]">
-      <p className="text-xs font-extrabold text-center pb-2">3팀 🔥 21일 러닝 · 5</p>
+    <div className={`${CARD} p-3`}>
+      <p className="text-xs font-extrabold text-center text-slate-300 pb-2">3팀 🔥 21일 러닝 · 5</p>
       <div className="flex gap-1.5 items-start mt-1">
         <Avatar name="하늘" />
         <div>
-          <p className="text-[10.5px] text-[#444] mb-0.5">하늘 (팀장)</p>
-          <div className="bg-slate-900 rounded-xl px-3 py-2.5 w-[210px] text-slate-200">
+          <p className="text-[10.5px] text-slate-500 mb-0.5">하늘 (팀장)</p>
+          <div className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2.5 w-[210px] text-slate-200">
             <p className="text-[10px] font-extrabold text-slate-500 tracking-[0.12em]">최종 순위 · 21일</p>
             {FINAL_RANK.map((r) => (
               <div key={r.team} className={`flex justify-between items-center mt-1.5 text-[13px] ${r.win ? 'font-black text-accent-green' : 'font-semibold text-slate-400'}`}>
@@ -172,7 +175,7 @@ function WinMock() {
       <KakaoBubble name="지은" text="미쳤다 ㅋㅋㅋㅋ 우리가 1등이야??" />
       <KakaoBubble name="민수" text="21일 한 명도 안 빠진 보람 있다 🥹" />
       <div className="flex justify-end mt-2">
-        <p className="bg-[#fee500] rounded-[12px_4px_12px_12px] px-2.5 py-1.5 text-xs">상금 10만원으로 회식 가자 🍻</p>
+        <p className="bg-accent-green text-bg-primary font-semibold rounded-[12px_4px_12px_12px] px-2.5 py-1.5 text-xs">상금 10만원으로 회식 가자 🍻</p>
       </div>
     </div>
   );
