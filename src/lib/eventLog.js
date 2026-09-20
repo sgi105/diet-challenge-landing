@@ -26,7 +26,7 @@ function sessionId() {
 // 유입 꼬리표(utm) — 첫 진입 URL에서 한 번 읽어 세션 동안 유지한다.
 // 랜딩 → /apply 로 이동하면 URL에서 utm이 사라지므로 저장해둬야 지원서 이벤트에도 붙는다.
 const UTM_KEY = 'ttr_utm';
-function utm() {
+export function utm() {
   try {
     const saved = sessionStorage.getItem(UTM_KEY);
     if (saved) return JSON.parse(saved);
