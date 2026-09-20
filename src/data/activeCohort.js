@@ -19,6 +19,7 @@ export const ACTIVE = {
 
   // 신청 마감 — 이 시각 이후 접수분은 대기명단으로 태깅된다.
   deadline: COHORT5.officialDeadline,
+  backdoorKey: COHORT5.backdoorKey,   // /apply?pass=<키> — 마감 뒤 결원 충원용
   deadlineLabel: COHORT5.deadlineLabel,
 
   startLabel: `${COHORT5.startDate} 시작`,

@@ -23,6 +23,10 @@ export const COHORT5 = {
   otTime: '저녁 7시 30분',              // OT 시각 (KST) — 이 자리에서 팀 배정
   finalDate: '10/11(일)',              // 파이널 5K 레이스 (Day 21)
 
+  // 마감 뒤 결원 충원용 백도어 — /apply?pass=<이 값> 이면 마감이어도 지원서가 열린다.
+  // 링크를 아는 사람만 들어온다(추측 방지용 문자열). 들어온 지원서는 [결원 충원] 으로 표시된다.
+  backdoorKey: 'refill0921',
+
   totalSpots: 30,
   teamSize: 5,     // 5인 1팀
   teamCount: 6,    // 30명 / 5인 = 6팀

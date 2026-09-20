@@ -145,7 +145,11 @@ export default function ApplyPage() {
     countApplicantsPublic(ACTIVE.cohortCode).then(setApplicantCount).catch(() => { /* row 없음 등 무시 */ });
   }, []);
   const previewedCount = previewCount(applicantCount); // URL ?spots=N 프리뷰 지원(마감 화면 확인용)
-  const isClosed = deadlinePassed || (previewedCount != null && previewedCount >= (ACTIVE.totalSpots || 30));
+  // 결원 충원 백도어 — /apply?pass=<키> 로 들어오면 마감·정원과 무관하게 정상 접수한다.
+  // 링크를 받은 사람만 쓰고, 들어온 지원서는 코치 목록에서 [결원 충원] 으로 구분된다.
+  const isBackdoor = !!ACTIVE.backdoorKey && searchParams.get('pass') === ACTIVE.backdoorKey;
+  const isClosed = !isBackdoor
+    && (deadlinePassed || (previewedCount != null && previewedCount >= (ACTIVE.totalSpots || 30)));
   // 마감 뒤엔 지원서 대신 다음 기수 오픈 알림(/notify)으로 — 결원 대기는 없앴다(2026-09-19).
   // 광고·예전 링크로 /apply 에 바로 들어온 사람도 여기서 넘긴다.
   useEffect(() => {
@@ -186,7 +190,7 @@ export default function ApplyPage() {
     let attempt = 0;
     while (attempt < 2) {
       try {
-        const { id } = await submitApplication(form, { waitlist: isClosed });
+        const { id } = await submitApplication(form, { waitlist: isClosed, backdoor: isBackdoor });
         track('apply_submit_success', { isReferral });
         logEvent('apply_submit', { is_referral: isReferral });
         metaTrackApplication({ phone: form.phone.trim(), phoneCountry: form.phoneCountry, waitlist: isClosed, isReferral });

@@ -9,6 +9,7 @@
 import { createClient } from '@supabase/supabase-js';
 import { ACTIVE } from '../data/activeCohort';
 import { PACE_GOAL_VALUE, partsToSec } from '../data/applicationGoals';
+import { utm } from './eventLog';
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -45,10 +46,18 @@ function combineMotivationWithFriend(motivation, friend) {
   return (base + tail).slice(0, 2000);
 }
 
-export async function submitApplication(form, { waitlist = false } = {}) {
+function pickUtm() {
+  const u = utm() || {};
+  const clip = (v) => (typeof v === 'string' && v ? v.slice(0, 200) : null);
+  return { utm_source: clip(u.utm_source), utm_medium: clip(u.utm_medium), utm_campaign: clip(u.utm_campaign) };
+}
+
+export async function submitApplication(form, { waitlist = false, backdoor = false } = {}) {
   let motivation = combineMotivationWithFriend(form.motivation, form.friend);
   // 마감(데드라인/정원) 후 접수분은 대기명단으로 태깅 — 코치 신청서 탭 동기 필드에 그대로 노출.
   if (waitlist) motivation = `[대기명단] ${motivation}`.slice(0, 2000);
+  // 마감 뒤 결원 충원 링크(/apply?pass=…)로 들어온 접수분 — 정상 접수지만 구분은 필요하다.
+  else if (backdoor) motivation = `[결원 충원] ${motivation}`.slice(0, 2000);
   const goals = Array.isArray(form.goals) ? form.goals.slice(0, 5) : [];
   const goalsOther = form.goalsOther?.trim().slice(0, 500) || null;
   const payload = {
@@ -77,6 +86,8 @@ export async function submitApplication(form, { waitlist = false } = {}) {
     target_time_sec: goals.includes(PACE_GOAL_VALUE) ? partsToSec(form.targetTime || {}) : null,
     // OT 참석 가능 여부 — 불참이면 팀 랜덤 배정 대상.
     ot_attend: form.otAttend || null,
+    // 유입 꼬리표 — 어느 광고/링크로 와서 지원했는지. 메타 광고는 utm_campaign = 광고 이름.
+    ...pickUtm(),
   };
 
   // RETURNING은 anon SELECT 권한이 필요해서 사용 X — INSERT만 수행하고 id는 null 반환.
