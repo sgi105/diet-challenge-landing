@@ -56,9 +56,58 @@ function preseasonSmsText(): string {
   ].join('\n')
 }
 
+// ── 결원 충원 백도어 지원자 자동 문자 ────────────────────────────────
+// /apply?pass=<키> 로 들어온 지원서는 motivation 이 '[결원 충원]' 으로 시작한다(랜딩 applyApi.js).
+// 문구와 단톡방 링크는 coach_msg_templates 가 정본 — 코치 화면에서 고치면 여기 나가는 문자도 같이 바뀐다.
+// 한국 LMS 는 이모지를 못 실어서 빈칸으로 날아간다 → 기본 문구에도 이모지를 쓰지 않는다.
+const REFILL_TAG = '[결원 충원]'
+const DEFAULT_TALK_LINK = 'https://ig.me/j/GRUD0rvDyt6ongwi/'
+const DEFAULT_REFILL_WELCOME = [
+  '{name}님 신청 완료!',
+  '',
+  '시작은 오늘부터야. 딱 두 개만 해줘',
+  '',
+  '1. 보증금 10만원 입금',
+  '토스뱅크 1000-2641-8699 신가인',
+  '입금자명은 본인 이름으로',
+  '',
+  '2. 인스타 단톡방 입장',
+  '{link}',
+  '',
+  '팀 배정이랑 시작 안내는 단톡방에서 해. 지금 바로 들어와줘',
+].join('\n')
+
+async function loadTemplates(keys: string[]): Promise<Record<string, string>> {
+  const url = Deno.env.get('SUPABASE_URL')
+  const key = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')
+  if (!url || !key) return {}
+  try {
+    const res = await fetch(
+      `${url}/rest/v1/coach_msg_templates?select=key,body&key=in.(${keys.join(',')})`,
+      { headers: { apikey: key, Authorization: `Bearer ${key}` } },
+    )
+    if (!res.ok) return {}
+    const rows = await res.json()
+    const out: Record<string, string> = {}
+    for (const row of rows ?? []) if (row?.key && row?.body) out[row.key] = row.body
+    return out
+  } catch (e) {
+    console.error('template load failed', e instanceof Error ? e.message : String(e))
+    return {}
+  }
+}
+
+// deno-lint-ignore no-explicit-any
+async function refillSmsText(r: any): Promise<string> {
+  const tpl = await loadTemplates(['refill_welcome', 'refill_talk_link'])
+  const link = tpl.refill_talk_link || DEFAULT_TALK_LINK
+  const body = tpl.refill_welcome || DEFAULT_REFILL_WELCOME
+  return body.replaceAll('{name}', String(r.name || '').trim()).replaceAll('{link}', link)
+}
+
 // 신청자에게 톡방 링크 SMS 발송. 시크릿 미설정/비KR 번호면 스킵(비치명적).
 // deno-lint-ignore no-explicit-any
-async function sendApplicantSms(r: any): Promise<Record<string, unknown>> {
+async function sendApplicantSms(r: any, text?: string): Promise<Record<string, unknown>> {
   const apiKey = Deno.env.get('SOLAPI_API_KEY')
   const apiSecret = Deno.env.get('SOLAPI_API_SECRET')
   const from = Deno.env.get('SOLAPI_SENDER')
@@ -80,7 +129,7 @@ async function sendApplicantSms(r: any): Promise<Record<string, unknown>> {
     method: 'POST',
     headers: { Authorization: auth, 'Content-Type': 'application/json' },
     body: JSON.stringify({
-      messages: [{ to, from: String(from).replace(/\D/g, ''), text: preseasonSmsText() }],
+      messages: [{ to, from: String(from).replace(/\D/g, ''), text: text ?? preseasonSmsText() }],
     }),
   })
   const txt = await res.text().catch(() => '')
@@ -201,10 +250,12 @@ Deno.serve(async (__req: Request) => {
     }
 
     // 프리시즌 신청자에게 톡방 링크 문자 발송 (비치명적 — 실패해도 200)
-    let smsResult: Record<string, unknown> = { sms: 'skipped_not_preseason' }
-    if (r.cohort_code === PRESEASON_COHORT) {
+    let smsResult: Record<string, unknown> = { sms: 'skipped_not_target' }
+    const isRefill = String(r.motivation || '').startsWith(REFILL_TAG)
+    if (r.cohort_code === PRESEASON_COHORT || isRefill) {
       try {
-        smsResult = await sendApplicantSms(r)
+        smsResult = await sendApplicantSms(r, isRefill ? await refillSmsText(r) : undefined)
+        if (isRefill) smsResult = { ...smsResult, kind: 'refill' }
       } catch (e) {
         console.error('sms send error', e instanceof Error ? e.message : String(e))
         smsResult = { sms: 'exception' }

@@ -26,6 +26,7 @@ import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
 import RefundPage from './pages/RefundPage';
 import ApplyPage from './pages/ApplyPage';
+import UnsubscribePage from './pages/UnsubscribePage';
 import ApplyDonePage from './pages/ApplyDonePage';
 import PayPage from './pages/PayPage';
 import { useCohortStatus, COPY, COPY_REFERRAL } from './hooks/useCohortStatus';
@@ -154,6 +155,8 @@ export default function App() {
       <Route path="/apply/done" element={<ApplyDonePage />} />
       {/* 마감 뒤 — 다음 기수 오픈 알림 신청(전화번호 하나) */}
       <Route path="/notify" element={<NotifyPage />} />
+      {/* 알림 문자 수신 해제 — 문자 맨 아래 링크 */}
+      <Route path="/off" element={<UnsubscribePage />} />
       <Route path="/success" element={<SuccessPage />} />
       <Route path="/fail" element={<FailPage />} />
       <Route path="/terms" element={<TermsPage />} />
