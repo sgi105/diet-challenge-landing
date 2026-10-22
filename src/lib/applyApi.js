@@ -69,7 +69,10 @@ export async function submitApplication(form, { waitlist = false, backdoor = fal
   // 마감(데드라인/정원) 후 접수분은 대기명단으로 태깅 — 코치 신청서 탭 동기 필드에 그대로 노출.
   if (waitlist) motivation = `[대기명단] ${motivation}`.slice(0, 2000);
   // 마감 뒤 결원 충원 링크(/apply?pass=…)로 들어온 접수분 — 정상 접수지만 구분은 필요하다.
-  else if (backdoor) motivation = `[결원 충원] ${motivation}`.slice(0, 2000);
+  // 보증금 카드결제 기수는 '[추가 모집]' 꼬리표 — notify-new-applicant 는 '[결원 충원]'으로 시작하는 지원서에만
+  // 옛 안내 문자(보증금 10만원 계좌 입금)를 보내므로, 꼬리표를 바꿔 그 문자를 끈다(가인 2026-10-23 A안).
+  // 결제자 안내는 결제 완료 화면의 "10/25(일) 저녁 단톡방 초대"로 충분.
+  else if (backdoor) motivation = `${ACTIVE.fee ? '[추가 모집]' : '[결원 충원]'} ${motivation}`.slice(0, 2000);
   const goals = Array.isArray(form.goals) ? form.goals.slice(0, 5) : [];
   const goalsOther = form.goalsOther?.trim().slice(0, 500) || null;
   const payload = {
