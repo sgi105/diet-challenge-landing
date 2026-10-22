@@ -98,6 +98,8 @@ export async function submitApplication(form, { waitlist = false, backdoor = fal
     target_time_sec: goals.includes(PACE_GOAL_VALUE) ? partsToSec(form.targetTime || {}) : null,
     // OT 참석 가능 여부 — 불참이면 팀 랜덤 배정 대상.
     ot_attend: form.otAttend || null,
+    // 시즌6 프리프레이밍 질문 — 원하는 몸을 못 만든 이유(consistency|fun|method|motivation).
+    fail_reason: form.failReason || null,
     // 유입 꼬리표 — 어느 광고/링크로 와서 지원했는지. 메타 광고는 utm_campaign = 광고 이름.
     ...pickUtm(),
     id: appId,

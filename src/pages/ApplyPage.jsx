@@ -3,6 +3,7 @@ import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
+import { PROOF } from '../data/season5v2';
 import { previewCount } from '../lib/spots';
 import { logEvent, once } from '../lib/eventLog';
 import { metaTrack, metaTrackApplication } from '../lib/metaPixel';
@@ -46,6 +47,7 @@ const initialForm = {
   targetTime: { h: '', m: '', s: '' },
   targetTimeMode: 'preset', // 'preset' = 마일스톤 객관식 | 'custom' = 기타(휠로 직접)
   otAttend: '',
+  failReason: '',
 };
 
 // 초보 → 상급 순. 지원자 대부분이 초심자라 위에서 바로 자기 자리를 찾게 한다.
@@ -62,6 +64,10 @@ const runningExpOptions = [
 // 뺀 것: 'job'(선발·팀배정에 안 씀), 'friend'(선택 항목 → instagram 화면 하단으로 합침), 'region'(100% 온라인이라 불필요).
 const MAIN_STEPS = ['intro', 'name', 'age', 'gender', 'phone', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'deposit', 'ot'];
 const REFERRAL_STEPS = ['intro', 'referrer', 'name', 'age', 'gender', 'phone', 'runningExp', 'shortGoal', 'motivation', 'goals', 'instagram', 'deposit', 'ot'];
+// 참가비(보증금) 결제 기수 — 마찰 최소 + 프리프레이밍(가인 2026-10-22).
+// 탭 질문 3개(타잔 맞춤 한마디가 붙음)를 먼저, 개인정보는 뒤에. 지원 동기·28일 목표·인스타·OT 확인은 뺐다(앱 온보딩·결제 완료 화면이 대신).
+const FEE_STEPS = ['intro', 'runningExp', 'failReason', 'goal90', 'name', 'age', 'gender', 'phone'];
+const FEE_REFERRAL_STEPS = ['intro', 'referrer', 'runningExp', 'failReason', 'goal90', 'name', 'age', 'gender', 'phone'];
 
 function loadState(storageKey) {
   try {
@@ -98,7 +104,9 @@ export default function ApplyPage() {
   const STORAGE_KEY = isReferral ? STORAGE_KEY_REFERRAL : STORAGE_KEY_MAIN;
   // 무료 기수거나 참가비(카드 결제) 기수면 보증금(deposit) step 제거. 보증금 기수면 살아난다.
   const baseSteps = isReferral ? REFERRAL_STEPS : MAIN_STEPS;
-  const STEPS = (ACTIVE.isFree || ACTIVE.fee) ? baseSteps.filter(s => s !== 'deposit') : baseSteps;
+  const STEPS = ACTIVE.fee
+    ? (isReferral ? FEE_REFERRAL_STEPS : FEE_STEPS)
+    : (ACTIVE.isFree ? baseSteps.filter(s => s !== 'deposit') : baseSteps);
   const TOTAL_QUESTIONS = STEPS.length - 1;
 
   const persisted = useMemo(() => loadState(STORAGE_KEY), [STORAGE_KEY]);
@@ -320,6 +328,10 @@ export default function ApplyPage() {
                 <p className="text-text-primary text-sm font-extrabold">🎉 보증금만 내면 28일 무료 체험 시작</p>
                 <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
                   참가비 무료 · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급 · {ACTIVE.otLabel} 전까지 취소하면 전액 환불
+                </p>
+                {/* 보증금 동의 step 을 뺐으니 결제 전 약관·환불정책 고지는 여기서 */}
+                <p className="text-text-muted text-[11px] mt-1.5">
+                  결제하면 <Link to="/terms" className="underline">이용약관</Link>·<Link to="/refund" className="underline">환불정책</Link>에 동의하는 거야
                 </p>
               </>
             ) : (
@@ -566,11 +578,42 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
       return <TextStep label="거주 지역" placeholder="예: 서울 마포구 / 경기 분당 / 부산 해운대" value={form.region} onChange={v => update('region', v)} autoComplete="address-level1" autoFocus />;
     case 'runningExp':
       return (
-        <RadioStep
-          label="러닝 경력은 어느 정도야?"
+        <ReactionStep
+          label={<>러닝은<br />어느 정도 해봤어?</>}
           options={runningExpOptions}
+          reactions={RUN_EXP_REACTIONS}
           value={form.runningExp}
           onChange={v => update('runningExp', v)}
+        />
+      );
+    case 'failReason':
+      return (
+        <ReactionStep
+          label={<>여태까지 왜 원하는 몸을<br />못 만들었다고 생각해?</>}
+          options={FAIL_REASON_OPTIONS}
+          reactions={FAIL_REASON_REACTIONS}
+          value={form.failReason}
+          onChange={v => update('failReason', v)}
+        />
+      );
+    case 'goal90':
+      return (
+        <ReactionStep
+          label={<>90일 뒤<br />어떤 모습이고 싶어?</>}
+          options={GOAL90_OPTIONS}
+          reactions={GOAL90_REACTIONS}
+          value={form.goals?.[0] || ''}
+          onChange={v => update('goals', [v])}
+          extra={form.goals?.[0] === 'other' ? (
+            <input
+              type="text"
+              value={form.goalsOther || ''}
+              onChange={e => update('goalsOther', e.target.value)}
+              placeholder="90일 뒤 이루고 싶은 것 (선택)"
+              maxLength={100}
+              className="mt-3 w-full px-4 py-3 rounded-2xl bg-bg-card text-card-ink font-semibold placeholder:text-card-ink-faint outline-none border-2 border-transparent focus:border-accent-green"
+            />
+          ) : null}
         />
       );
     case 'motivation':
@@ -859,6 +902,98 @@ function TextareaStep({ label, placeholder, value, onChange, minLength, autoFocu
   );
 }
 
+// 러닝 경험 + 타잔 맞춤 한마디 — 시안 SOT: design-references/s6-apply-runexp-reaction.html A (가인 2026-10-22).
+// 목적은 결제 직전에 "나 같은 사람도 되는구나"를 확인시키는 것(프리프레이밍).
+// 문구는 13주 플랜 사실과 실측 완주율만. "2주차부터 시작" 같은 선택지는 없다 — 그건 일요일 뒤 추가 모집으로
+// 들어온 사람이 그 시점부터 이어서 하는 것일 뿐(가인).
+const RUN_EXP_REACTIONS = {
+  almost_none: <>딱 좋아. <b>1주차는 하루 5분</b>이야. 걷다 뛰다 해도 돼.<br />처음 참가한 사람 <b>{PROOF.newTotal}명 중 {PROOF.finished}명</b>이 끝까지 갔어.</>,
+  run_1km: <>충분해. <b>하루 5분</b>부터 하루 1분씩 늘리면<br />3주 뒤엔 <b>25분</b>, 28일째엔 <b>5km</b>를 뛰어.</>,
+  run_5km: <>기초는 됐네. 첫 28일에는 <b>5km 스피드</b>를 올리는 데 집중해보자.<br />진짜 목표는 <b>90일 뒤 하프</b>야.</>,
+  run_10km: <>체력은 있네. 첫 28일엔 <b>매일 뛰는 습관</b>을 단단하게 잡자.<br />그러면 <b>90일 뒤 하프</b>는 충분해.</>,
+  half_marathon: <>하프 뛴 체력이면 충분해.<br />이제 이걸 기반으로 <b>인생 최고의 몸</b>을 만들어보자.</>,
+  full_marathon: <>풀까지 뛴 체력이면 충분해.<br />이제 이걸 기반으로 <b>인생 최고의 몸</b>을 만들어보자.</>,
+};
+
+// 못 만든 이유 — 랜딩 훅("꾸준히 안 해서")을 본인이 고르게 하고, 보기마다 TARZAN이 그걸 어떻게 푸는지 답한다. 문구 = 가인 2026-10-22.
+const FAIL_REASON_OPTIONS = [
+  { value: 'consistency', label: '꾸준히 못해서' },
+  { value: 'fun', label: '재미가 없어서' },
+  { value: 'method', label: '방법을 몰라서' },
+  { value: 'motivation', label: '동기가 부족해서' },
+];
+const FAIL_REASON_REACTIONS = {
+  consistency: <>의지로 하는 게 아니라 <b>꾸준히 할 수밖에 없는 환경</b>에서<br />같이 해내자.</>,
+  fun: <>혼자 하면 재미없어. 같은 목표를 향해 <b>으쌰으쌰하고 경쟁도 하면서</b><br />재밌게 하자.</>,
+  method: <><b>정해진 프로그램대로 따라만 오면 돼.</b><br />몸 만드는 게 얼마나 쉬운지 알게 될 거야.</>,
+  motivation: <>명확한 목표가 없어서 그래. <b>90일. 하프마라톤</b>이라는 목표를 향해 가면<br />동기는 저절로 생길 거야.</>,
+};
+
+// 90일 목표 — 랜딩 헤드라인("생애 첫 하프마라톤 완주하고 인생 최고의 몸")에 맞춘 보기(가인 2026-10-23).
+// 하나만 고른다. 값은 applications.goals[0] (하프·몸·10K·기타는 기존 GOAL_LABEL 값 재사용, 연속 기록만 새 값 'streak90').
+// 기타를 고르면 목표를 적는 칸(선택)이 뜬다 → goals_other.
+// ⚠️ 반응 문구는 Claude 초안. 거리·일차는 13주 플랜 사실(5→10→14→21km · 9주차 롱런 10km = DAY 63).
+const GOAL90_OPTIONS = [
+  { value: 'half_marathon', label: '생애 첫 하프마라톤 완주' },
+  { value: 'lean_body', label: '365일 유지되는 복근' },
+  { value: '10K_complete', label: '일단 10km부터' },
+  { value: 'streak90', label: '90일 연속 운동한 기록' },
+  { value: 'other', label: '기타' },
+];
+const GOAL90_REACTIONS = {
+  half_marathon: <>그게 이 90일의 결승선이야.<br />5km → 10km → 14km → <b>21km</b>, 한 계단씩 올라가.</>,
+  lean_body: <>90일 동안 매일 뛰어서 <b>21km를 뛸 수 있는 몸</b>이 되면<br /><b>복근 윤곽</b>이 드러나기 시작할 거야.</>, // 문구 = 가인 2026-10-23
+  '10K_complete': <>좋아. <b>DAY 63쯤 롱런이 10km</b>야.<br />거기까지 가면 하프도 보여.</>,
+  streak90: <>앱에 매일 <b>연속 기록</b>이 쌓여.<br />90까지 채우면 그건 습관이 아니라 <b>네 정체성</b>이야.</>,
+  other: <>좋아. 뭐든 <b>90일 매일</b>이면 가까워져.<br />아래에 적어주면 같이 챙길게.</>,
+};
+
+// 탭 질문 + 타잔 맞춤 한마디(말풍선) — 시안 SOT: design-references/s6-apply-runexp-reaction.html A.
+function ReactionStep({ label, options, reactions, value, onChange, extra = null }) {
+  const reaction = value ? reactions[value] : null;
+  // 폰에서는 보기 아래로 말풍선이 밀려 안 보인다 → 고르는 순간 말풍선이 보이게 스크롤.
+  const bubbleRef = useRef(null);
+  const picked = useRef(false);
+  useEffect(() => {
+    if (!picked.current || !bubbleRef.current) return;
+    bubbleRef.current.scrollIntoView({ behavior: 'smooth', block: 'center' });
+  }, [value]);
+  return (
+    <div className="flex-1 flex flex-col justify-center">
+      <label className="block text-text-primary text-2xl font-black font-kr mb-6 break-keep">{label}</label>
+      <div className="space-y-2.5">
+        {options.map(opt => {
+          const selected = value === opt.value;
+          return (
+            <button
+              key={opt.value}
+              onClick={() => { picked.current = true; onChange(opt.value); }}
+              className={`w-full text-left px-5 py-3 rounded-2xl border-2 font-bold transition-all ${
+                selected
+                  ? 'border-accent-green bg-accent-green text-bg-primary'
+                  : `border-white/20 bg-bg-card text-card-ink hover:border-accent-green/60 ${value ? 'opacity-55' : ''}`
+              }`}
+            >
+              {opt.label}
+            </button>
+          );
+        })}
+      </div>
+      {reaction && (
+        <div key={value} ref={bubbleRef} className="flex items-start gap-2.5 mt-4 animate-fade-up">
+          {/* 가인 인스타 프로필 사진(@bali_tarzan, 2026-10-22 Graph API로 받아 160px로 줄임) */}
+          <img src="/s6/tarzan-profile.jpg" alt="" className="w-9 h-9 rounded-full object-cover border-2 border-white shrink-0" />
+          <div className="bg-bg-card text-card-ink rounded-[4px_16px_16px_16px] px-3.5 py-3 text-[14px] font-semibold leading-relaxed break-keep">
+            <span className="block text-[11px] font-black text-card-ink-faint mb-0.5">발리타잔</span>
+            {reaction}
+          </div>
+        </div>
+      )}
+      {extra}
+    </div>
+  );
+}
+
 function RadioStep({ label, options, value, onChange }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
@@ -893,7 +1028,7 @@ function PhoneStep({ form, update }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">연락처</label>
-      <p className="text-text-muted text-sm mb-4">시작 안내·앱 입장 문자용이야.</p>
+      <p className="text-text-muted text-sm mb-4">{ACTIVE.fee ? '단톡방 초대 문자 받을 번호야.' : '시작 안내·앱 입장 문자용이야.'}</p>
 
       <div className="flex gap-2 mb-4">
         {[
@@ -1343,6 +1478,12 @@ function validateStep(stepKey, form) {
       return null;
     case 'runningExp':
       if (!form.runningExp) return '러닝 경력을 선택해줘.';
+      return null;
+    case 'failReason':
+      if (!form.failReason) return '하나 골라줘.';
+      return null;
+    case 'goal90':
+      if (!form.goals?.[0]) return '하나 골라줘.';
       return null;
     case 'motivation':
       if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
