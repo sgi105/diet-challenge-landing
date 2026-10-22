@@ -5,7 +5,7 @@
 // 시즌6 구조 (가인 2026-10-22):
 //   10/19-10/25 = 프리시즌(이월 멤버만) · 10/26(월) Day 1 - 11/22(일) Day 28 본 시즌.
 //   참가비 무료 + 보증금 1만원 — 지원서 안에서 카드·간편결제 → 즉시 참가 확정(선발 없음).
-//   "돈이 걸려야 제대로 한다". 해내면 보증금 전액 환급(결제 취소로 같은 카드에 돌려준다 — 계좌 송금 X).
+//   "돈이 걸려야 제대로 한다". 해내면 보증금 전액 환급. 환급 방법(결제 취소 / 계좌)은 미정 — 랜딩·약관에 방법을 쓰지 말 것(가인 2026-10-22).
 //   팀 상금 없음. (10/22 오전엔 참가비 9,900 + 리워드 1만원 안이었다가 같은 날 보증금 구조로 바꿈)
 //
 // 요일 확정(2026년 달력 검증): 10/25 = 일, 10/26 = 월, 10/27 = 화, 11/22 = 일.
@@ -18,6 +18,7 @@ export const COHORT6 = {
 
   openLabel: '지금',
   deadlineLabel: '10/25(일) 자정',
+  chatInvite: '10/25(일) 저녁',        // 결제자 단톡방 초대 — 마감 날 저녁에 한 번에 (가인 2026-10-22)
   startDate: '10/26(월)',              // 본 시즌 Day 1
   otDate: '10/26(월)',                 // 온라인 OT (줌) — 시작 당일 저녁 (가인 2026-10-22: 화→월)
   otTime: '저녁 7시 30분',
@@ -34,7 +35,7 @@ export const COHORT6 = {
 
 // 보상 구조:
 // - 참가비 무료 · 보증금 1만원 (카드·간편결제, 지원서 제출 직후)
-// - 28일 중 25일 이상 인증 + 파이널 5K 완주 → 보증금 전액 환급(결제 취소)
+// - 28일 중 25일 이상 인증 + 파이널 5K 완주 → 보증금 전액 환급(방법 미정)
 // - 포기하면 보증금 몰수 · 팀 상금 없음
 export const PROGRAM6 = {
   deposit: 10000,
@@ -86,6 +87,7 @@ export const WEEKS6 = [
 export const SCHEDULE6 = [
   { label: '모집 마감', value: COHORT6.deadlineLabel, highlight: true },
   { label: '참가 확정', value: '보증금 결제하면 바로', highlight: false },
+  { label: '단톡방 초대', value: COHORT6.chatInvite, highlight: false },
   { label: '챌린지 시작', value: COHORT6.startDate, highlight: false },
   { label: '온라인 OT (줌)', value: `${COHORT6.otDate} ${COHORT6.otTime}`, highlight: false },
   { label: '파이널 5K 레이스', value: COHORT6.finalDate, highlight: false },

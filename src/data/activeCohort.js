@@ -30,6 +30,7 @@ export const ACTIVE = {
   backdoorKey: COHORT6.backdoorKey,   // /apply?pass=<키> — 마감 뒤 결원 충원용
   deadlineLabel: COHORT6.deadlineLabel,
 
+  chatInviteLabel: COHORT6.chatInvite,
   startLabel: `${COHORT6.startDate} 시작`,
   startDateLabel: COHORT6.startDate,
   otLabel: COHORT6.otDate,

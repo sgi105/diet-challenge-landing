@@ -95,11 +95,12 @@ export default function ApplyPaidPage() {
               <h1 className="font-kr text-3xl font-black text-text-primary mt-4 mb-3 leading-tight">
                 28일 무료 체험 시작!<br />같이 뛰자
               </h1>
-              <p className="text-text-secondary text-sm mb-8">보증금 {ACTIVE.depositLabel} 결제가 확인됐어. 해내면 같은 카드로 전액 돌려줄게.</p>
+              <p className="text-text-secondary text-sm mb-8">보증금 {ACTIVE.depositLabel} 결제가 확인됐어. 해내면 전액 돌려줄게.</p>
 
               <div className="bg-bg-card rounded-3xl p-6 text-left shadow-[0_12px_30px_rgba(0,0,0,0.15)] space-y-3 text-sm">
                 <p className="text-card-ink font-extrabold">다음 순서</p>
-                <p className="text-card-ink-muted">📱 시작 전에 앱 입장 안내를 문자로 보내줄게</p>
+                {/* 결제 후 안내는 단톡방 하나로(가인 2026-10-22) — 앱 입장·OT 링크 등 앞으로 진행은 전부 단톡방에서 */}
+                <p className="text-card-ink-muted">💬 <span className="text-card-ink font-bold">{ACTIVE.chatInviteLabel}</span>에 단톡방에 초대할게. 앞으로 진행은 전부 거기서 안내해줄게</p>
                 <p className="text-card-ink-muted">🎥 OT · <span className="text-card-ink font-bold">{ACTIVE.otLabel} {ACTIVE.otTimeLabel}</span></p>
                 <p className="text-card-ink-muted">🏃 Day 1 · <span className="text-card-ink font-bold">{ACTIVE.startDateLabel}</span></p>
               </div>

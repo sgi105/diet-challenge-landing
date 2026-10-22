@@ -8,7 +8,7 @@ const D = COHORT6.durationDays;
 export const faqItems = [
   {
     question: `무료인데 보증금 ${PROGRAM6.depositLabel}은 왜 받아요?`,
-    answer: `28일 체험은 진짜 무료야. 근데 공짜면 아무도 안 뛰어. 돈이 걸려야 제대로 하거든. ${D}일 중 ${PROGRAM6.successDays}일 이상 인증하고 파이널 5K까지 뛰면 보증금 ${PROGRAM6.depositLabel} 전액 돌려줄게. 결제한 카드로 그대로 취소해서 돌려줘.`,
+    answer: `28일 체험은 진짜 무료야. 근데 공짜면 아무도 안 뛰어. 돈이 걸려야 제대로 하거든. ${D}일 중 ${PROGRAM6.successDays}일 이상 인증하고 파이널 5K까지 뛰면 보증금 ${PROGRAM6.depositLabel} 전액 돌려줄게.`,
   },
   {
     question: '무료 체험 끝나면 자동으로 결제돼요?',
@@ -40,7 +40,7 @@ export const faqItems = [
   },
   {
     question: '환불 되나요?',
-    answer: `OT(${COHORT6.otDate}) 전까지 말해주면 보증금 전액 환불해줄게. 결제한 카드로 그대로 취소돼. OT 이후엔 끝까지 해내야 돌려받을 수 있어.`,
+    answer: `OT(${COHORT6.otDate}) 전까지 말해주면 보증금 전액 환불해줄게. OT 이후엔 끝까지 해내야 돌려받을 수 있어.`,
   },
   {
     question: '100% 온라인이면 어떻게 같이 뛰어요?',

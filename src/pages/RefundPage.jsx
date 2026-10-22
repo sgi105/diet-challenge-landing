@@ -13,7 +13,7 @@ export default function RefundPage() {
           <h2 className="text-text-primary font-bold text-base mb-2">1. 챌린지 시작 전 환불</h2>
           <p>참가비는 무료이며, 보증금({ACTIVE.depositLabel})을 결제한 뒤 오리엔테이션(OT) 시작 전까지 취소를 요청하시면 전액 환불해 드립니다.</p>
           <ul className="list-disc pl-5 space-y-1 mt-2">
-            <li>OT({ACTIVE.otLabel} {ACTIVE.otTimeLabel}) 시작 전까지: 전액 환불 (결제한 카드·간편결제 취소)</li>
+            <li>OT({ACTIVE.otLabel} {ACTIVE.otTimeLabel}) 시작 전까지: 전액 환불</li>
           </ul>
         </section>
 
@@ -31,8 +31,8 @@ export default function RefundPage() {
           <h2 className="text-text-primary font-bold text-base mb-2">3. 챌린지 성공 시 보증금 환급</h2>
           <p>성공 기준을 충족한 경우 보증금 {ACTIVE.depositLabel}을 전액 환급합니다.</p>
           <ul className="list-disc pl-5 space-y-1 mt-2">
-            <li>환급은 결제 취소로 처리되어 결제한 카드·간편결제 수단으로 돌아갑니다</li>
-            <li>챌린지 종료 후 7일 이내 처리 (카드사에 따라 반영까지 영업일 3-5일)</li>
+            <li>환급 방법과 일정은 챌린지 종료 시 개별 안내합니다</li>
+            <li>챌린지 종료 후 7일 이내 처리</li>
           </ul>
         </section>
 
@@ -57,7 +57,7 @@ export default function RefundPage() {
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">6. 환불 신청 방법</h2>
           <p>이메일: justinshin3610@gmail.com · 인스타그램 DM @bali_tarzan</p>
-          <p className="mt-2">환불은 결제 취소로 처리되며, 카드사에 따라 영업일 기준 3-5일 소요됩니다.</p>
+          <p className="mt-2">환불은 신청일로부터 영업일 기준 3-5일 안에 처리됩니다.</p>
         </section>
 
         <p className="text-text-muted pt-4">시행일: 2026년 10월 22일</p>
