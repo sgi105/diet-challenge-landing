@@ -1,19 +1,13 @@
-import { useSearchParams } from 'react-router-dom';
-import { requestPayment } from '../lib/tossPayments';
+import { useNavigate, useSearchParams } from 'react-router-dom';
 
 export default function FailPage() {
   const [searchParams] = useSearchParams();
   const code = searchParams.get('code');
   const message = searchParams.get('message');
 
-  const handleRetry = async () => {
-    try {
-      await requestPayment();
-    } catch (error) {
-      if (error.code === 'USER_CANCEL') return;
-      console.error('결제 오류:', error);
-    }
-  };
+  const navigate = useNavigate();
+  // 결제는 지원서 안에서 다시 연다(제출된 지원서는 그대로 두고 결제만 이어서).
+  const handleRetry = () => navigate('/apply');
 
   return (
     <div className="bg-bg-primary min-h-screen flex items-center justify-center px-6">

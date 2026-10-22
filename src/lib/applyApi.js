@@ -52,7 +52,19 @@ function pickUtm() {
   return { utm_source: clip(u.utm_source), utm_medium: clip(u.utm_medium), utm_campaign: clip(u.utm_campaign) };
 }
 
-export async function submitApplication(form, { waitlist = false, backdoor = false } = {}) {
+function readCookie(name) {
+  try {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+    return m ? decodeURIComponent(m[1]) : null;
+  } catch {
+    return null;
+  }
+}
+
+// id 를 브라우저에서 만들어 넣는다 — anon 은 RETURNING(SELECT) 권한이 없어서 INSERT 후 id 를 못 받는다.
+// 참가비 결제가 이 id 를 페이앱 var1 로 실어 보내고, 결제 통보가 이 행을 찾아 결제 완료로 바꾼다.
+export async function submitApplication(form, { waitlist = false, backdoor = false, id = null } = {}) {
+  const appId = id || crypto.randomUUID();
   let motivation = combineMotivationWithFriend(form.motivation, form.friend);
   // 마감(데드라인/정원) 후 접수분은 대기명단으로 태깅 — 코치 신청서 탭 동기 필드에 그대로 노출.
   if (waitlist) motivation = `[대기명단] ${motivation}`.slice(0, 2000);
@@ -88,15 +100,25 @@ export async function submitApplication(form, { waitlist = false, backdoor = fal
     ot_attend: form.otAttend || null,
     // 유입 꼬리표 — 어느 광고/링크로 와서 지원했는지. 메타 광고는 utm_campaign = 광고 이름.
     ...pickUtm(),
+    id: appId,
+    // 결제 통보는 페이앱 서버에서 오니까 메타 매칭용 쿠키·브라우저 정보를 지금 받아 둔다.
+    meta_fbp: readCookie('_fbp'),
+    meta_fbc: readCookie('_fbc'),
+    client_ua: (navigator.userAgent || '').slice(0, 400) || null,
   };
 
-  // RETURNING은 anon SELECT 권한이 필요해서 사용 X — INSERT만 수행하고 id는 null 반환.
-  // id는 done 페이지에서 사용되지 않음.
   const { error } = await supabase.from('applications').insert(payload);
   if (error) {
     throw new Error(`제출 실패: ${error.message}`);
   }
-  return { id: null };
+  return { id: appId };
+}
+
+// 결제 완료 화면용 — 지원서 결제 상태만 조회(개인정보 X).
+export async function fetchPayStatus(id) {
+  const { data, error } = await supabase.rpc('application_pay_status', { p_id: id });
+  if (error) throw new Error(error.message);
+  return Array.isArray(data) ? (data[0] || null) : data;
 }
 
 export async function submitWaitlist({ name, contact, contactType, note }) {

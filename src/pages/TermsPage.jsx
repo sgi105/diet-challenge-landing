@@ -15,7 +15,7 @@ export default function TermsPage() {
           <h2 className="text-text-primary font-bold text-base mb-2">제2조 (정의)</h2>
           <p>1. "서비스"란 회사가 제공하는 온라인 러닝·운동 습관 챌린지 및 코칭 프로그램을 말합니다.</p>
           <p>2. "이용자"란 본 약관에 따라 서비스를 이용하는 자를 말합니다.</p>
-          <p>3. "예치금"이란 챌린지 참여를 위해 이용자가 납부하는 금액을 말합니다.</p>
+          <p>3. "보증금"이란 챌린지 참여를 위해 이용자가 결제하는 금액으로, 성공 기준 충족 시 환급되는 금액을 말합니다.</p>
         </section>
 
         <section>
@@ -33,10 +33,10 @@ export default function TermsPage() {
 
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">제5조 (챌린지 참여)</h2>
-          <p>1. 챌린지 참여를 위해 예치금을 납부하여야 합니다.</p>
+          <p>1. 챌린지 참여를 위해 보증금을 결제하여야 하며, 결제가 완료되면 참가가 확정됩니다.</p>
           <p>2. 성공 기준은 각 기수가 정한 미션 수행률 및 파이널 미션 완주 여부로 하며, 구체적인 기준은 모집 페이지와 환불정책에 명시합니다.</p>
-          <p>3. 성공 기준 충족 시 예치금 전액 환급 및 보너스가 지급됩니다.</p>
-          <p>4. 성공 기준 미달 시 예치금은 반환되지 않습니다.</p>
+          <p>3. 성공 기준 충족 시 보증금 전액이 결제 취소 방식으로 환급됩니다.</p>
+          <p>4. 성공 기준 미달 시 보증금은 반환되지 않으며, 그 밖의 환불은 환불정책에 따릅니다.</p>
         </section>
 
         <section>
@@ -57,7 +57,7 @@ export default function TermsPage() {
           <p>2. 협의가 이루어지지 않을 경우, 관할 법원에 소송을 제기할 수 있습니다.</p>
         </section>
 
-        <p className="text-text-muted pt-4">시행일: 2026년 8월 19일</p>
+        <p className="text-text-muted pt-4">시행일: 2026년 10월 22일</p>
       </div>
     </div>
   );

@@ -1,7 +1,8 @@
 // 모집 정원(30명) 대비 남은 자리 계산 — Hero/Live/Urgency에서 공유.
 // 신청자수(count)는 listApplicantsPublic의 전체 코호트 카운트 기준.
-// 시즌2·시즌4 모두 정원 30명 — 시즌별 config에 묶지 않고 여기서 단독 관리.
-export const TOTAL_SPOTS = 30;
+// 정원은 지금 모집 중인 기수 설정(activeCohort.totalSpots)을 따른다. 시즌6부터 50명.
+import { ACTIVE } from '../data/activeCohort';
+export const TOTAL_SPOTS = ACTIVE.totalSpots || 30;
 
 // count → { remaining, low, full }. count 미정(null)이면 null 반환.
 //   low  : 0 < remaining < 10  (10자리 미만 남음 → 오렌지 강조)

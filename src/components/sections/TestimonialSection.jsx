@@ -28,12 +28,15 @@ function score(t, signals = SIGNALS) {
 }
 
 // signals: 정렬 점수 규칙 덮어쓰기(선택). 안 넘기면 위 SIGNALS(반론 해소 우선).
-export default function TestimonialSection({ signals } = {}) {
+// pinnedIds: 이 게시물만 이 순서대로 보여준다(선택). 넘기면 점수 정렬은 건너뛴다 — 랜딩 메시지에 맞춰 사람이 고른 후기용.
+export default function TestimonialSection({ signals, pinnedIds } = {}) {
   const { rows, cardStyle } = useTestimonialPicks();
   const trackRef = useRef(null);
   const [idx, setIdx] = useState(0);
 
-  const cards = [...rows].sort((a, b) => score(b, signals) - score(a, signals)).slice(0, MAX_CARDS);
+  const cards = pinnedIds
+    ? pinnedIds.map((id) => rows.find((r) => r.id === id)).filter(Boolean)
+    : [...rows].sort((a, b) => score(b, signals) - score(a, signals)).slice(0, MAX_CARDS);
 
   // 점(인디케이터) 위치 — 스크롤 위치를 카드 폭으로 나눠 현재 장을 구한다.
   useEffect(() => {

@@ -6,11 +6,21 @@ import { ACTIVE } from '../data/activeCohort';
 import { previewCount } from '../lib/spots';
 import { logEvent, once } from '../lib/eventLog';
 import { metaTrack, metaTrackApplication } from '../lib/metaPixel';
+import { startPayment } from '../lib/payapp';
 import { useCountdown } from '../hooks/useCountdown';
 import { GOAL_OPTIONS, MAX_GOALS, SHORT_GOAL_OPTIONS, TARGET_DISTANCE_OPTIONS, TARGET_MILESTONES, PACE_GOAL_VALUE, partsToSec, secToParts, paceLabel } from '../data/applicationGoals';
 
 const STORAGE_KEY_MAIN = 'samurai-season2-apply-v1';
 const STORAGE_KEY_REFERRAL = 'samurai-season2-apply-referral-v1';
+// 제출은 됐는데 결제를 안 마친 지원서 id — 결제창에서 뒤로 와서 다시 누르면 지원서를 또 만들지 않고 결제만 다시 연다.
+const PENDING_PAY_KEY = `ttr_pending_pay_${ACTIVE.cohortCode}`;
+
+function loadPendingPay() {
+  try { return localStorage.getItem(PENDING_PAY_KEY) || null; } catch { return null; }
+}
+function savePendingPay(id) {
+  try { localStorage.setItem(PENDING_PAY_KEY, id); } catch { /* ignore */ }
+}
 
 const initialForm = {
   name: '',
@@ -86,9 +96,9 @@ export default function ApplyPage() {
   const isReferral = searchParams.get('type') === 'referral';
 
   const STORAGE_KEY = isReferral ? STORAGE_KEY_REFERRAL : STORAGE_KEY_MAIN;
-  // 무료 기수면 보증금(deposit) step 제거. 보증금 기수면 살아난다.
+  // 무료 기수거나 참가비(카드 결제) 기수면 보증금(deposit) step 제거. 보증금 기수면 살아난다.
   const baseSteps = isReferral ? REFERRAL_STEPS : MAIN_STEPS;
-  const STEPS = ACTIVE.isFree ? baseSteps.filter(s => s !== 'deposit') : baseSteps;
+  const STEPS = (ACTIVE.isFree || ACTIVE.fee) ? baseSteps.filter(s => s !== 'deposit') : baseSteps;
   const TOTAL_QUESTIONS = STEPS.length - 1;
 
   const persisted = useMemo(() => loadState(STORAGE_KEY), [STORAGE_KEY]);
@@ -101,13 +111,20 @@ export default function ApplyPage() {
   useEffect(() => {
     if (!isReferral) return;
     const prev = document.title;
-    document.title = '친구랑 같이 지원 · 21일 팀 러닝 챌린지';
+    document.title = `친구랑 같이 참가 · ${ACTIVE.durationDays}일 팀 러닝 챌린지`;
     return () => { document.title = prev; };
   }, [isReferral]);
 
   useEffect(() => {
     saveState(STORAGE_KEY, { step, form });
   }, [STORAGE_KEY, step, form]);
+
+  // 결제창에서 뒤로가기로 돌아오면(bfcache) "결제창 여는 중" 상태가 그대로 남아 버튼이 잠긴다 → 풀어준다.
+  useEffect(() => {
+    const onShow = (e) => { if (e.persisted) setSubmitting(false); };
+    window.addEventListener('pageshow', onShow);
+    return () => window.removeEventListener('pageshow', onShow);
+  }, []);
 
   // 지원서 페이지 진입 — "CTA는 눌렀는데 폼까지 안 온" 이탈을 구분하려면 이 지점이 필요하다.
   // 새로고침·중간 복귀도 있으므로 세션당 1회만 찍는다.
@@ -187,6 +204,14 @@ export default function ApplyPage() {
     setSubmitting(true);
     setError('');
     track('apply_submit_attempt', { isReferral });
+    // 참가비 기수: 이미 제출한 지원서가 결제 전이면 지원서는 건너뛰고 결제창만 다시 연다.
+    const payFlow = !!ACTIVE.fee && !isClosed;
+    const pendingId = payFlow ? loadPendingPay() : null;
+    if (pendingId) {
+      track('apply_pay_retry', { isReferral });
+      startPayment({ applicationId: pendingId, phone: form.phone.trim(), name: form.name.trim() });
+      return;
+    }
     let attempt = 0;
     while (attempt < 2) {
       try {
@@ -196,6 +221,13 @@ export default function ApplyPage() {
         metaTrackApplication({ phone: form.phone.trim(), phoneCountry: form.phoneCountry, waitlist: isClosed, isReferral });
         const friendAttached = !!(form.friend || '').trim();
         if (friendAttached) track('apply_submit_friend_attached');
+        if (payFlow) {
+          // 폼 내용은 결제 끝날 때까지 남겨 둔다(결제창에서 뒤로 오면 그대로 이어서).
+          savePendingPay(id);
+          metaTrack('AddPaymentInfo', { content_name: 'apply_fee', currency: 'KRW', value: ACTIVE.fee });
+          startPayment({ applicationId: id, phone: form.phone.trim(), name: form.name.trim() });
+          return;
+        }
         clearState(STORAGE_KEY);
         navigate('/apply/done', { state: { id, phone: form.phone.trim(), friendAttached, isReferral, waitlist: isClosed } });
         return;
@@ -283,10 +315,21 @@ export default function ApplyPage() {
             제출 버튼 바로 위에서 불안을 지운다 — 돈 안 나감 · 발표 시각 · 연락 경로. */}
         {step === TOTAL_QUESTIONS && !isClosed && (
           <div className="max-w-md mx-auto mb-3 text-center">
-            <p className="text-text-primary text-sm font-extrabold">🎉 여기까지 왔으면 제출만 누르면 끝</p>
-            <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
-              지원은 0원이야 · {ACTIVE.resultLabel}에 합격 여부를 연락해줄게
-            </p>
+            {ACTIVE.fee ? (
+              <>
+                <p className="text-text-primary text-sm font-extrabold">🎉 보증금만 내면 28일 무료 체험 시작</p>
+                <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
+                  참가비 무료 · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급 · {ACTIVE.otLabel} 전까지 취소하면 전액 환불
+                </p>
+              </>
+            ) : (
+              <>
+                <p className="text-text-primary text-sm font-extrabold">🎉 여기까지 왔으면 제출만 누르면 끝</p>
+                <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
+                  지원은 0원이야 · 합격 여부를 연락해줄게
+                </p>
+              </>
+            )}
           </div>
         )}
         <div className="max-w-md mx-auto flex gap-3">
@@ -320,7 +363,9 @@ export default function ApplyPage() {
                 disabled={submitting}
                 className="flex-1 bg-accent-green text-bg-primary font-extrabold py-4 rounded-2xl hover:brightness-110 transition-all disabled:opacity-50 cursor-pointer shadow-[0_8px_24px_rgba(200,255,77,0.3)]"
               >
-                {submitting ? '제출 중...' : (isClosed ? '대기 명단 신청하기 →' : '지원서 제출하기 →')}
+                {submitting
+                  ? (ACTIVE.fee ? '결제창 여는 중...' : '제출 중...')
+                  : (isClosed ? '대기 명단 신청하기 →' : (ACTIVE.fee ? `보증금 ${ACTIVE.depositLabel} 내고 무료로 시작하기 →` : '지원서 제출하기 →'))}
               </button>
             </>
           )}
@@ -533,7 +578,7 @@ function StepContent({ stepKey, form, update, isReferral, totalQuestions }) {
         <div className="flex-1 flex flex-col justify-center">
           <label className="block text-text-primary text-2xl font-black font-kr mb-3">왜 이번 챌린지에 지원해?</label>
           <p className="text-text-secondary text-sm leading-relaxed mb-4">
-            내가 왜 꼭 이 챌린지에 참여해야 하는지 알려줘. 이유가 분명하고 열정 있는 사람들과만 함께할거야. <span className="text-accent-orange font-bold">성의 없는 지원서는 선발되지 않을 수 있어.</span>
+            내가 왜 꼭 이 챌린지에 참여해야 하는지 알려줘. 코칭이랑 팀 매칭에 그대로 쓸 거야. <span className="text-accent-orange font-bold">솔직하게 써줄수록 너한테 맞게 짜줄 수 있어.</span>
           </p>
           <textarea
             value={form.motivation}
@@ -662,13 +707,13 @@ function IntroStep({ isReferral, totalQuestions }) {
         </h1>
         <p className="text-text-secondary leading-relaxed">
           둘 다 지원하면 <span className="text-text-primary font-bold">같은 팀</span> 으로 묶여.<br />
-          21일, 같이 뿌시자.
+          {ACTIVE.durationDays}일, 같이 뿌시자.
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>💸 <span className="text-card-ink font-bold">참가비 무료</span> · 보증금 {ACTIVE.depositLabel}은 완주하면 전액 환급</li>
+          <li>💸 <span className="text-card-ink font-bold">28일 무료 체험</span> · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급</li>
           <li>🤝 <span className="text-card-ink font-bold">친구랑 같은 팀</span> 배정</li>
-          <li>📅 <span className="text-bg-primary font-bold">{ACTIVE.startLabel}</span> · 21일</li>
+          <li>📅 <span className="text-bg-primary font-bold">{ACTIVE.startLabel}</span> · {ACTIVE.durationDays}일</li>
         </ul>
         <Link to="/" className="mt-6 inline-block text-accent-green text-sm font-bold underline underline-offset-4 hover:brightness-110">
           📖 챌린지 설명 먼저 보기 →
@@ -678,25 +723,25 @@ function IntroStep({ isReferral, totalQuestions }) {
   }
   return (
     <div className="flex-1 flex flex-col justify-center text-center">
-      <span className="pill text-accent-green block w-fit mx-auto mb-4">21DAY RUN · APPLY</span>
+      <span className="pill text-accent-green block w-fit mx-auto mb-4">{ACTIVE.durationDays}DAY RUN · APPLY</span>
       <h1 className="font-kr text-4xl font-black text-text-primary mb-4 leading-tight">
-        2분이면<br />지원 끝
+        2분이면<br />무료 체험 시작
       </h1>
       <p className="text-text-secondary leading-relaxed">
-        21일 팀 러닝 챌린지.<br />
-        모든 항목은 선발이랑 팀 매칭에 쓰여.
+        90일 하프마라톤 프로그램 · 첫 28일 무료 체험.<br />
+        모든 항목은 팀 매칭이랑 코칭에 쓰여.
       </p>
       {/* 퍼널: 시작 화면 42명 → 이름 29명(-31%). 원인 추정 2가지를 막는다.
           ① 보증금이 여기서 처음 눈에 띄는데 "지금 내는 돈"으로 오해 → 지원은 0원임을 먼저 말한다.
           ② "챌린지 설명 먼저 보기" 링크가 지원서 밖으로 내보냈다 → 제거. 뒤로가기는 상단 "메인"으로 충분. */}
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 탭 한 번)</li>
-        <li>🆓 <span className="text-bg-primary font-bold">지원은 0원</span> · 보증금은 합격한 뒤에만 입금</li>
+        <li>🆓 <span className="text-bg-primary font-bold">28일 무료 체험</span> · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (나갔다 와도 이어서)</li>
-        <li>📅 <span className="text-card-ink font-bold">{ACTIVE.startLabel}</span> · 21일</li>
+        <li>📅 <span className="text-card-ink font-bold">{ACTIVE.startLabel}</span> · {ACTIVE.durationDays}일</li>
       </ul>
       <p className="mt-5 text-accent-green text-sm font-extrabold">
-        🎁 지금 지원하면 선착순 보너스까지
+        🎁 지금 참가하면 선착순 보너스까지
       </p>
     </div>
   );
@@ -750,7 +795,7 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao, friend, onFrien
     return (
       <div className="flex-1 flex flex-col justify-center">
         <label className="block text-text-primary text-2xl font-black font-kr mb-2">카톡 ID</label>
-        <p className="text-text-muted text-sm mb-4">합격하면 여기로 단톡방 초대를 보내.</p>
+        <p className="text-text-muted text-sm mb-4">참가 확정되면 여기로 단톡방 초대를 보내.</p>
         <div className="relative mt-3">
           <input
             type="text"
@@ -776,7 +821,7 @@ function ContactStep({ instagram, kakaoId, onInstagram, onKakao, friend, onFrien
   return (
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">인스타 아이디</label>
-      <p className="text-text-muted text-sm mb-4">이 계정으로 합격 소식을 보낼거니 정확히 입력해줘.</p>
+      <p className="text-text-muted text-sm mb-4">이 계정으로 시작 안내를 보낼 거니까 정확히 입력해줘.</p>
       <div className="relative mt-3">
         <span className="absolute left-4 top-1/2 -translate-y-1/2 text-lg font-semibold text-card-ink select-none pointer-events-none">@</span>
         <input
@@ -848,7 +893,7 @@ function PhoneStep({ form, update }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">연락처</label>
-      <p className="text-text-muted text-sm mb-4">합격 안내·입금 확인용이야.</p>
+      <p className="text-text-muted text-sm mb-4">시작 안내·앱 입장 문자용이야.</p>
 
       <div className="flex gap-2 mb-4">
         {[
@@ -982,17 +1027,17 @@ function DepositConsentStep({ checked, onChange }) {
   );
 }
 
-// OT 참석 가능 여부 — 이 자리에서 팀 배정이 이뤄지므로 미리 받아둔다.
+// OT 참석 가능 여부. (시즌6부터 OT 안내에서 팀 배정 문구는 뺐다 — 가인 2026-10-22)
 function OtStep({ value, onChange }) {
+  // 시즌6: 참석 여부는 묻지 않고 일정 안내만(가인 2026-10-22). 녹화본 제공도 약속하지 않는다.
   const options = [
-    { value: 'yes', label: '참석할게', desc: '팀 배정 자리에 직접 참여할게' },
-    { value: 'no', label: '못 갈 것 같아', desc: '남은 팀에 랜덤으로 배정돼도 괜찮아' },
+    { value: 'informed', label: 'OT 일정 확인했어', desc: '시간 맞으면 줌으로 들어갈게' },
   ];
   return (
     <div className="flex-1 flex flex-col justify-center">
-      <label className="block text-text-primary text-2xl font-black font-kr mb-2">OT 참석할 수 있어?</label>
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">온라인 OT 안내</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-5">
-        온라인 줌으로 1시간. 여기서 팀이 정해져.
+        온라인 줌으로 1시간.
       </p>
 
       <div className="bg-bg-card rounded-2xl p-5 border-l-4 border-accent-green mb-5">
@@ -1001,8 +1046,8 @@ function OtStep({ value, onChange }) {
           {ACTIVE.otLabel} {ACTIVE.otTimeLabel} <span className="text-card-ink-muted text-base font-bold">· 1시간</span>
         </p>
         <p className="text-card-ink-muted text-[13px] mt-2 leading-relaxed">
-          이때 <span className="text-card-ink font-bold">팀 배정</span>이 이뤄져. 챌린지를 어떻게 해야 잘 끝낼 수 있는지 알려주고,
-          앞으로 21일 같이 갈 <span className="text-card-ink font-bold">팀원들이랑 처음 인사하는 자리</span>야.
+          {ACTIVE.durationDays}일을 어떻게 해야 끝까지 갈 수 있는지 알려주고,
+          같이 뛸 <span className="text-card-ink font-bold">사람들이랑 처음 인사하는 자리</span>야.
         </p>
       </div>
 
@@ -1083,9 +1128,9 @@ function TimeInput({ parts, onChange, showHours, showSeconds = true }) {
 function ShortGoalStep({ shortGoal, current5k, onGoal, onRecord }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
-      <label className="block text-text-primary text-2xl font-black font-kr mb-2">21일 동안 달성하고 싶은 목표</label>
+      <label className="block text-text-primary text-2xl font-black font-kr mb-2">{ACTIVE.durationDays}일 동안 달성하고 싶은 목표</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-5">
-        지금 어디쯤인지 알아야 21일을 제대로 짜줄 수 있어.
+        지금 어디쯤인지 알아야 {ACTIVE.durationDays}일을 제대로 짜줄 수 있어.
       </p>
       <div className="space-y-2">
         {SHORT_GOAL_OPTIONS.map(opt => {
@@ -1143,10 +1188,10 @@ function GoalsStep({ goals, goalsOther, targetDistance, targetTime, targetTimeMo
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">최종적으로 이루고 싶은 목표</label>
       <p className="text-text-secondary text-sm leading-relaxed mb-1">
-        21일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
+        {ACTIVE.durationDays}일은 시작일 뿐이야. 그 뒤에도 계속 달려서 진짜 이루고 싶은 목표를 골라줘. <span className="font-bold">(최대 2개)</span>
       </p>
       <p className="text-text-muted text-xs mb-5">
-        선발할 때 팀 매칭이랑 코칭 방향 잡는 데 써.
+        팀 매칭이랑 코칭 방향 잡는 데 써.
       </p>
       <div className="space-y-2">
         {GOAL_OPTIONS.map(opt => {
@@ -1303,7 +1348,7 @@ function validateStep(stepKey, form) {
       if (!form.motivation.trim()) return '지원 동기를 입력해줘.';
       return null;
     case 'shortGoal': {
-      if (!form.shortGoal) return '21일 목표를 선택해줘.';
+      if (!form.shortGoal) return `${ACTIVE.durationDays}일 목표를 선택해줘.`;
       if (form.shortGoal === 'pr_5k') {
         const sec = partsToSec(form.current5k || {});
         if (!sec) return '지금 5km 완주 기록을 입력해줘. (대충이어도 괜찮아)';
@@ -1335,7 +1380,7 @@ function validateStep(stepKey, form) {
       if (!form.agreeDeposit) return '보증금 안내에 동의해줘.';
       return null;
     case 'ot':
-      if (!form.otAttend) return 'OT 참석 가능 여부를 선택해줘.';
+      if (!form.otAttend) return 'OT 일정 확인을 눌러줘.';
       return null;
     default:
       return null;

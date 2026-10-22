@@ -1,43 +1,50 @@
-// 지금 신청을 받는 기수 = 260921_team_run_season5.
-// 신청 폼(ApplyPage) · 완료 페이지(ApplyDonePage) · 입금 페이지(PayPage)가 공유하는 단일 출처.
+// 지금 신청을 받는 기수 = 261019_team_run_season6 (10/26 본 시즌 시작 · 28일).
+// 신청 폼(ApplyPage) · 결제 완료(ApplyPaidPage) · 완료 페이지(ApplyDonePage)가 공유하는 단일 출처.
 //
 // 기수가 바뀌면 이 파일만 갈아끼우면 된다 — 폼 쪽 import는 전부 여기를 본다.
-// (이전에는 프리시즌 설정 configPre.js를 직접 물고 있어서 기수 전환 때마다 폼을 뜯어야 했음)
-import { COHORT5, PROGRAM5 } from './season5';
+// 시즌5 값은 season5.js 에 그대로 있다(이 파일만 시즌6으로 바꿈).
+import { COHORT6, PROGRAM6 } from './season6';
 
 export const ACTIVE = {
-  cohortCode: COHORT5.cohortCode,
+  cohortCode: COHORT6.cohortCode,
 
-  // 무료 여부 — false면 보증금 동의 step이 살아나고 /pay 입금 페이지가 열린다.
+  // 무료 여부 — true면 결제 없이 제출 → 완료 페이지.
   isFree: false,
-  deposit: PROGRAM5.deposit,
-  depositLabel: PROGRAM5.depositLabel,   // "10만원" — 신청폼/입금/완료 페이지 문구용
+  // 보증금(참가비는 무료). 해내면 결제 취소로 전액 환급.
+  deposit: PROGRAM6.deposit,
+  depositLabel: PROGRAM6.depositLabel,
 
-  teamSize: COHORT5.teamSize,
-  totalSpots: COHORT5.totalSpots,
-  durationDays: COHORT5.durationDays,
+  // 지원서 안에서 카드로 받는 금액(페이앱). 값이 있으면 보증금 동의 step 대신 제출 직후 결제창으로 간다.
+  // null 이면 예전 흐름(제출 → 완료 페이지 → 합격 후 계좌 입금).
+  // 서버 금액 대조값(Edge secret PAYAPP_PRICE)과 반드시 같이 바꿀 것.
+  fee: PROGRAM6.deposit,
+  feeLabel: PROGRAM6.depositLabel,
+  feeGoodName: `${COHORT6.durationDays}일 팀 러닝 챌린지 보증금`,
 
-  // 신청 마감 — 이 시각 이후 접수분은 대기명단으로 태깅된다.
-  deadline: COHORT5.officialDeadline,
-  backdoorKey: COHORT5.backdoorKey,   // /apply?pass=<키> — 마감 뒤 결원 충원용
-  deadlineLabel: COHORT5.deadlineLabel,
+  teamSize: COHORT6.teamSize,
+  totalSpots: COHORT6.totalSpots,
+  durationDays: COHORT6.durationDays,
 
-  startLabel: `${COHORT5.startDate} 시작`,
-  startDateLabel: COHORT5.startDate,   // "시작"이라는 말이 앞에 이미 있는 자리용
-  resultLabel: COHORT5.resultDate,        // 합격 발표
-  depositDeadlineLabel: COHORT5.depositDeadline,
-  otLabel: COHORT5.otDate,
-  otTimeLabel: COHORT5.otTime,
-  finalLabel: COHORT5.finalDate,
+  // 신청 마감 — 이 시각 이후엔 /notify 로 넘긴다.
+  deadline: COHORT6.officialDeadline,
+  backdoorKey: COHORT6.backdoorKey,   // /apply?pass=<키> — 마감 뒤 결원 충원용
+  deadlineLabel: COHORT6.deadlineLabel,
 
-  // 러닝 시간표 요약 — 신청서 일정 동의 step에서 사용.
-  minutesStart: PROGRAM5.startMinutes,
-  minutesPeak: PROGRAM5.peakMinutes,
-  peakDay: PROGRAM5.peakDay,
-  passCount: PROGRAM5.passCount,
-  finalDistanceKm: PROGRAM5.finalDistanceKm,
-  successRate: PROGRAM5.successRate,
-  prizeTeam1st: PROGRAM5.prizeTeam1st,
+  startLabel: `${COHORT6.startDate} 시작`,
+  startDateLabel: COHORT6.startDate,
+  otLabel: COHORT6.otDate,
+  otTimeLabel: COHORT6.otTime,
+  finalLabel: COHORT6.finalDate,
+
+  // 러닝 시간표 요약 — 신청서 일정 안내 step에서 사용.
+  minutesStart: PROGRAM6.startMinutes,
+  minutesPeak: PROGRAM6.peakMinutes,
+  peakDay: PROGRAM6.peakDay,
+  deloadFromDay: PROGRAM6.deloadFromDay,
+  deloadMinutes: PROGRAM6.deloadMinutes,
+  passCount: PROGRAM6.passCount,
+  successDays: PROGRAM6.successDays,
+  finalDistanceKm: PROGRAM6.finalDistanceKm,
 };
 
 export default ACTIVE;
