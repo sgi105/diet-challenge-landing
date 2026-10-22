@@ -27,16 +27,34 @@ function score(t, signals = SIGNALS) {
   return s;
 }
 
+// 원문에서 고른 문장만 남기고 빠진 자리는 … 로 잇는다. 문장이 원문에 순서대로 없으면 원문 그대로(글자를 바꾸는 일은 없게).
+function applyExcerpt(caption, sentences) {
+  if (!sentences?.length) return caption;
+  const parts = [];
+  let pos = 0;
+  for (const s of sentences) {
+    const i = caption.indexOf(s, pos);
+    if (i === -1) return caption;
+    if (caption.slice(pos, i).trim()) parts.push('…');
+    parts.push(s);
+    pos = i + s.length;
+  }
+  if (caption.slice(pos).trim()) parts.push('…');
+  return parts.join(' ');
+}
+
 // signals: 정렬 점수 규칙 덮어쓰기(선택). 안 넘기면 위 SIGNALS(반론 해소 우선).
 // pinnedIds: 이 게시물만 이 순서대로 보여준다(선택). 넘기면 점수 정렬은 건너뛴다 — 랜딩 메시지에 맞춰 사람이 고른 후기용.
-export default function TestimonialSection({ signals, pinnedIds } = {}) {
+// excerpts: { 게시물 id: [원문 문장, ...] } — 긴 후기를 원문 문장 발췌로 줄여 보여준다(선택).
+export default function TestimonialSection({ signals, pinnedIds, excerpts } = {}) {
   const { rows, cardStyle } = useTestimonialPicks();
   const trackRef = useRef(null);
   const [idx, setIdx] = useState(0);
 
-  const cards = pinnedIds
+  const cards = (pinnedIds
     ? pinnedIds.map((id) => rows.find((r) => r.id === id)).filter(Boolean)
-    : [...rows].sort((a, b) => score(b, signals) - score(a, signals)).slice(0, MAX_CARDS);
+    : [...rows].sort((a, b) => score(b, signals) - score(a, signals)).slice(0, MAX_CARDS)
+  ).map((t) => (excerpts?.[t.id] ? { ...t, caption: applyExcerpt(t.caption, excerpts[t.id]) } : t));
 
   // 점(인디케이터) 위치 — 스크롤 위치를 카드 폭으로 나눠 현재 장을 구한다.
   useEffect(() => {

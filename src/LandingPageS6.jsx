@@ -23,7 +23,7 @@ import Button from './components/ui/Button';
 import { useSeason6Status, COPY6, applyPathForStatus6 } from './hooks/useSeason6Status';
 import { useApplicantCount } from './hooks/useApplicantCount';
 import { spotsInfo } from './lib/spots';
-import { COHORT6, CTA_LABEL6, TESTIMONIAL_IDS6 } from './data/season6';
+import { COHORT6, CTA_LABEL6, TESTIMONIAL_IDS6, TESTIMONIAL_EXCERPTS6 } from './data/season6';
 
 // 261019_team_run_season6 랜딩 — LandingPageS5v2 fork (시즌5 v2 파일은 그대로 둔다).
 // 바뀐 것: 28일 · 정원 50명 · 보증금 대신 참가비 9,900원(결제하면 바로 참가 확정, 선발 없음)
@@ -88,7 +88,7 @@ export default function LandingPageS6() {
         <PainPointSection />
 
         {/* 후기 → "같이 하면" 제목 바로 위 (가인 2026-09-19) */}
-        <TestimonialSection pinnedIds={TESTIMONIAL_IDS6} />
+        <TestimonialSection pinnedIds={TESTIMONIAL_IDS6} excerpts={TESTIMONIAL_EXCERPTS6} />
 
         {/* 같이 하면 결국 하게 돼 — 팀 배정 · 응원 · 책임감 · 팀 우승 (앱 화면) */}
         <TogetherSection />
