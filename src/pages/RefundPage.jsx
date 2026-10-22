@@ -41,7 +41,9 @@ export default function RefundPage() {
           {/* bg-card는 흰색이므로 text-primary(흰 글씨)를 쓰면 글자가 사라진다. 카드용 색으로 쓸 것. */}
           <div className="bg-bg-card rounded-xl p-4 mt-2">
             <p className="text-card-ink font-semibold">
-              {ACTIVE.durationDays}일 중 {ACTIVE.successDays}일 이상 미션 인증 + 파이널 {ACTIVE.finalDistanceKm}K 레이스 완주
+              {ACTIVE.joinDays
+                ? <>합류일({ACTIVE.startDateLabel})부터 {ACTIVE.finalLabel}까지 {ACTIVE.joinDays}일 중 {ACTIVE.joinSuccessDays}일 이상 미션 인증 + 마지막 날 {ACTIVE.finalDistanceKm}km 테스트 완주</>
+                : <>{ACTIVE.durationDays}일 중 {ACTIVE.successDays}일 이상 미션 인증 + 파이널 {ACTIVE.finalDistanceKm}K 레이스 완주</>}
             </p>
             <p className="mt-2 text-card-ink-muted">
               두 조건을 모두 충족해야 성공으로 인정됩니다.

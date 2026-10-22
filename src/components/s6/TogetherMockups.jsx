@@ -48,8 +48,8 @@ function KakaoBubble({ name, text, lead }) {
 function KakaoMock() {
   return (
     <div className={`${CARD} p-3`}>
-      <p className="text-xs font-extrabold text-center text-slate-300 pb-2">3팀 🔥 28일 러닝 · 5</p>
-      <KakaoBubble name="하늘" lead text="3팀 안녕! 28일 끝까지 같이 가자 🔥" />
+      <p className="text-xs font-extrabold text-center text-slate-300 pb-2">3팀 🔥 25일 러닝 · 5</p>
+      <KakaoBubble name="하늘" lead text="3팀 안녕! 25일 끝까지 같이 가자 🔥" />
       <KakaoBubble name="지은" text="잘 부탁해 🙌 매일 인증 간다" />
       <div className="flex justify-end mt-2">
         <p className="bg-accent-green text-bg-primary font-semibold rounded-[12px_4px_12px_12px] px-2.5 py-1.5 text-xs">나도! 한 명도 안 빠지고 끝까지 가자</p>
@@ -156,13 +156,13 @@ const FINAL_RANK = [
 function WinMock() {
   return (
     <div className={`${CARD} p-3`}>
-      <p className="text-xs font-extrabold text-center text-slate-300 pb-2">3팀 🔥 28일 러닝 · 5</p>
+      <p className="text-xs font-extrabold text-center text-slate-300 pb-2">3팀 🔥 25일 러닝 · 5</p>
       <div className="flex gap-1.5 items-start mt-1">
         <Avatar name="하늘" />
         <div>
           <p className="text-[10.5px] text-slate-500 mb-0.5">하늘 (팀장)</p>
           <div className="bg-slate-950 border border-white/10 rounded-xl px-3 py-2.5 w-[210px] text-slate-200">
-            <p className="text-[10px] font-extrabold text-slate-500 tracking-[0.12em]">최종 순위 · 28일</p>
+            <p className="text-[10px] font-extrabold text-slate-500 tracking-[0.12em]">최종 순위 · 25일</p>
             {FINAL_RANK.map((r) => (
               <div key={r.team} className={`flex justify-between items-center mt-1.5 text-[13px] ${r.win ? 'font-black text-accent-green' : 'font-semibold text-slate-400'}`}>
                 <span>{r.medal} {r.team}</span>
@@ -173,7 +173,7 @@ function WinMock() {
         </div>
       </div>
       <KakaoBubble name="지은" text="미쳤다 ㅋㅋㅋㅋ 우리가 1등이야??" />
-      <KakaoBubble name="민수" text="28일 한 명도 안 빠진 보람 있다 🥹" />
+      <KakaoBubble name="민수" text="25일 한 명도 안 빠진 보람 있다 🥹" />
       <div className="flex justify-end mt-2">
         <p className="bg-accent-green text-bg-primary font-semibold rounded-[12px_4px_12px_12px] px-2.5 py-1.5 text-xs">다음 시즌도 이 팀 그대로 가자 🔥</p>
       </div>

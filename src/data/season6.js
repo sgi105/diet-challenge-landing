@@ -3,7 +3,8 @@
 // 오프셋 없는 ISO 문자열은 브라우저 로컬 타임존으로 파싱되어 viewer마다 다른 순간을 가리킴 → +09:00 명시 필수.
 //
 // 시즌6 구조 (가인 2026-10-22):
-//   10/19-10/25 = 프리시즌(이월 멤버만) · 10/26(월) Day 1 - 11/22(일) Day 28 본 시즌.
+//   10/19-10/25 = 프리시즌(이월 멤버만) · 10/26(월) Day 1 - 11/22(일) Day 28 무료 체험 · Day 90 = 2027-01-23(토).
+//   신규는 10/28(수) 모집 마감 → 10/29(목) Day 4부터 합류.
 //   참가비 무료 + 보증금 1만원 — 지원서 안에서 카드·간편결제 → 즉시 참가 확정(선발 없음).
 //   "돈이 걸려야 제대로 한다". 해내면 보증금 전액 환급. 환급 방법(결제 취소 / 계좌)은 미정 — 랜딩·약관에 방법을 쓰지 말 것(가인 2026-10-22).
 //   팀 상금 없음. (10/22 오전엔 참가비 9,900 + 리워드 1만원 안이었다가 같은 날 보증금 구조로 바꿈)
@@ -14,15 +15,17 @@ export const COHORT6 = {
 
   // 모집: 배포 즉시 - 10/25(일) 24:00. 오픈 전 단계 없음.
   officialOpen: '2026-10-22T00:00:00+09:00',
-  officialDeadline: '2026-10-26T00:00:00+09:00',
+  // 모집 마감 = 10/28(수) 24:00 (가인 2026-10-23: 추가 모집 구분 없이 수요일까지 한 번에). 얼리버드는 일요일까지 따로.
+  officialDeadline: '2026-10-29T00:00:00+09:00',
 
   openLabel: '지금',
-  deadlineLabel: '10/25(일) 자정',
-  chatInvite: '10/25(일) 저녁',        // 결제자 단톡방 초대 — 마감 날 저녁에 한 번에 (가인 2026-10-22)
-  startDate: '10/26(월)',              // 본 시즌 Day 1
-  otDate: '10/26(월)',                 // 온라인 OT (줌) — 시작 당일 저녁 (가인 2026-10-22: 화→월)
+  deadlineLabel: '10/28(수) 자정',
+  chatInvite: '모집 마감 후',          // 결제자 단톡방 초대 — 10/28(수) 마감 뒤 한 번에 (가인 2026-10-23)
+  // 프로그램 Day 1 = 10/26(월) 그대로(DB·앱·13주 표 기준). 신규는 모집 마감 뒤 10/29(목)=Day 4부터 합류 — Day 1-3은 건너뛴다(가인 2026-10-23).
+  startDate: '10/29(목)',              // 신규가 실제로 뛰기 시작하는 날(= Day 4) · 온라인 OT 같은 날
+  otDate: '10/29(목)',                 // 온라인 OT (줌) — 모집 마감 다음 날 (가인 2026-10-23: 월→목)
   otTime: '저녁 7시 30분',
-  finalDate: '11/22(일)',              // 파이널 5K (Day 28)
+  finalDate: '11/22(일)',              // Day 28 = 무료 체험 끝 · 5km 테스트
 
   // 마감 뒤 결원 충원용 백도어 — /apply?pass=<이 값>
   backdoorKey: 'refill1026',
@@ -30,7 +33,12 @@ export const COHORT6 = {
   totalSpots: 50,
   teamSize: 5,     // 5인 1팀
   teamCount: 10,   // 최대 10팀
-  durationDays: 28,
+  durationDays: 28,   // 프로그램 무료 구간(Day 1-28) 길이
+  // 신규 기준 무료 체험 = Day 4(10/29)-Day 28(11/22) = 25일 (가인 2026-10-23). 랜딩·지원서 카피는 이 값.
+  trialDays: 25,
+  joinDay: 4,
+  strengthStart: '11/23(월)',   // Day 29 — 근력(푸시업) 시작
+  halfDate: '1/23(토)',         // Day 90 — 하프마라톤
 };
 
 // 보상 구조:
@@ -40,10 +48,14 @@ export const COHORT6 = {
 export const PROGRAM6 = {
   deposit: 10000,
   depositLabel: '1만원',
-  successDays: 25,      // 28일 중 성공 기준 인증 일수
-  passCount: 3,         // 28일 중 봐주는 미완료 횟수
+  successDays: 25,      // 이월 멤버 기준: 28일 중 25일
+  passCount: 3,         // 봐주는 미완료 횟수 — 신규·이월 동일
+  // 신규는 Day 4(10/29)부터 합류 → 25일 중 22일(가인 2026-10-23 A안). 앱은 신규 미션 시작일을 10/29로 넣어 Day 1-3을 실패로 안 센다.
+  joinDays: 25,
+  joinSuccessDays: 22,
   // 90일 플랜 SOT = 가인 13주 표(2026-10-22): 1-3주 시간 기반(5→25분, 하루 1분씩) · 4주 평일 10분 + 5km 테스트.
-  startMinutes: 5,      // Day 1 권장 러닝 시간
+  startMinutes: 5,      // Day 1 권장 러닝 시간(프로그램 기준)
+  joinStartMinutes: 8,  // 신규 첫날(Day 4) 권장 러닝 시간 — Day 1-3 건너뜀(가인 2026-10-23)
   successMinutes: 10,   // 성공 기준선 — 권장 시간과 별개로 끝까지 10분 이상
   peakMinutes: 25,      // 최대 러닝 시간
   peakDay: 21,          // 하루 1분씩 → Day 21에 25분
@@ -52,19 +64,20 @@ export const PROGRAM6 = {
   finalDistanceKm: 5,   // 파이널 레이스 거리 (Day 28)
 };
 
-// 오픈 선착순 보너스 — 시즌5와 같은 두 가지 (가인 2026-10-22 "둘 다 유지").
-// - 1대1 러닝폼 분석: 결제 완료 선착순 15명
-// - Road to 1% 가이드: 오픈 다음 날 자정까지 결제한 모두
+// 얼리버드 보너스 (가인 2026-10-22 "둘 다 유지", 10/23 기한·안내 확정)
+// - 1대1 러닝폼 분석: 결제 완료 선착순 15명 · 시즌 시작 후 개인 메시지로 요청
+// - 90일 하프 가이드: 10/25(일) 자정까지 결제한 모두 · 결제 완료 화면에서 바로 열람
 export const BONUS6 = {
   formSpots: 15,
   formTitle: '1대1 러닝폼 영상 분석',
-  formDesc: '영상 보내면 자세 직접 봐줄게',
+  formDesc: '시즌 시작 후 개인 메시지로 요청하면 돼',
   formIcon: '🎥',
   guideTitle: '90일 하프마라톤 완주 가이드',
   guideDesc: '조회수 200만 러닝 팁 전부 담았어',
   guideIcon: '📖',
-  guideDeadline: '2026-10-24T00:00:00+09:00',
-  guideDeadlineLabel: '10/23(금) 자정',
+  guideDeadline: '2026-10-26T00:00:00+09:00',
+  guideDeadlineLabel: '10/25(일) 자정',
+  guideUrl: '/guide/road-to-1-percent-90.html',
 };
 
 // 28일 러닝 시간표 — Day 1 10분 → 하루 1분씩 → Day 16에 25분 → Day 21까지 유지
@@ -77,9 +90,9 @@ export const DAY_MINUTES6 = Array.from({ length: COHORT6.durationDays }, (_, i) 
 
 // 4주 흐름 — SystemSection 카드.
 export const WEEKS6 = [
-  { label: 'Week 1', title: '몸 깨우기', desc: `${PROGRAM6.startMinutes}분에서 시작 · 하루 1분씩` },
+  { label: 'Week 1', title: '몸 깨우기', desc: `${PROGRAM6.joinStartMinutes}분에서 시작 · 하루 1분씩` },
   { label: 'Week 2', title: '조금씩 더 길게', desc: '12분 → 18분' },
-  { label: 'Week 3', title: `${PROGRAM6.peakMinutes}분까지`, desc: `19분 → Day ${PROGRAM6.peakDay}에 ${PROGRAM6.peakMinutes}분` },
+  { label: 'Week 3', title: `${PROGRAM6.peakMinutes}분까지`, desc: `19분 → 11/15에 ${PROGRAM6.peakMinutes}분` },
   { label: 'Week 4', title: '회복 → 5km 테스트', desc: `평일 ${PROGRAM6.deloadMinutes}분으로 쉬고 마지막 날 5km`, highlight: true },
 ];
 
@@ -88,9 +101,8 @@ export const SCHEDULE6 = [
   { label: '모집 마감', value: COHORT6.deadlineLabel, highlight: true },
   { label: '참가 확정', value: '보증금 결제하면 바로', highlight: false },
   { label: '단톡방 초대', value: COHORT6.chatInvite, highlight: false },
-  { label: '챌린지 시작', value: COHORT6.startDate, highlight: false },
-  { label: '온라인 OT (줌)', value: `${COHORT6.otDate} ${COHORT6.otTime}`, highlight: false },
-  { label: '파이널 5K 레이스', value: COHORT6.finalDate, highlight: false },
+  { label: '첫 러닝 · 온라인 OT (줌)', value: `${COHORT6.startDate} ${COHORT6.otTime}`, highlight: false },
+  { label: '무료 체험 끝 · 5km 테스트', value: COHORT6.finalDate, highlight: false },
 ];
 
 // ── v2 랜딩(하프마라톤 목적지 프레임) 시즌6 값 ──
@@ -102,7 +114,7 @@ export const SCHEDULE6 = [
 
 // 여정 3단계 — 첫 단계 = 28일 무료 체험.
 export const JOURNEY6 = [
-  { label: '28일', title: '무료 체험 · 습관', now: true },
+  { label: '25일', title: '무료 체험 · 습관', now: true },
   { label: '90일', title: '하프마라톤 훈련', now: false },
   { label: '21.0975km', title: '완주', now: false, goal: true },
 ];
@@ -112,12 +124,16 @@ export const JOURNEY6 = [
 // 단위는 전부 "일"로 통일(4주 X — 가인 "일수가 통일돼야 알아듣기 쉽다").
 export const HERO_BAR6 = {
   lead: '90일 하프마라톤 프로그램',
-  leadMark: '첫 28일은 무료로 체험해',
+  leadMark: '첫 25일은 무료로 시작해',
   tag: '무료 체험',
-  freeDays: 28,
-  totalDays: 90,
+  freeDays: 25,       // 신규 무료 체험 일수(10/29-11/22)
+  restDays: 62,       // 11/23-1/23 (Day 29-90)
+  totalDays: 90,      // 상품 이름(실제 신규는 87일)
+  // 눈금은 DAY 번호 대신 날짜 — 신규의 첫날은 프로그램 Day 4라 DAY 1 표기가 헷갈린다.
+  ticks: ['10/29', '11/22', '1/23'],
   freeLabel: '습관 만들기',
-  restLabel: '본격 훈련 → 하프 완주 🏁',
+  restLabel: '러닝 + 근력 → 하프 + 몸 🏁',
+  restLead: '11/23부터',
 };
 
 // 모집 중 버튼 문구 — 전부 통일. 보증금은 가격 섹션·지원서에서 안내한다.

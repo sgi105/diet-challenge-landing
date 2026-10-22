@@ -325,7 +325,7 @@ export default function ApplyPage() {
           <div className="max-w-md mx-auto mb-3 text-center">
             {ACTIVE.fee ? (
               <>
-                <p className="text-text-primary text-sm font-extrabold">🎉 보증금만 내면 28일 무료 체험 시작</p>
+                <p className="text-text-primary text-sm font-extrabold">🎉 보증금만 내면 {ACTIVE.durationDays}일 무료 체험 시작</p>
                 <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
                   참가비 무료 · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급 · {ACTIVE.otLabel} 전까지 취소하면 전액 환불
                 </p>
@@ -754,7 +754,7 @@ function IntroStep({ isReferral, totalQuestions }) {
         </p>
         <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
           <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 1줄)</li>
-          <li>💸 <span className="text-card-ink font-bold">28일 무료 체험</span> · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급</li>
+          <li>💸 <span className="text-card-ink font-bold">{ACTIVE.durationDays}일 무료 체험</span> · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급</li>
           <li>🤝 <span className="text-card-ink font-bold">친구랑 같은 팀</span> 배정</li>
           <li>📅 <span className="text-bg-primary font-bold">{ACTIVE.startLabel}</span> · {ACTIVE.durationDays}일</li>
         </ul>
@@ -771,7 +771,7 @@ function IntroStep({ isReferral, totalQuestions }) {
         2분이면<br />무료 체험 시작
       </h1>
       <p className="text-text-secondary leading-relaxed">
-        90일 하프마라톤 프로그램 · 첫 28일 무료 체험.<br />
+        90일 하프마라톤 프로그램 · 첫 {ACTIVE.durationDays}일 무료 체험.<br />
         모든 항목은 팀 매칭이랑 코칭에 쓰여.
       </p>
       {/* 퍼널: 시작 화면 42명 → 이름 29명(-31%). 원인 추정 2가지를 막는다.
@@ -779,9 +779,10 @@ function IntroStep({ isReferral, totalQuestions }) {
           ② "챌린지 설명 먼저 보기" 링크가 지원서 밖으로 내보냈다 → 제거. 뒤로가기는 상단 "메인"으로 충분. */}
       <ul className="mt-8 text-left space-y-3 text-sm bg-bg-card rounded-3xl p-6 text-card-ink-muted shadow-[0_12px_30px_rgba(0,0,0,0.15)]">
         <li>⚡ <span className="text-card-ink font-bold">짧은 질문 {totalQuestions}개</span> (대부분 탭 한 번)</li>
-        <li>🆓 <span className="text-bg-primary font-bold">28일 무료 체험</span> · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급</li>
+        <li>🆓 <span className="text-bg-primary font-bold">{ACTIVE.durationDays}일 무료 체험</span> · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급</li>
         <li>💾 작성 중 <span className="text-card-ink font-bold">자동 저장</span> (나갔다 와도 이어서)</li>
         <li>📅 <span className="text-card-ink font-bold">{ACTIVE.startLabel}</span> · {ACTIVE.durationDays}일</li>
+        {ACTIVE.fee && <li>🇰🇷 <span className="text-card-ink font-bold">국내 거주자만</span> 참가 가능</li>}
       </ul>
       <p className="mt-5 text-accent-green text-sm font-extrabold">
         🎁 지금 참가하면 선착순 보너스까지
@@ -907,10 +908,10 @@ function TextareaStep({ label, placeholder, value, onChange, minLength, autoFocu
 // 문구는 13주 플랜 사실과 실측 완주율만. "2주차부터 시작" 같은 선택지는 없다 — 그건 일요일 뒤 추가 모집으로
 // 들어온 사람이 그 시점부터 이어서 하는 것일 뿐(가인).
 const RUN_EXP_REACTIONS = {
-  almost_none: <>딱 좋아. <b>1주차는 하루 5분</b>이야. 걷다 뛰다 해도 돼.<br />처음 참가한 사람 <b>{PROOF.newTotal}명 중 {PROOF.finished}명</b>이 끝까지 갔어.</>,
-  run_1km: <>충분해. <b>하루 5분</b>부터 하루 1분씩 늘리면<br />3주 뒤엔 <b>25분</b>, 28일째엔 <b>5km</b>를 뛰어.</>,
-  run_5km: <>기초는 됐네. 첫 28일에는 <b>5km 스피드</b>를 올리는 데 집중해보자.<br />진짜 목표는 <b>90일 뒤 하프</b>야.</>,
-  run_10km: <>체력은 있네. 첫 28일엔 <b>매일 뛰는 습관</b>을 단단하게 잡자.<br />그러면 <b>90일 뒤 하프</b>는 충분해.</>,
+  almost_none: <>딱 좋아. <b>첫날은 하루 8분</b>이야. 걷다 뛰다 해도 돼.<br />처음 참가한 사람 <b>{PROOF.newTotal}명 중 {PROOF.finished}명</b>이 끝까지 갔어.</>,
+  run_1km: <>충분해. <b>하루 8분</b>부터 하루 1분씩 늘리면<br />11/15엔 <b>25분</b>, 마지막 날엔 <b>5km</b>를 뛰어.</>,
+  run_5km: <>기초는 됐네. 첫 25일에는 <b>5km 스피드</b>를 올리는 데 집중해보자.<br />진짜 목표는 <b>90일 뒤 하프</b>야.</>,
+  run_10km: <>체력은 있네. 첫 25일엔 <b>매일 뛰는 습관</b>을 단단하게 잡자.<br />그러면 <b>90일 뒤 하프</b>는 충분해.</>,
   half_marathon: <>하프 뛴 체력이면 충분해.<br />이제 이걸 기반으로 <b>인생 최고의 몸</b>을 만들어보자.</>,
   full_marathon: <>풀까지 뛴 체력이면 충분해.<br />이제 이걸 기반으로 <b>인생 최고의 몸</b>을 만들어보자.</>,
 };
@@ -943,7 +944,7 @@ const GOAL90_OPTIONS = [
 const GOAL90_REACTIONS = {
   half_marathon: <>그게 이 90일의 결승선이야.<br />5km → 10km → 14km → <b>21km</b>, 한 계단씩 올라가.</>,
   lean_body: <>90일 동안 매일 뛰어서 <b>21km를 뛸 수 있는 몸</b>이 되면<br /><b>복근 윤곽</b>이 드러나기 시작할 거야.</>, // 문구 = 가인 2026-10-23
-  '10K_complete': <>좋아. <b>DAY 63쯤 롱런이 10km</b>야.<br />거기까지 가면 하프도 보여.</>,
+  '10K_complete': <>좋아. <b>12월 말쯤 롱런이 10km</b>야.<br />거기까지 가면 하프도 보여.</>,
   streak90: <>앱에 매일 <b>연속 기록</b>이 쌓여.<br />90까지 채우면 그건 습관이 아니라 <b>네 정체성</b>이야.</>,
   other: <>좋아. 뭐든 <b>90일 매일</b>이면 가까워져.<br />아래에 적어주면 같이 챙길게.</>,
 };
@@ -1018,7 +1019,11 @@ function RadioStep({ label, options, value, onChange }) {
 }
 
 function PhoneStep({ form, update }) {
-  const isKR = form.phoneCountry === 'KR';
+  const isKR = ACTIVE.fee ? true : form.phoneCountry === 'KR';
+  // 예전에 '해외'를 골라 저장된 폼이 남아 있어도 결제 기수에선 한국 번호로 되돌린다.
+  useEffect(() => {
+    if (ACTIVE.fee && form.phoneCountry !== 'KR') update('phoneCountry', 'KR');
+  }, [form.phoneCountry, update]);
   const formatKR = (digits) => {
     if (digits.length <= 3) return digits;
     if (digits.length <= 7) return `${digits.slice(0, 3)}-${digits.slice(3)}`;
@@ -1030,6 +1035,8 @@ function PhoneStep({ form, update }) {
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">연락처</label>
       <p className="text-text-muted text-sm mb-4">{ACTIVE.fee ? '단톡방 초대 문자 받을 번호야.' : '시작 안내·앱 입장 문자용이야.'}</p>
 
+      {/* 보증금 결제 기수는 국내 거주자만(가인 2026-10-23) — 해외 번호 선택지를 숨기고 한국 번호만 받는다 */}
+      {!ACTIVE.fee && (
       <div className="flex gap-2 mb-4">
         {[
           { value: 'KR', label: '🇰🇷 한국' },
@@ -1048,6 +1055,7 @@ function PhoneStep({ form, update }) {
           </button>
         ))}
       </div>
+      )}
 
       <input
         type="tel"
@@ -1064,6 +1072,7 @@ function PhoneStep({ form, update }) {
       />
       <p className="text-text-muted text-xs mt-2 font-semibold">
         {isKR ? '010으로 시작하는 휴대폰. 자동 포맷돼.' : '국가번호 포함. 예: +1 415 555 0123'}
+        {ACTIVE.fee && <><br />🇰🇷 지금은 국내 거주자만 참가할 수 있어.</>}
       </p>
     </div>
   );

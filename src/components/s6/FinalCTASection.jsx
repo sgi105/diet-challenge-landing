@@ -35,7 +35,7 @@ export default function FinalCTASection({ onCTA }) {
             인생 최고의 몸
           </span>
           <span className="block font-sans font-normal text-[31px] text-text-primary leading-[1.2] mt-1">
-            만들자
+            90일 안에 만들자
           </span>
         </h2>
       </AnimateOnScroll>

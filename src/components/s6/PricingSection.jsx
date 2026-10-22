@@ -17,7 +17,7 @@ export default function PricingSection({ onCTA }) {
     <section className="px-6 py-14 max-w-lg mx-auto text-center">
       <AnimateOnScroll>
         <h2 className="font-sans font-normal text-[34px] leading-[1.2] text-text-primary break-keep">
-          첫 28일은 무료지만<br />
+          첫 {COHORT6.trialDays}일은 무료지만<br />
           <span className="text-accent-green">보증금 {PROGRAM6.depositLabel}을 받아</span>
         </h2>
         <p className="text-text-secondary text-[15px] font-bold mt-2.5 break-keep">
@@ -31,7 +31,7 @@ export default function PricingSection({ onCTA }) {
             <p className="text-2xl leading-none">✅</p>
             <p className="text-sm font-black mt-1.5">해내면</p>
             <p className="font-sans font-normal text-[22px] leading-tight mt-0.5">전액 환급</p>
-            <p className="text-[11px] font-bold opacity-70 mt-1">{COHORT6.durationDays}일 중 {PROGRAM6.successDays}일 이상 인증</p>
+            <p className="text-[11px] font-bold opacity-70 mt-1">못 뛴 날 {PROGRAM6.passCount}번 빼고 매일 인증</p>
           </div>
           <div className="rounded-[20px] border-2 border-accent-orange px-2.5 py-4">
             <p className="text-2xl leading-none">❌</p>

@@ -11,18 +11,26 @@ export default function SystemSection() {
     <section className="px-6 py-14 max-w-lg mx-auto">
       <AnimateOnScroll>
         <h2 className="font-kr text-3xl md:text-5xl font-black mb-4 text-text-primary leading-tight break-keep">
-          {COHORT6.durationDays}일간 하루 {PROGRAM6.successMinutes}분<br />
+          {COHORT6.trialDays}일간 하루 {PROGRAM6.successMinutes}분<br />
           <span className="text-accent-green">누구나 할 수 있어</span>
         </h2>
-        <p className="text-text-secondary text-center mb-8 leading-relaxed break-keep">
-          졸라 쉽게 시작해. 성공을 쌓다 보면 관성이 붙어서 점점 쉬워져.<br />
-          솔직히 하루 {PROGRAM6.successMinutes}분도 없다는 건 스스로를 속이는 거지?
-        </p>
+        {/* 줄바꿈은 뜻 단위로 직접 — 폰 폭(327px)에서 "쉬워져." "거지?"만 홀로 떨어지던 문제(가인 2026-10-23) */}
+        <div className="text-text-secondary text-center text-[15px] mb-8 leading-relaxed break-keep space-y-3">
+          <p>
+            졸라 쉽게 시작해.<br />
+            성공이 쌓이면 관성이 붙어서<br />
+            점점 쉬워져.
+          </p>
+          <p>
+            솔직히 하루 {PROGRAM6.successMinutes}분도 없다는 건<br />
+            스스로를 속이는 거지?
+          </p>
+        </div>
       </AnimateOnScroll>
 
       <AnimateOnScroll>
         <p className="text-text-muted text-xs font-bold tracking-widest mb-3">
-          무료 체험 28일 흐름
+          무료 체험 {COHORT6.trialDays}일 흐름
         </p>
         <div className="space-y-2">
           {WEEKS6.map((w) => (
@@ -65,8 +73,9 @@ export default function SystemSection() {
           </div>
           <div className="relative h-24 mb-3">
             <div className="absolute inset-0 flex items-end gap-[2px]">
-              {DAY_MINUTES6.map((min, i) => {
-                const isFinal = i === COHORT6.durationDays - 1;
+              {/* 신규는 Day 4부터 — 프로그램 표의 Day 4-28(25칸)만 그린다 */}
+              {DAY_MINUTES6.slice(COHORT6.joinDay - 1).map((min, i, arr) => {
+                const isFinal = i === arr.length - 1;
                 // 파이널 날은 시간이 아니라 5K — 막대는 최고 높이로 그리고 색으로 구분한다.
                 const h = isFinal ? 100 : (min / max) * 100;
                 return (
@@ -84,10 +93,10 @@ export default function SystemSection() {
             />
           </div>
           <div className="flex justify-between text-card-ink-muted text-[11px] font-bold">
-            <span>Day 1 · {PROGRAM6.startMinutes}분</span>
-            <span>Day {PROGRAM6.peakDay} · {PROGRAM6.peakMinutes}분</span>
-            <span>Day {PROGRAM6.deloadFromDay} · 회복</span>
-            <span className="text-accent-orange">Day {COHORT6.durationDays} · {PROGRAM6.finalDistanceKm}K</span>
+            <span>{COHORT6.startDate.slice(0, 5)} · {PROGRAM6.joinStartMinutes}분</span>
+            <span>11/15 · {PROGRAM6.peakMinutes}분</span>
+            <span>11/16 · 회복</span>
+            <span className="text-accent-orange">11/22 · {PROGRAM6.finalDistanceKm}K</span>
           </div>
           <p className="text-card-ink text-sm font-bold leading-relaxed mt-4 break-keep">
             매일 1분씩 늘리는 건 권장일 뿐. <span className="text-bg-primary">{PROGRAM6.successMinutes}분만 뛰면 오늘 미션 성공이야.</span>

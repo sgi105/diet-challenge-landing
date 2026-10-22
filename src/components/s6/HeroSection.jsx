@@ -26,7 +26,7 @@ const USP = {
   line1Accent: '하프마라톤',
   line1Post: ' 완주하고',
   line2: '인생 최고의 몸',
-  line3: '만들자',
+  line3: '90일 안에 만들자', // 기한 추가(가인 2026-10-23 A안) — 아래 90일 막대와 이어진다
 };
 
 // 영상 밑 라벨(가인 2026-10-22) — 비포/애프터가 "몇 km 뛰는 몸"인지 한 줄로. 순서 = HERO_MEDIA 순서.
@@ -78,8 +78,8 @@ function MediaSlot({ src, poster, label, accent, caption }) {
 // 90일 막대 — 길이는 실제 비율(28:62). 앞 28일(흰 칸)이 무료 체험, 나머지(점선)는 이어서 하는 본격 훈련.
 // 라임은 쓰지 않는다(라임은 버튼 전용). 눈금은 DAY 1 · DAY 28 · DAY 90.
 function Bar90() {
-  const { tag, freeDays, totalDays, freeLabel, restLabel } = HERO_BAR6;
-  const freePct = (freeDays / totalDays) * 100;
+  const { tag, freeDays, restDays, freeLabel, restLabel, restLead, ticks } = HERO_BAR6;
+  const freePct = (freeDays / (freeDays + restDays)) * 100;
   return (
     <div>
       <div className="relative flex h-[58px] gap-[3px] mt-7">
@@ -95,16 +95,16 @@ function Bar90() {
         </div>
         <div
           className="border-2 border-dashed border-white/35 rounded-l-[4px] rounded-r-[10px] flex flex-col items-center justify-center text-text-secondary"
-          style={{ flex: totalDays - freeDays }}
+          style={{ flex: restDays }}
         >
-          <p className="text-[12px] font-black leading-none">{freeDays + 1}일차부터</p>
+          <p className="text-[12px] font-black leading-none">{restLead}</p>
           <p className="text-[11px] font-bold opacity-80 mt-1">{restLabel}</p>
         </div>
       </div>
       <div className="relative h-4 mt-1 text-[10px] font-extrabold text-text-muted">
-        <span className="absolute left-0">DAY 1</span>
-        <span className="absolute -translate-x-1/2" style={{ left: `${freePct}%` }}>DAY {freeDays}</span>
-        <span className="absolute right-0">DAY {totalDays}</span>
+        <span className="absolute left-0">{ticks[0]}</span>
+        <span className="absolute -translate-x-1/2" style={{ left: `${freePct}%` }}>{ticks[1]}</span>
+        <span className="absolute right-0">{ticks[2]}</span>
       </div>
     </div>
   );
@@ -168,11 +168,11 @@ export default function HeroSection({ onCTA }) {
             ))}
           </div>
 
-          {/* 90일 프로그램 중 앞 28일 = 무료 체험 */}
-          <div className="text-left mt-6">
-            <p className="text-text-muted text-xs font-extrabold">{HERO_BAR6.lead}</p>
-            <p className="text-text-primary text-[17px] font-black mt-0.5 break-keep">{HERO_BAR6.leadMark}</p>
-          </div>
+          {/* 90일 프로그램 중 앞 25일(신규 기준) = 무료 체험 */}
+          {/* "90일 하프마라톤 프로그램" 머리말은 뺐다 — 헤드라인 "90일 안에"가 이미 말한다. 무료를 크게(가인 2026-10-23) */}
+          <p className="text-left mt-7 text-text-primary text-[24px] font-black leading-tight break-keep">
+            첫 <span className="text-accent-green">{HERO_BAR6.freeDays}일은 무료</span>로 시작해
+          </p>
           <Bar90 />
 
           {isClosed && (

@@ -3,7 +3,7 @@
 //
 // 기수가 바뀌면 이 파일만 갈아끼우면 된다 — 폼 쪽 import는 전부 여기를 본다.
 // 시즌5 값은 season5.js 에 그대로 있다(이 파일만 시즌6으로 바꿈).
-import { COHORT6, PROGRAM6 } from './season6';
+import { COHORT6, PROGRAM6, BONUS6 } from './season6';
 
 export const ACTIVE = {
   cohortCode: COHORT6.cohortCode,
@@ -23,10 +23,12 @@ export const ACTIVE = {
 
   teamSize: COHORT6.teamSize,
   totalSpots: COHORT6.totalSpots,
-  durationDays: COHORT6.durationDays,
+  durationDays: COHORT6.trialDays,   // 신규 기준 무료 체험 25일(지원서·결제 완료 화면 카피)
 
   // 신청 마감 — 이 시각 이후엔 /notify 로 넘긴다.
   deadline: COHORT6.officialDeadline,
+  guideDeadline: BONUS6.guideDeadline,
+  guideUrl: BONUS6.guideUrl,
   backdoorKey: COHORT6.backdoorKey,   // /apply?pass=<키> — 마감 뒤 결원 충원용
   deadlineLabel: COHORT6.deadlineLabel,
 
@@ -45,6 +47,8 @@ export const ACTIVE = {
   deloadMinutes: PROGRAM6.deloadMinutes,
   passCount: PROGRAM6.passCount,
   successDays: PROGRAM6.successDays,
+  joinDays: PROGRAM6.joinDays,
+  joinSuccessDays: PROGRAM6.joinSuccessDays,
   finalDistanceKm: PROGRAM6.finalDistanceKm,
 };
 

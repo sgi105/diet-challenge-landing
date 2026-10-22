@@ -45,7 +45,7 @@ export const COPY6 = {
     stickySub: `정원 ${COHORT6.totalSpots}명`,
   },
   official: {
-    banner: `🔴 28일 무료 체험 모집 중 · ${COHORT6.deadlineLabel} 마감 · 정원 ${COHORT6.totalSpots}명`,
+    banner: `🔴 ${COHORT6.trialDays}일 무료 체험 모집 중 · ${COHORT6.deadlineLabel} 마감 · 정원 ${COHORT6.totalSpots}명`,
     ctaSub: `${COHORT6.deadlineLabel} 마감`,
     cta: { hero: '무료로 시작하기', pricing: '무료로 시작하기', final: '무료로 시작하기', sticky: '무료로 시작하기' },
     stickySub: `${COHORT6.deadlineLabel} 마감`,

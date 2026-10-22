@@ -93,7 +93,7 @@ export default function LandingPageS6() {
         {/* 같이 하면 결국 하게 돼 — 팀 배정 · 응원 · 책임감 · 팀 우승 (앱 화면) */}
         <TogetherSection />
 
-        {/* 28일 프로그램 — 쉬운 시작 · 주차 흐름 · 매일 러닝 시간 */}
+        {/* 25일 무료 체험 프로그램 — 쉬운 시작 · 주차 흐름 · 매일 러닝 시간 */}
         <SystemSection />
 
         {/* 기록 — (게임 섹션은 뺐다: 팀 대항전·상금은 공감 섹션 "팀 우승" 항목이 담당) */}
@@ -110,7 +110,7 @@ export default function LandingPageS6() {
         {/* 오퍼 — 참가비 0원 + 보증금(해내면 환급 / 포기하면 몰수). v1의 3시나리오 섹션은 이게 대신한다 */}
         <PricingSection onCTA={() => handleCTA('pricing')} />
 
-        {/* 다음 단계 — 28일이 어디로 이어지는지 (가격 없음) */}
+        {/* 다음 단계 — 무료 체험이 어디로 이어지는지 (가격 없음) */}
         <NextStepSection />
 
 
