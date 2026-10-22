@@ -180,6 +180,7 @@ Deno.serve(async (req) => {
     return new Response('FAIL db', { status: 500 })
   }
 
-  if (firstPaid && mulNo) await sendPurchase(app, mulNo, price)
+  // 테스트 아이디(payapptest) 결제는 메타에 구매로 보내지 않는다 — 10/22 테스트 6건이 실제 Purchase 로 섞였다.
+  if (firstPaid && mulNo && !isTest) await sendPurchase(app, mulNo, price)
   return ok()
 })

@@ -18,8 +18,11 @@ export const META_PIXEL_ID = '1800035934531489';
 
 let initialized = false;
 
+// 운영 도메인에서만 켠다 — 로컬·미리보기 배포 테스트가 실제 이벤트로 섞이면 광고 학습이 오염된다(10/22 Purchase 6건).
+const LIVE_HOSTS = ['challenge.samuraihabits.com'];
+
 function enabled() {
-  return typeof window !== 'undefined' && !!META_PIXEL_ID;
+  return typeof window !== 'undefined' && !!META_PIXEL_ID && LIVE_HOSTS.includes(window.location.hostname);
 }
 
 export function initMetaPixel() {
