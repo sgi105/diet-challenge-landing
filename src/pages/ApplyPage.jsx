@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { submitApplication, countApplicantsPublic } from '../lib/applyApi';
+import { submitApplication, countApplicantsPublic, fetchPayStatus } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { PROOF } from '../data/season5v2';
 import { previewCount } from '../lib/spots';
@@ -216,6 +216,14 @@ export default function ApplyPage() {
     const payFlow = !!ACTIVE.fee && !isClosed;
     const pendingId = payFlow ? loadPendingPay() : null;
     if (pendingId) {
+      // 결제는 끝났는데 완료 화면까지 못 온 경우(카카오페이 등) 결제창을 또 열면 이중 결제가 된다(10/23 2건).
+      // 결제 상태를 먼저 보고, 이미 결제됐으면 완료 화면으로 보낸다. 조회 실패 시엔 기존대로 결제창.
+      const paid = await fetchPayStatus(pendingId).then(s => s?.pay_state === 'paid').catch(() => false);
+      if (paid) {
+        track('apply_pay_already_paid', { isReferral });
+        navigate(`/apply/paid?id=${pendingId}`, { replace: true });
+        return;
+      }
       track('apply_pay_retry', { isReferral });
       startPayment({ applicationId: pendingId, phone: form.phone.trim(), name: form.name.trim() });
       return;

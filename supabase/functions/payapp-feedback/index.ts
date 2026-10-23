@@ -23,6 +23,28 @@ const SERVICE_ROLE_KEY = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 const GRAPH_VERSION = 'v21.0'
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i
 
+// 중복 결제 알림 — 실패해도 통보 처리는 막지 않는다.
+async function alertDuplicate(appId: string, keptMulNo: string, dupMulNo: string, f: Record<string, string>) {
+  const token = Deno.env.get('TELEGRAM_BOT_TOKEN')
+  const chatId = Deno.env.get('TELEGRAM_CHAT_ID')
+  if (!token || !chatId) return
+  const text = [
+    '⚠️ 페이앱 중복 결제',
+    `지원서 ${appId}`,
+    `구매자 ${f.recvphone || '-'} · ${f.pay_type || '-'} · ${f.price || '-'}원`,
+    `유지: ${keptMulNo} / 취소 필요: ${dupMulNo}`,
+  ].join('\n')
+  try {
+    await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
+    })
+  } catch (e) {
+    console.error('duplicate alert failed', e)
+  }
+}
+
 const ok = () => new Response('SUCCESS', { status: 200, headers: { 'Content-Type': 'text/plain' } })
 const reject = (why: string) => {
   console.error('payapp-feedback reject', why)
@@ -155,6 +177,8 @@ Deno.serve(async (req) => {
   // 이미 결제 완료된 지원서에 다른 결제번호가 또 오면 덮어쓰지 않는다(중복 결제는 수동 취소 대상).
   if (app.pay_state === 'paid' && mulNo && app.pay_mul_no && app.pay_mul_no !== mulNo) {
     console.error('payapp-feedback duplicate payment', appId, app.pay_mul_no, mulNo)
+    // 조용히 넘기면 아무도 모른다(10/23 김두현·정두환 이중 결제) → 결제 완료 통보일 때 텔레그램으로 알린다.
+    if (state === 'paid') await alertDuplicate(appId, app.pay_mul_no, mulNo, f)
     return ok()
   }
 
