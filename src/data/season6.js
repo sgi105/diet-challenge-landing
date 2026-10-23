@@ -68,16 +68,16 @@ export const PROGRAM6 = {
 // - 1대1 러닝폼 분석: 결제 완료 선착순 15명 · 시즌 시작 후 개인 메시지로 요청
 // - 90일 하프 가이드: 10/25(일) 자정까지 결제한 모두 · 결제 완료 화면에서 바로 열람
 export const BONUS6 = {
-  formSpots: 15,
+  formSpots: 20,   // 가인 2026-10-23: 15 → 20명
   formTitle: '1대1 러닝폼 영상 분석',
   formDesc: '시즌 시작 후 개인 메시지로 요청하면 돼',
   formIcon: '🎥',
-  guideTitle: '90일 하프마라톤 완주 가이드',
-  guideDesc: '조회수 200만 러닝 팁 전부 담았어',
+  guideTitle: '헬스장 없이 90일 가이드',
+  guideDesc: '하프 완주하고 러닝 + 푸시업으로 몸 만드는 법',
   guideIcon: '📖',
   guideDeadline: '2026-10-26T00:00:00+09:00',
   guideDeadlineLabel: '10/25(일) 자정',
-  guideUrl: '/guide/road-to-1-percent-90.html',
+  guideUrl: '/guide/no-gym-90.html',
 };
 
 // 28일 러닝 시간표 — Day 1 10분 → 하루 1분씩 → Day 16에 25분 → Day 21까지 유지

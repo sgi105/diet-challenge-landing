@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { ACTIVE } from '../data/activeCohort';
+import { BONUS6 } from '../data/season6';
 import { fetchPayStatus } from '../lib/applyApi';
 import { metaTrack } from '../lib/metaPixel';
 import { logEvent } from '../lib/eventLog';
@@ -120,7 +121,7 @@ export default function ApplyPaidPage() {
                     📖 90일 하프마라톤 완주 가이드 보기 →
                   </a>
                   <p className="text-card-ink-muted text-[13px] mt-3 leading-relaxed">
-                    🎥 1대1 러닝폼 영상 분석(선착순 15명)은 시즌 시작 후 개인 메시지로 요청하면 돼
+                    🎥 1대1 러닝폼 영상 분석(선착순 {BONUS6.formSpots}명)은 시즌 시작 후 개인 메시지로 요청하면 돼
                   </p>
                 </div>
               )}
