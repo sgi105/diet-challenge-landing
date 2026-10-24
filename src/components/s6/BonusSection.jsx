@@ -61,7 +61,7 @@ function EbookThumb({ size }) {
           >
             <span className="whitespace-nowrap text-accent-green text-[12px] font-black tracking-[0.1em]">ROAD TO 1%</span>
             <p className="text-white font-black leading-[1.18] text-[17px] whitespace-nowrap">
-              <span className="text-accent-green text-[32px] leading-none block mb-1.5">90일</span>하프마라톤<br />완주 가이드
+              <span className="text-accent-green text-[24px] leading-none block mb-1.5">상위 1%</span>피지컬 90일<br />완성 가이드
             </p>
             <p className="text-white/60 text-[10px] font-bold tracking-wide">BALI TARZAN</p>
           </div>

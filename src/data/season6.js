@@ -72,12 +72,12 @@ export const BONUS6 = {
   formTitle: '1대1 러닝폼 영상 분석',
   formDesc: '시즌 시작 후 개인 메시지로 요청하면 돼',
   formIcon: '🎥',
-  guideTitle: '90일 하프마라톤 완주 가이드',
-  guideDesc: '조회수 200만 러닝 팁 전부 담았어',
+  guideTitle: '상위 1% 피지컬 90일 완성 가이드',   // 가인 2026-10-24 이름 확정
+  guideDesc: '헬스장 없이 러닝 + 푸시업으로 하프 완주하고 몸 만드는 법',
   guideIcon: '📖',
   guideDeadline: '2026-10-26T00:00:00+09:00',
   guideDeadlineLabel: '10/25(일) 자정',
-  guideUrl: '/guide/road-to-1-percent-90.html',
+  guideUrl: '/guide/no-gym-90.html',
 };
 
 // 28일 러닝 시간표 — Day 1 10분 → 하루 1분씩 → Day 16에 25분 → Day 21까지 유지

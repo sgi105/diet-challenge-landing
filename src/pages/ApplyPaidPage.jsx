@@ -118,7 +118,7 @@ export default function ApplyPaidPage() {
                     rel="noopener noreferrer"
                     className="block w-full bg-bg-primary text-white text-center font-extrabold py-3.5 rounded-2xl hover:brightness-110"
                   >
-                    📖 90일 하프마라톤 완주 가이드 보기 →
+                    📖 {BONUS6.guideTitle} 보기 →
                   </a>
                   <p className="text-card-ink-muted text-[13px] mt-3 leading-relaxed">
                     🎥 1대1 러닝폼 영상 분석(선착순 {BONUS6.formSpots}명)은 시즌 시작 후 개인 메시지로 요청하면 돼
