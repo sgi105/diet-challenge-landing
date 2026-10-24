@@ -10,6 +10,7 @@ import { createClient } from '@supabase/supabase-js';
 import { ACTIVE } from '../data/activeCohort';
 import { PACE_GOAL_VALUE, partsToSec } from '../data/applicationGoals';
 import { utm } from './eventLog';
+import { heroVariant } from './abTest';
 
 export const supabase = createClient(
   import.meta.env.VITE_SUPABASE_URL,
@@ -105,6 +106,8 @@ export async function submitApplication(form, { waitlist = false, backdoor = fal
     fail_reason: form.failReason || null,
     // 유입 꼬리표 — 어느 광고/링크로 와서 지원했는지. 메타 광고는 utm_campaign = 광고 이름.
     ...pickUtm(),
+    // 어느 첫 화면(A/B)을 보고 지원했는지 — /stats A/B 비교용 (abTest.js)
+    hero_variant: heroVariant(),
     id: appId,
     // 결제 통보는 페이앱 서버에서 오니까 메타 매칭용 쿠키·브라우저 정보를 지금 받아 둔다.
     meta_fbp: readCookie('_fbp'),

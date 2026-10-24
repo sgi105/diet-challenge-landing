@@ -144,8 +144,66 @@ function FunnelRow({ label, value, base, prev, note }) {
   );
 }
 
+// 두 그룹 비교표 — 광고 vs 자연, 첫 화면 A vs B. 열 = 그룹, 행 = 퍼널 단계.
+// 결제는 applications(실제 결제 행) 기준, 나머지는 landing_events 세션 기준.
+const COMPARE_ROWS = [
+  ['visitors', '방문'],
+  ['scrolled', '첫 화면 넘김'],
+  ['cta_clicks', '신청하기 클릭'],
+  ['apply_opens', '지원서 진입'],
+  ['applicants', '지원 완료'],
+  ['paid', '결제 완료'],
+];
+
+function CompareTable({ groups }) {
+  return (
+    <div className="bg-bg-card/10 rounded-2xl p-4 mb-8 border border-white/10 overflow-x-auto">
+      <table className="w-full text-xs tabular-nums">
+        <thead>
+          <tr className="text-text-muted">
+            <th className="text-left font-bold pb-2" />
+            {groups.map((g) => (
+              <th key={g.label} className="text-right font-extrabold pb-2 text-text-primary">{g.label}</th>
+            ))}
+          </tr>
+        </thead>
+        <tbody>
+          {COMPARE_ROWS.map(([k, label]) => (
+            <tr key={k} className="border-t border-white/10">
+              <td className="py-2 text-text-secondary font-semibold">{label}</td>
+              {groups.map((g) => {
+                const v = Number(g.row?.[k]) || 0;
+                const base = Number(g.row?.visitors) || 0;
+                return (
+                  <td key={g.label} className="py-2 text-right text-text-primary font-bold">
+                    {v.toLocaleString()}
+                    {k !== 'visitors' && base > 0 && <span className="text-text-muted font-semibold"> · {pct(v, base)}%</span>}
+                  </td>
+                );
+              })}
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
+  );
+}
+
+// A/B 판정 — 신청하기 클릭률 두 비율 차이(z 검정). 표본이 적으면 판단 보류.
+function abVerdict(a, b) {
+  const na = Number(a?.visitors) || 0, nb = Number(b?.visitors) || 0;
+  const xa = Number(a?.cta_clicks) || 0, xb = Number(b?.cta_clicks) || 0;
+  if (na < 200 || nb < 200) return `아직 표본이 적어 (그룹당 방문 200명부터 판단 · 지금 A ${na} / B ${nb})`;
+  const pa = xa / na, pb = xb / nb, p = (xa + xb) / (na + nb);
+  const se = Math.sqrt(p * (1 - p) * (1 / na + 1 / nb));
+  const z = se > 0 ? (pb - pa) / se : 0;
+  if (Math.abs(z) < 1.96) return `차이가 아직 우연 범위야 (클릭률 A ${pct(xa, na)}% · B ${pct(xb, nb)}%)`;
+  return `${z > 0 ? 'B' : 'A'}가 이기는 중 — 클릭률 A ${pct(xa, na)}% · B ${pct(xb, nb)}% (통계적으로 의미 있음)`;
+}
+
 export default function StatsPage() {
   const [data, setData] = useState(null);
+  const [ab, setAb] = useState(null); // 광고/자연 · 첫 화면 A/B · 결제 (landing_ab)
   const [insights, setInsights] = useState(null);
   const [applicants, setApplicants] = useState(null);
   const [alerts, setAlerts] = useState(null); // 다음 기수 오픈 알림 신청 수(번호는 코치 페이지에서만)
@@ -154,12 +212,14 @@ export default function StatsPage() {
 
   const load = async () => {
     try {
-      const [funnelRes, countRes, insightRes, alertRes] = await Promise.all([
+      const [funnelRes, countRes, insightRes, alertRes, abRes] = await Promise.all([
         supabase.rpc('landing_funnel', { p_cohort: ACTIVE.cohortCode }),
         supabase.rpc('count_applicants_public', { p_cohort: ACTIVE.cohortCode }),
         supabase.rpc('landing_insights', { p_cohort: ACTIVE.cohortCode, p_cutoff: DEPLOY_CUTOFF }),
         supabase.rpc('count_cohort_alerts_public', { p_cohort: ACTIVE.cohortCode }),
+        supabase.rpc('landing_ab', { p_cohort: ACTIVE.cohortCode }),
       ]);
+      setAb(abRes.error ? null : abRes.data);
       if (funnelRes.error) throw new Error(funnelRes.error.message);
       setData(funnelRes.data);
       // 인사이트는 부가 정보 — 실패해도 기본 퍼널은 보여준다.
@@ -258,7 +318,44 @@ export default function StatsPage() {
         <FunnelRow label="2. 신청하기 클릭" value={t.cta_clicks} base={t.visitors} prev={t.visitors} />
         <FunnelRow label="3. 지원서 진입" value={t.apply_opens} base={t.visitors} prev={t.cta_clicks} />
         <FunnelRow label="4. 지원 완료" value={t.submits} base={t.visitors} prev={t.apply_opens} />
+        {ab && (
+          <FunnelRow
+            label="5. 결제 완료"
+            value={Number(ab.paid_total) || 0}
+            base={t.visitors}
+            prev={t.submits}
+            note="결제는 실제 결제 행 기준 (지원서에서 바로 들어온 방문도 포함)"
+          />
+        )}
       </div>
+
+      {ab && (() => {
+        const byM = Object.fromEntries((ab.by_medium || []).map((r) => [r.medium, r]));
+        const byV = Object.fromEntries((ab.by_variant || []).map((r) => [r.variant, r]));
+        return (
+          <>
+            <Section
+              title="광고 vs 자연 유입"
+              desc="광고 = 메타 광고 링크로 들어온 방문(utm_medium=paid). 나머지는 프로필 링크·카톡·직접 방문 전부. % = 그 그룹 방문 대비."
+            >
+              <CompareTable groups={[{ label: '광고', row: byM.paid }, { label: '자연', row: byM.organic }]} />
+            </Section>
+            <Section
+              title="첫 화면 A/B"
+              desc="A = 기존 첫 화면 · B = '90일 안에 완성하는 인생 최고의 몸'. 브라우저마다 반반 고정 배정. 판정은 신청하기 클릭률로(결제는 표본이 적어 참고용)."
+            >
+              {byV.A || byV.B ? (
+                <>
+                  <p className="text-accent-green text-xs font-bold mb-2">{abVerdict(byV.A, byV.B)}</p>
+                  <CompareTable groups={[{ label: 'A 기존', row: byV.A }, { label: 'B 90일', row: byV.B }]} />
+                </>
+              ) : (
+                <Empty>A/B 시작 전이야. 배포 뒤 방문부터 쌓여.</Empty>
+              )}
+            </Section>
+          </>
+        );
+      })()}
 
       {/* 유입 경로별 전환 */}
       <Section

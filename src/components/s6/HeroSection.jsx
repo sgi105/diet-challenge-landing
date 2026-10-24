@@ -6,6 +6,8 @@ import { useApplicantCount } from '../../hooks/useApplicantCount';
 import { spotsInfo } from '../../lib/spots';
 import BonusSection from './BonusSection';
 import { useSectionViews } from '../../hooks/useSectionViews';
+import { useState } from 'react';
+import { heroVariant } from '../../lib/abTest';
 
 // v2 — 첫 화면에서 파는 건 21일이 아니라 '하프마라톤 완주'라는 목적지와 그 증명이다.
 // 시안 SOT: design-references/s5v2-hero-copy-C.html ①
@@ -27,6 +29,15 @@ const USP = {
   line1Post: ' 완주하고',
   line2: '인생 최고의 몸',
   line3: '90일 안에 만들자', // 기한 추가(가인 2026-10-23 A안) — 아래 90일 막대와 이어진다
+};
+
+// A/B 의 B — 몸이 주어, 하프는 수단(가인 2026-10-25). 광고 2(몸 앵글)가 결제 1건당 비용 1/3이라 첫 화면도 몸 중심으로.
+// 시안 SOT: design-references/s6-hero-90d-3.html ① · 25일 막대는 버튼 아래로 내려 버튼을 인스타 앱 첫 화면 안에.
+const USP_B = {
+  line1Accent: '90일',
+  line1Post: ' 안에 완성하는',
+  line2: '인생 최고의 몸',
+  line3: '하프 뛰면 저절로 따라온다',
 };
 
 // 영상 밑 라벨(가인 2026-10-22) — 비포/애프터가 "몇 km 뛰는 몸"인지 한 줄로. 순서 = HERO_MEDIA 순서.
@@ -127,6 +138,13 @@ export default function HeroSection({ onCTA }) {
   // 모집 중엔 "21일 챌린지 지원하기"로 — 헤드라인의 90일과 헷갈리지 않게 지원 대상을 버튼에 박는다.
   // 오픈 전/마감 문구는 공용(COPY5) 그대로.
   const ctaLabel = isOfficial ? CTA_LABEL6 : copy.cta.hero;
+  const [isB] = useState(() => heroVariant() === 'B');
+
+  const freeLine = (
+    <p className={`text-left text-text-primary text-[24px] font-black leading-tight break-keep ${isB ? 'mt-6' : 'mt-7'}`}>
+      첫 <span className="text-accent-green">{HERO_BAR6.freeDays}일은 무료</span>로 시작해
+    </p>
+  );
 
   // overflow: clip — hidden 이면 안쪽 큰 배경 원(600px) 때문에 스크롤 이동(scrollIntoView 등)에 히어로가 옆으로 밀려
   // 버튼·보너스 카드 왼쪽이 잘려 보인다(가인 2026-10-22 스샷). clip 은 스크롤 자체가 안 생긴다. hidden 은 구형 브라우저용 대비.
@@ -146,6 +164,22 @@ export default function HeroSection({ onCTA }) {
             </div>
           )}
 
+          {isB ? (
+            <h1 className="break-keep animate-fade-up">
+              <span className="block font-kr text-[19px] md:text-2xl font-black text-text-secondary leading-snug">
+                <span className="text-accent-green">{USP_B.line1Accent}</span>{USP_B.line1Post}
+              </span>
+              <span
+                className="block font-sans font-normal text-[44px] md:text-7xl text-accent-green leading-[1.1] mt-2"
+                style={{ textShadow: '0 0 32px rgba(200,255,77,0.45)' }}
+              >
+                {USP_B.line2}
+              </span>
+              <span className="block font-sans font-normal text-[24px] md:text-4xl text-text-primary leading-[1.3] mt-2">
+                {USP_B.line3}
+              </span>
+            </h1>
+          ) : (
           <h1 className="break-keep animate-fade-up">
             <span className="block font-kr text-[19px] md:text-2xl font-black text-text-secondary leading-snug">
               {USP.line1Pre}<span className="text-accent-green">{USP.line1Accent}</span>{USP.line1Post}
@@ -160,6 +194,7 @@ export default function HeroSection({ onCTA }) {
               {USP.line3}
             </span>
           </h1>
+          )}
 
           {/* 영상 두 칸 — 왼쪽 비포 · 오른쪽 애프터 (각각 러닝 + 몸) */}
           <div className="grid grid-cols-2 gap-2.5 mt-6 animate-fade-up" style={{ animationDelay: '0.14s' }}>
@@ -170,10 +205,8 @@ export default function HeroSection({ onCTA }) {
 
           {/* 90일 프로그램 중 앞 25일(신규 기준) = 무료 체험 */}
           {/* "90일 하프마라톤 프로그램" 머리말은 뺐다 — 헤드라인 "90일 안에"가 이미 말한다. 무료를 크게(가인 2026-10-23) */}
-          <p className="text-left mt-7 text-text-primary text-[24px] font-black leading-tight break-keep">
-            첫 <span className="text-accent-green">{HERO_BAR6.freeDays}일은 무료</span>로 시작해
-          </p>
-          <Bar90 />
+          {freeLine}
+          {!isB && <Bar90 />}
 
           {isClosed && (
             <p className="text-text-secondary text-[13px] font-semibold leading-relaxed mt-4">
@@ -190,6 +223,7 @@ export default function HeroSection({ onCTA }) {
               <span className="block">{ctaLabel}</span>
               <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{ctaSub}</span>
             </Button>
+            {isB && <Bar90 />}
             {!isClosed && <BonusSection compact />}
           </div>
         </div>

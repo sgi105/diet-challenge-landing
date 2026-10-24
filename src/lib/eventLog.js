@@ -7,6 +7,7 @@
 // 개인정보는 담지 않는다. 세션 단위 무작위 id만 붙여서 "몇 명이" 를 셀 수 있게 한다.
 import { supabase } from './applyApi';
 import { ACTIVE } from '../data/activeCohort';
+import { heroVariant } from './abTest';
 
 const SESSION_KEY = 'ttr_sid';
 
@@ -119,6 +120,7 @@ export function logEvent(event, extra = {}) {
       path: typeof location !== 'undefined' ? location.pathname : null,
       referrer: typeof document !== 'undefined' ? (document.referrer || null) : null,
       in_app: inApp(),
+      variant: heroVariant(), // 첫 화면 A/B (abTest.js)
       ...utm(),
       ...extra,
     };
