@@ -3,7 +3,7 @@
 //
 // 기수가 바뀌면 이 파일만 갈아끼우면 된다 — 폼 쪽 import는 전부 여기를 본다.
 // 시즌5 값은 season5.js 에 그대로 있다(이 파일만 시즌6으로 바꿈).
-import { COHORT6, PROGRAM6, BONUS6 } from './season6';
+import { COHORT6, PROGRAM6, BONUS6, HERO_BAR6 } from './season6';
 
 export const ACTIVE = {
   cohortCode: COHORT6.cohortCode,
@@ -19,7 +19,8 @@ export const ACTIVE = {
   // 서버 금액 대조값(Edge secret PAYAPP_PRICE)과 반드시 같이 바꿀 것.
   fee: PROGRAM6.deposit,
   feeLabel: PROGRAM6.depositLabel,
-  feeGoodName: `${COHORT6.durationDays}일 팀 러닝 챌린지 보증금`,
+  // 결제창에 뜨는 상품명 — 랜딩의 "첫 25일 무료"와 같은 숫자로(28일로 보이면 결제 직전에 헷갈림. 2026-10-25)
+  feeGoodName: `러닝 챌린지 첫 ${HERO_BAR6.freeDays}일 무료 체험 보증금`,
 
   teamSize: COHORT6.teamSize,
   totalSpots: COHORT6.totalSpots,
