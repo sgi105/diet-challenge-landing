@@ -4,7 +4,7 @@ import { track } from '@vercel/analytics';
 import { submitCohortAlert } from '../lib/alertApi';
 import { logEvent, once } from '../lib/eventLog';
 import { metaTrackApplication } from '../lib/metaPixel';
-import { COHORT5 } from '../data/season5';
+import { ACTIVE } from '../data/activeCohort';
 
 // 다음 기수 오픈 알림 신청 (/notify) — 모집 마감 뒤 랜딩의 모든 버튼이 여기로 온다. (2026-09-19)
 // 시안 SOT: design-references/s5v2-notify-flow.html ②③
@@ -50,7 +50,7 @@ export default function NotifyPage() {
     setSubmitting(true);
     try {
       const value = isKR ? formatKR(phone) : phone.trim();
-      await submitCohortAlert({ phone: value, phoneCountry: country, sourceCohort: COHORT5.cohortCode });
+      await submitCohortAlert({ phone: value, phoneCountry: country, sourceCohort: ACTIVE.cohortCode });
       track('notify_submit');
       logEvent('notify_submit');
       metaTrackApplication({ phone: value, phoneCountry: country, waitlist: true, isReferral: false });
@@ -109,7 +109,7 @@ export default function NotifyPage() {
           다음 기수<br /><span className="text-accent-green">오픈 알림 받기</span>
         </h1>
         <p className="text-text-secondary text-sm font-semibold leading-relaxed mt-3 break-keep">
-          이번 21일 챌린지는 마감됐어.<br />
+          이번 기수 모집은 마감됐어.<br />
           다음 기수 모집 열리면 제일 먼저 문자로 알려줄게.
         </p>
 

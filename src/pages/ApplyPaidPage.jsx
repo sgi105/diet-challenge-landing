@@ -2,7 +2,7 @@ import { useEffect, useRef, useState } from 'react';
 import { Link, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
 import { ACTIVE } from '../data/activeCohort';
-import { BONUS6 } from '../data/season6';
+import { BONUS6, PROGRAM6 } from '../data/season6';
 import { fetchPayStatus } from '../lib/applyApi';
 import { metaTrack } from '../lib/metaPixel';
 import { logEvent } from '../lib/eventLog';
@@ -103,10 +103,10 @@ export default function ApplyPaidPage() {
 
               <div className="bg-bg-card rounded-3xl p-6 text-left shadow-[0_12px_30px_rgba(0,0,0,0.15)] space-y-3 text-sm">
                 <p className="text-card-ink font-extrabold">다음 순서</p>
-                {/* 결제 후 안내는 단톡방 하나로 — 모집 마감(10/28 수) 뒤 한 번에 초대(가인 2026-10-23) */}
-                <p className="text-card-ink-muted">💬 <span className="text-card-ink font-bold">{ACTIVE.chatInviteLabel} 한 번에 단톡방에 초대</span>할게. 앞으로 진행은 전부 거기서 안내해줄게</p>
+                {/* 시작 안내 채널(문자/단톡)은 미정이라 '단톡방' 표현 X — 결제 확인 문자(paid_confirm)와 같은 말(가인 2026-10-25) */}
+                <p className="text-card-ink-muted">💬 <span className="text-card-ink font-bold">{ACTIVE.chatInviteLabel}에 시작 안내</span> 보내줄게. 앞으로 진행은 그때 다 알려줄게</p>
                 <p className="text-card-ink-muted">🎥 OT · <span className="text-card-ink font-bold">{ACTIVE.otLabel} {ACTIVE.otTimeLabel}</span></p>
-                <p className="text-card-ink-muted">🏃 첫 러닝 · <span className="text-card-ink font-bold">{ACTIVE.startDateLabel}</span></p>
+                <p className="text-card-ink-muted">🏃 첫 러닝 · <span className="text-card-ink font-bold">{ACTIVE.startDateLabel} · {PROGRAM6.joinStartMinutes}분 러닝</span></p>
               </div>
 
               {earlyBird && (
