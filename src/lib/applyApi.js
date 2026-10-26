@@ -94,6 +94,8 @@ export async function submitApplication(form, { waitlist = false, backdoor = fal
     agree_deposit: !!form.agreeDeposit,
     agree_schedule: !!form.agreeSchedule,
     cohort_code: CURRENT_COHORT_CODE,
+    // 결제 기수 지원서는 '결제 대기'로 시작 — 새 지원자 텔레그램 알림은 결제 완료 때 나간다(DB 트리거, 2026-10-26).
+    ...(ACTIVE.fee && !waitlist ? { pay_state: 'pending' } : {}),
     // 단기(21일) 목표 — 'pr_5k'면 현재 5K 기록도 함께. 시간은 전부 정수 초로 저장.
     short_goal: form.shortGoal || null,
     current_5k_sec: form.shortGoal === 'pr_5k' ? partsToSec(form.current5k || {}) : null,
