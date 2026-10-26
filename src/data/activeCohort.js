@@ -22,6 +22,11 @@ export const ACTIVE = {
   // 결제창에 뜨는 상품명 — 랜딩의 "첫 25일 무료"와 같은 숫자로(28일로 보이면 결제 직전에 헷갈림. 2026-10-25)
   feeGoodName: `러닝 챌린지 첫 ${HERO_BAR6.freeDays}일 무료 체험 보증금`,
 
+  // 지원 가능 나이(만 나이, 양 끝 포함). 밖이면 나이 단계에서 막혀 결제까지 못 간다.
+  // 2026-10-26 가인 결정 — 2030 또래 크루 브랜딩. 기존 멤버 이월은 지원서를 안 거쳐서 영향 없음.
+  ageMin: 19,
+  ageMax: 39,
+
   teamSize: COHORT6.teamSize,
   totalSpots: COHORT6.totalSpots,
   durationDays: COHORT6.trialDays,   // 신규 기준 무료 체험 25일(지원서·결제 완료 화면 카피)

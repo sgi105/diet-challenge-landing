@@ -236,6 +236,14 @@ export default function ApplyPage() {
       track('apply_step_invalid', { step, stepKey, reason: v, isReferral });
       return;
     }
+    // 저장된 진행분으로 이어 온 사람은 나이 단계를 다시 안 거친다 → 제출 직전에 한 번 더 본다.
+    const ageErr = validateStep('age', form);
+    if (ageErr) {
+      setError(ageErr);
+      setStep(STEPS.indexOf('age'));
+      track('apply_step_invalid', { step, stepKey: 'age', reason: ageErr, isReferral });
+      return;
+    }
     setSubmitting(true);
     setError('');
     track('apply_submit_attempt', { isReferral });
@@ -1513,7 +1521,8 @@ function validateStep(stepKey, form) {
     case 'age': {
       const n = parseInt(form.age, 10);
       if (!form.age || isNaN(n)) return '나이를 입력해줘.';
-      if (n < 14 || n > 80) return '14~80세 사이로 입력해줘.';
+      if (n < ACTIVE.ageMin) return `만 ${ACTIVE.ageMin}세부터 참여할 수 있어.`;
+      if (n > ACTIVE.ageMax) return `챌린지는 연령대별로 모집을 하고 있어서 이번에는 만 ${ACTIVE.ageMax}세까지 참여할 수 있어.`;
       return null;
     }
     case 'gender':
