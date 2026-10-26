@@ -18,11 +18,14 @@ const POLL_MAX = 15; // 최대 30초
 
 const FORM_KEYS = ['samurai-season2-apply-v1', 'samurai-season2-apply-referral-v1'];
 const PENDING_PAY_KEY = `ttr_pending_pay_${ACTIVE.cohortCode}`;
+// 결제 완료 id 를 남겨 둔다 → 같은 브라우저로 지원서에 다시 오면 바로 이 화면(ApplyPage). 기수 코드가 키라 다음 기수엔 무시.
+const PAID_KEY = `ttr_paid_${ACTIVE.cohortCode}`;
 
-function clearApplyStorage() {
+function markPaid(id) {
   try {
     for (const k of FORM_KEYS) localStorage.removeItem(k);
     localStorage.removeItem(PENDING_PAY_KEY);
+    localStorage.setItem(PAID_KEY, id);
   } catch { /* ignore */ }
 }
 
@@ -40,6 +43,19 @@ export default function ApplyPaidPage() {
   const id = searchParams.get('id');
   const [status, setStatus] = useState(id ? 'checking' : 'missing'); // checking | paid | pending | cancelled | missing
   const tries = useRef(0);
+  // 결제창에서 뒤로 와 이 화면이 되살아나면(bfcache·탭 복귀) 타이머가 멈춰 있다 → 다시 확인을 시작한다.
+  const [recheck, setRecheck] = useState(0);
+  useEffect(() => {
+    const again = () => { tries.current = 0; setRecheck(n => n + 1); };
+    const onShow = (e) => { if (e.persisted) again(); };
+    const onVisible = () => { if (document.visibilityState === 'visible') again(); };
+    window.addEventListener('pageshow', onShow);
+    document.addEventListener('visibilitychange', onVisible);
+    return () => {
+      window.removeEventListener('pageshow', onShow);
+      document.removeEventListener('visibilitychange', onVisible);
+    };
+  }, []);
   // 얼리버드(가이드) = 10/25(일) 자정 전에 결제 완료 화면을 본 사람.
   const [now] = useState(() => Date.now()); // 화면을 연 시점 기준으로 한 번만
   const earlyBird = ACTIVE.guideDeadline && now < new Date(ACTIVE.guideDeadline).getTime();
@@ -55,7 +71,7 @@ export default function ApplyPaidPage() {
       if (!alive) return;
       if (row?.pay_state === 'paid') {
         setStatus('paid');
-        clearApplyStorage();
+        markPaid(id);
         if (row.pay_mul_no && purchaseSentOnce(row.pay_mul_no)) {
           metaTrack('Purchase', { currency: 'KRW', value: row.pay_amount || ACTIVE.fee, content_name: 'apply_fee' }, { eventId: `pay-${row.pay_mul_no}` });
           track('apply_paid');
@@ -69,7 +85,7 @@ export default function ApplyPaidPage() {
     };
     check();
     return () => { alive = false; clearTimeout(timer); };
-  }, [id]);
+  }, [id, recheck]);
 
   return (
     <div className="min-h-screen flex flex-col">

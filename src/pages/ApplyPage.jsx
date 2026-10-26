@@ -1,7 +1,7 @@
 import { useEffect, useMemo, useRef, useState } from 'react';
 import { Link, useNavigate, useSearchParams } from 'react-router-dom';
 import { track } from '@vercel/analytics';
-import { submitApplication, countApplicantsPublic, fetchPayStatus } from '../lib/applyApi';
+import { submitApplication, countApplicantsPublic, fetchPayStatus, findPaidByPhone } from '../lib/applyApi';
 import { ACTIVE } from '../data/activeCohort';
 import { PROOF } from '../data/season5v2';
 import { previewCount } from '../lib/spots';
@@ -21,6 +21,11 @@ function loadPendingPay() {
 }
 function savePendingPay(id) {
   try { localStorage.setItem(PENDING_PAY_KEY, id); } catch { /* ignore */ }
+}
+// 결제 완료가 확인된 지원서 id — 완료 화면(ApplyPaidPage)이 남긴다. 기수 코드가 키에 들어 있어 다음 기수엔 자동으로 무시된다.
+const PAID_KEY = `ttr_paid_${ACTIVE.cohortCode}`;
+function loadPaid() {
+  try { return localStorage.getItem(PAID_KEY) || null; } catch { return null; }
 }
 
 const initialForm = {
@@ -134,6 +139,24 @@ export default function ApplyPage() {
     return () => window.removeEventListener('pageshow', onShow);
   }, []);
 
+  // 이미 결제한 사람이 지원서로 다시 오면 완료 화면으로(2026-10-26 가인: 랜딩은 그대로 두고 지원서만).
+  // 간편결제(카카오·네이버·토스)는 앱에서 돌아와도 결제창이 우리 화면으로 안 넘겨줘 하얀 화면에 멈춘다 → 다시 들어온 사람을 여기서 받는다.
+  useEffect(() => {
+    if (!ACTIVE.fee) return undefined;
+    const paidId = loadPaid();
+    if (paidId) { navigate(`/apply/paid?id=${paidId}`, { replace: true }); return undefined; }
+    const pendingId = loadPendingPay();
+    if (!pendingId) return undefined;
+    let alive = true;
+    fetchPayStatus(pendingId).then(row => {
+      if (alive && row?.pay_state === 'paid') {
+        track('apply_pay_already_paid', { isReferral, at: 'open' });
+        navigate(`/apply/paid?id=${pendingId}`, { replace: true });
+      }
+    }).catch(() => { /* 조회 실패면 지원서 그대로 */ });
+    return () => { alive = false; };
+  }, [navigate, isReferral]);
+
   // 지원서 페이지 진입 — "CTA는 눌렀는데 폼까지 안 온" 이탈을 구분하려면 이 지점이 필요하다.
   // 새로고침·중간 복귀도 있으므로 세션당 1회만 찍는다.
   useEffect(() => {
@@ -202,6 +225,15 @@ export default function ApplyPage() {
     setStep(s => Math.max(s - 1, 0));
   };
 
+  // 결제창 열기. ?payflow=back(폰 실기기 테스트 중, 2026-10-26)이면 먼저 우리 "결제 확인 중" 화면을 깔고 그 위에서 결제창을 연다
+  // → 간편결제 뒤 하얀 화면에서 뒤로 가기만 하면 확인 화면이 나와 결제 완료를 자동으로 잡는다.
+  const openPayment = (applicationId) => {
+    const pay = () => startPayment({ applicationId, phone: form.phone.trim(), name: form.name.trim() });
+    if (searchParams.get('payflow') !== 'back') { pay(); return; }
+    navigate(`/apply/paid?id=${applicationId}`);
+    setTimeout(pay, 80);
+  };
+
   const handleSubmit = async () => {
     const v = validateStep(stepKey, form);
     if (v) {
@@ -214,6 +246,15 @@ export default function ApplyPage() {
     track('apply_submit_attempt', { isReferral });
     // 참가비 기수: 이미 제출한 지원서가 결제 전이면 지원서는 건너뛰고 결제창만 다시 연다.
     const payFlow = !!ACTIVE.fee && !isClosed;
+    // 다른 브라우저·경로로 다시 온 결제자는 브라우저 메모가 없다 → 번호로 확인. 조회 실패 시엔 그냥 진행.
+    if (payFlow) {
+      const paidId = await findPaidByPhone(ACTIVE.cohortCode, form.phone.trim()).catch(() => null);
+      if (paidId) {
+        track('apply_pay_already_paid', { isReferral, at: 'phone' });
+        navigate(`/apply/paid?id=${paidId}`, { replace: true });
+        return;
+      }
+    }
     const pendingId = payFlow ? loadPendingPay() : null;
     if (pendingId) {
       // 결제는 끝났는데 완료 화면까지 못 온 경우(카카오페이 등) 결제창을 또 열면 이중 결제가 된다(10/23 2건).
@@ -225,7 +266,7 @@ export default function ApplyPage() {
         return;
       }
       track('apply_pay_retry', { isReferral });
-      startPayment({ applicationId: pendingId, phone: form.phone.trim(), name: form.name.trim() });
+      openPayment(pendingId);
       return;
     }
     let attempt = 0;
@@ -241,7 +282,7 @@ export default function ApplyPage() {
           // 폼 내용은 결제 끝날 때까지 남겨 둔다(결제창에서 뒤로 오면 그대로 이어서).
           savePendingPay(id);
           metaTrack('AddPaymentInfo', { content_name: 'apply_fee', currency: 'KRW', value: ACTIVE.fee });
-          startPayment({ applicationId: id, phone: form.phone.trim(), name: form.name.trim() });
+          openPayment(id);
           return;
         }
         clearState(STORAGE_KEY);
@@ -336,6 +377,10 @@ export default function ApplyPage() {
                 <p className="text-text-primary text-sm font-extrabold">🎉 보증금만 내면 {ACTIVE.durationDays}일 무료 체험 시작</p>
                 <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
                   참가비 무료 · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급 · {ACTIVE.otLabel} 전까지 취소하면 전액 환불
+                </p>
+                {/* 간편결제는 앱에서 돌아와도 화면이 하얗게 멈출 수 있다 — 결제는 된 거라고 미리 안심시킨다(2026-10-26) */}
+                <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
+                  간편결제 뒤 화면이 하얗게 멈춰도 결제는 된 거야 · 1분 안에 확인 문자 보내줄게
                 </p>
                 {/* 보증금 동의 step 을 뺐으니 결제 전 약관·환불정책 고지는 여기서 */}
                 <p className="text-text-muted text-[11px] mt-1.5">
@@ -1041,7 +1086,7 @@ function PhoneStep({ form, update }) {
   return (
     <div className="flex-1 flex flex-col justify-center">
       <label className="block text-text-primary text-2xl font-black font-kr mb-2">연락처</label>
-      <p className="text-text-muted text-sm mb-4">{ACTIVE.fee ? '단톡방 초대 문자 받을 번호야.' : '시작 안내·앱 입장 문자용이야.'}</p>
+      <p className="text-text-muted text-sm mb-4">{ACTIVE.fee ? '결제 확인·시작 안내 문자 받을 번호야.' : '시작 안내·앱 입장 문자용이야.'}</p>
 
       {/* 보증금 결제 기수는 국내 거주자만(가인 2026-10-23) — 해외 번호 선택지를 숨기고 한국 번호만 받는다 */}
       {!ACTIVE.fee && (

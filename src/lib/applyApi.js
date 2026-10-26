@@ -129,6 +129,13 @@ export async function fetchPayStatus(id) {
   return Array.isArray(data) ? (data[0] || null) : data;
 }
 
+// 이 번호로 이번 기수 결제가 끝난 지원서가 있으면 그 id, 없으면 null — 다른 브라우저·경로로 다시 온 결제자 잡기(2026-10-26).
+export async function findPaidByPhone(cohortCode, phone) {
+  const { data, error } = await supabase.rpc('application_paid_by_phone', { p_cohort: cohortCode, p_phone: phone });
+  if (error) throw new Error(error.message);
+  return data || null;
+}
+
 export async function submitWaitlist({ name, contact, contactType, note }) {
   const payload = {
     name: (name || '').trim().slice(0, 50),
