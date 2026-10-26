@@ -225,13 +225,8 @@ export default function ApplyPage() {
     setStep(s => Math.max(s - 1, 0));
   };
 
-  // 결제창 열기. ?payflow=back(폰 실기기 테스트 중, 2026-10-26)이면 먼저 우리 "결제 확인 중" 화면을 깔고 그 위에서 결제창을 연다
-  // → 간편결제 뒤 하얀 화면에서 뒤로 가기만 하면 확인 화면이 나와 결제 완료를 자동으로 잡는다.
   const openPayment = (applicationId) => {
-    const pay = () => startPayment({ applicationId, phone: form.phone.trim(), name: form.name.trim() });
-    if (searchParams.get('payflow') !== 'back') { pay(); return; }
-    navigate(`/apply/paid?id=${applicationId}`);
-    setTimeout(pay, 80);
+    startPayment({ applicationId, phone: form.phone.trim(), name: form.name.trim() });
   };
 
   const handleSubmit = async () => {
@@ -378,9 +373,10 @@ export default function ApplyPage() {
                 <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
                   참가비 무료 · 보증금 {ACTIVE.depositLabel}은 해내면 전액 환급 · {ACTIVE.otLabel} 전까지 취소하면 전액 환불
                 </p>
-                {/* 간편결제는 앱에서 돌아와도 화면이 하얗게 멈출 수 있다 — 결제는 된 거라고 미리 안심시킨다(2026-10-26) */}
+                {/* 간편결제는 앱에서 돌아와도 페이앱 결제창이 하얗게 멈춘다(뒤로 가기로도 안 풀림, 가인 실기기 10/26).
+                    다시 '지원하기'를 누르면 결제 확인 후 완료 화면으로 가니 그 길을 안내한다 */}
                 <p className="text-text-secondary text-xs mt-1 leading-relaxed break-keep">
-                  간편결제 뒤 화면이 하얗게 멈춰도 결제는 된 거야 · 1분 안에 확인 문자 보내줄게
+                  간편결제 뒤 화면이 하얗게 멈추면 창 닫고 다시 '지원하기' 누르면 돼 · 결제 확인 문자도 1분 안에 가
                 </p>
                 {/* 보증금 동의 step 을 뺐으니 결제 전 약관·환불정책 고지는 여기서 */}
                 <p className="text-text-muted text-[11px] mt-1.5">
