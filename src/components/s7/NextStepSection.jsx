@@ -6,17 +6,17 @@ import AnimateOnScroll from '../ui/AnimateOnScroll';
 // ② 근력: 90일 줄 위에 DAY 1-28 러닝 습관 / DAY 29-90 매일 푸시업. 영상 = 업셀 S5 푸시업 영상 앞 6초(480px로 줄임).
 // ③ 마무리: 업셀 "90일 후면 매일 5km 뛰고 푸시업 100개 하는데 몸이 안 변하겠어?"를 근력 기간에 맞게 숫자 없이.
 // 단위는 전부 "일". 가격은 쓰지 않는다.
-// 눈금 = 날짜. 시즌7: Day 28=12/27 · 63=1/31 · 77=2/14 · 하프=Day 91=2/28(일).
+// 눈금 = 날짜. 시즌7: Day 28=12/27 · 63=1/31 · 77=2/14 · 하프=Day 90=2/27(토) 희망드림 동계.
 const STEPS = [
   { day: '12/27', km: 5, label: '28일 체험 끝', now: true },
   { day: '1/31', km: 10, label: '' },
   { day: '2/14', km: 14, label: '' },
-  { day: '2/28', km: 21, label: '하프마라톤 완주', goal: true },
+  { day: '2/27', km: 21, label: '하프마라톤 완주', goal: true },
 ];
 const MAX_KM = 21;
 const BAR_MAX = 140; // 21km 막대 높이(px)
 const FREE_DAYS = 28;   // 1만원 체험 11/30-12/27
-const REST_DAYS = 63;   // 12/28-2/28 러닝 + 푸시업
+const REST_DAYS = 62;   // 12/28-2/27 러닝 + 푸시업
 
 export default function NextStepSection() {
   const freePct = (FREE_DAYS / (FREE_DAYS + REST_DAYS)) * 100;
@@ -82,7 +82,7 @@ export default function NextStepSection() {
             헬스장 안 가도 돼. 하루 5분으로 시작해서 매일 조금씩 늘려.
           </p>
 
-          {/* 90일 줄 — 러닝 습관(28일) → 러닝 + 푸시업(63일) */}
+          {/* 90일 줄 — 러닝 습관(28일) → 러닝 + 푸시업(62일) */}
           <div className="flex h-9 gap-[3px] mt-4">
             <div
               className="rounded-l-lg rounded-r-[3px] bg-white/15 flex items-center justify-center text-[11px] font-extrabold text-text-secondary"
@@ -100,7 +100,7 @@ export default function NextStepSection() {
           <div className="relative h-4 mt-1 text-[10px] font-extrabold text-text-muted">
             <span className="absolute left-0">11/30</span>
             <span className="absolute -translate-x-1/2" style={{ left: `${freePct}%` }}>12/28</span>
-            <span className="absolute right-0">2/28</span>
+            <span className="absolute right-0">2/27</span>
           </div>
 
           <video
