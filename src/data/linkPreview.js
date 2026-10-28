@@ -7,26 +7,27 @@
 // 기수가 바뀌면 season 데이터만 바꾸면 따라온다. 데이터에 없는 값(firstMinutes)만 여기서 직접 고친다.
 //
 // 디자인 SOT: design-references/og6/og6.html ② (가인 2026-10-25)
-import { COHORT6, HERO_BAR6 } from './season6.js';
+import { COHORT7 as COHORT, HERO_BAR7 as HERO_BAR, PROGRAM7 } from './season7.js';
 
-// 신규가 합류하는 날의 러닝 시간(분). 261019_team_run_season6 = 프로그램 Day 4(5분 + 3) 합류 → 8분.
-const FIRST_MINUTES = 8;
+// 첫날 러닝 시간(분). 261130_team_run_season7 = Day 1 합류 → 5분.
+const FIRST_MINUTES = PROGRAM7.startMinutes;
 
-const free = HERO_BAR6.freeDays;
-const total = HERO_BAR6.totalDays;
+const trial = HERO_BAR.freeDays;
+const total = HERO_BAR.totalDays;
+const fee = PROGRAM7.feeLabel;
 
 export const LINK_PREVIEW = {
-  title: `${total}일 하프마라톤 프로그램 · 첫 ${free}일 무료`,
-  description: `첫 ${free}일 무료 체험 · 하루 ${FIRST_MINUTES}분부터 · ${COHORT6.teamSize}인 1팀 · 정원 ${COHORT6.totalSpots}명 · ${COHORT6.startDate} 시작`,
+  title: `${total}일 하프마라톤 프로그램 · 첫 ${trial}일 ${fee} 체험`,
+  description: `첫 ${trial}일 ${fee} 체험 · 하루 ${FIRST_MINUTES}분부터 · ${COHORT.teamSize}인 1팀 · 정원 ${COHORT.totalSpots}명 · ${COHORT.startDate} 시작`,
   // 검색엔진용 설명(조금 길게)
-  metaDescription: `혼자선 맨날 실패한 러닝. ${total}일 하프마라톤 프로그램의 첫 ${free}일을 무료로 체험해. 하루 ${FIRST_MINUTES}분부터 · ${COHORT6.teamSize}인 1팀 · 정원 ${COHORT6.totalSpots}명 · ${COHORT6.startDate} 시작.`,
+  metaDescription: `혼자선 맨날 실패한 러닝. ${total}일 하프마라톤 프로그램의 첫 ${trial}일을 ${fee}으로 체험해. 하루 ${FIRST_MINUTES}분부터 · ${COHORT.teamSize}인 1팀 · 정원 ${COHORT.totalSpots}명 · ${COHORT.startDate} 시작.`,
   image: {
     tag: `${total}D HALF · TEAM`,
     kickerAccent: `${total}일`,
     kicker: ' 안에 완성하는',
     headline: '인생 최고의 몸',
     sub: '하프 뛰면 저절로 따라온다',
-    chips: [`첫 ${free}일 무료`, `하루 ${FIRST_MINUTES}분부터`, `${COHORT6.teamSize}인 1팀`],
+    chips: [`첫 ${trial}일 ${fee}`, `하루 ${FIRST_MINUTES}분부터`, `${COHORT.teamSize}인 1팀`],
     photo: '/s5v2/after.jpg',
   },
 };

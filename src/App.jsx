@@ -37,6 +37,10 @@ import LandingPageS4 from './LandingPageS4';
 import LandingPageS5 from './LandingPageS5';
 import LandingPageS5v2 from './LandingPageS5v2';
 import LandingPageS6 from './LandingPageS6';
+import LandingPageS7 from './LandingPageS7';
+import JoinPage7 from './pages/s7/JoinPage';
+import JoinSuccessPage7 from './pages/s7/JoinSuccessPage';
+import JoinFailPage7 from './pages/s7/JoinFailPage';
 import StatsPage from './pages/StatsPage';
 import NotifyPage from './pages/NotifyPage';
 
@@ -141,7 +145,13 @@ export default function App() {
     <Routes>
       {/* 메인 = 260921_team_run_season5 모집 랜딩 v2(하프마라톤 목적지 프레임, 2026-09-19 교체).
           v1은 /s5 에 비교용으로 남겨둠. 지난 기수 랜딩은 아카이브 URL로만. */}
-      <Route path="/" element={<LandingPageS6 />} />
+      {/* 메인 = 261130_team_run_season7 (90일의 첫 28일 1만원 체험 · 모집 전엔 오픈 알림 모드, 2026-10-27).
+          시즌6 랜딩은 /s6 아카이브. 결제는 /s7/join(랜딩에 공개 링크). */}
+      <Route path="/" element={<LandingPageS7 />} />
+      <Route path="/s7" element={<LandingPageS7 />} />
+      <Route path="/s7/join" element={<JoinPage7 />} />
+      <Route path="/s7/join/success" element={<JoinSuccessPage7 />} />
+      <Route path="/s7/join/fail" element={<JoinFailPage7 />} />
       <Route path="/s6" element={<LandingPageS6 />} />
       <Route path="/s5" element={<LandingPageS5 />} />
       {/* v2 직접 주소 — / 와 같은 페이지 */}
