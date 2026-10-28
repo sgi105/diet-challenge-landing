@@ -93,6 +93,14 @@ export default function JoinPage() {
       </header>
 
       <main className="px-6 py-8 max-w-lg mx-auto">
+        {/* 토스 계약 전(테스트 키)엔 실제 결제가 안 된다 — 실서비스 도메인에서 결제한 사람이 참가 확정으로 착각하지 않게 안내.
+            실결제 키(VITE_TOSS_CLIENT_KEY=live_...)로 바꾸면 자동으로 사라진다. */}
+        {TOSS_IS_TEST && typeof window !== 'undefined' && window.location.hostname === 'challenge.samuraihabits.com' && (
+          <div className="rounded-2xl border-2 border-accent-orange bg-accent-orange/10 p-4 mb-6 text-sm">
+            <p className="text-text-primary font-black">지금은 결제 시스템 준비 중이야</p>
+            <p className="text-text-secondary mt-1 break-keep">이 페이지 결제는 테스트라 실제로 결제되지 않고 참가도 확정되지 않아. 결제가 열리면 <Link to="/notify" className="underline">오픈 알림</Link>으로 제일 먼저 알려줄게.</p>
+          </div>
+        )}
         <p className="text-accent-green text-[11px] font-black tracking-widest">TARZAN 시즌7</p>
         <h1 className="font-kr text-[28px] font-black text-text-primary leading-tight mt-2 break-keep">
           90일 하프마라톤 프로그램<br />첫 {COHORT7.trialDays}일 체험
