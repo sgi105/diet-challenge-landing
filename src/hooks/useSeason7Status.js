@@ -28,9 +28,11 @@ export function useSeason7Status() {
     return () => clearInterval(t);
   }, [status]);
 
-  // 정원(결제 완료 기준) 다 차면 자동 closed.
+  // 정원(결제 완료 기준) 다 차면 자동 closed — 모집 중일 때만 본다.
+  // useApplicantCount 는 꺼져 있어도 localStorage 캐시(지난 기수 인원)를 돌려주므로, official 이 아닐 땐 무시해야 한다
+  // (시즌6 정원 50명 캐시 때문에 알림 모드가 '마감'으로 보이던 버그, 2026-10-28).
   const count = useApplicantCount(status === 'official', COHORT7.cohortCode);
-  if (spotsInfo(count)?.full) return 'closed';
+  if (status === 'official' && spotsInfo(count)?.full) return 'closed';
 
   return status;
 }
