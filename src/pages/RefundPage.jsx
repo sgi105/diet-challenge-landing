@@ -16,7 +16,7 @@ export default function RefundPage() {
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">1. 적용 상품</h2>
           <p>① 상품 1: 90일 하프마라톤 프로그램의 첫 {total}일 체험(시즌7, {COHORT7.startDate} - {COHORT7.finalDate}) · 참가비 {PROGRAM7.fee.toLocaleString()}원</p>
-          <p className="mt-1">② 상품 2: {CONTINUE7.name}({CONTINUE7.startDate} - {CONTINUE7.endDate}, {CONTINUE7.durationDays}일) · 참가비 {CONTINUE7.fee.toLocaleString()}원. {total}일 체험을 마친 분 중 원하는 분만 {CONTINUE7.saleWindow}에 따로 결제합니다.</p>
+          <p className="mt-1">② 상품 2: {CONTINUE7.name} · {CONTINUE7.startDate} - {CONTINUE7.endDate}({CONTINUE7.durationDays}일) · 참가비 {CONTINUE7.fee.toLocaleString()}원. {total}일 체험을 마친 분 중 원하는 분만 {CONTINUE7.saleWindow}에 따로 결제합니다.</p>
           <p className="mt-1">참가비는 서비스 이용 대금이며, 미션 성공 여부에 따라 반환되는 금액이 아닙니다.</p>
         </section>
 
