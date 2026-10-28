@@ -1,4 +1,3 @@
-import JoinLink from './JoinLink';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import Button from '../ui/Button';
 import CountdownTimer from '../ui/CountdownTimer';
@@ -80,7 +79,6 @@ export default function FinalCTASection({ onCTA }) {
           <span className="block">{isOfficial ? CTA_LABEL7 : copy.cta.final}</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
         </Button>
-        {isUpcoming && <JoinLink placement="final" className="mt-5" />}
 
         {showCountdown && (
           <div className="mt-6">

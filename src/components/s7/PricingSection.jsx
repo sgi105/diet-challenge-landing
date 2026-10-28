@@ -1,6 +1,5 @@
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import Button from '../ui/Button';
-import JoinLink from './JoinLink';
 import { useSeason7Status, COPY7 } from '../../hooks/useSeason7Status';
 import { COHORT7, PROGRAM7, REFUND7, CTA_LABEL7 } from '../../data/season7';
 
@@ -17,7 +16,6 @@ const INCLUDES = [
 export default function PricingSection({ onCTA }) {
   const status = useSeason7Status();
   const copy = COPY7[status];
-  const isUpcoming = status === 'upcoming';
 
   return (
     <section className="px-6 py-14 max-w-lg mx-auto text-center">
@@ -59,7 +57,6 @@ export default function PricingSection({ onCTA }) {
           <span className="block">{status === 'official' ? CTA_LABEL7 : copy.cta.pricing}</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
         </Button>
-        {isUpcoming && <JoinLink placement="pricing" className="mt-5" />}
         <p className="text-text-muted text-xs font-semibold mt-4 break-keep">
           자동 결제 없음 · {REFUND7.summary}
         </p>

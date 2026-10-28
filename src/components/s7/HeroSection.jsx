@@ -4,7 +4,6 @@ import { HERO_MEDIA } from '../../data/season5v2';
 import { useSeason7Status, COPY7 } from '../../hooks/useSeason7Status';
 import { useApplicantCount } from '../../hooks/useApplicantCount';
 import { spotsInfo } from '../../lib/spots';
-import JoinLink from './JoinLink';
 import { useSectionViews } from '../../hooks/useSectionViews';
 import { useState } from 'react';
 import { heroVariant } from '../../lib/abTest';
@@ -126,7 +125,6 @@ export default function HeroSection({ onCTA }) {
   const status = useSeason7Status();
   const copy = COPY7[status];
   const isClosed = status === 'closed';
-  const isUpcoming = status === 'upcoming';
   const isOfficial = status === 'official';
 
   const liveCount = useApplicantCount(isOfficial, COHORT7.cohortCode);
@@ -223,7 +221,6 @@ export default function HeroSection({ onCTA }) {
               <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{ctaSub}</span>
             </Button>
             {isB && <Bar90 />}
-            {isUpcoming && <JoinLink placement="hero" className="mt-5" />}
           </div>
         </div>
       </div>

@@ -101,7 +101,6 @@ export default function LandingPageS7() {
         {!isClosed && (
           <section className="px-6 pt-2 pb-10 max-w-lg mx-auto text-center">
             <Button onClick={() => handleCTA('mid_testimonial')} className="w-full max-w-xs">{ctaLabel ?? copy.cta.hero} →</Button>
-            {isUpcoming && <JoinLink placement="mid" className="mt-4" />}
           </section>
         )}
 
@@ -116,6 +115,8 @@ export default function LandingPageS7() {
         {!isClosed && <UrgencySection hideCountdown />}
         <FAQSection />
         <FinalCTASection onCTA={() => handleCTA('final')} />
+        {/* 결제 페이지(/s7/join) 공개 링크 — 맨 밑에 한 번만, 눈에 덜 띄게(가인 2026-10-28). 알림 모드에서만. */}
+        {isUpcoming && <JoinLink placement="bottom" subtle />}
         <Footer />
         <StickyCTA onCTA={() => handleCTA('sticky')} label={ctaLabel ?? undefined} />
       </div>
