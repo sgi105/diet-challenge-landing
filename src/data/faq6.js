@@ -1,5 +1,5 @@
 // 261019_team_run_season6 FAQ — 28일 · 5인 1팀 · 하루 10분 이상이면 성공(권장 10-25분, 마지막 주 디로딩)
-// · 참가비 무료 · 보증금 1만원(28일 중 25일 + 파이널 5K → 전액 환급) · 선발 없음 · 팀 상금 없음.
+// · 참가비 무료 · 보증금 1만원(25일 끝까지 목숨 남으면 전액 환급 — 5km 테스트는 조건 아님, 가인 2026-10-29) · 선발 없음 · 팀 상금 없음.
 // 날짜·숫자는 season6.js 에서 가져온다.
 import { COHORT6, PROGRAM6 } from './season6';
 
@@ -8,7 +8,7 @@ const D = COHORT6.trialDays; // 신규 기준 무료 체험 25일
 export const faqItems = [
   {
     question: `무료인데 보증금 ${PROGRAM6.depositLabel}은 왜 받아요?`,
-    answer: `${D}일 체험은 진짜 무료야. 근데 공짜면 아무도 안 뛰어. 돈이 걸려야 제대로 하거든. 못 뛴 날 ${PROGRAM6.passCount}번 빼고 매일 인증하고 마지막 날 5km 테스트까지 뛰면 보증금 ${PROGRAM6.depositLabel} 전액 돌려줄게.`,
+    answer: `${D}일 체험은 진짜 무료야. 근데 공짜면 아무도 안 뛰어. 돈이 걸려야 제대로 하거든. ${D}일 끝까지 목숨이 남아 있으면 보증금 ${PROGRAM6.depositLabel} 전액 돌려줄게.`,
   },
   {
     question: '무료 체험 끝나면 자동으로 결제돼요?',
@@ -32,7 +32,7 @@ export const faqItems = [
   },
   {
     question: `${D}일 동안 하루도 못 빠지나요?`,
-    answer: `${PROGRAM6.passCount}번까지는 봐줄게. ${COHORT6.startDate} 합류부터 ${COHORT6.finalDate}까지 ${PROGRAM6.joinDays}일 중 ${PROGRAM6.joinSuccessDays}일만 채우면 돼. 살다 보면 아프거나 일정 겹치는 날 있잖아. 그것까지 계산해둔 거야.`,
+    answer: `목숨이 4개야. 미션 실패하면 하나씩 깎이고 ${COHORT6.finalDate}까지 하나라도 남아 있으면 돼. 살다 보면 아프거나 일정 겹치는 날 있잖아. 그것까지 계산해둔 거야.`,
   },
   {
     question: '신청하면 바로 참가할 수 있나요?',
