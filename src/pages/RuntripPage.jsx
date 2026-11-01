@@ -6,12 +6,11 @@ import { submitRuntripApplication } from '../lib/runtripApi';
 const BASE = '/runtrip';
 const TOTAL_SPOTS = 12;
 const DEADLINE = '2026-11-04';
-const ACCOUNT = '1000 2641 8699 토스뱅크 신가인';
 const HERO_TAGS = ['러닝', '명상', '핀란드 사우나', '알코올 프리'];
 
 const OPTIONS = [
-  { key: 'full', name: '풀코스 2박 3일', price: 290000, amount: '29만원', desc: '숙소 2박 · 금요일 바비큐 + 파이어사이드 챗부터 전부 같이', recommended: true },
-  { key: 'weekend', name: '주말 1박 2일 (토-일)', price: 190000, amount: '19만원', desc: '토요일 09:00 아침 러닝부터 합류 · 숙소 1박 · 금요일 바비큐와 파이어사이드 챗은 빠져' },
+  { key: 'full', name: '풀코스 2박 3일', price: 290000, desc: '숙소 2박 · 금요일 바비큐 + 파이어사이드 챗부터 전부 같이', recommended: true },
+  { key: 'weekend', name: '주말 1박 2일 (토-일)', price: 190000, desc: '토요일 09:00 아침 러닝부터 합류 · 숙소 1박 · 금요일 바비큐와 파이어사이드 챗은 빠져' },
 ];
 
 const GALLERY = [
@@ -41,7 +40,7 @@ const DAYS = [
 
 const FAQS = [
   ['러닝 초보도 가도 돼?', '완전 돼. 페이스 맞춰서 같이 뛰고 기록 경쟁 아니야'],
-  ['자리는 언제 확정돼?', '입금 완료 순으로 확정돼. 신청한 날까지 입금해줘'],
+  ['자리는 언제 확정돼?', '입금 완료 순으로 확정돼. 입금 안내 받은 날까지 입금해줘'],
   ['혼자 신청해도 돼?', '완전 돼. 혼자 와도 2박 3일 같이 지내다 보면 금방 친해져'],
   ['방은 어떻게 써?', '방은 팀별로 배정할 거고 남녀 구분돼'],
   ['식사는 어떻게 돼?', '금요일 바비큐 저녁이랑 조식 2회가 참가비에 포함이야. 토요일 점심 · 저녁은 포함이 아니라 각자 부담이야'],
@@ -61,12 +60,15 @@ function SectionTitle({ children }) {
 
 function ApplySheet({ option, onClose, onDone }) {
   const [name, setName] = useState('');
+  const [gender, setGender] = useState('');
+  const [age, setAge] = useState('');
   const [phone, setPhone] = useState('');
   const [agreed, setAgreed] = useState(false);
   const [sending, setSending] = useState(false);
   const [error, setError] = useState('');
   const digits = phone.replace(/[^0-9]/g, '');
-  const valid = name.trim().length > 0 && /^01[0-9]{8,9}$/.test(digits) && agreed;
+  const ageNum = Number(age);
+  const valid = name.trim().length > 0 && !!gender && ageNum >= 14 && ageNum <= 99 && /^01[0-9]{8,9}$/.test(digits) && agreed;
 
   const submit = async (e) => {
     e.preventDefault();
@@ -74,7 +76,7 @@ function ApplySheet({ option, onClose, onDone }) {
     setSending(true);
     setError('');
     try {
-      await submitRuntripApplication({ name: name.trim(), phone: digits, option: option.key });
+      await submitRuntripApplication({ name: name.trim(), gender, age: ageNum, phone: digits, option: option.key });
       onDone();
     } catch (err) {
       console.error('[runtrip] 신청 실패:', err);
@@ -98,6 +100,19 @@ function ApplySheet({ option, onClose, onDone }) {
         <label className="block mt-4 text-sm font-bold">이름
           <input value={name} onChange={(e) => setName(e.target.value)} maxLength={30} autoComplete="name" className="mt-1 block w-full h-12 rounded-xl border border-[#d9cfbb] px-3 text-base font-normal outline-none focus:border-[#1f4d3a]" />
         </label>
+        <div className="mt-3 flex gap-3">
+          <div className="flex-1">
+            <p className="text-sm font-bold">성별</p>
+            <div className="mt-1 grid grid-cols-2 gap-2">
+              {[['male', '남'], ['female', '여']].map(([key, label]) => (
+                <button key={key} type="button" aria-pressed={gender === key} onClick={() => setGender(key)} className={`h-12 rounded-xl border font-bold ${gender === key ? 'border-[#1f4d3a] bg-[#1f4d3a] text-white' : 'border-[#d9cfbb] bg-white'}`}>{label}</button>
+              ))}
+            </div>
+          </div>
+          <label className="block flex-1 text-sm font-bold">나이
+            <input value={age} onChange={(e) => setAge(e.target.value.replace(/[^0-9]/g, '').slice(0, 2))} inputMode="numeric" className="mt-1 block w-full h-12 rounded-xl border border-[#d9cfbb] px-3 text-base font-normal outline-none focus:border-[#1f4d3a]" />
+          </label>
+        </div>
         <label className="block mt-3 text-sm font-bold">휴대폰 번호
           <input value={phone} onChange={(e) => setPhone(e.target.value)} inputMode="numeric" autoComplete="tel" placeholder="01012345678" className="mt-1 block w-full h-12 rounded-xl border border-[#d9cfbb] px-3 text-base font-normal outline-none focus:border-[#1f4d3a]" />
         </label>
@@ -118,28 +133,14 @@ function ApplySheet({ option, onClose, onDone }) {
 }
 
 function DonePopup({ option, onClose }) {
-  const [copied, setCopied] = useState(false);
-  const copy = async () => {
-    try {
-      await navigator.clipboard.writeText(ACCOUNT);
-      setCopied(true);
-    } catch (err) {
-      console.error('[runtrip] 복사 실패:', err);
-    }
-  };
   return (
     <div className="fixed inset-0 z-50 bg-black/50 flex items-center justify-center px-6">
       <div role="dialog" aria-label="런트립 신청 완료" className="w-full max-w-[340px] bg-white text-[#1c1f1a] rounded-2xl p-6 text-center">
         <p className="text-3xl mb-2">🎉</p>
         <p className="text-xl font-extrabold">런트립에 온 걸 환영해!</p>
-        <p className="mt-2 text-[15px] text-[#4f554b]">오늘까지 아래 계좌로 입금 부탁할게.<br />입금 완료 순으로 자리가 확정돼.</p>
-        <div className="mt-4 rounded-xl bg-[#f6f3ec] p-3">
-          <p className="font-extrabold">{ACCOUNT}</p>
-          <p className="mt-1 font-extrabold text-[#d9531e]">{option.amount}</p>
-        </div>
-        <button onClick={copy} className="mt-3 w-full h-12 rounded-xl bg-[#ece7dc] font-bold">{copied ? '복사했어' : '계좌 복사'}</button>
-        <p className="mt-3 text-[13px] text-[#4f554b]">입금 확인되면 남겨준 번호로 연락할게</p>
-        <button onClick={onClose} className="mt-3 w-full h-14 rounded-2xl bg-[#1f4d3a] text-white font-extrabold">확인</button>
+        <p className="mt-2 font-bold">{option.name}</p>
+        <p className="mt-2 text-[15px] text-[#4f554b]">남겨준 번호로 입금 안내를 보내줄게<br />입금 완료 순으로 자리가 확정돼</p>
+        <button onClick={onClose} className="mt-5 w-full h-14 rounded-2xl bg-[#1f4d3a] text-white font-extrabold">확인</button>
       </div>
     </div>
   );
