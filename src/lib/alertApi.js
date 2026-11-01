@@ -4,7 +4,7 @@ import { supabase } from './applyApi';
 // anon은 INSERT만 가능하고 읽기는 코치 계정만 된다. 공개 대시보드엔 count_cohort_alerts_public 숫자만.
 
 // 유입 꼬리표 — eventLog가 첫 진입 때 sessionStorage에 저장해 둔 utm을 그대로 읽는다.
-function savedUtm() {
+export function savedUtm() {
   try {
     const raw = sessionStorage.getItem('ttr_utm');
     const u = raw ? JSON.parse(raw) : null;

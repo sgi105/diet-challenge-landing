@@ -24,6 +24,7 @@ import SuccessPage from './pages/SuccessPage';
 import FailPage from './pages/FailPage';
 import TermsPage from './pages/TermsPage';
 import PrivacyPage from './pages/PrivacyPage';
+import RuntripPage from './pages/RuntripPage';
 import RefundPage from './pages/RefundPage';
 import ApplyPage from './pages/ApplyPage';
 import UnsubscribePage from './pages/UnsubscribePage';
@@ -148,6 +149,7 @@ export default function App() {
       {/* 메인 = 261130_team_run_season7 (90일의 첫 28일 1만원 체험 · 모집 전엔 오픈 알림 모드, 2026-10-27).
           시즌6 랜딩은 /s6 아카이브. 결제는 /s7/join(랜딩에 공개 링크). */}
       <Route path="/" element={<LandingPageS7 />} />
+      <Route path="/runtrip" element={<RuntripPage />} />
       <Route path="/s7" element={<LandingPageS7 />} />
       <Route path="/s7/join" element={<JoinPage7 />} />
       <Route path="/s7/join/success" element={<JoinSuccessPage7 />} />
