@@ -7,8 +7,10 @@
 // env 가 없으면 토스 공식 문서의 공개 샘플 테스트 키로 동작한다(미리보기·심사 준비용).
 import { loadTossPayments, ANONYMOUS } from '@tosspayments/tosspayments-sdk';
 
+// 무사 상점(MID 신청 2026-11-05) 전용 테스트 클라이언트 키 — 공용 문서 키가 500 을 내서 교체. 클라이언트 키라 공개돼도 됨.
+export const MUSA_TEST_CLIENT_KEY = 'test_gck_6bJXmgo28e7mGj7jRbojVLAnGKWx';
 export const DOCS_TEST_CLIENT_KEY = 'test_gck_docs_Ovk5rk1EwkEbP0W43n07xlzm';
-export const TOSS_CLIENT_KEY = import.meta.env.VITE_TOSS_CLIENT_KEY || DOCS_TEST_CLIENT_KEY;
+export const TOSS_CLIENT_KEY = import.meta.env.VITE_TOSS_CLIENT_KEY || MUSA_TEST_CLIENT_KEY;
 export const TOSS_IS_TEST = TOSS_CLIENT_KEY.startsWith('test_');
 
 export async function createWidgets() {
