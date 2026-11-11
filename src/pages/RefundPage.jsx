@@ -32,22 +32,15 @@ export default function RefundPage() {
 
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">3. 환불 기준 — 상품 2 (이어하기 · {CONTINUE7.fee.toLocaleString()}원)</h2>
-          <p>이용 기간 {CONTINUE7.durationDays}일을 두 구간으로 나눠 계산합니다.</p>
-          <ul className="list-disc pl-5 space-y-1 mt-1">
-            {CONTINUE7.blocks.map((b) => (
-              <li key={b.label}>{b.label}: {b.range} ({b.days}일) · {b.fee.toLocaleString()}원</li>
-            ))}
-          </ul>
-          <div className="bg-bg-card rounded-xl p-4 mt-3 space-y-2">
+          <div className="bg-bg-card rounded-xl p-4 mt-2 space-y-2">
             <p className="text-card-ink font-semibold">① 시작일({CONTINUE7.startDate}) 전 요청: 전액 환불</p>
             <p className="text-card-ink font-semibold">② 시작일부터 {CONTINUE7.proRataDays}일 이내 요청: 남은 일수만큼 일할 환불</p>
             <p className="text-card-ink-muted text-xs pl-4">환불액 = 참가비 × (남은 일수 ÷ {CONTINUE7.durationDays}일)</p>
-            <p className="text-card-ink font-semibold">③ 그 이후 요청: 요청한 날이 속한 구간은 아래 기준, 그 뒤 남은 구간은 전액 환불</p>
-            <p className="text-card-ink-muted text-xs pl-4">· 구간의 1/3이 지나기 전: 그 구간 참가비의 2/3</p>
-            <p className="text-card-ink-muted text-xs pl-4">· 구간의 1/3이 지난 뒤 1/2이 지나기 전: 그 구간 참가비의 1/2</p>
-            <p className="text-card-ink-muted text-xs pl-4">· 구간의 1/2이 지난 뒤: 그 구간 참가비는 환불하지 않음</p>
+            <p className="text-card-ink font-semibold">③ 그 이후 요청: 남은 일수 금액에서 위약금 {Math.round(CONTINUE7.penaltyRate * 100)}%를 뺀 금액 환불</p>
+            <p className="text-card-ink-muted text-xs pl-4">환불액 = 참가비 × (남은 일수 ÷ {CONTINUE7.durationDays}일) × {Math.round((1 - CONTINUE7.penaltyRate) * 100)}%</p>
+            <p className="text-card-ink-muted text-xs pl-4">이어하기는 1개월이 넘는 계속거래로, 이용 기간 중 언제든 해지를 요청할 수 있습니다.</p>
           </div>
-          <p className="mt-3 font-semibold text-text-primary">요청일별 환불액</p>
+          <p className="mt-3 font-semibold text-text-primary">요청일별 환불액 (예시)</p>
           <div className="bg-bg-card rounded-xl p-4 mt-2 space-y-1">
             {CONTINUE7.table.map((r) => (
               <p key={r.when} className="text-card-ink text-xs flex justify-between gap-3"><span>{r.when}</span><span className="font-semibold text-right">{r.amount}</span></p>
@@ -77,10 +70,10 @@ export default function RefundPage() {
 
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">부칙</h2>
-          <p>본 정책은 2026년 10월 27일부터 시행합니다. 상품 2 환불 기준은 2026년 10월 28일에 추가했습니다. 시즌6 이전에 결제된 건은 결제 당시 안내된 환불정책을 적용합니다.</p>
+          <p>본 정책은 2026년 10월 27일부터 시행합니다. 상품 2 환불 기준은 2026년 10월 28일에 추가하고 2026년 11월 11일에 개정했습니다. 시즌6 이전에 결제된 건은 결제 당시 안내된 환불정책을 적용합니다.</p>
         </section>
 
-        <p className="text-text-muted pt-4">시행일: 2026년 10월 27일 · 개정일: 2026년 10월 28일</p>
+        <p className="text-text-muted pt-4">시행일: 2026년 10월 27일 · 개정일: 2026년 11월 11일</p>
       </div>
     </div>
   );
