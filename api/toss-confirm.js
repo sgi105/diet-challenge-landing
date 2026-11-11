@@ -8,7 +8,8 @@
 // 실결제 전환 체크리스트: TOSS_SECRET_KEY/VITE_TOSS_CLIENT_KEY 를 라이브 키로 · toss_orders 마이그레이션 적용 · 위 Supabase env 설정.
 import { PROGRAM7 } from '../src/data/season7.js';
 
-export const config = { runtime: 'edge' };
+// 토스 API 키 접근 정책(기본: 대한민국 IP만 허용) 때문에 서울 리전에서만 실행한다. 다른 리전(예: 싱가포르)에서 호출하면 승인 거절됨 (2026-11-11 확인).
+export const config = { runtime: 'edge', regions: ['icn1'] };
 
 const DOCS_TEST_SECRET_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6';
 
