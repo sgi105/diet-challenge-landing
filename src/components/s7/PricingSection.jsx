@@ -1,6 +1,8 @@
+import { Link } from 'react-router-dom';
+import { track } from '@vercel/analytics';
 import AnimateOnScroll from '../ui/AnimateOnScroll';
 import Button from '../ui/Button';
-import { useSeason7Status, COPY7 } from '../../hooks/useSeason7Status';
+import { useSeason7Status, COPY7, JOIN_PATH7 } from '../../hooks/useSeason7Status';
 import { COHORT7, PROGRAM7, REFUND7, CTA_LABEL7 } from '../../data/season7';
 
 // 시즌7 오퍼 — 90일 하프 프로그램의 첫 28일 = 1만원 체험 (가인 2026-10-27).
@@ -57,6 +59,16 @@ export default function PricingSection({ onCTA }) {
           <span className="block">{status === 'official' ? CTA_LABEL7 : copy.cta.pricing}</span>
           <span className="block text-[11px] font-bold opacity-80 mt-1 tracking-wide">{copy.ctaSub}</span>
         </Button>
+        {/* 알림 모드에서도 결제 경로는 눈에 보이게 — 카드사 심사(결제창 연동 확인) 대비 (2026-11-11) */}
+        {status === 'upcoming' && (
+          <Link
+            to={JOIN_PATH7}
+            onClick={() => track('s7_join_link_click', { placement: 'pricing' })}
+            className="block w-full mt-3 px-6 py-3.5 rounded-xl border-2 border-accent-green text-accent-green font-bold text-base hover:bg-accent-green hover:text-bg-primary transition-all"
+          >
+            {PROGRAM7.fee.toLocaleString()}원 결제하고 바로 참가 확정 →
+          </Link>
+        )}
         <p className="text-text-muted text-xs font-semibold mt-4 break-keep">
           자동 결제 없음 · {REFUND7.summary}
         </p>
