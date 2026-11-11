@@ -69,6 +69,8 @@ export default async function handler(req) {
     totalAmount: pay.totalAmount,
     approvedAt: pay.approvedAt,
     receiptUrl: pay.receipt?.url || null,
+    // 가상계좌: 승인 시점엔 WAITING_FOR_DEPOSIT(입금 대기). 입금돼야 DONE.
+    virtualAccount: pay.virtualAccount ? { bankCode: pay.virtualAccount.bankCode, accountNumber: pay.virtualAccount.accountNumber, dueDate: pay.virtualAccount.dueDate, customerName: pay.virtualAccount.customerName } : null,
     recorded,
   });
 }
