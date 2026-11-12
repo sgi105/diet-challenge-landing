@@ -23,7 +23,7 @@ export default function RefundPage() {
         <section>
           <h2 className="text-text-primary font-bold text-base mb-2">2. 환불 기준 — 상품 1 ({total}일 체험 · {PROGRAM7.fee.toLocaleString()}원)</h2>
           <div className="bg-bg-card rounded-xl p-4 mt-2 space-y-2">
-            <p className="text-card-ink font-semibold">① {REFUND7.fullUntil}({COHORT7.otDate} {COHORT7.otTime}) 요청: 전액 환불</p>
+            <p className="text-card-ink font-semibold">① {REFUND7.fullUntil} 요청: 전액 환불</p>
             <p className="text-card-ink font-semibold">② 시작일({COHORT7.startDate})부터 {REFUND7.proRataDays}일 이내 요청: 남은 일수만큼 일할 환불</p>
             <p className="text-card-ink-muted text-xs pl-4">환불액 = 참가비 × (남은 일수 ÷ {total}일), 10원 단위 버림. 요청한 날은 이용한 날로 봅니다.</p>
             <p className="text-card-ink font-semibold">③ 시작일부터 {REFUND7.proRataDays}일이 지난 뒤: 환불 불가</p>

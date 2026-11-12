@@ -11,7 +11,7 @@ import { COHORT7, PROGRAM7, REFUND7, CTA_LABEL7 } from '../../data/season7';
 const INCLUDES = [
   { icon: '👟', title: '레벨 맞춤 28일 러닝 프로그램', desc: '지원할 때 레벨 테스트 · 출발점에 맞게' },
   { icon: '👥', title: `${COHORT7.teamSize}인 1팀 배정`, desc: '앱 인증 피드 · 팀 점수 · 응원' },
-  { icon: '💬', title: '단톡방 + 주간 라이브 점검', desc: `온라인 OT ${COHORT7.otDate} ${COHORT7.otTime}` },
+  { icon: '💬', title: '단톡방 + 코치 Q&A', desc: '질문하면 코치가 답해줘 · 공지 · 페이스 공유' },
   { icon: '🏁', title: `파이널 ${PROGRAM7.finalDistanceKm}km 테스트`, desc: `${COHORT7.finalDate} · 각자 동네에서` },
 ];
 

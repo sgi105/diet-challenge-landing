@@ -12,8 +12,7 @@ import { createWidgets, newOrderId, TOSS_IS_TEST } from '../../lib/tossPayments'
 const INCLUDES = [
   '레벨 테스트 후 수준별 28일 러닝 프로그램',
   `${COHORT7.teamSize}인 1팀 배정 · 앱 러닝 인증 · 팀 피드`,
-  '단톡방 · 주간 온라인 라이브 점검',
-  `온라인 OT · ${COHORT7.otDate} ${COHORT7.otTime} (줌)`,
+  '단톡방 · 코치 Q&A · 공지',
   `파이널 ${PROGRAM7.finalDistanceKm}km 테스트 · ${COHORT7.finalDate}`,
 ];
 
@@ -114,7 +113,7 @@ export default function JoinPage() {
           </div>
           <dl className="text-sm mt-3 space-y-2">
             <div className="flex justify-between"><dt className="text-card-ink-muted">제공 기간</dt><dd className="text-card-ink font-bold">{COHORT7.startDate} - {COHORT7.finalDate} ({COHORT7.durationDays}일)</dd></div>
-            <div className="flex justify-between"><dt className="text-card-ink-muted">진행 방식</dt><dd className="text-card-ink font-bold">100% 온라인 (앱 · 단톡방 · 줌)</dd></div>
+            <div className="flex justify-between"><dt className="text-card-ink-muted">진행 방식</dt><dd className="text-card-ink font-bold">100% 온라인 (앱 · 단톡방)</dd></div>
             <div className="flex justify-between"><dt className="text-card-ink-muted">정원</dt><dd className="text-card-ink font-bold">{COHORT7.totalSpots}명 (선착순)</dd></div>
             <div className="flex justify-between"><dt className="text-card-ink-muted">참가비</dt><dd className="text-card-ink font-black text-lg">{PROGRAM7.fee.toLocaleString()}원</dd></div>
           </dl>
@@ -141,7 +140,7 @@ export default function JoinPage() {
             className="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3 text-text-primary placeholder:text-text-muted outline-none focus:border-accent-green" />
           <input value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="휴대폰 번호 (010...)" inputMode="numeric" autoComplete="tel"
             className="w-full rounded-xl bg-white/10 border border-white/15 px-4 py-3 text-text-primary placeholder:text-text-muted outline-none focus:border-accent-green" />
-          <p className="text-text-muted text-xs">단톡방 초대·OT 안내를 이 번호로 문자 보내요. 국내 휴대폰 번호만 가능해요.</p>
+          <p className="text-text-muted text-xs">단톡방 초대를 이 번호로 문자 보내요. 국내 휴대폰 번호만 가능해요.</p>
         </section>
 
         {/* 결제수단 · 토스 약관 */}
@@ -154,7 +153,7 @@ export default function JoinPage() {
         <section className="mt-6 rounded-2xl border border-white/15 p-4 text-sm">
           <p className="text-text-primary font-black mb-2">환불 기준</p>
           <ul className="space-y-1 text-text-secondary">
-            <li>· {REFUND7.fullUntil}({COHORT7.otDate} {COHORT7.otTime}): 전액 환불</li>
+            <li>· {REFUND7.fullUntil}: 전액 환불</li>
             <li>· 시작일({COHORT7.startDate})부터 {REFUND7.proRataDays}일 이내: 남은 일수만큼 일할 환불</li>
             <li>· 시작일부터 {REFUND7.proRataDays}일이 지난 뒤: 환불 불가</li>
           </ul>

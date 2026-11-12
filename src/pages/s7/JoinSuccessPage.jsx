@@ -89,7 +89,6 @@ export default function JoinSuccessPage() {
             </p>
             <div className="bg-bg-card rounded-2xl p-5 text-left space-y-2 text-sm">
               <p className="text-card-ink"><b>단톡방 초대</b> · {COHORT7.chatInvite} 문자로 보내줄게</p>
-              <p className="text-card-ink"><b>온라인 OT</b> · {COHORT7.otDate} {COHORT7.otTime} (줌)</p>
               <p className="text-card-ink"><b>첫 러닝</b> · {COHORT7.startDate} 딱 {PROGRAM7.startMinutes}분</p>
               <p className="text-card-ink-muted text-xs pt-2">주문번호 {state.data.orderId}</p>
               {state.data.receiptUrl && <a href={state.data.receiptUrl} target="_blank" rel="noreferrer" className="text-card-ink underline text-xs">영수증 보기</a>}

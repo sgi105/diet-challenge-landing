@@ -8,7 +8,7 @@ const D = COHORT7.trialDays; // 28일 체험
 export const faqItems = [
   {
     question: `왜 ${PROGRAM7.feeLabel}이에요?`,
-    answer: `90일 하프마라톤 프로그램의 첫 ${D}일을 ${PROGRAM7.feeLabel}에 해보는 체험이야. 레벨 맞춤 프로그램, 팀 배정, 단톡방, 주간 라이브 점검까지 본 프로그램이랑 똑같이 들어가.`,
+    answer: `90일 하프마라톤 프로그램의 첫 ${D}일을 ${PROGRAM7.feeLabel}에 해보는 체험이야. 레벨 맞춤 프로그램, 팀 배정, 단톡방 코치 Q&A까지 본 프로그램이랑 똑같이 들어가.`,
   },
   {
     question: `${D}일 끝나면 자동으로 결제돼요?`,
@@ -20,7 +20,7 @@ export const faqItems = [
   },
   {
     question: '러닝 초보인데 가능한가요?',
-    answer: `첫날은 딱 ${PROGRAM7.startMinutes}분이야. 걷다 뛰다 해도 돼. 권장 시간은 하루 1분씩 늘어서 12/20에 ${PROGRAM7.peakMinutes}분이 되는데 ${PROGRAM7.successMinutes}분만 뛰어도 그날 미션은 성공이야. OT에서 호흡법이랑 페이스 다 알려줄게.`,
+    answer: `첫날은 딱 ${PROGRAM7.startMinutes}분이야. 걷다 뛰다 해도 돼. 권장 시간은 하루 1분씩 늘어서 12/20에 ${PROGRAM7.peakMinutes}분이 되는데 ${PROGRAM7.successMinutes}분만 뛰어도 그날 미션은 성공이야. 호흡법이나 페이스가 궁금하면 단톡방에 물어봐. 코치가 답해줄게.`,
   },
   {
     question: '하루에 얼마나 뛰어야 해요?',
@@ -44,16 +44,16 @@ export const faqItems = [
   },
   {
     question: '일정이 어떻게 돼요?',
-    answer: `${COHORT7.startDate}에 시작해서 ${COHORT7.finalDate}에 ${D}일 체험이 끝나. 온라인 OT는 ${COHORT7.otDate} ${COHORT7.otTime}이고, 단톡방은 ${COHORT7.chatInvite}에 한 번에 초대해. 하프마라톤은 90일째(${COHORT7.halfDate})야.`,
+    answer: `${COHORT7.startDate}에 시작해서 ${COHORT7.finalDate}에 ${D}일 체험이 끝나. 단톡방은 ${COHORT7.chatInvite}에 한 번에 초대해. 하프마라톤은 90일째(${COHORT7.halfDate})야.`,
   },
   {
     question: '환불 되나요?',
-    answer: `${REFUND7.fullUntil}(${COHORT7.otDate} ${COHORT7.otTime})에 말해주면 전액 환불해줄게. 시작 후 ${REFUND7.proRataDays}일 이내에 말해주면 남은 일수만큼 일할로 돌려주고, ${REFUND7.proRataDays}일이 지나면 환불은 어려워. 자세한 건 환불정책 페이지에 있어.`,
+    answer: `${REFUND7.fullUntil}에 말해주면 전액 환불해줄게. 시작 후 ${REFUND7.proRataDays}일 이내에 말해주면 남은 일수만큼 일할로 돌려주고, ${REFUND7.proRataDays}일이 지나면 환불은 어려워. 자세한 건 환불정책 페이지에 있어.`,
   },
   {
     question: '100% 온라인이면 어떻게 같이 뛰어요?',
     // 따옴표 안 = 참가자가 가인에게 직접 한 말(가인 2026-10-22 확인).
-    answer: '앱에 매일 러닝 인증을 올리면 팀원들이 댓글로 응원해. 단톡방에서 페이스 공유하고 주간 라이브로 같이 점검해. "만나지 않았는데도 함께하는 느낌이 들어서 좋았다"는 게 직전 기수 후기야.',
+    answer: '앱에 매일 러닝 인증을 올리면 팀원들이 댓글로 응원해. 단톡방에서 페이스 공유하고, 궁금한 건 코치한테 바로 물어봐. "만나지 않았는데도 함께하는 느낌이 들어서 좋았다"는 게 직전 기수 후기야.',
   },
   {
     question: '파이널 레이스는 뭐예요?',

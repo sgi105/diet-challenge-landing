@@ -61,9 +61,9 @@ export const PROGRAM7 = {
 
 // 환불정책 SOT — /refund · 약관 · 결제 페이지가 같이 본다.
 export const REFUND7 = {
-  fullUntil: "OT 시작 전",
+  fullUntil: "11/30(월) 저녁 7시 30분 전",   // 토스 정책(라이브 서비스 입점 불가)으로 OT를 상품 설명에서 뺌 — 전액 환불 기한은 그대로 유지 (2026-11-12)
   proRataDays: 7,          // 시작 후 7일 이내 = 남은 일수 일할 환불
-  summary: "OT 전 전액 환불 · 시작 후 7일 이내 남은 일수만큼 환불 · 7일 이후 환불 불가",
+  summary: "11/30 저녁 7시 30분 전 전액 환불 · 시작 후 7일 이내 남은 일수만큼 환불 · 7일 이후 환불 불가",
 };
 
 // 90일 프로그램 이어하기(상품 2) — 28일 체험 끝난 뒤 원하는 사람만 별도 결제. 자동 결제 없음.
@@ -124,7 +124,7 @@ export const SCHEDULE7 = [
   { label: "모집 마감", value: COHORT7.deadlineLabel, highlight: true },
   { label: "참가 확정", value: "참가비 결제하면 바로", highlight: false },
   { label: "단톡방 초대", value: COHORT7.chatInvite, highlight: false },
-  { label: "첫 러닝 · 온라인 OT (줌)", value: `${COHORT7.startDate} ${COHORT7.otTime}`, highlight: false },
+  { label: "첫 러닝", value: COHORT7.startDate, highlight: false },
   { label: "28일 체험 끝 · 5km 테스트", value: COHORT7.finalDate, highlight: false },
 ];
 
