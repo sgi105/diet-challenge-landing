@@ -46,17 +46,19 @@ async function sendMetaPurchase({ orderId, amount, phone, fbp, fbc, clientIp, cl
   }
 }
 
-// 실결제 누적 인원(이번 기수, 결제완료, 테스트 제외). 실패하면 null.
+// 이번 기수 결제 인원(DB count_applicants_public — 랜딩 남은 자리와 같은 기준). 실패하면 null.
 async function paidCount(cohortCode) {
   const url = process.env.SUPABASE_URL;
   const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
   if (!url || !key) return null;
   try {
-    const res = await fetch(`${url}/rest/v1/toss_orders?select=order_id&cohort_code=eq.${encodeURIComponent(cohortCode)}&status=eq.DONE&is_test=eq.false`, {
-      headers: { apikey: key, Authorization: `Bearer ${key}`, Prefer: 'count=exact', Range: '0-0' },
+    const res = await fetch(`${url}/rest/v1/rpc/count_applicants_public`, {
+      method: 'POST',
+      headers: { apikey: key, Authorization: `Bearer ${key}`, 'Content-Type': 'application/json' },
+      body: JSON.stringify({ p_cohort: cohortCode }),
     });
-    const cr = res.headers.get('content-range') || '';
-    const n = Number(cr.split('/')[1]);
+    if (!res.ok) return null;
+    const n = Number(await res.json());
     return Number.isFinite(n) ? n : null;
   } catch {
     return null;
@@ -102,6 +104,14 @@ export default async function handler(req) {
   if (Number(amount) !== PROGRAM7.fee) return json(400, { ok: false, message: '결제 금액이 상품 금액과 달라요' });
 
   const secret = process.env.TOSS_SECRET_KEY || DOCS_TEST_SECRET_KEY;
+
+  // 정원 체크(실결제만) — 승인 전에 막으면 고객 카드는 청구되지 않는다(인증만 된 결제는 자동 소멸).
+  if (!secret.startsWith('test_')) {
+    const n = await paidCount(String(cohortCode || COHORT7.cohortCode).slice(0, 64));
+    if (n !== null && n >= COHORT7.totalSpots) {
+      return json(409, { ok: false, code: 'SOLD_OUT', message: `정원(${COHORT7.totalSpots}명)이 마감됐어요. 결제는 진행되지 않았어요.` });
+    }
+  }
   const res = await fetch('https://api.tosspayments.com/v1/payments/confirm', {
     method: 'POST',
     headers: { Authorization: `Basic ${btoa(`${secret}:`)}`, 'Content-Type': 'application/json' },

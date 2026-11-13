@@ -1,5 +1,6 @@
 // Edge Function — 토스 결제 텔레그램 알림.
-// 호출: api/toss-confirm.js(Vercel) 가 결제 승인 직후 서버 간 호출. 헤더 x-internal-secret = INTERNAL_CAPI_SECRET.
+// 호출: ① api/toss-confirm.js(Vercel) 가 결제 승인 직후 — 헤더 x-internal-secret = INTERNAL_CAPI_SECRET
+//       ② DB cron cohort_full_watch() 가 정원 도달 시 — 헤더 apikey = 새 비밀 키(internal_edge_headers)
 // secrets: TELEGRAM_BOT_TOKEN, TELEGRAM_CHAT_ID (페이앱 알림과 같은 봇·채팅), INTERNAL_CAPI_SECRET
 // 배포: Management API (verify_jwt=false — 내부 시크릿으로만 인증)
 
@@ -23,7 +24,12 @@ function kst(iso: string): string {
 Deno.serve(async (req) => {
   if (req.method !== 'POST') return json({ error: 'method' }, 405)
   const secret = Deno.env.get('INTERNAL_CAPI_SECRET')
-  if (!secret || req.headers.get('x-internal-secret') !== secret) return json({ error: 'unauthorized' }, 401)
+  let secretKeys: string[] = []
+  try { secretKeys = Object.values(JSON.parse(Deno.env.get('SUPABASE_SECRET_KEYS') ?? '{}')) as string[] } catch { /* 비어 있음 */ }
+  const apikey = req.headers.get('apikey') ?? ''
+  const okSecret = !!secret && req.headers.get('x-internal-secret') === secret
+  const okApikey = apikey !== '' && secretKeys.includes(apikey)
+  if (!okSecret && !okApikey) return json({ error: 'unauthorized' }, 401)
   const token = Deno.env.get('TELEGRAM_BOT_TOKEN')
   const chatId = Deno.env.get('TELEGRAM_CHAT_ID')
   if (!token || !chatId) return json({ skipped: 'no_telegram' })
@@ -32,6 +38,22 @@ Deno.serve(async (req) => {
   try { b = await req.json() } catch { return json({ error: 'bad_json' }, 400) }
 
   const kind = s(b.kind, 20) // 'paid' | 'waiting' | 'probe'
+  if (kind === 'full') {
+    const adsets = Array.isArray(b.adsets) ? b.adsets.length : 0
+    const text = [
+      '🚩 시즌7 정원 마감!',
+      `결제 완료 ${s(b.paidCount, 10)}명 / 정원 ${s(b.capacity, 10)}명`,
+      '결제 페이지는 자동으로 막혔어요.',
+      adsets ? `메타 광고 세트 ${adsets}개 끄기 요청함` : '⚠️ 연결된 광고 세트가 없어요 — 광고는 직접 꺼주세요.',
+    ].join('\n')
+    try {
+      const r = await fetch(`https://api.telegram.org/bot${token}/sendMessage`, {
+        method: 'POST', headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ chat_id: chatId, text, disable_web_page_preview: true }),
+      })
+      return json({ ok: r.ok }, r.ok ? 200 : 502)
+    } catch { return json({ ok: false }, 502) }
+  }
   const head = kind === 'probe' ? '🔔 [연결 확인] 토스 결제 알림 테스트'
     : kind === 'waiting' ? '🏦 시즌7 가상계좌 발급 (입금 대기)'
     : '💳 시즌7 결제 완료'

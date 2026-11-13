@@ -4,6 +4,7 @@ import { track } from '@vercel/analytics';
 import Footer from '../../components/layout/Footer';
 import { COHORT7, PROGRAM7, REFUND7, SCHEDULE7 } from '../../data/season7';
 import { createWidgets, newOrderId, TOSS_IS_TEST } from '../../lib/tossPayments';
+import { countApplicantsPublic } from '../../lib/applyApi';
 
 // 시즌7 참가비 결제 페이지 (/s7/join) — 랜딩에 공개 링크로 연결(가인 2026-10-27).
 // 실제 상품 페이지다: 여기서 결제하면 시즌7 참가가 확정된다(모집 오픈 전 사전 참가 확정).
@@ -29,6 +30,11 @@ export default function JoinPage() {
   const [error, setError] = useState('');
   const [paying, setPaying] = useState(false);
   const rendered = useRef(false);
+  // 정원 마감 여부(결제 완료 인원 기준). 서버(api/toss-confirm)도 한 번 더 막는다.
+  const [soldOut, setSoldOut] = useState(false);
+  useEffect(() => {
+    countApplicantsPublic(COHORT7.cohortCode).then((n) => setSoldOut(n >= COHORT7.totalSpots), () => {});
+  }, []);
 
   useEffect(() => {
     document.title = `시즌7 28일 러닝 챌린지 참가 · ${PROGRAM7.feeLabel}`;
@@ -55,7 +61,7 @@ export default function JoinPage() {
   }, []);
 
   const phoneDigits = normalizePhone(phone);
-  const canPay = ready && name.trim().length >= 2 && /^01\d{8,9}$/.test(phoneDigits) && agreeRefund && !paying;
+  const canPay = !soldOut && ready && name.trim().length >= 2 && /^01\d{8,9}$/.test(phoneDigits) && agreeRefund && !paying;
 
   const onPay = async () => {
     if (!canPay) return;
@@ -166,13 +172,14 @@ export default function JoinPage() {
         </section>
 
         {error && <p className="text-accent-orange text-sm font-bold mt-4">{error}</p>}
+        {soldOut && <p className="text-accent-orange text-sm font-bold mt-4 text-center break-keep">정원 {COHORT7.totalSpots}명이 모두 찼어요. 다음 기수는 <Link to="/notify" className="underline">오픈 알림</Link>으로 먼저 알려줄게.</p>}
 
         <button
           onClick={onPay}
           disabled={!canPay}
           className={`w-full mt-5 rounded-2xl py-4 font-extrabold text-lg transition-all ${canPay ? 'bg-accent-green text-bg-primary shadow-[0_12px_40px_rgba(200,255,77,0.4)] hover:brightness-110' : 'bg-white/15 text-text-muted cursor-not-allowed'}`}
         >
-          {paying ? '결제창 여는 중…' : `${PROGRAM7.fee.toLocaleString()}원 결제하고 참가 확정`}
+          {soldOut ? '정원 마감' : paying ? '결제창 여는 중…' : `${PROGRAM7.fee.toLocaleString()}원 결제하고 참가 확정`}
         </button>
         {!ready && !error && <p className="text-text-muted text-xs text-center mt-2">결제수단 불러오는 중…</p>}
       </main>
