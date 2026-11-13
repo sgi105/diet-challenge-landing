@@ -6,9 +6,9 @@
 //   SUPABASE_URL               기록용 — 없으면 기록은 건너뛴다(테스트 단계).
 //   SUPABASE_SERVICE_ROLE_KEY  기록용 서버 키
 //   META_CAPI_INTERNAL_SECRET  메타 전환(Purchase) 서버 전송용 — Supabase meta-capi 함수의 INTERNAL_CAPI_SECRET 과 같은 값.
-//                              실결제(라이브 키)·결제완료(DONE)일 때만 보낸다. event_id = toss-<orderId> (결제 완료 화면 픽셀과 같은 값 → 메타가 한 건으로 합침)
+//                              실결제(라이브 키)·결제완료(DONE)일 때만 보낸다. 같은 시크릿으로 toss-paid-notify(텔레그램 알림)도 호출. event_id = toss-<orderId> (결제 완료 화면 픽셀과 같은 값 → 메타가 한 건으로 합침)
 // 실결제 전환 체크리스트: TOSS_SECRET_KEY/VITE_TOSS_CLIENT_KEY 를 라이브 키로 · toss_orders 마이그레이션 적용 · 위 Supabase env 설정.
-import { PROGRAM7 } from '../src/data/season7.js';
+import { PROGRAM7, COHORT7 } from '../src/data/season7.js';
 
 // 토스 API 키 접근 정책(기본: 대한민국 IP만 허용) 때문에 서울 리전에서만 실행한다. 다른 리전(예: 싱가포르)에서 호출하면 승인 거절됨 (2026-11-11 확인).
 export const config = { runtime: 'edge', regions: ['icn1'] };
@@ -42,6 +42,40 @@ async function sendMetaPurchase({ orderId, amount, phone, fbp, fbc, clientIp, cl
     return res.ok ? 'ok' : 'failed';
   } catch (e) {
     console.error('meta purchase error', String(e));
+    return 'failed';
+  }
+}
+
+// 실결제 누적 인원(이번 기수, 결제완료, 테스트 제외). 실패하면 null.
+async function paidCount(cohortCode) {
+  const url = process.env.SUPABASE_URL;
+  const key = process.env.SUPABASE_SERVICE_ROLE_KEY;
+  if (!url || !key) return null;
+  try {
+    const res = await fetch(`${url}/rest/v1/toss_orders?select=order_id&cohort_code=eq.${encodeURIComponent(cohortCode)}&status=eq.DONE&is_test=eq.false`, {
+      headers: { apikey: key, Authorization: `Bearer ${key}`, Prefer: 'count=exact', Range: '0-0' },
+    });
+    const cr = res.headers.get('content-range') || '';
+    const n = Number(cr.split('/')[1]);
+    return Number.isFinite(n) ? n : null;
+  } catch {
+    return null;
+  }
+}
+
+// 텔레그램 결제 알림(Supabase toss-paid-notify). 실패해도 결제 흐름은 막지 않는다.
+async function notifyTelegram(payload) {
+  const url = process.env.SUPABASE_URL;
+  const secret = process.env.META_CAPI_INTERNAL_SECRET;
+  if (!url || !secret) return 'skipped';
+  try {
+    const res = await fetch(`${url}/functions/v1/toss-paid-notify`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-internal-secret': secret },
+      body: JSON.stringify(payload),
+    });
+    return res.ok ? 'ok' : 'failed';
+  } catch {
     return 'failed';
   }
 }
@@ -104,9 +138,29 @@ export default async function handler(req) {
       })
     : 'skipped';
 
+  // 실결제만 텔레그램 알림(결제 완료 또는 가상계좌 입금 대기). 테스트 키 결제는 알리지 않는다.
+  let notified = 'skipped';
+  if (!secret.startsWith('test_') && (pay.status === 'DONE' || pay.status === 'WAITING_FOR_DEPOSIT')) {
+    const cohort = String(cohortCode || COHORT7.cohortCode).slice(0, 64);
+    notified = await notifyTelegram({
+      kind: pay.status === 'DONE' ? 'paid' : 'waiting',
+      name: String(name || '').slice(0, 50),
+      phone: String(phone || '').replace(/\D/g, '').slice(0, 11),
+      amount: pay.totalAmount,
+      method: pay.method,
+      provider: pay.easyPay?.provider || pay.card?.issuerCode || '',
+      approvedAt: pay.approvedAt || pay.requestedAt,
+      orderId: pay.orderId,
+      paidCount: await paidCount(cohort),
+      capacity: COHORT7.totalSpots,
+      meta,
+    });
+  }
+
   return json(200, {
     ok: true,
     meta,
+    notified,
     orderId: pay.orderId,
     status: pay.status,
     method: pay.method,
