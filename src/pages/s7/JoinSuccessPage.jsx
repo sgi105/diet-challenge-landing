@@ -7,6 +7,16 @@ import { TOSS_IS_TEST } from '../../lib/tossPayments';
 
 // 결제 인증 성공 → 서버(api/toss-confirm)에서 결제 승인. 승인이 끝나야 결제 완료다.
 // 금액은 여기서 한 번, 서버에서 한 번 더 대조한다(클라이언트 금액 조작 방지).
+// 메타 픽셀 쿠키(_fbp/_fbc) — 서버 전환(CAPI) 매칭용으로 승인 API 에 같이 보낸다.
+function readCookie(name) {
+  try {
+    const m = document.cookie.match(new RegExp(`(?:^|; )${name}=([^;]*)`));
+    return m ? decodeURIComponent(m[1]) : null;
+  } catch {
+    return null;
+  }
+}
+
 // 토스 가상계좌 은행 코드(자주 쓰는 것만) — 없으면 코드 그대로 보여준다.
 const VA_BANKS = { '11': '농협', '06': '국민', '20': '우리', '88': '신한', '03': '기업', '39': '경남', '32': '부산', '81': '하나', '71': '우체국', '07': '수협', '31': '대구', '34': '광주', '37': '전북', '35': '제주', '45': '새마을', '23': 'SC제일' };
 
@@ -32,7 +42,7 @@ export default function JoinSuccessPage() {
         const res = await fetch('/api/toss-confirm', {
           method: 'POST',
           headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify({ paymentKey, orderId, amount, name, phone, cohortCode: COHORT7.cohortCode }),
+          body: JSON.stringify({ paymentKey, orderId, amount, name, phone, cohortCode: COHORT7.cohortCode, fbp: readCookie('_fbp'), fbc: readCookie('_fbc'), sourceUrl: window.location.origin + '/s7/join' }),
         });
         const data = await res.json().catch(() => ({}));
         if (!res.ok || !data.ok) throw new Error(data.message || `승인 실패 (${res.status})`);

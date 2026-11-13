@@ -6,12 +6,17 @@
 //   META_PIXEL_ID      픽셀 ID
 //   META_CAPI_TOKEN    이벤트 관리자 → 설정 → Conversions API 액세스 토큰
 //   META_TEST_EVENT_CODE (선택) 이벤트 관리자 "테스트 이벤트" 탭 코드. 검증 끝나면 삭제
+//   INTERNAL_CAPI_SECRET 서버 간 호출용(api/toss-confirm → Purchase). 헤더 x-internal-secret 로 확인
 // 시크릿 없으면 조용히 스킵(200).
+//
+// Purchase 는 공개 호출로 받지 않는다(누구나 가짜 구매를 넣을 수 있으므로). 토스 결제 승인 서버(api/toss-confirm)만
+// x-internal-secret 을 붙여 보낸다. 이때 고객 IP·UA 는 body 의 client_ip / client_ua 로 넘어온다(서버 간 호출이라 헤더 값은 Vercel 것).
 //
 // 배포: supabase functions deploy meta-capi --no-verify-jwt
 //   (랜딩 공개 키로 호출하므로 JWT 검증 끔)
 
 const ALLOWED_EVENTS = new Set(['Lead', 'WaitlistLead'])
+const INTERNAL_EVENTS = new Set(['Purchase'])
 const GRAPH_VERSION = 'v21.0'
 
 const CORS = {
@@ -58,15 +63,19 @@ Deno.serve(async (req) => {
 
   const eventName = String(body.event_name || '')
   const eventId = str(body.event_id, 100)
-  if (!ALLOWED_EVENTS.has(eventName) || !eventId) return json({ error: 'bad_event' }, 400)
+  const internalSecret = Deno.env.get('INTERNAL_CAPI_SECRET')
+  const isInternal = !!internalSecret && req.headers.get('x-internal-secret') === internalSecret
+  const allowed = ALLOWED_EVENTS.has(eventName) || (isInternal && INTERNAL_EVENTS.has(eventName))
+  if (!allowed || !eventId) return json({ error: 'bad_event' }, 400)
 
   const ph = normalizePhone(body.phone, body.phone_country)
   const hashedPh = ph ? await sha256Hex(ph) : undefined
-  const ip = (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || undefined
+  const ip = (isInternal ? str(body.client_ip, 100) : undefined) || (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || undefined
+  const ua = (isInternal ? str(body.client_ua) : undefined) || str(req.headers.get('user-agent'))
 
   const userData: Record<string, unknown> = {
     client_ip_address: ip,
-    client_user_agent: str(req.headers.get('user-agent')),
+    client_user_agent: ua,
     fbp: str(body.fbp, 200),
     fbc: str(body.fbc, 500),
   }

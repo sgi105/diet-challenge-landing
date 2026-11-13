@@ -5,6 +5,8 @@
 //   TOSS_SECRET_KEY            주문서형 연동 시크릿 키. 없으면 토스 문서의 공개 테스트 시크릿 키(테스트 결제만 가능).
 //   SUPABASE_URL               기록용 — 없으면 기록은 건너뛴다(테스트 단계).
 //   SUPABASE_SERVICE_ROLE_KEY  기록용 서버 키
+//   META_CAPI_INTERNAL_SECRET  메타 전환(Purchase) 서버 전송용 — Supabase meta-capi 함수의 INTERNAL_CAPI_SECRET 과 같은 값.
+//                              실결제(라이브 키)·결제완료(DONE)일 때만 보낸다. event_id = toss-<orderId> (결제 완료 화면 픽셀과 같은 값 → 메타가 한 건으로 합침)
 // 실결제 전환 체크리스트: TOSS_SECRET_KEY/VITE_TOSS_CLIENT_KEY 를 라이브 키로 · toss_orders 마이그레이션 적용 · 위 Supabase env 설정.
 import { PROGRAM7 } from '../src/data/season7.js';
 
@@ -15,6 +17,33 @@ const DOCS_TEST_SECRET_KEY = 'test_gsk_docs_OaPz8L5KdmQXkzRz3y47BMw6';
 
 function json(status, body) {
   return new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json' } });
+}
+
+// 메타 Conversions API 로 Purchase 1건(서버 전송). 실패해도 결제 흐름은 막지 않는다.
+async function sendMetaPurchase({ orderId, amount, phone, fbp, fbc, clientIp, clientUa, sourceUrl }) {
+  const url = process.env.SUPABASE_URL;
+  const secret = process.env.META_CAPI_INTERNAL_SECRET;
+  if (!url || !secret) return 'skipped';
+  try {
+    const res = await fetch(`${url}/functions/v1/meta-capi`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'x-internal-secret': secret },
+      body: JSON.stringify({
+        event_name: 'Purchase',
+        event_id: `toss-${orderId}`,
+        event_source_url: sourceUrl,
+        phone, phone_country: 'KR',
+        fbp, fbc,
+        client_ip: clientIp, client_ua: clientUa,
+        custom_data: { currency: 'KRW', value: amount, content_name: 's7_fee' },
+      }),
+    });
+    if (!res.ok) console.error('meta purchase failed', res.status, (await res.text()).slice(0, 300));
+    return res.ok ? 'ok' : 'failed';
+  } catch (e) {
+    console.error('meta purchase error', String(e));
+    return 'failed';
+  }
 }
 
 async function record(row) {
@@ -34,7 +63,7 @@ export default async function handler(req) {
   if (req.method !== 'POST') return json(405, { ok: false, message: 'POST only' });
   let body;
   try { body = await req.json(); } catch { return json(400, { ok: false, message: 'bad json' }); }
-  const { paymentKey, orderId, amount, name, phone, cohortCode } = body || {};
+  const { paymentKey, orderId, amount, name, phone, cohortCode, fbp, fbc, sourceUrl } = body || {};
   if (!paymentKey || !orderId) return json(400, { ok: false, message: '결제 정보 누락' });
   if (Number(amount) !== PROGRAM7.fee) return json(400, { ok: false, message: '결제 금액이 상품 금액과 달라요' });
 
@@ -61,8 +90,23 @@ export default async function handler(req) {
     raw: pay,
   });
 
+  // 실결제(라이브)이고 결제 완료(DONE)인 건만 메타에 구매로 보낸다. 테스트 키·가상계좌 입금 대기는 제외.
+  const meta = (!secret.startsWith('test_') && pay.status === 'DONE')
+    ? await sendMetaPurchase({
+        orderId: pay.orderId,
+        amount: pay.totalAmount,
+        phone: String(phone || '').replace(/\D/g, '').slice(0, 11),
+        fbp: typeof fbp === 'string' ? fbp.slice(0, 200) : undefined,
+        fbc: typeof fbc === 'string' ? fbc.slice(0, 500) : undefined,
+        clientIp: (req.headers.get('x-forwarded-for') || '').split(',')[0].trim() || undefined,
+        clientUa: req.headers.get('user-agent') || undefined,
+        sourceUrl: typeof sourceUrl === 'string' ? sourceUrl.slice(0, 1000) : undefined,
+      })
+    : 'skipped';
+
   return json(200, {
     ok: true,
+    meta,
     orderId: pay.orderId,
     status: pay.status,
     method: pay.method,
