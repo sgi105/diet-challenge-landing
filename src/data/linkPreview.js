@@ -43,3 +43,30 @@ export function previewVersion() {
 }
 
 export const PREVIEW_IMAGE_URL = `${SITE_URL}/api/og?v=${previewVersion()}`;
+
+// /diet — 식단 없이 100일 애슬릿 프로그램 상담 랜딩 전용 미리보기 (가인 2026-11-17).
+// diet.html 이 빌드 때 이 값으로 채워지고, 이미지는 /api/og?p=diet 가 그린다. 가격은 쓰지 않는다.
+export const DIET_PREVIEW = {
+  title: '식단 없이 100일, 다이어트 고민 평생 끝',
+  description: '다이어트에 1,000만원 쓰고도 또 고민 중이라면. 널 애슬릿으로 만들어줄게 · 1:1 상담 신청',
+  metaDescription: '식단 없이 100일 안에 다이어트 고민 평생 끝내줄게. 앞으로 다이어트에 한 푼도 안 쓰게. 성공 관성 · 팀 · 대회로 애슬릿이 되는 100일 프로그램 1:1 상담 신청.',
+  path: '/diet',
+  image: {
+    tag: '100D ATHLETE',
+    kickerAccent: '식단 없이',
+    kicker: ' 100일 안에',
+    headline: '다이어트 고민 끝',
+    sub: '널 애슬릿으로 만들어줄게',
+    chips: ['식단 X', '매일 운동', '팀 · 대회'],
+    photo: '/founder/bodyprofile2.png',
+  },
+};
+
+export function dietPreviewVersion() {
+  const s = JSON.stringify(DIET_PREVIEW);
+  let h = 0;
+  for (let i = 0; i < s.length; i++) h = (h * 31 + s.charCodeAt(i)) | 0;
+  return (h >>> 0).toString(36);
+}
+
+export const DIET_PREVIEW_IMAGE_URL = `${SITE_URL}/api/og?p=diet&v=${dietPreviewVersion()}`;

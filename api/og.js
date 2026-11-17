@@ -2,7 +2,10 @@
 // 디자인 SOT: design-references/og6/og6.html ② · 기수가 바뀌면 데이터만 바꾸면 이미지도 따라 바뀐다.
 // 글꼴은 구글 폰트에서 이미지에 쓰는 글자만 받아 쓴다(text= 서브셋) — 가볍고 빠르다.
 import { ImageResponse } from '@vercel/og';
-import { LINK_PREVIEW, SITE_URL } from '../src/data/linkPreview.js';
+import { LINK_PREVIEW, DIET_PREVIEW, SITE_URL } from '../src/data/linkPreview.js';
+
+// ?p=diet → /diet 상담 랜딩 카드. 그 외 = 메인(런클럽) 카드.
+const pick = (req) => (new URL(req.url).searchParams.get('p') === 'diet' ? DIET_PREVIEW : LINK_PREVIEW);
 
 export const config = { runtime: 'edge' };
 
@@ -20,8 +23,8 @@ async function googleFont(family, weight, text) {
 // satori 는 React 없이 {type, props} 객체도 받는다. 자식이 여럿인 div 는 display:flex 필수.
 const h = (type, style, children) => ({ type, props: { style, children } });
 
-export function buildTree(origin) {
-  const im = LINK_PREVIEW.image;
+export function buildTree(origin, preview = LINK_PREVIEW) {
+  const im = preview.image;
   const host = SITE_URL.replace(/^https?:\/\//, '');
   return h('div', {
     width: 1200, height: 630, display: 'flex', position: 'relative', background: BG, color: '#fff',
@@ -51,13 +54,14 @@ export function buildTree(origin) {
 
 export default async function handler(req) {
   const origin = new URL(req.url).origin;
-  const im = LINK_PREVIEW.image;
+  const preview = pick(req);
+  const im = preview.image;
   const allText = [im.tag, im.kickerAccent, im.kicker, im.headline, im.sub, ...im.chips, SITE_URL].join('');
   const [bhs, noto] = await Promise.all([
     googleFont('Black+Han+Sans', 400, [im.headline, im.sub].join('')),
     googleFont('Noto+Sans+KR', 900, allText),
   ]);
-  return new ImageResponse(buildTree(origin), {
+  return new ImageResponse(buildTree(origin, preview), {
     width: 1200,
     height: 630,
     fonts: [

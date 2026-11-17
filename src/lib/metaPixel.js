@@ -68,11 +68,12 @@ function newEventId() {
 const SEND_HASHED_PHONE = true;
 
 // 지원서 제출 성공 시 1회 호출. 픽셀 + 서버 전송을 같은 event_id로 묶는다.
-export function metaTrackApplication({ phone, phoneCountry, waitlist, isReferral }) {
+// contentName: 꼬리표 덮어쓰기(선택) — /diet 상담 신청은 'diet_consult' 로 런클럽 지원과 구분한다.
+export function metaTrackApplication({ phone, phoneCountry, waitlist, isReferral, contentName }) {
   if (!enabled()) return;
   const eventId = newEventId();
   const event = waitlist ? 'WaitlistLead' : 'Lead';
-  const params = { content_name: waitlist ? 'waitlist' : (isReferral ? 'apply_referral' : 'apply') };
+  const params = { content_name: contentName || (waitlist ? 'waitlist' : (isReferral ? 'apply_referral' : 'apply')) };
   metaTrack(event, params, { eventId, custom: waitlist });
 
   try {

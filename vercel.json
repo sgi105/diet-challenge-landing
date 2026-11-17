@@ -6,6 +6,7 @@
   ],
   "rewrites": [
     { "source": "/guide/:slug", "destination": "/guide/:slug.html" },
+    { "source": "/diet", "destination": "/diet.html" },
     { "source": "/((?!guide/|ot/|r/|api/).*)", "destination": "/" }
   ]
 }

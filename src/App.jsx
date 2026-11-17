@@ -44,6 +44,7 @@ import JoinSuccessPage7 from './pages/s7/JoinSuccessPage';
 import JoinFailPage7 from './pages/s7/JoinFailPage';
 import StatsPage from './pages/StatsPage';
 import NotifyPage from './pages/NotifyPage';
+import DietPage from './pages/diet/DietPage';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
@@ -150,6 +151,8 @@ export default function App() {
           시즌6 랜딩은 /s6 아카이브. 결제는 /s7/join(랜딩에 공개 링크). */}
       <Route path="/" element={<LandingPageS7 />} />
       <Route path="/runtrip" element={<RuntripPage />} />
+      {/* 식단 없이 100일 애슬릿 프로그램 1:1 상담 (2026-11-17) — 가격 비공개. 링크 미리보기는 diet.html */}
+      <Route path="/diet" element={<DietPage />} />
       <Route path="/s7" element={<LandingPageS7 />} />
       <Route path="/s7/join" element={<JoinPage7 />} />
       <Route path="/s7/join/success" element={<JoinSuccessPage7 />} />

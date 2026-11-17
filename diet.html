@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="ko">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <!-- /diet 전용(diet.html) — %LP_*% 는 DIET_PREVIEW 로 채워진다. 나머지는 index.html 과 같게 유지. 링크 미리보기 — %LP_*% 는 빌드 때 src/data/linkPreview.js 값으로 채워진다(vite.config.js linkPreviewPlugin). 여기에 직접 쓰지 말 것. -->
+    <title>%LP_TITLE%</title>
+    <meta name="description" content="%LP_META_DESCRIPTION%" />
+    <meta property="og:title" content="%LP_TITLE%" />
+    <meta property="og:description" content="%LP_DESCRIPTION%" />
+    <meta property="og:type" content="website" />
+    <meta property="og:image" content="%LP_IMAGE%" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:url" content="%LP_SITE%" />
+    <meta property="og:locale" content="ko_KR" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="%LP_TITLE%" />
+    <meta name="twitter:description" content="%LP_DESCRIPTION%" />
+    <meta name="twitter:image" content="%LP_IMAGE%" />
+    <meta name="theme-color" content="#1e3cff" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.9/dist/web/variable/pretendardvariable-dynamic-subset.min.css" rel="stylesheet" />
+    <link href="https://fonts.googleapis.com/css2?family=Archivo+Black&family=Bebas+Neue&family=Black+Han+Sans&display=swap" rel="stylesheet" />
+  </head>
+  <body>
+    <div id="root"></div>
+    <script type="module" src="/src/main.jsx"></script>
+  </body>
+</html>
