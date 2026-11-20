@@ -57,6 +57,7 @@ Deno.serve(async (req) => {
   const head = kind === 'probe' ? '🔔 [연결 확인] 토스 결제 알림 테스트'
     : kind === 'waiting' ? '🏦 시즌7 가상계좌 발급 (입금 대기)'
     : kind === 'canceled' ? '↩️ 시즌7 결제 취소 (남은 자리에 반영됨)'
+    : s(b.product, 30) === 'half_s6' ? '🏃 하프 연장 결제 완료 (런클럽 시즌6)'
     : s(b.product, 30) === 's7_continue' ? '💎 시즌7 이어하기(49만원) 결제 완료'
     : '💳 시즌7 결제 완료'
   const lines = [head]
@@ -65,7 +66,8 @@ Deno.serve(async (req) => {
     lines.push(`${Number(b.amount || 0).toLocaleString('ko-KR')}원 · ${s(b.method, 30) || '-'}${s(b.provider, 30) ? ` (${s(b.provider, 30)})` : ''}`)
     lines.push(`${kst(s(b.approvedAt, 40))} · 주문 ${s(b.orderId, 80)}`)
     if (b.paidCount !== undefined && b.paidCount !== null) lines.push(`누적 결제 ${s(b.paidCount, 10)}명 / 정원 ${s(b.capacity, 10) || '-'}명`)
-    if (s(b.meta, 20)) lines.push(`메타 전환: ${s(b.meta, 20)}`)
+    if (s(b.product, 30) === 'half_s6') { if (s(b.meta, 60)) lines.push(s(b.meta, 60)) }
+    else if (s(b.meta, 20)) lines.push(`메타 전환: ${s(b.meta, 20)}`)
   } else {
     lines.push('이 메시지가 보이면 결제 알림이 정상 연결된 거예요.')
   }

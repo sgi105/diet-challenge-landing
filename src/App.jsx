@@ -43,6 +43,8 @@ import JoinPage7 from './pages/s7/JoinPage';
 import JoinSuccessPage7 from './pages/s7/JoinSuccessPage';
 import JoinFailPage7 from './pages/s7/JoinFailPage';
 import ContinuePage7 from './pages/s7/ContinuePage';
+import HalfPayPage from './pages/half/HalfPayPage';
+import HalfPaySuccessPage from './pages/half/HalfPaySuccessPage';
 import StatsPage from './pages/StatsPage';
 import NotifyPage from './pages/NotifyPage';
 import DietPage from './pages/diet/DietPage';
@@ -159,6 +161,8 @@ export default function App() {
       <Route path="/s7/join/success" element={<JoinSuccessPage7 />} />
       <Route path="/s7/join/fail" element={<JoinFailPage7 />} />
       <Route path="/s7/continue" element={<ContinuePage7 />} />
+      <Route path="/half/pay" element={<HalfPayPage />} />
+      <Route path="/half/pay/success" element={<HalfPaySuccessPage />} />
       <Route path="/s7/continue/success" element={<JoinSuccessPage7 product="s7_continue" />} />
       <Route path="/s7/continue/fail" element={<JoinFailPage7 />} />
       <Route path="/s6" element={<LandingPageS6 />} />
