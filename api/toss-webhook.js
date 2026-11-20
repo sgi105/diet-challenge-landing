@@ -42,7 +42,7 @@ export default async function handler(req) {
     const code = pay?.code || '';
     if (res.status === 404 || res.status === 400) return ok({ ok: false, why: 'lookup', status: res.status, code });
     console.error('toss lookup failed', res.status, code);
-    return new Response(JSON.stringify({ ok: false, why: 'lookup', status: res.status, code, msg: (pay?.message || rawText || '').slice(0, 160), region: process.env.VERCEL_REGION || '', vid: (req.headers.get('x-vercel-id') || '').slice(0, 40) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ ok: false, why: 'lookup', status: res.status, code }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 
   // 우리 주문만 갱신(없는 주문은 무시)
