@@ -34,8 +34,14 @@ export default async function handler(req) {
   const res = await fetch(`https://api.tosspayments.com/v1/payments/${encodeURIComponent(paymentKey)}`, {
     headers: { Authorization: `Basic ${btoa(`${secret}:`)}` },
   });
-  if (!res.ok) return new Response('lookup failed', { status: 500 }); // 토스가 재전송하도록
-  const pay = await res.json();
+  const pay = await res.json().catch(() => ({}));
+  if (!res.ok) {
+    // 없는 결제(404)·잘못된 요청(400)은 재전송해도 소용없으니 200 으로 끝낸다. 그 밖(권한·장애)은 500 → 토스 재전송.
+    const code = pay?.code || '';
+    if (res.status === 404 || res.status === 400) return ok({ ok: false, why: 'lookup', status: res.status, code });
+    console.error('toss lookup failed', res.status, code);
+    return new Response(JSON.stringify({ ok: false, why: 'lookup', status: res.status, code }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+  }
 
   // 우리 주문만 갱신(없는 주문은 무시)
   const sel = await sb(`toss_orders?order_id=eq.${encodeURIComponent(pay.orderId)}&select=order_id,status,is_test,name,phone,amount`);
