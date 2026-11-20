@@ -57,6 +57,7 @@ Deno.serve(async (req) => {
   const head = kind === 'probe' ? '🔔 [연결 확인] 토스 결제 알림 테스트'
     : kind === 'waiting' ? '🏦 시즌7 가상계좌 발급 (입금 대기)'
     : kind === 'canceled' ? '↩️ 시즌7 결제 취소 (남은 자리에 반영됨)'
+    : s(b.product, 30) === 's7_continue' ? '💎 시즌7 이어하기(49만원) 결제 완료'
     : '💳 시즌7 결제 완료'
   const lines = [head]
   if (kind !== 'probe') {

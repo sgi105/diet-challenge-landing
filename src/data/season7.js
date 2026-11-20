@@ -73,6 +73,8 @@ export const REFUND7 = {
 //   (이전 구간식 2/3·1/2·0 은 일부 기간에 위 기준보다 적게 돌려줘서 폐기)
 export const CONTINUE7 = {
   fee: 490000,
+  goodName: "90일 하프 프로그램 이어하기 (시즌7)",   // 결제창 상품명
+  orderCohort: "261228_continue_season7",            // toss_orders.cohort_code (시즌7 정원 집계와 분리)
   name: "90일 하프마라톤 프로그램 이어하기 (시즌7)",
   saleWindow: "12/20(일) - 12/27(일)",
   startDate: "12/28(월)",

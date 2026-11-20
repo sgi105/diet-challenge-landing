@@ -42,6 +42,7 @@ import LandingPageS7 from './LandingPageS7';
 import JoinPage7 from './pages/s7/JoinPage';
 import JoinSuccessPage7 from './pages/s7/JoinSuccessPage';
 import JoinFailPage7 from './pages/s7/JoinFailPage';
+import ContinuePage7 from './pages/s7/ContinuePage';
 import StatsPage from './pages/StatsPage';
 import NotifyPage from './pages/NotifyPage';
 import DietPage from './pages/diet/DietPage';
@@ -157,6 +158,9 @@ export default function App() {
       <Route path="/s7/join" element={<JoinPage7 />} />
       <Route path="/s7/join/success" element={<JoinSuccessPage7 />} />
       <Route path="/s7/join/fail" element={<JoinFailPage7 />} />
+      <Route path="/s7/continue" element={<ContinuePage7 />} />
+      <Route path="/s7/continue/success" element={<JoinSuccessPage7 product="s7_continue" />} />
+      <Route path="/s7/continue/fail" element={<JoinFailPage7 />} />
       <Route path="/s6" element={<LandingPageS6 />} />
       <Route path="/s5" element={<LandingPageS5 />} />
       {/* v2 직접 주소 — / 와 같은 페이지 */}

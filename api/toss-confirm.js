@@ -8,7 +8,13 @@
 //   META_CAPI_INTERNAL_SECRET  메타 전환(Purchase) 서버 전송용 — Supabase meta-capi 함수의 INTERNAL_CAPI_SECRET 과 같은 값.
 //                              실결제(라이브 키)·결제완료(DONE)일 때만 보낸다. 같은 시크릿으로 toss-paid-notify(텔레그램 알림)도 호출. event_id = toss-<orderId> (결제 완료 화면 픽셀과 같은 값 → 메타가 한 건으로 합침)
 // 실결제 전환 체크리스트: TOSS_SECRET_KEY/VITE_TOSS_CLIENT_KEY 를 라이브 키로 · toss_orders 마이그레이션 적용 · 위 Supabase env 설정.
-import { PROGRAM7, COHORT7 } from '../src/data/season7.js';
+import { PROGRAM7, COHORT7, CONTINUE7 } from '../src/data/season7.js';
+
+// 판매 상품 — 금액·주문 코호트는 서버가 정한다(클라이언트 값 무시).
+const PRODUCTS = {
+  s7_fee: { amount: PROGRAM7.fee, cohort: COHORT7.cohortCode, capacity: COHORT7.totalSpots, label: '시즌7 28일 체험' },
+  s7_continue: { amount: CONTINUE7.fee, cohort: CONTINUE7.orderCohort, capacity: null, label: '시즌7 90일 이어하기' },
+};
 
 // 토스 API 키 접근 정책(기본: 대한민국 IP만 허용) 때문에 서울 리전에서만 실행한다. 다른 리전(예: 싱가포르)에서 호출하면 승인 거절됨 (2026-11-11 확인).
 export const config = { runtime: 'edge', regions: ['icn1'] };
@@ -20,7 +26,7 @@ function json(status, body) {
 }
 
 // 메타 Conversions API 로 Purchase 1건(서버 전송). 실패해도 결제 흐름은 막지 않는다.
-async function sendMetaPurchase({ orderId, amount, phone, fbp, fbc, clientIp, clientUa, sourceUrl }) {
+async function sendMetaPurchase({ productId, orderId, amount, phone, fbp, fbc, clientIp, clientUa, sourceUrl }) {
   const url = process.env.SUPABASE_URL;
   const secret = process.env.META_CAPI_INTERNAL_SECRET;
   if (!url || !secret) return 'skipped';
@@ -35,7 +41,7 @@ async function sendMetaPurchase({ orderId, amount, phone, fbp, fbc, clientIp, cl
         phone, phone_country: 'KR',
         fbp, fbc,
         client_ip: clientIp, client_ua: clientUa,
-        custom_data: { currency: 'KRW', value: amount, content_name: 's7_fee' },
+        custom_data: { currency: 'KRW', value: amount, content_name: productId },
       }),
     });
     if (!res.ok) console.error('meta purchase failed', res.status, (await res.text()).slice(0, 300));
@@ -99,23 +105,26 @@ export default async function handler(req) {
   if (req.method !== 'POST') return json(405, { ok: false, message: 'POST only' });
   let body;
   try { body = await req.json(); } catch { return json(400, { ok: false, message: 'bad json' }); }
-  const { paymentKey, orderId, amount, name, phone, cohortCode, fbp, fbc, sourceUrl } = body || {};
+  const { paymentKey, orderId, amount, name, phone, fbp, fbc, sourceUrl } = body || {};
+  const productId = Object.prototype.hasOwnProperty.call(PRODUCTS, body?.product) ? body.product : 's7_fee';
+  const P = PRODUCTS[productId];
+  const cohortCode = P.cohort;
   if (!paymentKey || !orderId) return json(400, { ok: false, message: '결제 정보 누락' });
-  if (Number(amount) !== PROGRAM7.fee) return json(400, { ok: false, message: '결제 금액이 상품 금액과 달라요' });
+  if (Number(amount) !== P.amount) return json(400, { ok: false, message: '결제 금액이 상품 금액과 달라요' });
 
   const secret = process.env.TOSS_SECRET_KEY || DOCS_TEST_SECRET_KEY;
 
   // 정원 체크(실결제만) — 승인 전에 막으면 고객 카드는 청구되지 않는다(인증만 된 결제는 자동 소멸).
-  if (!secret.startsWith('test_')) {
-    const n = await paidCount(String(cohortCode || COHORT7.cohortCode).slice(0, 64));
-    if (n !== null && n >= COHORT7.totalSpots) {
-      return json(409, { ok: false, code: 'SOLD_OUT', message: `정원(${COHORT7.totalSpots}명)이 마감됐어요. 결제는 진행되지 않았어요.` });
+  if (!secret.startsWith('test_') && P.capacity) {
+    const n = await paidCount(cohortCode);
+    if (n !== null && n >= P.capacity) {
+      return json(409, { ok: false, code: 'SOLD_OUT', message: `정원(${P.capacity}명)이 마감됐어요. 결제는 진행되지 않았어요.` });
     }
   }
   const res = await fetch('https://api.tosspayments.com/v1/payments/confirm', {
     method: 'POST',
     headers: { Authorization: `Basic ${btoa(`${secret}:`)}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ paymentKey, orderId, amount: PROGRAM7.fee }),
+    body: JSON.stringify({ paymentKey, orderId, amount: P.amount }),
   });
   const pay = await res.json().catch(() => ({}));
   if (!res.ok) return json(res.status, { ok: false, code: pay.code, message: pay.message || '결제 승인 실패' });
@@ -123,7 +132,7 @@ export default async function handler(req) {
   const recorded = await record({
     order_id: orderId,
     payment_key: paymentKey,
-    cohort_code: String(cohortCode || '').slice(0, 64),
+    cohort_code: cohortCode,
     amount: pay.totalAmount,
     status: pay.status,
     method: pay.method,
@@ -137,6 +146,7 @@ export default async function handler(req) {
   // 실결제(라이브)이고 결제 완료(DONE)인 건만 메타에 구매로 보낸다. 테스트 키·가상계좌 입금 대기는 제외.
   const meta = (!secret.startsWith('test_') && pay.status === 'DONE')
     ? await sendMetaPurchase({
+        productId,
         orderId: pay.orderId,
         amount: pay.totalAmount,
         phone: String(phone || '').replace(/\D/g, '').slice(0, 11),
@@ -151,8 +161,8 @@ export default async function handler(req) {
   // 실결제만 텔레그램 알림(결제 완료 또는 가상계좌 입금 대기). 테스트 키 결제는 알리지 않는다.
   let notified = 'skipped';
   if (!secret.startsWith('test_') && (pay.status === 'DONE' || pay.status === 'WAITING_FOR_DEPOSIT')) {
-    const cohort = String(cohortCode || COHORT7.cohortCode).slice(0, 64);
     notified = await notifyTelegram({
+      product: productId, productLabel: P.label,
       kind: pay.status === 'DONE' ? 'paid' : 'waiting',
       name: String(name || '').slice(0, 50),
       phone: String(phone || '').replace(/\D/g, '').slice(0, 11),
@@ -161,8 +171,8 @@ export default async function handler(req) {
       provider: pay.easyPay?.provider || pay.card?.issuerCode || '',
       approvedAt: pay.approvedAt || pay.requestedAt,
       orderId: pay.orderId,
-      paidCount: await paidCount(cohort),
-      capacity: COHORT7.totalSpots,
+      paidCount: P.capacity ? await paidCount(cohortCode) : null,
+      capacity: P.capacity,
       meta,
     });
   }
