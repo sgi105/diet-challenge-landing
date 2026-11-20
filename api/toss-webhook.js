@@ -32,15 +32,17 @@ export default async function handler(req) {
 
   // 진짜 상태는 토스에서 다시 조회
   const res = await fetch(`https://api.tosspayments.com/v1/payments/${encodeURIComponent(paymentKey)}`, {
-    headers: { Authorization: `Basic ${btoa(`${secret}:`)}` },
+    headers: { Authorization: `Basic ${btoa(`${secret}:`)}`, 'User-Agent': 'samuraihabits-webhook/1.0', Accept: 'application/json' },
   });
-  const pay = await res.json().catch(() => ({}));
+  const rawText = await res.text();
+  let pay = {};
+  try { pay = JSON.parse(rawText); } catch { /* not json */ }
   if (!res.ok) {
     // 없는 결제(404)·잘못된 요청(400)은 재전송해도 소용없으니 200 으로 끝낸다. 그 밖(권한·장애)은 500 → 토스 재전송.
     const code = pay?.code || '';
     if (res.status === 404 || res.status === 400) return ok({ ok: false, why: 'lookup', status: res.status, code });
     console.error('toss lookup failed', res.status, code);
-    return new Response(JSON.stringify({ ok: false, why: 'lookup', status: res.status, code }), { status: 500, headers: { 'Content-Type': 'application/json' } });
+    return new Response(JSON.stringify({ ok: false, why: 'lookup', status: res.status, code, msg: (pay?.message || rawText || '').slice(0, 160) }), { status: 500, headers: { 'Content-Type': 'application/json' } });
   }
 
   // 우리 주문만 갱신(없는 주문은 무시)
