@@ -55,7 +55,7 @@ function Reviews() {
     v.play().catch(() => {});
     setPlaying(i);
     track('diet_review_play', { name: REVIEWS[i].name });
-    logEvent('diet_review_play', { name: REVIEWS[i].name });
+    logEvent('diet_review_play', { placement: REVIEWS[i].name }); // landing_events 칸에 맞춰야 저장됨(없는 칸이면 통째로 실패)
   };
   return (
     <div className="reviews">

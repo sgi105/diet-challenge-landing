@@ -47,7 +47,7 @@ export default function DietApplySheet({ answers, setAnswers, step, setStep, onC
   }, []);
   useEffect(() => {
     if (fieldRef.current) setTimeout(() => fieldRef.current?.focus(), 250);
-    logEvent('diet_q_view', { step: step + 1, key: q.key });
+    logEvent('diet_q_view', { step_index: step + 1, step_key: q.key }); // landing_events 칸 이름 그대로
   }, [step, q.key]);
 
   const submit = async () => {
@@ -59,6 +59,7 @@ export default function DietApplySheet({ answers, setAnswers, step, setStep, onC
       metaTrackApplication({ phone: answers.phone, phoneCountry: answers.phoneCountry, waitlist: false, contentName: 'diet_consult' });
       setDone(true);
     } catch (e) {
+      logEvent('diet_consult_error', { step_key: 'submit', placement: String(e.message).slice(0, 80) });
       setErr(e.message);
     } finally {
       setSubmitting(false);
