@@ -48,6 +48,7 @@ import HalfPaySuccessPage from './pages/half/HalfPaySuccessPage';
 import StatsPage from './pages/StatsPage';
 import NotifyPage from './pages/NotifyPage';
 import DietPage from './pages/diet/DietPage';
+import DietStatsPage from './pages/diet/DietStatsPage';
 
 export const DM_URL = 'https://ig.me/m/bali_tarzan';
 export const APPLY_PATH = '/apply';
@@ -156,6 +157,7 @@ export default function App() {
       <Route path="/runtrip" element={<RuntripPage />} />
       {/* 식단 없이 100일 애슬릿 프로그램 1:1 상담 (2026-11-17) — 가격 비공개. 링크 미리보기는 diet.html */}
       <Route path="/diet" element={<DietPage />} />
+      <Route path="/diet/stats" element={<DietStatsPage />} />
       <Route path="/s7" element={<LandingPageS7 />} />
       <Route path="/s7/join" element={<JoinPage7 />} />
       <Route path="/s7/join/success" element={<JoinSuccessPage7 />} />
